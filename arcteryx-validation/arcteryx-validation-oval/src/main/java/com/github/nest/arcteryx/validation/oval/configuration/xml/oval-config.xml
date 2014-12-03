@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE digester-rules PUBLIC
+  "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+  "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+
+<digester-rules>
+	<pattern value="oval">
+		<object-create-rule classname="net.sf.oval.configuration.pojo.POJOConfigurer" />
+
+		<!-- create class configurations set and set to POJO configurer -->
+		<object-create-rule classname="java.util.HashSet" />
+		<call-method-rule methodname="setClassConfigurations"
+			targetoffset="1" paramcount="1" paramtypes="java.util.Set" />
+		<call-param-rule paramnumber="0" stack-index="0" />
+
+		<!-- create constraint set configurations set and set to POJO configurer -->
+		<object-create-rule classname="java.util.HashSet" />
+		<call-method-rule methodname="setConstraintSetConfigurations"
+			targetoffset="2" paramcount="1" paramtypes="java.util.Set" />
+		<call-param-rule paramnumber="0" stack-index="0" />
+
+		<!-- read ConstraintSetConfiguration -->
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-constraintSet.xml" />
+
+		<!-- read ClassConfiguration -->
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-class.xml" />
+	</pattern>
+</digester-rules>

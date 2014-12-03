@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE digester-rules PUBLIC
+  "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+  "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+
+<!-- there are several objects in stack. -->
+<!-- top of stack: parent object with addCheck(Check) method -->
+<digester-rules>
+	<pattern value="assertURL">
+		<object-create-rule classname="net.sf.oval.constraint.AssertURLCheck" />
+		<!-- read properties and set into Check -->
+		<set-properties-rule>
+			<alias attr-name="connect" prop-name="connect" />
+		</set-properties-rule>
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-check-properties.xml" />
+
+		<call-method-rule methodname="addCheck" targetoffset="1"
+			paramcount="1" paramtypes="net.sf.oval.Check" />
+		<call-param-rule paramnumber="0" stack-index="0" />
+
+		<pattern value="permittedURIScheme">
+			<object-create-rule
+				classname="com.github.nest.arcteryx.validation.oval.configuration.wrapper.URISchemesWrapper" />
+			<call-method-rule methodname="set" targetoffset="0"
+				paramcount="1" paramtypes="java.lang.String" />
+			<call-param-rule paramnumber="0" />
+			<set-top-rule methodname="setToCheck"
+				paramtype="net.sf.oval.constraint.AssertURLCheck" />
+		</pattern>
+	</pattern>
+</digester-rules>

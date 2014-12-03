@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE digester-rules PUBLIC
+  "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+  "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+
+<!-- there are several objects in stack. -->
+<!-- top of stack: parent object with addCheck(Check) method -->
+<digester-rules>
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-assert.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-assertConstraintSet.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-assertFalse.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-assertFieldConstraints.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-assertNull.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-assertTrue.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-assertURL.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-assertValid.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-checkWith.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-dateRange.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-digits.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-email.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-equalToField.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-future.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-hasSubstring.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-instanceOf.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-instanceOfAny.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-length.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-matchPattern.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-max.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-maxLength.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-maxSize.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-memberOf.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-min.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-minLength.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-minSize.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-noSelfReference.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-notBlank.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-notEmpty.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-notEqual.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-notEqualToField.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-notMatchPattern.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-notMemberOf.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-notNegative.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-notNull.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-past.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-range.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-size.xml" />
+	<include
+		url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/check/oval-check-validateWithMethod.xml" />
+	<include url="classpath:/arcteryx/validation/oval/oval-check-extensions.xml" />
+</digester-rules>

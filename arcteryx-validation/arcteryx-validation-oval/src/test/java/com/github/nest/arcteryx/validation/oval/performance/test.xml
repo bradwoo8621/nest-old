@@ -1,0 +1,409 @@
+<?xml version="1.0" ?>
+<oval xmlns="http://oval.sf.net/oval-configuration" xmlns:xsi="http://http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://oval.sf.net/oval-configuration http://oval.sourceforge.net/oval-configuration.xsd">
+
+	<constraintSet id="cons.NullValueTest">
+		<assertNull>
+			<profiles>
+				<string>NullValueTest</string>
+			</profiles>
+		</assertNull>
+	</constraintSet>
+
+	<!-- overwrite : false means already defined checks for this class will 
+		not be removed -->
+	<!-- applyFieldConstraintsToConstructors : Automatically apply field constraints 
+		to the corresponding parameters of constructors declared within the same 
+		class. A corresponding parameter is a parameter with the same name and type 
+		as the field. -->
+	<!-- applyFieldConstraintsToSetters : Automatically apply field constraints 
+		to the parameters of the corresponding setter methods declared within the 
+		same class. A corresponding setter method is a method following the JavaBean 
+		convention and its parameter has as the same type as the field. -->
+	<!-- assertParametersNotNull : Declares if parameter values of constructors 
+		and methods are expected to be not null. This can be weakened by using the 
+		@net.sf.oval.constraint.exclusion.Nullable annotation on specific parameters. -->
+	<!-- checkInvariants : Specifies if invariants are checked prior and after 
+		calls to non-private methods and constructors -->
+	<class
+		type="com.github.nest.arcteryx.validation.oval.performance.ObjectWithValidation"
+		overwrite="false" applyFieldConstraintsToSetters="false"
+		applyFieldConstraintsToConstructors="false" assertParametersNotNull="false"
+		checkInvariants="false">
+		<!-- field validation -->
+		<!-- name : name of property -->
+		<!-- overwrite : overwrite the annotation -->
+		<field name="notNull" overwrite="true">
+			<!-- errorCode : error code of violated, default is "net.sf.oval.constraint.NotNull" -->
+			<!-- message : key of violated message, or message if not found in resource 
+				bundle. default is "net.sf.oval.constraint.NotNull.violated" -->
+			<!-- severity : integer value, default is zero -->
+			<notNull errorCode="TestObject.SequenceID.NotNull" message="net.sf.oval.constraint.NotNull.violated"
+				severity="1">
+				<!-- declare the profiles -->
+				<profiles>
+					<string>NotNullTest</string>
+				</profiles>
+				<!-- more than one target can be applied, if no element declared, CONTAINER 
+					is default value -->
+				<appliesTo>
+					<!-- KEYS : apply the constraint to the keys of a map -->
+					<!-- VALUES : apply the constraint to the values of a the map / the 
+						items of the collection / the elements of the array -->
+					<!-- CONTAINER : apply the constraint to the collection / map / array 
+						object itself. -->
+					<constraintTarget>CONTAINER</constraintTarget>
+				</appliesTo>
+			</notNull>
+		</field>
+		<field name="trueValue">
+			<assertTrue>
+				<permittedURIScheme>https</permittedURIScheme>
+				<profiles>
+					<string>TrueValueTest</string>
+				</profiles>
+			</assertTrue>
+		</field>
+		<field name="falseValue">
+			<assertFalse>
+				<profiles>
+					<string>FalseValueTest</string>
+				</profiles>
+			</assertFalse>
+		</field>
+		<field name="nullValue">
+			<assertConstraintSet id="cons.NullValueTest">
+				<profiles>
+					<string>NullValueTest</string>
+				</profiles>
+			</assertConstraintSet>
+		</field>
+		<field name="url">
+			<assertURL connect="false">
+				<permittedURIScheme>https</permittedURIScheme>
+				<profiles>
+					<string>URLTest</string>
+				</profiles>
+			</assertURL>
+		</field>
+		<field name="dateRange">
+			<!-- tolerance : default zero -->
+			<!-- max/min : now;today;tomorrow;yesterday; or appointed date time with 
+				given format -->
+			<dateRange max="20140615" min="20140501" format="yyyyMMdd"
+				tolerance="0">
+				<profiles>
+					<string>DateRangeTest</string>
+				</profiles>
+			</dateRange>
+		</field>
+		<field name="digits">
+			<digits maxFraction="2" maxInteger="2" minFraction="0"
+				minInteger="1">
+				<profiles>
+					<string>DigitsTest</string>
+				</profiles>
+			</digits>
+		</field>
+		<field name="email">
+			<!-- allowPersonalName : allow email address with personal name, such 
+				as "Woody Mo <woody.mo@githubtech.com>" -->
+			<!-- when : test when "when" return true -->
+			<email allowPersonalName="true"
+				when="groovy: _this.when1 == 'abc' &amp;&amp; _this.when2 == 'def'">
+				<profiles>
+					<string>EmailTest</string>
+				</profiles>
+			</email>
+			<validateWithMethod methodName="validateWithMethod"
+				parameterType="java.lang.String">
+				<profiles>
+					<string>ValidateWithMethodTest</string>
+				</profiles>
+			</validateWithMethod>
+		</field>
+		<field name="equalToField">
+			<!-- declaringClass: use in error message, will not attend the validation -->
+			<equalToField useGetter="true" fieldName="email"
+				declaringClass="java.lang.String">
+				<profiles>
+					<string>EqualToFieldTest</string>
+				</profiles>
+			</equalToField>
+		</field>
+		<field name="future">
+			<future tolerance="0">
+				<profiles>
+					<string>FutureTest</string>
+				</profiles>
+			</future>
+		</field>
+		<field name="substring">
+			<hasSubstring ignoreCase="true" substring="zyx">
+				<profiles>
+					<string>HasSubstringTest</string>
+				</profiles>
+			</hasSubstring>
+		</field>
+		<field name="instanceOf">
+			<!-- must be instance of all types -->
+			<instanceOf>
+				<types>
+					<java-type>java.util.Date</java-type>
+					<java-type>java.sql.Timestamp</java-type>
+				</types>
+				<profiles>
+					<string>InstanceOfTest</string>
+				</profiles>
+			</instanceOf>
+		</field>
+		<field name="instanceOfAny">
+			<!-- must be instance of all types -->
+			<instanceOfAny>
+				<types>
+					<java-type>java.lang.Number</java-type>
+					<java-type>java.sql.Timestamp</java-type>
+				</types>
+				<profiles>
+					<string>InstanceOfAnyTest</string>
+				</profiles>
+			</instanceOfAny>
+		</field>
+		<field name="length">
+			<length max="3" min="3">
+				<profiles>
+					<string>LengthTest</string>
+				</profiles>
+			</length>
+		</field>
+		<field name="matchPattern">
+			<!-- matchAll : match all patterns or not -->
+			<matchPattern matchAll="false">
+				<pattern pattern="a{4}" />
+				<pattern pattern="\d*" />
+				<profiles>
+					<string>MatchPatternTest</string>
+				</profiles>
+			</matchPattern>
+		</field>
+		<field name="max">
+			<!-- test Number or number parsed from toString -->
+			<max max="99">
+				<profiles>
+					<string>MaxTest</string>
+				</profiles>
+			</max>
+		</field>
+		<field name="maxLength">
+			<!-- test length of toString() or String -->
+			<maxLength max="4">
+				<profiles>
+					<string>MaxLengthTest</string>
+				</profiles>
+			</maxLength>
+		</field>
+		<field name="maxSize">
+			<!-- test size of Collection/Map/array -->
+			<maxSize max="2">
+				<profiles>
+					<string>MaxSizeTest</string>
+				</profiles>
+			</maxSize>
+		</field>
+		<field name="memberOf">
+			<!-- test value of property is member of given members or not -->
+			<memberOf ignoreCase="true">
+				<members>
+					<string>MemberOfElement1</string>
+					<string>MemberOfElement2</string>
+				</members>
+				<profiles>
+					<string>MemberOfTest</string>
+				</profiles>
+			</memberOf>
+		</field>
+		<field name="min">
+			<!-- test Number or number parsed from toString -->
+			<min min="105">
+				<profiles>
+					<string>MinTest</string>
+				</profiles>
+			</min>
+		</field>
+		<field name="minLength">
+			<!-- test length of toString() or String -->
+			<minLength min="6">
+				<profiles>
+					<string>MinLengthTest</string>
+				</profiles>
+			</minLength>
+		</field>
+		<field name="minSize">
+			<minSize min="3">
+				<!-- test size of Collection/Map/array -->
+				<profiles>
+					<string>MinSizeTest</string>
+				</profiles>
+			</minSize>
+		</field>
+		<field name="noSelfReference">
+			<!-- test the property is self or not -->
+			<noSelfReference>
+				<profiles>
+					<string>NoSelfReferenceTest</string>
+				</profiles>
+			</noSelfReference>
+		</field>
+		<field name="notBlank">
+			<!-- test all characters are space character or whitespace character -->
+			<notBlank>
+				<profiles>
+					<string>NotBlankTest</string>
+				</profiles>
+			</notBlank>
+		</field>
+		<field name="notEmpty">
+			<!-- test is empty string or not, will not trim -->
+			<notEmpty>
+				<profiles>
+					<string>NotEmptyTest</string>
+				</profiles>
+			</notEmpty>
+		</field>
+		<field name="notEqual">
+			<notEqual ignoreCase="true" testString="abc">
+				<profiles>
+					<string>NotEqualTest</string>
+				</profiles>
+			</notEqual>
+		</field>
+		<field name="notEqualToField">
+			<!-- declaringClass: use in error message, will not attend the validation -->
+			<notEqualToField useGetter="true" fieldName="email"
+				declaringClass="java.lang.String">
+				<profiles>
+					<string>NotEqualToFieldTest</string>
+				</profiles>
+			</notEqualToField>
+		</field>
+		<field name="notMatchPattern">
+			<notMatchPattern>
+				<pattern pattern=".*" flags="0" />
+				<pattern pattern="a{5}" />
+				<profiles>
+					<string>NotMatchPatternTest</string>
+				</profiles>
+			</notMatchPattern>
+		</field>
+		<field name="notMemberOf">
+			<notMemberOf ignoreCase="true">
+				<members>
+					<string>notMemberOf</string>
+					<string>notMemberOf1</string>
+				</members>
+				<profiles>
+					<string>NotMemberOfTest</string>
+				</profiles>
+			</notMemberOf>
+		</field>
+		<field name="notNegative">
+			<notNegative>
+				<profiles>
+					<string>NotNegativeTest</string>
+				</profiles>
+			</notNegative>
+		</field>
+		<field name="past">
+			<past tolerance="0">
+				<profiles>
+					<string>PastTest</string>
+				</profiles>
+			</past>
+		</field>
+		<field name="range">
+			<range min="1.24" max="5">
+				<profiles>
+					<string>RangeTest</string>
+				</profiles>
+			</range>
+		</field>
+		<field name="size">
+			<size min="5" max="10">
+				<profiles>
+					<string>SizeTest</string>
+				</profiles>
+			</size>
+		</field>
+		<field name="assertCheck">
+			<!-- _this : validated object -->
+			<!-- _value : validated value -->
+			<assert lang="groovy" expr="_value ==_this.email || _value.endsWith('.com')">
+				<profiles>
+					<string>AssertCheckTest</string>
+				</profiles>
+			</assert>
+		</field>
+		<field name="assertValid">
+			<!-- test the sub object is valid or not -->
+			<assertValid>
+				<profiles>
+					<string>AssertValidTest</string>
+				</profiles>
+			</assertValid>
+			<!-- target means assertValid.maxLength -->
+			<!-- eg. address.street -->
+			<!-- eg. jxpath:address[0].street -->
+			<maxLength max="5" target="maxLength">
+				<profiles>
+					<string>TargetTest</string>
+				</profiles>
+			</maxLength>
+			<!-- in JXPath, index starts from 1. Which means list[1] is first element of collection -->
+			<maxLength max="5" target="jxpath:list[1]/maxLength">
+				<profiles>
+					<string>JXPathTargetTest</string>
+				</profiles>
+			</maxLength>
+		</field>
+		<field name="assertFieldConstraints">
+			<!-- test using another field's check declaration -->
+			<assertFieldConstraints
+				declaringClass="com.github.nest.arcteryx.validation.oval.performance.InnerObjectWithValidation"
+				fieldName="notNull">
+				<profiles>
+					<string>AssertFieldConstraintsTest</string>
+				</profiles>
+			</assertFieldConstraints>
+		</field>
+		<field name="checkWith">
+			<checkWith ignoreIfNull="false">
+				<simpleCheck
+					class="com.github.nest.arcteryx.validation.oval.performance.CheckWithSimpleCheck" />
+				<profiles>
+					<string>CheckWithTest</string>
+				</profiles>
+			</checkWith>
+		</field>
+
+		<method name="getMethod" overwrite="true" isInvariant="true">
+			<returnValue>
+				<notNull>
+					<profiles>
+						<string>MethodTest</string>
+					</profiles>
+				</notNull>
+			</returnValue>
+		</method>
+	</class>
+	<class
+		type="com.github.nest.arcteryx.validation.oval.performance.InnerObjectWithValidation">
+		<field name="notNull" overwrite="true">
+			<notNull>
+				<profiles>
+					<string>AssertValidTest</string>
+					<string>AssertFieldConstraintsTest</string>
+				</profiles>
+			</notNull>
+		</field>
+	</class>
+</oval>

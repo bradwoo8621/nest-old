@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE digester-rules PUBLIC
+  "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+  "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+
+<!-- there are five objects in stack. -->
+<!-- 0: POJOConfigurer -->
+<!-- 1: Set<ClassConfiguration> -->
+<!-- 2: Set<ConstraintSetConfiguration> -->
+<!-- 3: ClassConfiguration -->
+<!-- 4: MethodConfiguration -->
+<digester-rules>
+	<set-properties-rule>
+		<alias attr-name="message" prop-name="message" />
+		<alias attr-name="errorCode" prop-name="errorCode" />
+		<alias attr-name="severity" prop-name="severity" />
+		<alias attr-name="when" prop-name="when" />
+		<alias attr-name="target" prop-name="target" />
+	</set-properties-rule>
+
+	<!-- read profiles and set into Check -->
+	<pattern value="profiles">
+		<object-create-rule
+			classname="com.github.nest.arcteryx.validation.oval.configuration.wrapper.ProfilesWrapper" />
+		<pattern value="string">
+			<call-method-rule methodname="add" targetoffset="0"
+				paramcount="1" paramtypes="java.lang.String" />
+			<call-param-rule paramnumber="0" />
+		</pattern>
+		<set-top-rule methodname="setToCheck" paramtype="net.sf.oval.AbstractCheck" />
+	</pattern>
+
+	<!-- read constraint targets and set into check -->
+	<pattern value="appliesTo">
+		<object-create-rule
+			classname="com.github.nest.arcteryx.validation.oval.configuration.wrapper.ConstraintTargetsWrapper" />
+		<pattern value="constraintTarget">
+			<call-method-rule methodname="add" targetoffset="0"
+				paramcount="1" paramtypes="java.lang.String" />
+			<call-param-rule paramnumber="0" />
+		</pattern>
+		<set-top-rule methodname="setToCheck" paramtype="net.sf.oval.AbstractCheck" />
+	</pattern>
+</digester-rules>

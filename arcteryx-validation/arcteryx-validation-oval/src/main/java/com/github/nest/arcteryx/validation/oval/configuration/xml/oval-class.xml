@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE digester-rules PUBLIC
+  "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+  "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+
+<!-- there are three objects in stack. -->
+<!-- 0: POJOConfigurer -->
+<!-- 1: Set<ClassConfiguration> -->
+<!-- 2: Set<ConstraintSetConfiguration> -->
+<digester-rules>
+	<pattern value="class">
+		<object-create-rule
+			classname="com.github.nest.arcteryx.validation.oval.configuration.wrapper.ClassConfigurationWrapper" />
+		<set-properties-rule>
+			<alias attr-name="type" prop-name="type" />
+			<alias attr-name="applyFieldConstraintsToConstructors"
+				prop-name="applyFieldConstraintsToConstructors" />
+			<alias attr-name="applyFieldConstraintsToSetters" prop-name="applyFieldConstraintsToSetters" />
+			<alias attr-name="assertParametersNotNull" prop-name="assertParametersNotNull" />
+			<alias attr-name="checkInvariants" prop-name="checkInvariants" />
+			<alias attr-name="inspectInterfaces" prop-name="inspectInterfaces" />
+			<alias attr-name="overwrite" prop-name="overwrite" />
+		</set-properties-rule>
+		<!-- add class configuration to set -->
+		<!-- targetoffset: count from stack top -->
+		<call-method-rule methodname="add" targetoffset="2"
+			paramcount="1" paramtypes="java.lang.Object" />
+		<!-- stack-index: count from stack top -->
+		<call-param-rule paramnumber="0" stack-index="0" />
+
+		<!-- read object -->
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-class-object.xml" />
+
+		<!-- read field -->
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-class-field.xml" />
+
+		<!-- read constructor -->
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-class-constructor.xml" />
+
+		<!-- read method -->
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-class-method.xml" />
+	</pattern>
+</digester-rules>

@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<oval xmlns="http://oval.sf.net/oval-configuration" xmlns:xsi="http://http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://oval.sf.net/oval-configuration http://oval.sourceforge.net/oval-configuration.xsd">
+	<!-- define a constraint set -->
+	<constraintSet id="user.userid">
+		<notNull />
+		<matchPattern>
+			<pattern pattern="^[a-z0-9]{8}$" flags="0" />
+		</matchPattern>
+	</constraintSet>
+
+	<!-- define checks for the acme.model.User class -->
+	<!-- overwrite=false means already defined checks for this class will not 
+		be removed -->
+	<class type="com.github.nest.arcteryx.validation.oval.configuration.xml.User"
+		overwrite="false" applyFieldConstraintsToSetters="true">
+		<object />
+		<field name="firstName">
+			<length min="0" max="3" />
+		</field>
+
+		<field name="lastName">
+			<length min="0" max="5" />
+		</field>
+
+		<!-- overwrite=true means previously defined checks for this field will 
+			be overwritten by the checks defined here -->
+		<field name="managerId" overwrite="true">
+			<!-- use the checks defined for the constaint set "user.userid" -->
+			<assertConstraint id="user.userid" />
+		</field>
+
+		<field name="userId" overwrite="true">
+			<!-- use the checks defined for the constaint set "user.userid" -->
+			<assertConstraintSet id="user.userid" />
+		</field>
+
+		<!-- define constructor parameter checks -->
+		<constructor>
+			<!-- parameter1 -->
+			<parameter type="java.lang.String">
+				<notNull />
+				<nullable when="groovy:_this.fieldA == null">
+					<profiles>
+						<string>phase1</string>
+						<string>phase2</string>
+					</profiles>
+				</nullable>
+			</parameter>
+
+			<!-- parameter 2 -->
+			<!-- the types of all parameters must be listed, even if no checks are 
+				defined -->
+			<parameter type="java.lang.String" />
+		</constructor>
+
+		<!-- define method parameter checks -->
+		<method name="setPasswordExpirationDays">
+			<!-- parameter 1 -->
+			<parameter type="int">
+				<notNull />
+			</parameter>
+		</method>
+	</class>
+</oval>

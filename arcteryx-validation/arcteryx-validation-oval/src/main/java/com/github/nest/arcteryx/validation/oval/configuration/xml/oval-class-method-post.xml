@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE digester-rules PUBLIC
+  "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+  "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+
+<!-- there are five objects in stack. -->
+<!-- 0: POJOConfigurer -->
+<!-- 1: Set<ClassConfiguration> -->
+<!-- 2: Set<ConstraintSetConfiguration> -->
+<!-- 3: ClassConfiguration -->
+<!-- 4: MethodConfiguration -->
+<digester-rules>
+	<!-- post execution configuration -->
+	<pattern value="postExecution">
+		<object-create-rule
+			classname="com.github.nest.arcteryx.validation.oval.configuration.wrapper.MethodPostExecutionConfigurationWrapper" />
+		<set-properties-rule>
+			<alias attr-name="overwrite" prop-name="overwrite" />
+		</set-properties-rule>
+		<!-- set into MethodConfiguration -->
+		<call-method-rule methodname="setPostExecutionConfiguration"
+			targetoffset="1" paramcount="1"
+			paramtypes="net.sf.oval.configuration.pojo.elements.MethodPostExecutionConfiguration" />
+		<call-param-rule paramnumber="0" stack-index="0" />
+
+		<pattern value="post">
+			<object-create-rule classname="net.sf.oval.guard.PostCheck" />
+			<set-properties-rule>
+				<alias attr-name="expression" prop-name="expression" />
+				<alias attr-name="language" prop-name="language" />
+				<alias attr-name="old" prop-name="old" />
+			</set-properties-rule>
+			<!-- read properties and set into Check -->
+			<include
+				url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-check-properties.xml" />
+
+			<!-- add into MethodPostExecutionConfiguration -->
+			<call-method-rule methodname="addCheck"
+				targetoffset="1" paramcount="1" paramtypes="net.sf.oval.guard.PostCheck" />
+			<call-param-rule paramnumber="0" stack-index="0" />
+		</pattern>
+	</pattern>
+</digester-rules>

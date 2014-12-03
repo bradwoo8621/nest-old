@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE digester-rules PUBLIC
+  "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+  "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+
+<!-- there are several objects in stack. -->
+<!-- top of stack: parent object with addCheckExclusion(CheckExclusion) method -->
+<digester-rules>
+	<pattern value="nullable">
+		<object-create-rule
+			classname="net.sf.oval.constraint.exclusion.NullableExclusion" />
+		<!-- read properties and set into CheckExlusion -->
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-check-exclusion-properties.xml" />
+		<call-method-rule methodname="addCheckExclusion"
+			targetoffset="1" paramcount="1" paramtypes="net.sf.oval.CheckExclusion" />
+		<call-param-rule paramnumber="0" stack-index="0" />
+	</pattern>
+</digester-rules>

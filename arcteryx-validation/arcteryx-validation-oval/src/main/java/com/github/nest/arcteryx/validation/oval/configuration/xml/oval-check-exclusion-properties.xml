@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE digester-rules PUBLIC
+  "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+  "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+
+<!-- there are several objects in stack. -->
+<!-- top-1 of stack is AbstractCheckExclusion -->
+<digester-rules>
+	<set-properties-rule>
+		<alias attr-name="when" prop-name="when" />
+	</set-properties-rule>
+	<!-- read profiles and set into CheckExlusion -->
+	<pattern value="profiles">
+		<object-create-rule
+			classname="com.github.nest.arcteryx.validation.oval.configuration.wrapper.ProfilesWrapper" />
+		<pattern value="string">
+			<call-method-rule methodname="add" targetoffset="0"
+				paramcount="1" paramtypes="java.lang.String" />
+			<call-param-rule paramnumber="0" />
+		</pattern>
+		<set-top-rule methodname="setToCheckExculsion"
+			paramtype="net.sf.oval.AbstractCheckExclusion" />
+	</pattern>
+</digester-rules>

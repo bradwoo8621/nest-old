@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE digester-rules PUBLIC
+  "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+  "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+
+<!-- there are four objects in stack. -->
+<!-- 0: POJOConfigurer -->
+<!-- 1: Set<ClassConfiguration> -->
+<!-- 2: Set<ConstraintSetConfiguration> -->
+<!-- 3: ClassConfiguration -->
+<digester-rules>
+	<pattern value="constructor">
+		<!-- create ConstructorConfiguration -->
+		<object-create-rule
+			classname="com.github.nest.arcteryx.validation.oval.configuration.wrapper.ConstructorConfigurationWrapper" />
+		<set-properties-rule>
+			<alias attr-name="postCheckInvariants" prop-name="postCheckInvariants" />
+			<alias attr-name="overwrite" prop-name="overwrite" />
+		</set-properties-rule>
+		<!-- add into ClassConfiguration -->
+		<call-method-rule methodname="addConstructorConfiguration"
+			targetoffset="1" paramcount="1"
+			paramtypes="net.sf.oval.configuration.pojo.elements.ConstructorConfiguration" />
+		<call-param-rule paramnumber="0" stack-index="0" />
+
+		<!-- read parameters -->
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-class-parameter.xml" />
+	</pattern>
+</digester-rules>

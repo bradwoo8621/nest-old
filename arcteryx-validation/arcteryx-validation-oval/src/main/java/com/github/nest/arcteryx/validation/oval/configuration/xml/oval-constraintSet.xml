@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE digester-rules PUBLIC
+  "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+  "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+
+<!-- there are three objects in stack. -->
+<!-- 0: POJOConfigurer -->
+<!-- 1: Set<ClassConfiguration> -->
+<!-- 2: Set<ConstraintSetConfiguration> -->
+<digester-rules>
+	<pattern value="constraintSet">
+		<object-create-rule
+			classname="com.github.nest.arcteryx.validation.oval.configuration.wrapper.ConstraintSetConfigurationWrapper" />
+		<set-properties-rule>
+			<alias attr-name="id" prop-name="id" />
+			<alias attr-name="overwrite" prop-name="overwrite" />
+		</set-properties-rule>
+		<!-- add constraint set configuration to set -->
+		<!-- targetoffset: count from stack top -->
+		<call-method-rule methodname="add" targetoffset="1"
+			paramcount="1" paramtypes="java.lang.Object" />
+		<!-- stack-index: count from stack top -->
+		<call-param-rule paramnumber="0" stack-index="0" />
+
+		<!-- read checks -->
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-checks.xml" />
+	</pattern>
+</digester-rules>

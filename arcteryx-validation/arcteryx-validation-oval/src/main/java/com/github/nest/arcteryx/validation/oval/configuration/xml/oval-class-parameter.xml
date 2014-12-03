@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE digester-rules PUBLIC
+  "-//Apache Commons //DTD digester-rules XML V1.0//EN"
+  "http://commons.apache.org/digester/dtds/digester-rules-3.0.dtd">
+
+<!-- there are five objects in stack. -->
+<!-- 0: POJOConfigurer -->
+<!-- 1: Set<ClassConfiguration> -->
+<!-- 2: Set<ConstraintSetConfiguration> -->
+<!-- 3: ClassConfiguration -->
+<!-- 4: ConstructorConfiguration or MethodConfiguration -->
+<digester-rules>
+	<pattern value="parameter">
+		<!-- create ParameterConfiguration -->
+		<object-create-rule
+			classname="com.github.nest.arcteryx.validation.oval.configuration.wrapper.ParameterConfigurationWrapper" />
+		<set-properties-rule>
+			<alias attr-name="type" prop-name="type" />
+			<alias attr-name="overwrite" prop-name="overwrite" />
+		</set-properties-rule>
+		<!-- add into ClassConfiguration -->
+		<call-method-rule methodname="addParameterConfiguration"
+			targetoffset="1" paramcount="1"
+			paramtypes="net.sf.oval.configuration.pojo.elements.ParameterConfiguration" />
+		<call-param-rule paramnumber="0" stack-index="0" />
+
+		<!-- read checks -->
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-checks.xml" />
+
+		<!-- read check exclusions -->
+		<include
+			url="classpath:/com/github/nest/arcteryx/validation/oval/configuration/xml/oval-check-exclusions.xml" />
+	</pattern>
+</digester-rules>

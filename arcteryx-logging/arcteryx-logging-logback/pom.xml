@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.github.nest</groupId>
+		<artifactId>arcteryx-logging</artifactId>
+		<version>0.0.1</version>
+	</parent>
+	<artifactId>arcteryx-logging-logback</artifactId>
+	<name>arcteryx-logging-logback</name>
+	<url>https://github.com/bradwoo8621/nest</url>
+	<dependencies>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+	</dependencies>
+</project>

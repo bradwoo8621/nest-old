@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.nest</groupId>
-	<artifactId>arcteryx-meta</artifactId>
+	<artifactId>arcteryx-common</artifactId>
 	<version>0.0.1</version>
 	<packaging>jar</packaging>
 
-	<name>arcteryx-meta</name>
+	<name>arcteryx-common</name>
 	<url>https://github.com/bradwoo8621/nest</url>
 
 	<properties>
@@ -25,15 +25,9 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.nest</groupId>
-			<artifactId>arcteryx-context</artifactId>
-			<version>0.0.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.github.nest</groupId>
-			<artifactId>arcteryx-common</artifactId>
-			<version>0.0.1</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
 		</dependency>
 	</dependencies>
 	<build>

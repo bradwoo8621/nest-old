@@ -44,6 +44,16 @@ public interface IResourceDescriptor extends Serializable {
 	IResourceOperator getOperator(String code);
 
 	/**
+	 * get operator by given code and operator class
+	 * 
+	 * @param code
+	 * @param operatorClass
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	<T extends IResourceOperator> T getOperator(String code, Class<T> operatorClass);
+
+	/**
 	 * get all operators
 	 * 
 	 * @return

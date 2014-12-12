@@ -20,7 +20,8 @@ public interface IResourceOperator<In, Out> {
 	 * handle resource instance
 	 * 
 	 * @param resource
-	 * @throws ResourceExecutionException
+	 * @param descriptor
+	 * @return
 	 */
-	Out handle(In resource);
+	Out handle(In resource, IResourceDescriptor descriptor);
 }

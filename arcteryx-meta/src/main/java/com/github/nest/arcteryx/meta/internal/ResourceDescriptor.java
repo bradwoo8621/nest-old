@@ -82,6 +82,8 @@ public class ResourceDescriptor implements IResourceDescriptor {
 
 	/**
 	 * never return null, if no properties described, return empty collection.
+	 * Call {@linkplain #getProperties(boolean)} and send parameter
+	 * <code>true</code>.
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getProperties()
 	 */
@@ -114,6 +116,19 @@ public class ResourceDescriptor implements IResourceDescriptor {
 		}
 
 		return operator;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getOperator(java.lang.String,
+	 *      java.lang.Class)
+	 */
+	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public <T extends IResourceOperator> T getOperator(String code, Class<T> operatorClass) {
+		IResourceOperator operator = getOperator(code);
+		return (T) operator;
 	}
 
 	/**
@@ -160,7 +175,8 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	}
 
 	/**
-	 * (non-Javadoc)
+	 * Will cache the ancestor's properties at first call when the parameter
+	 * <code>all</code> is true, and never change again.
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getProperties(boolean)
 	 */

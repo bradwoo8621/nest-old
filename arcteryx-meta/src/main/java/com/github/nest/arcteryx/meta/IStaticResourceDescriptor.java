@@ -10,9 +10,10 @@ package com.github.nest.arcteryx.meta;
  */
 public interface IStaticResourceDescriptor extends IResourceDescriptor {
 	/**
-	 * initialize the resource instances
+	 * get static resource initializer
 	 * 
-	 * @throws ResourceException
+	 * @return
 	 */
-	void initialize() throws ResourceException;
+	@SuppressWarnings("rawtypes")
+	IStaticResourceInitializer getInitializer();
 }

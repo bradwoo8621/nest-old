@@ -17,11 +17,25 @@ public interface IResourceOperator {
 	String getCode();
 
 	/**
+	 * set resource descriptor
+	 * 
+	 * @param resourceDescriptor
+	 */
+	void setResourceDescriptor(IResourceDescriptor resourceDescriptor);
+
+	/**
+	 * get resource descriptor
+	 * 
+	 * @return
+	 */
+	IResourceDescriptor getResourceDescriptor();
+
+	/**
 	 * handle resource instance
 	 * 
 	 * @param resource
 	 * @param descriptor
 	 * @return
 	 */
-	Object handle(Object resource, IResourceDescriptor descriptor);
+	Object handle(Object resource);
 }

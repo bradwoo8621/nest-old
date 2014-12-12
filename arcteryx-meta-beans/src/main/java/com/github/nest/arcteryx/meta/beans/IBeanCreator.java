@@ -5,48 +5,51 @@ package com.github.nest.arcteryx.meta.beans;
 
 import java.util.Map;
 
-import com.github.nest.arcteryx.meta.IResourceOperator;
-
 /**
  * Bean creator
  * 
  * @author brad.wu
  */
-public interface IBeanCreator extends IResourceOperator {
+public interface IBeanCreator extends IBeanOperator {
 	String CODE = "meta.beans.creator";
 
 	/**
 	 * create resource by default values
 	 * 
-	 * @param descriptor
 	 * @return
 	 */
-	<T> T create(IBeanDescriptor descriptor);
+	<T> T create();
 
 	/**
 	 * create resource by initial values
 	 * 
-	 * @param descriptor
 	 * @param initialValues
 	 * @return
 	 */
-	<T> T create(IBeanDescriptor descriptor, Object... initialValues);
+	<T> T create(Object... initialValues);
+
+	/**
+	 * create resource by given constructor and initial values
+	 * 
+	 * @param constructorParameterTypes
+	 * @param initialValues
+	 * @return
+	 */
+	<T> T create(Class<?>[] constructorParameterTypes, Object[] initialValues);
 
 	/**
 	 * create resource by initial values
 	 * 
-	 * @param descriptor
 	 * @param initialValues
 	 * @return
 	 */
-	<T> T create(IBeanDescriptor descriptor, Map<String, Object> initialValues);
+	<T> T create(Map<String, Object> initialValues);
 
 	/**
 	 * fill resource with default values
 	 * 
 	 * @param resource
-	 * @param descriptor
 	 * @return
 	 */
-	<T> T fillWithDefaultValues(T resource, IBeanDescriptor descriptor);
+	<T> T fillWithDefaultValues(T resource);
 }

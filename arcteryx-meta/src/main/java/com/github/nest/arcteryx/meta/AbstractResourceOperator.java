@@ -10,6 +10,7 @@ package com.github.nest.arcteryx.meta;
  */
 public abstract class AbstractResourceOperator implements IResourceOperator {
 	private String code = null;
+	private IResourceDescriptor resourceDescriptor = null;
 
 	/**
 	 * (non-Javadoc)
@@ -27,5 +28,25 @@ public abstract class AbstractResourceOperator implements IResourceOperator {
 	 */
 	public void setCode(String code) {
 		this.code = code;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceOperator#setResourceDescriptor(com.github.nest.arcteryx.meta.IResourceDescriptor)
+	 */
+	@Override
+	public void setResourceDescriptor(IResourceDescriptor resourceDescriptor) {
+		this.resourceDescriptor = resourceDescriptor;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceOperator#getResourceDescriptor()
+	 */
+	@Override
+	public IResourceDescriptor getResourceDescriptor() {
+		return this.resourceDescriptor;
 	}
 }

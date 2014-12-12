@@ -5,31 +5,27 @@ package com.github.nest.arcteryx.meta.beans;
 
 import java.util.List;
 
-import com.github.nest.arcteryx.meta.IResourceOperator;
-
 /**
  * Bean finder
  * 
  * @author brad.wu
  */
-public interface IBeanFinder extends IResourceOperator {
+public interface IBeanFinder extends IBeanOperator {
 	String CODE = "meta.beans.finder";
 
 	/**
 	 * find beans by given criteria
 	 * 
 	 * @param criteria
-	 * @param descriptor
 	 * @return
 	 */
-	<T> List<T> find(IBeanCriteria criteria, IBeanDescriptor descriptor);
+	<T> List<T> find(IBeanCriteria criteria);
 
 	/**
-	 * find bean by given key
+	 * find bean by given beanIdentity
 	 * 
-	 * @param key
-	 * @param descriptor
+	 * @param beanIdentity
 	 * @return
 	 */
-	<T> T find(String key, IBeanDescriptor descriptor);
+	<T> T find(IBeanIdentity beanIdentity);
 }

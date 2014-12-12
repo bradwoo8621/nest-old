@@ -137,6 +137,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
 		synchronized (this.operators) {
 			this.operators.clear();
 			for (IResourceOperator operator : operators) {
+				operator.setResourceDescriptor(this);
 				this.operators.put(operator.getCode(), operator);
 			}
 		}

@@ -3,6 +3,8 @@
  */
 package com.github.nest.arcteryx.meta.internal;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
 
@@ -33,7 +35,7 @@ public class PropertyDescriptor implements IPropertyDescriptor {
 	 *            the name to set
 	 */
 	public void setName(String name) {
-		assert (name != null && name.trim().length() != 0) : "Name of property descriptor cannot be null or empty string.";
+		assert StringUtils.isNotBlank(name) : "Name of property descriptor cannot be null or empty string.";
 		this.name = name;
 	}
 

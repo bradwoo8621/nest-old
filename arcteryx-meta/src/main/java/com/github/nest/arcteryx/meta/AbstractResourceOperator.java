@@ -3,6 +3,8 @@
  */
 package com.github.nest.arcteryx.meta;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * abstract resource operator
  * 
@@ -27,6 +29,7 @@ public abstract class AbstractResourceOperator implements IResourceOperator {
 	 *            the code to set
 	 */
 	public void setCode(String code) {
+		assert StringUtils.isNotBlank(code) : "Code cannot be null or empty string.";
 		this.code = code;
 	}
 

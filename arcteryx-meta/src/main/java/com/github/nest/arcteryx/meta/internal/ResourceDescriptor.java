@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceOperator;
@@ -56,7 +58,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 *            the name to set
 	 */
 	public void setName(String name) {
-		assert (name != null && name.trim().length() != 0) : "Name of resource descriptor cannot be null or empty string.";
+		assert StringUtils.isNotBlank(name) : "Name of resource descriptor cannot be null or empty string.";
 
 		this.name = name;
 	}
@@ -112,7 +114,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 */
 	@Override
 	public IResourceOperator getOperator(String code) {
-		assert (code != null && code.trim().length() != 0) : "Code cannot be null or empty string.";
+		assert StringUtils.isNotBlank(code) : "Code cannot be null or empty string.";
 
 		IResourceOperator operator = this.operators != null ? this.operators.get(code) : null;
 		if (operator == null) {

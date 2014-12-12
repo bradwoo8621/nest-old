@@ -8,7 +8,7 @@ package com.github.nest.arcteryx.meta;
  * 
  * @author brad.wu
  */
-public interface IResourceOperator<In, Out> {
+public interface IResourceOperator {
 	/**
 	 * get code
 	 * 
@@ -23,5 +23,5 @@ public interface IResourceOperator<In, Out> {
 	 * @param descriptor
 	 * @return
 	 */
-	Out handle(In resource, IResourceDescriptor descriptor);
+	Object handle(Object resource, IResourceDescriptor descriptor);
 }

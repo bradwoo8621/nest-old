@@ -19,7 +19,6 @@ public class StaticResourceDescriptor extends ResourceDescriptor implements ISta
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IStaticResourceDescriptor#getInitializer()
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public IStaticResourceInitializer getInitializer() {
 		return this.getOperator(IStaticResourceInitializer.CODE, IStaticResourceInitializer.class);

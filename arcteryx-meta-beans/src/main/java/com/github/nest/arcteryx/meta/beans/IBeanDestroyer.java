@@ -3,7 +3,6 @@
  */
 package com.github.nest.arcteryx.meta.beans;
 
-import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceOperator;
 
 /**
@@ -11,7 +10,7 @@ import com.github.nest.arcteryx.meta.IResourceOperator;
  * 
  * @author brad.wu
  */
-public interface IBeanDestroyer<In, Out> extends IResourceOperator<In, Out> {
+public interface IBeanDestroyer extends IResourceOperator {
 	String CODE = "meta.beans.destroyer";
 
 	/**
@@ -21,5 +20,5 @@ public interface IBeanDestroyer<In, Out> extends IResourceOperator<In, Out> {
 	 * @param descritpor
 	 * @return
 	 */
-	boolean destroy(In resource, IResourceDescriptor descritpor);
+	boolean destroy(Object resource, IBeanDescriptor descritpor);
 }

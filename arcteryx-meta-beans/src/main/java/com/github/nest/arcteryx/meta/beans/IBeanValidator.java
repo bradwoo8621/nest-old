@@ -11,7 +11,7 @@ import com.github.nest.arcteryx.meta.IResourceOperator;
  * 
  * @author brad.wu
  */
-public interface IBeanValidator<In, Out> extends IResourceOperator<In, Out> {
+public interface IBeanValidator extends IResourceOperator {
 	String CODE = "meta.beans.validator";
 
 	/**
@@ -21,5 +21,5 @@ public interface IBeanValidator<In, Out> extends IResourceOperator<In, Out> {
 	 * @param descriptor
 	 * @return
 	 */
-	Out validate(In resource, IResourceDescriptor descriptor);
+	Object validate(Object resource, IResourceDescriptor descriptor);
 }

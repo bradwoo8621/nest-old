@@ -5,7 +5,6 @@ package com.github.nest.arcteryx.meta.beans;
 
 import java.util.Map;
 
-import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceOperator;
 
 /**
@@ -13,7 +12,7 @@ import com.github.nest.arcteryx.meta.IResourceOperator;
  * 
  * @author brad.wu
  */
-public interface IBeanCreator<In, Out> extends IResourceOperator<In, Out> {
+public interface IBeanCreator extends IResourceOperator {
 	String CODE = "meta.beans.creator";
 
 	/**
@@ -22,7 +21,7 @@ public interface IBeanCreator<In, Out> extends IResourceOperator<In, Out> {
 	 * @param descriptor
 	 * @return
 	 */
-	Out create(IResourceDescriptor descriptor);
+	<T> T create(IBeanDescriptor descriptor);
 
 	/**
 	 * create resource by initial values
@@ -31,7 +30,7 @@ public interface IBeanCreator<In, Out> extends IResourceOperator<In, Out> {
 	 * @param initialValues
 	 * @return
 	 */
-	Out create(IResourceDescriptor descriptor, Object... initialValues);
+	<T> T create(IBeanDescriptor descriptor, Object... initialValues);
 
 	/**
 	 * create resource by initial values
@@ -40,7 +39,7 @@ public interface IBeanCreator<In, Out> extends IResourceOperator<In, Out> {
 	 * @param initialValues
 	 * @return
 	 */
-	Out create(IResourceDescriptor descriptor, Map<String, Object> initialValues);
+	<T> T create(IBeanDescriptor descriptor, Map<String, Object> initialValues);
 
 	/**
 	 * fill resource with default values
@@ -49,5 +48,5 @@ public interface IBeanCreator<In, Out> extends IResourceOperator<In, Out> {
 	 * @param descriptor
 	 * @return
 	 */
-	Out fillWithDefaultValues(In resource, IResourceDescriptor descriptor);
+	<T> T fillWithDefaultValues(T resource, IBeanDescriptor descriptor);
 }

@@ -5,7 +5,6 @@ package com.github.nest.arcteryx.meta.beans;
 
 import java.util.List;
 
-import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceOperator;
 
 /**
@@ -13,7 +12,7 @@ import com.github.nest.arcteryx.meta.IResourceOperator;
  * 
  * @author brad.wu
  */
-public interface IBeanFinder<In, Out> extends IResourceOperator<In, Out> {
+public interface IBeanFinder extends IResourceOperator {
 	String CODE = "meta.beans.finder";
 
 	/**
@@ -23,7 +22,7 @@ public interface IBeanFinder<In, Out> extends IResourceOperator<In, Out> {
 	 * @param descriptor
 	 * @return
 	 */
-	List<Out> find(IBeanCriteria criteria, IResourceDescriptor descriptor);
+	<T> List<T> find(IBeanCriteria criteria, IBeanDescriptor descriptor);
 
 	/**
 	 * find bean by given key
@@ -32,5 +31,5 @@ public interface IBeanFinder<In, Out> extends IResourceOperator<In, Out> {
 	 * @param descriptor
 	 * @return
 	 */
-	Out find(String key, IResourceDescriptor descriptor);
+	<T> T find(String key, IBeanDescriptor descriptor);
 }

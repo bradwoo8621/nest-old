@@ -10,7 +10,7 @@ import java.util.Collection;
  * 
  * @author brad.wu
  */
-public interface IStaticResourceInitializer<In, Out> extends IResourceOperator<In, Out> {
+public interface IStaticResourceInitializer extends IResourceOperator {
 	String CODE = "meta.initializer";
 
 	/**
@@ -19,5 +19,5 @@ public interface IStaticResourceInitializer<In, Out> extends IResourceOperator<I
 	 * @param descriptor
 	 * @return
 	 */
-	Collection<Out> initialize(IResourceDescriptor descriptor);
+	Collection<Object> initialize(IResourceDescriptor descriptor);
 }

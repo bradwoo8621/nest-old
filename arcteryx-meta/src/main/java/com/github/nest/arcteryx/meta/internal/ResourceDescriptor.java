@@ -30,7 +30,6 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	private String name = null;
 	private String description = null;
 	private Collection<IPropertyDescriptor> properties = null;
-	@SuppressWarnings("rawtypes")
 	private Map<String, IResourceOperator> operators = new HashMap<String, IResourceOperator>();
 	private IResourceDescriptor parent = null;
 	private Collection<IPropertyDescriptor> allProperties = null;
@@ -105,7 +104,6 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getOperator(java.lang.String)
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public IResourceOperator getOperator(String code) {
 		assert (code != null && code.trim().length() != 0) : "Code cannot be null or empty string.";
@@ -125,7 +123,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 *      java.lang.Class)
 	 */
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	public <T extends IResourceOperator> T getOperator(String code, Class<T> operatorClass) {
 		IResourceOperator operator = getOperator(code);
 		return (T) operator;
@@ -135,7 +133,6 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 * @param operators
 	 *            the operators to set
 	 */
-	@SuppressWarnings("rawtypes")
 	public void setOperators(Collection<IResourceOperator> operators) {
 		synchronized (this.operators) {
 			this.operators.clear();
@@ -150,7 +147,6 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getOperators()
 	 */
-	@SuppressWarnings("rawtypes")
 	@Override
 	public Collection<IResourceOperator> getOperators() {
 		return this.operators.values();

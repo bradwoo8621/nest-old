@@ -32,7 +32,6 @@ public interface IBeanDescriptor extends IResourceDescriptor {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	IBeanValidator getValidator();
 
 	/**
@@ -40,7 +39,6 @@ public interface IBeanDescriptor extends IResourceDescriptor {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	IBeanCreator getCreator();
 
 	/**
@@ -48,7 +46,6 @@ public interface IBeanDescriptor extends IResourceDescriptor {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	IBeanDestroyer getDestoryer();
 
 	/**
@@ -56,7 +53,6 @@ public interface IBeanDescriptor extends IResourceDescriptor {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	IBeanFinder getFinder();
 
 	/**

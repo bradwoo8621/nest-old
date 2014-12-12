@@ -14,6 +14,5 @@ public interface IStaticResourceDescriptor extends IResourceDescriptor {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	IStaticResourceInitializer getInitializer();
 }

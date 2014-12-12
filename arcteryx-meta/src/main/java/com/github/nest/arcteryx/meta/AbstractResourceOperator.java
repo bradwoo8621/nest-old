@@ -8,7 +8,7 @@ package com.github.nest.arcteryx.meta;
  * 
  * @author brad.wu
  */
-public abstract class AbstractResourceOperator<In, Out> implements IResourceOperator<In, Out> {
+public abstract class AbstractResourceOperator implements IResourceOperator {
 	private String code = null;
 
 	/**

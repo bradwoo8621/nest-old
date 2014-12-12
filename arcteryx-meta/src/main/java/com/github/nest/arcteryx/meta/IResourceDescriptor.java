@@ -40,7 +40,6 @@ public interface IResourceDescriptor extends Serializable {
 	 * @param code
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	IResourceOperator getOperator(String code);
 
 	/**
@@ -50,7 +49,6 @@ public interface IResourceDescriptor extends Serializable {
 	 * @param operatorClass
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	<T extends IResourceOperator> T getOperator(String code, Class<T> operatorClass);
 
 	/**
@@ -58,7 +56,6 @@ public interface IResourceDescriptor extends Serializable {
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	Collection<IResourceOperator> getOperators();
 
 	/**

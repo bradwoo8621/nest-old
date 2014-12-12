@@ -24,4 +24,11 @@ public interface IBeanPropertyDescriptor extends IPropertyDescriptor {
 	 * @return
 	 */
 	IBeanPropertyConstraint getConstraint();
+
+	/**
+	 * get bean descriptor
+	 * 
+	 * @return
+	 */
+	IBeanDescriptor getBeanDescriptor();
 }

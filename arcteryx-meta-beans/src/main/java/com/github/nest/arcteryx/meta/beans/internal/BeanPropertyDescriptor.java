@@ -3,6 +3,8 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal;
 
+import com.github.nest.arcteryx.meta.IResourceDescriptor;
+import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 import com.github.nest.arcteryx.meta.internal.PropertyDescriptor;
@@ -59,5 +61,27 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	 */
 	public void setContraint(IBeanPropertyConstraint contraint) {
 		this.contraint = contraint;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor#getBeanDescriptor()
+	 */
+	@Override
+	public IBeanDescriptor getBeanDescriptor() {
+		return (IBeanDescriptor) this.getResourceDescriptor();
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.internal.PropertyDescriptor#setResourceDescriptor(com.github.nest.arcteryx.meta.IResourceDescriptor)
+	 */
+	@Override
+	public void setResourceDescriptor(IResourceDescriptor resourceDescriptor) {
+		assert resourceDescriptor instanceof IBeanDescriptor : "Resource descriptor must be an instance of "
+				+ IBeanDescriptor.class;
+		super.setResourceDescriptor(resourceDescriptor);
 	}
 }

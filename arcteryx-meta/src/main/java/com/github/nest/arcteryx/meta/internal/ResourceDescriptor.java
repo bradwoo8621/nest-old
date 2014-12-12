@@ -97,6 +97,12 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 */
 	public void setProperties(Collection<IPropertyDescriptor> properties) {
 		this.properties = properties;
+
+		if (properties != null) {
+			for (IPropertyDescriptor property : properties) {
+				property.setResourceDescriptor(this);
+			}
+		}
 	}
 
 	/**

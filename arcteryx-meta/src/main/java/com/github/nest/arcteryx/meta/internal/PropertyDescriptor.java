@@ -4,6 +4,7 @@
 package com.github.nest.arcteryx.meta.internal;
 
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
+import com.github.nest.arcteryx.meta.IResourceDescriptor;
 
 /**
  * property descriptor
@@ -15,6 +16,7 @@ public class PropertyDescriptor implements IPropertyDescriptor {
 
 	private String name = null;
 	private String description = null;
+	private IResourceDescriptor resourceDescriptor = null;
 
 	/**
 	 * (non-Javadoc)
@@ -51,6 +53,26 @@ public class PropertyDescriptor implements IPropertyDescriptor {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IPropertyDescriptor#setResourceDescriptor(com.github.nest.arcteryx.meta.IResourceDescriptor)
+	 */
+	@Override
+	public void setResourceDescriptor(IResourceDescriptor resourceDescriptor) {
+		this.resourceDescriptor = resourceDescriptor;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IPropertyDescriptor#getResourceDescriptor()
+	 */
+	@Override
+	public IResourceDescriptor getResourceDescriptor() {
+		return this.resourceDescriptor;
 	}
 
 	/**

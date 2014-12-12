@@ -24,4 +24,18 @@ public interface IPropertyDescriptor extends Serializable {
 	 * @return
 	 */
 	String getDescription();
+
+	/**
+	 * set resource descriptor
+	 * 
+	 * @param resourceDescriptor
+	 */
+	void setResourceDescriptor(IResourceDescriptor resourceDescriptor);
+
+	/**
+	 * get resource descriptor
+	 * 
+	 * @return
+	 */
+	IResourceDescriptor getResourceDescriptor();
 }

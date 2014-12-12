@@ -82,7 +82,22 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 */
 	@Override
 	public IBeanCreator getCreator() {
-		return this.getOperator(IBeanCreator.CODE, IBeanCreator.class);
+		IBeanCreator creator = this.getOperator(IBeanCreator.CODE, IBeanCreator.class);
+		if (creator == null) {
+			creator = createBeanCreator();
+		}
+		return creator;
+	}
+
+	/**
+	 * create bean creator
+	 * 
+	 * @return
+	 */
+	protected IBeanCreator createBeanCreator() {
+		IBeanCreator creator = new BeanCreator();
+		creator.setResourceDescriptor(this);
+		return creator;
 	}
 
 	/**
@@ -92,7 +107,11 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 */
 	@Override
 	public IBeanDestroyer getDestoryer() {
-		return this.getOperator(IBeanDestroyer.CODE, IBeanDestroyer.class);
+		IBeanDestroyer destroyer = this.getOperator(IBeanDestroyer.CODE, IBeanDestroyer.class);
+		if (destroyer == null) {
+			destroyer = BeanDestroyer.DESTROYER;
+		}
+		return destroyer;
 	}
 
 	/**

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="descriptor.IPerson"
+		class="com.github.nest.arcteryx.meta.internal.ResourceDescriptor"
+		scope="singleton" p:name="Person" p:description="A person">
+		<property name="properties">
+			<bean class="com.github.nest.arcteryx.meta.internal.PropertyDescriptor"
+				p:name="name" p:description="Name of person" />
+		</property>
+	</bean>
+
+	<bean id="descriptor.IStuduent"
+		class="com.github.nest.arcteryx.meta.internal.ResourceDescriptor"
+		scope="singleton" p:name="Student" p:description="A student"
+		p:parent-ref="descriptor.IPerson">
+		<property name="properties">
+			<list>
+				<bean class="com.github.nest.arcteryx.meta.internal.PropertyDescriptor"
+					p:name="school" p:description="School of student" />
+				<bean class="com.github.nest.arcteryx.meta.internal.PropertyDescriptor"
+					p:name="grade" p:description="Grade of student" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="descriptor.repository"
+		class="com.github.nest.arcteryx.meta.DefaultResourceDescriptorRepository"
+		scope="singleton">
+		<property name="mapping">
+			<map>
+				<entry key="com.github.nest.arcteryx.meta.IPerson" value-ref="descriptor.IPerson" />
+				<entry key="com.github.nest.arcteryx.meta.IStudent" value-ref="descriptor.IStuduent" />
+			</map>
+		</property>
+	</bean>
+</beans>

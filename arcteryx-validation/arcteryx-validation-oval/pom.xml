@@ -31,7 +31,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.nest</groupId>
-			<artifactId>arcteryx-logging-logback</artifactId>
+			<artifactId>arcteryx-common</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>

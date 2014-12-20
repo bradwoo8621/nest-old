@@ -7,7 +7,7 @@ import com.github.nest.arcteryx.meta.beans.IBeanPreloader;
 import com.github.nest.arcteryx.meta.beans.IPreloadedBeanDescriptor;
 
 /**
- * static resource descriptor
+ * preloaded resource descriptor
  * 
  * @author brad.wu
  */

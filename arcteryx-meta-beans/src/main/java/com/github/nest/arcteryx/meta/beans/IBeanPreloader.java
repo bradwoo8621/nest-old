@@ -9,7 +9,7 @@ import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceOperator;
 
 /**
- * bean initializer
+ * bean preloader
  * 
  * @author brad.wu
  */

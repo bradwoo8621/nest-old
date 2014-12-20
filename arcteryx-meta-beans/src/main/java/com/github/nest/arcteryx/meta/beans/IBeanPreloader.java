@@ -13,14 +13,14 @@ import com.github.nest.arcteryx.meta.IResourceOperator;
  * 
  * @author brad.wu
  */
-public interface IBeanInitializer extends IResourceOperator {
-	String CODE = "meta.beans.initializer";
+public interface IBeanPreloader extends IResourceOperator {
+	String CODE = "meta.beans.preloader";
 
 	/**
-	 * initialize static resources
+	 * load static resources
 	 * 
 	 * @param descriptor
 	 * @return
 	 */
-	Collection<Object> initialize(IResourceDescriptor descriptor);
+	Collection<Object> load(IResourceDescriptor descriptor);
 }

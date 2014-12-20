@@ -9,6 +9,8 @@ package com.github.nest.arcteryx.meta.beans;
  * @author brad.wu
  */
 public interface IBeanCacheProvider extends IBeanOperator {
+	String CODE = "meta.beans.cacheProvider";
+
 	/**
 	 * put bean into cache
 	 * 

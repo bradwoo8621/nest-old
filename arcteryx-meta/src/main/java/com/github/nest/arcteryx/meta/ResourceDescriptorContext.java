@@ -82,7 +82,7 @@ public class ResourceDescriptorContext implements IResourceDescriptorRepository 
 	}
 
 	/**
-	 * set configuration
+	 * set mapping, return old mapping.
 	 * 
 	 * @param map
 	 * @return old configuration

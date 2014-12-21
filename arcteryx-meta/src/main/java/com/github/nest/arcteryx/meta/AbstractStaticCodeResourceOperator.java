@@ -53,4 +53,15 @@ public abstract class AbstractStaticCodeResourceOperator implements IResourceOpe
 	public IResourceDescriptor getResourceDescriptor() {
 		return this.resourceDescriptor;
 	}
+
+	/**
+	 * get resource descriptor as given class
+	 * 
+	 * @param descriptorClass
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends IResourceDescriptor> T getResourceDescriptor(Class<T> descriptorClass) {
+		return (T) getResourceDescriptor();
+	}
 }

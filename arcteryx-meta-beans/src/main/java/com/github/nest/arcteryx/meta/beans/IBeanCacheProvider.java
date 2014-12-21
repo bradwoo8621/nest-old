@@ -16,7 +16,7 @@ public interface IBeanCacheProvider extends IBeanOperator {
 	 * 
 	 * @param bean
 	 */
-	void put(Object bean);
+	void putIntoCache(Object bean);
 
 	/**
 	 * get bean from cache by given key
@@ -24,5 +24,12 @@ public interface IBeanCacheProvider extends IBeanOperator {
 	 * @param key
 	 * @return
 	 */
-	<T> T get(IBeanIdentity key);
+	<T> T getFromCache(IBeanIdentity key);
+
+	/**
+	 * get bean identity extracter
+	 * 
+	 * @return
+	 */
+	IBeanIdentityExtracter getIdentityExtracter();
 }

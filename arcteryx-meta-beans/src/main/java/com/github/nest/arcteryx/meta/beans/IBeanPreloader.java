@@ -5,7 +5,6 @@ package com.github.nest.arcteryx.meta.beans;
 
 import java.util.Collection;
 
-import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceOperator;
 
 /**
@@ -19,8 +18,7 @@ public interface IBeanPreloader extends IResourceOperator {
 	/**
 	 * load static resources
 	 * 
-	 * @param descriptor
 	 * @return
 	 */
-	<T> Collection<T> load(IResourceDescriptor descriptor);
+	<T> Collection<T> load();
 }

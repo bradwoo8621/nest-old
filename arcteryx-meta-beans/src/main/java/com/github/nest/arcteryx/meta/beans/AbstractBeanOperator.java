@@ -19,7 +19,7 @@ public abstract class AbstractBeanOperator extends AbstractResourceOperator impl
 	 */
 	@Override
 	public IBeanDescriptor getBeanDescriptor() {
-		return (IBeanDescriptor) getResourceDescriptor();
+		return getResourceDescriptor(IBeanDescriptor.class);
 	}
 
 	/**
@@ -31,7 +31,7 @@ public abstract class AbstractBeanOperator extends AbstractResourceOperator impl
 	public void setResourceDescriptor(IResourceDescriptor resourceDescriptor) {
 		assert resourceDescriptor instanceof IBeanDescriptor : "Resource descriptor must be an instanceof "
 				+ IBeanDescriptor.class;
-	
+
 		super.setResourceDescriptor(resourceDescriptor);
 	}
 }

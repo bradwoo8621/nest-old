@@ -37,7 +37,7 @@ public class Context {
 	 * @param configLocation
 	 * @ApplicationContext context =
 	 */
-	public static ApplicationContext createApplicationContextByClassPath(String... configLocation) {
+	public static synchronized ApplicationContext createApplicationContextByClassPath(String... configLocation) {
 		ApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
 		contextMap.put(context.getId(), context);
 		return context;
@@ -50,7 +50,7 @@ public class Context {
 	 * @param configLocation
 	 * @ApplicationContext context =
 	 */
-	public static ApplicationContext createApplicationContextByClassPath(ApplicationContext parent,
+	public static synchronized ApplicationContext createApplicationContextByClassPath(ApplicationContext parent,
 			String... configLocation) {
 		ApplicationContext context = new ClassPathXmlApplicationContext(configLocation, parent);
 		contextMap.put(context.getId(), context);
@@ -63,7 +63,7 @@ public class Context {
 	 * @param configLocation
 	 * @ApplicationContext context =
 	 */
-	public static ApplicationContext createContextByFileSystem(String... configLocation) {
+	public static synchronized ApplicationContext createContextByFileSystem(String... configLocation) {
 		ApplicationContext context = new FileSystemXmlApplicationContext(configLocation);
 		contextMap.put(context.getId(), context);
 		return context;
@@ -76,7 +76,8 @@ public class Context {
 	 * @param configLocation
 	 * @ApplicationContext context =
 	 */
-	public static ApplicationContext createContextByFileSystem(ApplicationContext parent, String... configLocation) {
+	public static synchronized ApplicationContext createContextByFileSystem(ApplicationContext parent,
+			String... configLocation) {
 		ApplicationContext context = new FileSystemXmlApplicationContext(configLocation, parent);
 		contextMap.put(context.getId(), context);
 		return context;

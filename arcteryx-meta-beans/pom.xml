@@ -29,6 +29,11 @@
 			<artifactId>arcteryx-meta</artifactId>
 			<version>0.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.nest</groupId>
+			<artifactId>arcteryx-context</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

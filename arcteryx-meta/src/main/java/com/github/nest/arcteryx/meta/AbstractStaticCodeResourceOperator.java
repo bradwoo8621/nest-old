@@ -4,7 +4,8 @@
 package com.github.nest.arcteryx.meta;
 
 /**
- * static code resource operator
+ * static code resource operator. code of operator will be created by
+ * {@linkplain #createCode()} and cannot be changed.
  * 
  * @author brad.wu
  */

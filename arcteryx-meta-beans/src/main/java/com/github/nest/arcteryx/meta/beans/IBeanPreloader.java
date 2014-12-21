@@ -22,5 +22,5 @@ public interface IBeanPreloader extends IResourceOperator {
 	 * @param descriptor
 	 * @return
 	 */
-	Collection<Object> load(IResourceDescriptor descriptor);
+	<T> Collection<T> load(IResourceDescriptor descriptor);
 }

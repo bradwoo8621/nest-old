@@ -7,11 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * default resource descriptor repository
+ * resource descriptor repository
  * 
  * @author brad.wu
  */
-public class DefaultResourceDescriptorRepository implements IResourceDescriptorRepository {
+public class ResourceDescriptorContext implements IResourceDescriptorRepository {
 	private Map<Class<?>, IResourceDescriptor> map = new HashMap<Class<?>, IResourceDescriptor>();
 
 	/**

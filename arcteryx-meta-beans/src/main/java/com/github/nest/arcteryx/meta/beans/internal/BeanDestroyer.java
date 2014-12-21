@@ -3,9 +3,7 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal;
 
-import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.beans.AbstractStaticCodeBeanOperator;
-import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanDestroyer;
 
 /**
@@ -52,34 +50,5 @@ public class BeanDestroyer extends AbstractStaticCodeBeanOperator implements IBe
 	@Override
 	protected String createCode() {
 		return CODE;
-	}
-
-	/**
-	 * return null
-	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.AbstractStaticCodeBeanOperator#getBeanDescriptor()
-	 */
-	@Override
-	public IBeanDescriptor getBeanDescriptor() {
-		return null;
-	}
-
-	/**
-	 * return null
-	 * 
-	 * @see com.github.nest.arcteryx.meta.AbstractStaticCodeResourceOperator#getResourceDescriptor()
-	 */
-	@Override
-	public IResourceDescriptor getResourceDescriptor() {
-		return null;
-	}
-
-	/**
-	 * do nothing
-	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.AbstractStaticCodeBeanOperator#setResourceDescriptor(com.github.nest.arcteryx.meta.IResourceDescriptor)
-	 */
-	@Override
-	public void setResourceDescriptor(IResourceDescriptor resourceDescriptor) {
 	}
 }

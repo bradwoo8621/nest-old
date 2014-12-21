@@ -20,7 +20,7 @@ public abstract class AbstractStaticCodeBeanOperator extends AbstractStaticCodeR
 	 */
 	@Override
 	public IBeanDescriptor getBeanDescriptor() {
-		return (IBeanDescriptor) getResourceDescriptor();
+		return getResourceDescriptor(IBeanDescriptor.class);
 	}
 
 	/**

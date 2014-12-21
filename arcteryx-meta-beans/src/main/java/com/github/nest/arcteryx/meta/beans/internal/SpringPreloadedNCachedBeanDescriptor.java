@@ -17,8 +17,11 @@ public class SpringPreloadedNCachedBeanDescriptor extends SpringPreloadedBeanDes
 	private String cacheName = null;
 
 	/**
-	 * @return the cacheName
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.ICachedBeanDescriptor#getCacheName()
 	 */
+	@Override
 	public String getCacheName() {
 		return cacheName;
 	}

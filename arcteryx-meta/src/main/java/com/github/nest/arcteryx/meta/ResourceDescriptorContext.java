@@ -13,6 +13,22 @@ import java.util.Map;
  */
 public class ResourceDescriptorContext implements IResourceDescriptorRepository {
 	private Map<Class<?>, IResourceDescriptor> map = new HashMap<Class<?>, IResourceDescriptor>();
+	private IResouceDescriptorContextInterceptor contextInterceptor = null;
+
+	/**
+	 * @return the contextInterceptor
+	 */
+	public IResouceDescriptorContextInterceptor getContextInterceptor() {
+		return contextInterceptor;
+	}
+
+	/**
+	 * @param contextInterceptor
+	 *            the contextInterceptor to set
+	 */
+	public void setContextInterceptor(IResouceDescriptorContextInterceptor contextInterceptor) {
+		this.contextInterceptor = contextInterceptor;
+	}
 
 	/**
 	 * (non-Javadoc)
@@ -77,7 +93,12 @@ public class ResourceDescriptorContext implements IResourceDescriptorRepository 
 		assert descriptor != null : "Resource descriptor cannot be null.";
 
 		synchronized (this.map) {
-			return map.put(resourceClass, descriptor);
+			IResourceDescriptor old = map.put(resourceClass, descriptor);
+			IResouceDescriptorContextInterceptor interceptor = this.getContextInterceptor();
+			if (interceptor != null) {
+				interceptor.postPutIntoContext(resourceClass, descriptor);
+			}
+			return old;
 		}
 	}
 
@@ -96,6 +117,13 @@ public class ResourceDescriptorContext implements IResourceDescriptorRepository 
 
 			this.map.clear();
 			this.map.putAll(map);
+
+			IResouceDescriptorContextInterceptor interceptor = this.getContextInterceptor();
+			if (interceptor != null) {
+				for (Class<?> resourceClass : map.keySet()) {
+					interceptor.postPutIntoContext(resourceClass, map.get(resourceClass));
+				}
+			}
 
 			return oldMap;
 		}

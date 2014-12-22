@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * resource descriptor repository
+ * resource descriptor context
  * 
  * @author brad.wu
  */

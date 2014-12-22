@@ -16,5 +16,10 @@ public interface ICachedBeanDescriptor extends IBeanDescriptor {
 	 */
 	IBeanCacheProvider getCacheProvider();
 
+	/**
+	 * get cache name
+	 * 
+	 * @return
+	 */
 	String getCacheName();
 }

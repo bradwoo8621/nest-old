@@ -27,7 +27,7 @@ public class TestPreloadedBeans {
 	public void testPreload() {
 		BeanDescriptorContext context = Context.getContext("TestPreloadedBeans").getBean("beans.context",
 				BeanDescriptorContext.class);
-		ICachedBeanDescriptor descriptor = context.get(PreloadedBean.class, ICachedBeanDescriptor.class);
+		ICachedBeanDescriptor descriptor = context.get(PreloadedBean.class);
 		IBeanFinder finder = descriptor.getFinder();
 
 		BeanID id = new BeanID();
@@ -51,7 +51,7 @@ public class TestPreloadedBeans {
 		assertEquals("Test Bean 003", beans.get(0).getName());
 		assertEquals("Test Bean 002", beans.get(1).getName());
 		assertEquals("Test Bean 001", beans.get(2).getName());
-		
+
 		beans = descriptor.getSortedBeans("sorter");
 		assertEquals(3, beans.size());
 		assertEquals("Test Bean 003", beans.get(0).getName());

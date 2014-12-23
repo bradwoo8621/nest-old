@@ -15,7 +15,7 @@ import java.util.Map;
  * @author brad.wu
  */
 public class ResourceDescriptorContext implements IResourceDescriptorContext {
-	private Map<Class<?>, IResourceDescriptor> map = new HashMap<Class<?>, IResourceDescriptor>();
+	private Map<Class<? extends IResourceDescriptor>, IResourceDescriptor> map = new HashMap<Class<? extends IResourceDescriptor>, IResourceDescriptor>();
 	private IResouceDescriptorContextInterceptor contextInterceptor = null;
 
 	/**
@@ -38,24 +38,19 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#get(java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public IResourceDescriptor get(Object resource) {
+	public <T extends IResourceDescriptor> T get(Object resource) {
 		assert resource != null : "Resource instance cannot be null.";
 
 		Class<?> clazz = resource.getClass();
-		return get(clazz);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#get(java.lang.Object,
-	 *      java.lang.Class)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T extends IResourceDescriptor> T get(Object resource, Class<T> descriptorClass) {
-		return (T) get(resource);
+		IResourceDescriptor descriptor = get(clazz);
+		IResouceDescriptorContextInterceptor interceptor = this.getContextInterceptor();
+		if (interceptor != null) {
+			return (T) interceptor.decorateDescriptor(descriptor);
+		} else {
+			return (T) descriptor;
+		}
 	}
 
 	/**
@@ -63,13 +58,14 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#get(java.lang.Class)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public IResourceDescriptor get(Class<?> resourceClass) {
+	public <T extends IResourceDescriptor> T get(Class<?> resourceClass) {
 		assert resourceClass != null : "Resource class cannot be null.";
 
 		IResourceDescriptor descriptor = map.get(resourceClass);
 		if (descriptor != null) {
-			return descriptor;
+			return (T) descriptor;
 		} else {
 			// find by super class
 			Class<?> superClass = resourceClass.getSuperclass();
@@ -79,7 +75,7 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 
 			// not defined by super class or no super class
 			if (descriptor != null) {
-				return descriptor;
+				return (T) descriptor;
 			} else {
 				// find by interfaces, traverse all interfaces and their
 				// interfaces until find the first interface with descriptor
@@ -87,7 +83,7 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 				for (Class<?> interfaceClass : interfaces) {
 					descriptor = get(interfaceClass);
 					if (descriptor != null) {
-						return descriptor;
+						return (T) descriptor;
 					}
 				}
 			}
@@ -99,23 +95,11 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#get(java.lang.Class,
-	 *      java.lang.Class)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T extends IResourceDescriptor> T get(Class<?> resourceClass, Class<T> descriptorClass) {
-		return (T) get(resourceClass);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#put(java.lang.Class,
 	 *      com.github.nest.arcteryx.meta.IResourceDescriptor)
 	 */
 	@Override
-	public IResourceDescriptor put(Class<?> resourceClass, IResourceDescriptor descriptor) {
+	public IResourceDescriptor put(Class<? extends IResourceDescriptor> resourceClass, IResourceDescriptor descriptor) {
 		assert resourceClass != null : "Resource class cannot be null.";
 		assert descriptor != null : "Resource descriptor cannot be null.";
 
@@ -135,11 +119,12 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 * @param map
 	 * @return old configuration
 	 */
-	public Map<Class<?>, IResourceDescriptor> setMapping(Map<Class<?>, IResourceDescriptor> map) {
+	public Map<Class<? extends IResourceDescriptor>, IResourceDescriptor> setMapping(
+			Map<Class<? extends IResourceDescriptor>, IResourceDescriptor> map) {
 		assert map != null : "Resource descriptor map cannot be null.";
 
 		synchronized (this.map) {
-			Map<Class<?>, IResourceDescriptor> oldMap = new HashMap<Class<?>, IResourceDescriptor>();
+			Map<Class<? extends IResourceDescriptor>, IResourceDescriptor> oldMap = new HashMap<Class<? extends IResourceDescriptor>, IResourceDescriptor>();
 			oldMap.putAll(this.map);
 
 			this.map.clear();
@@ -147,8 +132,8 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 
 			IResouceDescriptorContextInterceptor interceptor = this.getContextInterceptor();
 			if (interceptor != null) {
-				for (Class<?> resourceClass : map.keySet()) {
-					interceptor.postPutIntoContext(resourceClass, map.get(resourceClass));
+				for (Map.Entry<Class<? extends IResourceDescriptor>, IResourceDescriptor> entry : this.map.entrySet()) {
+					interceptor.postPutIntoContext(entry.getKey(), entry.getValue());
 				}
 			}
 

@@ -17,16 +17,7 @@ public interface IResourceDescriptorContext {
 	 * @param resource
 	 * @return
 	 */
-	IResourceDescriptor get(Object resource);
-
-	/**
-	 * get descriptor by given resource instance and descriptor class
-	 * 
-	 * @param resource
-	 * @param descriptorClass
-	 * @return
-	 */
-	<T extends IResourceDescriptor> T get(Object resource, Class<T> descriptorClass);
+	<T extends IResourceDescriptor> T get(Object resource);
 
 	/**
 	 * get descriptor by given resource class
@@ -34,16 +25,7 @@ public interface IResourceDescriptorContext {
 	 * @param resourceClass
 	 * @return
 	 */
-	IResourceDescriptor get(Class<?> resourceClass);
-
-	/**
-	 * get descriptor by given resource class and descriptor class
-	 * 
-	 * @param resourceClass
-	 * @param descriptorClass
-	 * @return
-	 */
-	<T extends IResourceDescriptor> T get(Class<?> resourceClass, Class<T> descriptorClass);
+	<T extends IResourceDescriptor> T get(Class<?> resourceClass);
 
 	/**
 	 * put resource class and its descriptor pair into repository
@@ -52,7 +34,7 @@ public interface IResourceDescriptorContext {
 	 * @param descriptor
 	 * @return
 	 */
-	IResourceDescriptor put(Class<?> resourceClass, IResourceDescriptor descriptor);
+	IResourceDescriptor put(Class<? extends IResourceDescriptor> resourceClass, IResourceDescriptor descriptor);
 
 	/**
 	 * get all descriptors

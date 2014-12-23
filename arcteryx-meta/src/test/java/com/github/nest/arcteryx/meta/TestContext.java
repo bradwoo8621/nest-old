@@ -18,27 +18,26 @@ import com.github.nest.arcteryx.context.Context;
  * @author brad.wu
  */
 @FixMethodOrder
-public class TestRepository {
+public class TestContext {
 	private static ApplicationContext context = null;
 
 	@BeforeClass
 	public static void test() {
-		context = Context.createApplicationContextByClassPath("/repository.xml");
+		context = Context.createApplicationContextByClassPath("context", "/context.xml");
+		System.out.println("Context ID: [" + context.getId() + "].");
 	}
 
 	@Test
 	public void testSingletonRepository() {
-		IResourceDescriptorRepository repository = context.getBean("descriptor.repository",
-				IResourceDescriptorRepository.class);
-		IResourceDescriptorRepository repository1 = context.getBean("descriptor.repository",
-				IResourceDescriptorRepository.class);
+		IResourceDescriptorContext repository = context.getBean("descriptor.context", IResourceDescriptorContext.class);
+		IResourceDescriptorContext repository1 = context
+				.getBean("descriptor.context", IResourceDescriptorContext.class);
 		assertEquals(repository, repository1);
 	}
 
 	@Test
 	public void testWorker() {
-		IResourceDescriptorRepository repository = context.getBean("descriptor.repository",
-				IResourceDescriptorRepository.class);
+		IResourceDescriptorContext repository = context.getBean("descriptor.context", IResourceDescriptorContext.class);
 		IResourceDescriptor descriptor = repository.get(Worker.class);
 		assertEquals("Person", descriptor.getName());
 		assertEquals("A person", descriptor.getDescription());
@@ -57,8 +56,7 @@ public class TestRepository {
 
 	@Test
 	public void testStudent() {
-		IResourceDescriptorRepository repository = context.getBean("descriptor.repository",
-				IResourceDescriptorRepository.class);
+		IResourceDescriptorContext repository = context.getBean("descriptor.context", IResourceDescriptorContext.class);
 		IResourceDescriptor descriptor = repository.get(IStudent.class);
 		assertEquals("Student", descriptor.getName());
 		assertEquals("A student", descriptor.getDescription());
@@ -88,8 +86,7 @@ public class TestRepository {
 
 	@Test
 	public void testPerson() {
-		IResourceDescriptorRepository repository = context.getBean("descriptor.repository",
-				IResourceDescriptorRepository.class);
+		IResourceDescriptorContext repository = context.getBean("descriptor.context", IResourceDescriptorContext.class);
 		IResourceDescriptor descriptor = repository.get(IPerson.class);
 		assertEquals("Person", descriptor.getName());
 		assertEquals("A person", descriptor.getDescription());

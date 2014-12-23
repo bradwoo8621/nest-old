@@ -4,6 +4,7 @@
 package com.github.nest.arcteryx.meta.beans.internal;
 
 import com.github.nest.arcteryx.meta.beans.IBeanCacheProvider;
+import com.github.nest.arcteryx.meta.beans.IBeanIdentity;
 import com.github.nest.arcteryx.meta.beans.ICachedBeanDescriptor;
 
 /**
@@ -42,5 +43,25 @@ public class SpringPreloadedNCachedBeanDescriptor extends SpringPreloadedBeanDes
 	@Override
 	public IBeanCacheProvider getCacheProvider() {
 		return this.getOperator(IBeanCacheProvider.CODE, IBeanCacheProvider.class);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.ICachedBeanDescriptor#getFromCache(com.github.nest.arcteryx.meta.beans.IBeanIdentity)
+	 */
+	@Override
+	public <T> T getFromCache(IBeanIdentity key) {
+		return this.getCacheProvider().getFromCache(key);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.ICachedBeanDescriptor#putIntoCache(java.lang.Object)
+	 */
+	@Override
+	public void putIntoCache(Object resource) {
+		this.getCacheProvider().putIntoCache(resource);
 	}
 }

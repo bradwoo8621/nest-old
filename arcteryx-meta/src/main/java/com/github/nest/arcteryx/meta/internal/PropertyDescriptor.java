@@ -78,6 +78,17 @@ public class PropertyDescriptor implements IPropertyDescriptor {
 	}
 
 	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IPropertyDescriptor#getResourceDescriptor(java.lang.Class)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends IResourceDescriptor> T getResourceDescriptor(Class<T> descriptorClass) {
+		return (T) getResourceDescriptor();
+	}
+
+	/**
 	 * return super.toString();
 	 * 
 	 * @return

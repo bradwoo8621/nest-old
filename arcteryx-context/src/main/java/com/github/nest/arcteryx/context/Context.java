@@ -34,11 +34,17 @@ public class Context {
 	/**
 	 * create application context by given class paths
 	 * 
+	 * @param id
 	 * @param configLocation
-	 * @ApplicationContext context =
+	 * 
+	 * @return
 	 */
-	public static synchronized ApplicationContext createApplicationContextByClassPath(String... configLocation) {
-		ApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
+	public static synchronized ApplicationContext createApplicationContextByClassPath(String id,
+			String... configLocation) {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
+		if (id != null) {
+			context.setId(id);
+		}
 		contextMap.put(context.getId(), context);
 		return context;
 	}
@@ -46,13 +52,18 @@ public class Context {
 	/**
 	 * create application context by given class paths and parent context
 	 * 
+	 * @param id
 	 * @param parent
 	 * @param configLocation
-	 * @ApplicationContext context =
+	 * 
+	 * @return
 	 */
 	public static synchronized ApplicationContext createApplicationContextByClassPath(ApplicationContext parent,
-			String... configLocation) {
-		ApplicationContext context = new ClassPathXmlApplicationContext(configLocation, parent);
+			String id, String... configLocation) {
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(configLocation, parent);
+		if (id != null) {
+			context.setId(id);
+		}
 		contextMap.put(context.getId(), context);
 		return context;
 	}
@@ -60,11 +71,16 @@ public class Context {
 	/**
 	 * create application context by give file system paths
 	 * 
+	 * @param id
 	 * @param configLocation
-	 * @ApplicationContext context =
+	 * 
+	 * @return
 	 */
-	public static synchronized ApplicationContext createContextByFileSystem(String... configLocation) {
-		ApplicationContext context = new FileSystemXmlApplicationContext(configLocation);
+	public static synchronized ApplicationContext createContextByFileSystem(String id, String... configLocation) {
+		FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(configLocation);
+		if (id != null) {
+			context.setId(id);
+		}
 		contextMap.put(context.getId(), context);
 		return context;
 	}
@@ -72,13 +88,18 @@ public class Context {
 	/**
 	 * create application context by given file system paths and parent context
 	 * 
+	 * @param id
 	 * @param parent
 	 * @param configLocation
-	 * @ApplicationContext context =
+	 * 
+	 * @return
 	 */
-	public static synchronized ApplicationContext createContextByFileSystem(ApplicationContext parent,
+	public static synchronized ApplicationContext createContextByFileSystem(ApplicationContext parent, String id,
 			String... configLocation) {
-		ApplicationContext context = new FileSystemXmlApplicationContext(configLocation, parent);
+		FileSystemXmlApplicationContext context = new FileSystemXmlApplicationContext(configLocation, parent);
+		if (id != null) {
+			context.setId(id);
+		}
 		contextMap.put(context.getId(), context);
 		return context;
 	}

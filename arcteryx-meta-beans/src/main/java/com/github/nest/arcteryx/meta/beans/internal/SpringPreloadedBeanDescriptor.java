@@ -15,6 +15,8 @@ public class SpringPreloadedBeanDescriptor extends PreloadedBeanDescriptor {
 	private String springBeanId = null;
 
 	/**
+	 * Spring bean id of predefined beans
+	 * 
 	 * @return the springBeanId
 	 */
 	public String getSpringBeanId() {
@@ -30,6 +32,8 @@ public class SpringPreloadedBeanDescriptor extends PreloadedBeanDescriptor {
 	}
 
 	/**
+	 * Spring context id of predefined beans
+	 * 
 	 * @return the springContextId
 	 */
 	public String getSpringContextId() {

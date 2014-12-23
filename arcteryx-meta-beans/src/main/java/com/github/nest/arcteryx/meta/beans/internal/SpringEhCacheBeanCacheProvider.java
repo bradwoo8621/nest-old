@@ -29,6 +29,8 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	private IBeanIdentityExtracter identityExtracter = null;
 
 	/**
+	 * Spring context id of cache manager bean
+	 * 
 	 * @return the springContextId
 	 */
 	public String getSpringContextId() {
@@ -44,6 +46,8 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	}
 
 	/**
+	 * Spring bean id of cache manager bean
+	 * 
 	 * @return the springCacheManagerId
 	 */
 	public String getSpringCacheManagerId() {
@@ -77,14 +81,21 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	}
 
 	/**
-	 * put resource into cache and return resource itself.
+	 * if the parameter is an instance of {@linkplain IBeanIdentity}, get object
+	 * from cache by the identity; or put the parameter into cache.
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceOperator#handle(java.lang.Object)
 	 */
 	@Override
 	public Object handle(Object resource) {
-		this.putIntoCache(resource);
-		return resource;
+		assert resource != null : "Parameter cannot be null.";
+
+		if (resource instanceof IBeanIdentity) {
+			return this.getFromCache((IBeanIdentity) resource);
+		} else {
+			this.putIntoCache(resource);
+			return resource;
+		}
 	}
 
 	/**

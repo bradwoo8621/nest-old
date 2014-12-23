@@ -63,7 +63,7 @@ public class SpringBeanPreloader extends AbstractStaticCodeBeanOperator implemen
 	public void setResourceDescriptor(IResourceDescriptor resourceDescriptor) {
 		assert resourceDescriptor instanceof SpringPreloadedBeanDescriptor : "Resource descriptor must be an instanceof "
 				+ SpringPreloadedBeanDescriptor.class;
-	
+
 		super.setResourceDescriptor(resourceDescriptor);
 	}
 }

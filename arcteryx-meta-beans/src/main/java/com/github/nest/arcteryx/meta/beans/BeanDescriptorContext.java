@@ -23,7 +23,7 @@ public class BeanDescriptorContext extends ResourceDescriptorContext {
 		if (interceptor == null) {
 			this.setContextInterceptor(createContextInterceptor());
 		}
-		return this.getContextInterceptor();
+		return super.getContextInterceptor();
 	}
 
 	/**

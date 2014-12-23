@@ -3,7 +3,10 @@
  */
 package com.github.nest.arcteryx.meta;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,7 +14,7 @@ import java.util.Map;
  * 
  * @author brad.wu
  */
-public class ResourceDescriptorContext implements IResourceDescriptorRepository {
+public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	private Map<Class<?>, IResourceDescriptor> map = new HashMap<Class<?>, IResourceDescriptor>();
 	private IResouceDescriptorContextInterceptor contextInterceptor = null;
 
@@ -33,7 +36,7 @@ public class ResourceDescriptorContext implements IResourceDescriptorRepository 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorRepository#get(java.lang.Object)
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#get(java.lang.Object)
 	 */
 	@Override
 	public IResourceDescriptor get(Object resource) {
@@ -46,7 +49,19 @@ public class ResourceDescriptorContext implements IResourceDescriptorRepository 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorRepository#get(java.lang.Class)
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#get(java.lang.Object,
+	 *      java.lang.Class)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends IResourceDescriptor> T get(Object resource, Class<T> descriptorClass) {
+		return (T) get(resource);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#get(java.lang.Class)
 	 */
 	@Override
 	public IResourceDescriptor get(Class<?> resourceClass) {
@@ -84,7 +99,19 @@ public class ResourceDescriptorContext implements IResourceDescriptorRepository 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorRepository#put(java.lang.Class,
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#get(java.lang.Class,
+	 *      java.lang.Class)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends IResourceDescriptor> T get(Class<?> resourceClass, Class<T> descriptorClass) {
+		return (T) get(resourceClass);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#put(java.lang.Class,
 	 *      com.github.nest.arcteryx.meta.IResourceDescriptor)
 	 */
 	@Override
@@ -127,5 +154,34 @@ public class ResourceDescriptorContext implements IResourceDescriptorRepository 
 
 			return oldMap;
 		}
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getDescriptors()
+	 */
+	@Override
+	public Collection<IResourceDescriptor> getDescriptors() {
+		List<IResourceDescriptor> list = new ArrayList<IResourceDescriptor>(map.size());
+		list.addAll(map.values());
+		return list;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getDescriptors(java.lang.Class)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> Collection<T> getDescriptors(Class<T> descriptorClass) {
+		List<T> list = new ArrayList<T>(map.size());
+		for (IResourceDescriptor descriptor : map.values()) {
+			if (descriptorClass.isAssignableFrom(descriptor.getClass())) {
+				list.add((T) descriptor);
+			}
+		}
+		return list;
 	}
 }

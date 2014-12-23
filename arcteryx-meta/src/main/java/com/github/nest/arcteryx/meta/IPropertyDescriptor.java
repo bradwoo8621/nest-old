@@ -38,4 +38,12 @@ public interface IPropertyDescriptor extends Serializable {
 	 * @return
 	 */
 	IResourceDescriptor getResourceDescriptor();
+
+	/**
+	 * get resource descriptor by given class
+	 * 
+	 * @param descriptorClass
+	 * @return
+	 */
+	<T extends IResourceDescriptor> T getResourceDescriptor(Class<T> descriptorClass);
 }

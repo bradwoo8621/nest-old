@@ -70,7 +70,7 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	 */
 	@Override
 	public IBeanDescriptor getBeanDescriptor() {
-		return (IBeanDescriptor) this.getResourceDescriptor();
+		return this.getResourceDescriptor(IBeanDescriptor.class);
 	}
 
 	/**

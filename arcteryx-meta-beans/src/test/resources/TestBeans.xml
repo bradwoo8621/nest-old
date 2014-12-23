@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
+    http://www.springframework.org/schema/util 
+    http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="beans.context"
+		class="com.github.nest.arcteryx.meta.beans.BeanDescriptorContext"
+		scope="singleton">
+		<property name="mapping">
+			<map>
+				<entry key="com.github.nest.arcteryx.meta.beans.PreloadedBean"
+					value-ref="PreloadedBean" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="PreloadedBean"
+		class="com.github.nest.arcteryx.meta.beans.internal.SpringPreloadedNCachedBeanDescriptor"
+		scope="singleton" p:name="PreloadedBean" p:description="A preloaded bean"
+		p:springContextId="Beans.PreloadedBean" p:springBeanId="PreloadedBean.preload"
+		p:cacheName="PreloadedBean">
+		<property name="properties">
+			<list>
+				<bean class="com.github.nest.arcteryx.meta.internal.PropertyDescriptor"
+					p:name="id" p:description="ID of bean" />
+				<bean class="com.github.nest.arcteryx.meta.internal.PropertyDescriptor"
+					p:name="name" p:description="Name of bean" />
+			</list>
+		</property>
+		<property name="operators">
+			<list>
+				<!-- finder -->
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.SpringEhCacheBeanFinder" />
+				<!-- preloader -->
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.SpringBeanPreloader" />
+				<!-- cache provider -->
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.SpringEhCacheBeanCacheProvider"
+					p:springContextId="Cache" p:springCacheManagerId="CacheManager">
+					<property name="identityExtracter">
+						<bean
+							class="com.github.nest.arcteryx.meta.beans.PreloadedBeanIdentityExtracter" />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+</beans>

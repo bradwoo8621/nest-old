@@ -22,4 +22,19 @@ public interface ICachedBeanDescriptor extends IBeanDescriptor {
 	 * @return
 	 */
 	String getCacheName();
+
+	/**
+	 * get from cache by given identity
+	 * 
+	 * @param key
+	 * @return
+	 */
+	<T> T getFromCache(IBeanIdentity key);
+
+	/**
+	 * put the resource into cache
+	 * 
+	 * @param resource
+	 */
+	void putIntoCache(Object resource);
 }

@@ -27,8 +27,8 @@
 		</property>
 	</bean>
 
-	<bean id="descriptor.repository"
-		class="com.github.nest.arcteryx.meta.DefaultResourceDescriptorRepository"
+	<bean id="descriptor.context"
+		class="com.github.nest.arcteryx.meta.ResourceDescriptorContext"
 		scope="singleton">
 		<property name="mapping">
 			<map>

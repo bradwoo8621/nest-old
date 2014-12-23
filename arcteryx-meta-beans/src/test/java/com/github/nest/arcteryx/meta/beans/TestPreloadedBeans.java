@@ -3,7 +3,9 @@
  */
 package com.github.nest.arcteryx.meta.beans;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,5 +44,18 @@ public class TestPreloadedBeans {
 		id.setId("003");
 		bean = descriptor.getFromCache(id);
 		assertEquals("Test Bean 003", bean.getName());
+
+		IBeanSorter sorter = descriptor.getSorter("sorter");
+		List<PreloadedBean> beans = sorter.sort();
+		assertEquals(3, beans.size());
+		assertEquals("Test Bean 003", beans.get(0).getName());
+		assertEquals("Test Bean 002", beans.get(1).getName());
+		assertEquals("Test Bean 001", beans.get(2).getName());
+		
+		beans = descriptor.getSortedBeans("sorter");
+		assertEquals(3, beans.size());
+		assertEquals("Test Bean 003", beans.get(0).getName());
+		assertEquals("Test Bean 002", beans.get(1).getName());
+		assertEquals("Test Bean 001", beans.get(2).getName());
 	}
 }

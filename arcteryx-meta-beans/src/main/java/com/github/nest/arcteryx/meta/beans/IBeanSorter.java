@@ -20,7 +20,8 @@ public interface IBeanSorter extends IBeanOperator {
 	boolean isCached();
 
 	/**
-	 * sort beans
+	 * sort beans, can be used in {@linkplain ICachedBeanDescriptor} which will
+	 * hold the beans.
 	 * 
 	 * @return
 	 */

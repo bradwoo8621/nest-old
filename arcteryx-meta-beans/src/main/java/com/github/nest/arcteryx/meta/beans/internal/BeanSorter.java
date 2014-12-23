@@ -25,6 +25,8 @@ public class BeanSorter extends AbstractBeanOperator implements IBeanSorter {
 	private Comparator<?> comparator = null;
 	private List<?> sortedBeans = null;
 
+	private boolean beansCached = false;
+
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -46,7 +48,8 @@ public class BeanSorter extends AbstractBeanOperator implements IBeanSorter {
 	/**
 	 * @return the comparator
 	 */
-	public Comparator<?> getComparator() {
+	@SuppressWarnings("rawtypes")
+	public Comparator getComparator() {
 		return comparator;
 	}
 
@@ -59,10 +62,54 @@ public class BeanSorter extends AbstractBeanOperator implements IBeanSorter {
 	}
 
 	/**
+	 * true if sorted beans are cached.
+	 * 
+	 * @return the beansCached
+	 */
+	protected boolean isBeansCached() {
+		return beansCached;
+	}
+
+	/**
+	 * set as true, if the sorted beans are cached.
+	 * 
+	 * @param beansCached
+	 *            the beansCached to set
+	 */
+	protected void setBeansCached(boolean beansCached) {
+		this.beansCached = beansCached;
+	}
+
+	/**
+	 * if descriptor is {@linkplain ICachedBeanDescriptor}, will get beans from
+	 * descriptor, and sort. Otherwise, return empty list.
+	 * 
 	 * @return the sortedBeans
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected List<?> getSortedBeans() {
-		return sortedBeans;
+		if (this.isBeansCached()) {
+			// set as cached and beans already be cached
+			return this.sortedBeans;
+		}
+
+		List list = null;
+		IBeanDescriptor descriptor = getResourceDescriptor();
+		if (descriptor instanceof ICachedBeanDescriptor) {
+			Collection beans = ((ICachedBeanDescriptor) descriptor).getBeans();
+			list = new ArrayList(beans.size());
+			list.addAll(beans);
+			Collections.sort(list, getComparator());
+		} else {
+			// no beans found, return empty list
+			list = Collections.emptyList();
+		}
+		// hold sorted beans
+		if (this.isCached()) {
+			this.setSortedBeans(list);
+			this.setBeansCached(true);
+		}
+		return list;
 	}
 
 	/**
@@ -109,27 +156,7 @@ public class BeanSorter extends AbstractBeanOperator implements IBeanSorter {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> sort() {
-		if (this.isCached()) {
-			return (List<T>) this.getSortedBeans();
-		}
-
-		List<T> list = null;
-		Collection<T> beans = null;
-		IBeanDescriptor descriptor = getResourceDescriptor();
-		if (descriptor instanceof ICachedBeanDescriptor) {
-			beans = ((ICachedBeanDescriptor) descriptor).getBeans();
-			list = new ArrayList<T>(beans.size());
-			list.addAll(beans);
-			Collections.sort(list, (Comparator<T>) getComparator());
-			// hold sorted beans
-			if (this.isCached()) {
-				this.setSortedBeans(list);
-			}
-		} else {
-			// no beans found, return empty list
-			list = Collections.emptyList();
-		}
-		return list;
+		return (List<T>) this.getSortedBeans();
 	}
 
 	/**

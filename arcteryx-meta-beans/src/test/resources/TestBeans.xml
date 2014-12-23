@@ -46,6 +46,13 @@
 							class="com.github.nest.arcteryx.meta.beans.PreloadedBeanIdentityExtracter" />
 					</property>
 				</bean>
+				<bean class="com.github.nest.arcteryx.meta.beans.internal.BeanSorter"
+					p:cached="true" p:code="sorter">
+					<property name="comparator">
+						<bean
+							class="com.github.nest.arcteryx.meta.beans.PreloadedBeanComparator" />
+					</property>
+				</bean>
 			</list>
 		</property>
 	</bean>

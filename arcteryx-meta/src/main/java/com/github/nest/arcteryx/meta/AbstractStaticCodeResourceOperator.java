@@ -49,19 +49,9 @@ public abstract class AbstractStaticCodeResourceOperator implements IResourceOpe
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceOperator#getResourceDescriptor()
 	 */
-	@Override
-	public IResourceDescriptor getResourceDescriptor() {
-		return this.resourceDescriptor;
-	}
-
-	/**
-	 * get resource descriptor as given class
-	 * 
-	 * @param descriptorClass
-	 * @return
-	 */
 	@SuppressWarnings("unchecked")
-	public <T extends IResourceDescriptor> T getResourceDescriptor(Class<T> descriptorClass) {
-		return (T) getResourceDescriptor();
+	@Override
+	public <T extends IResourceDescriptor> T getResourceDescriptor() {
+		return (T) this.resourceDescriptor;
 	}
 }

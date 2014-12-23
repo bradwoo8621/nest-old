@@ -19,7 +19,7 @@ public abstract class AbstractBeanOperator extends AbstractResourceOperator impl
 	 */
 	@Override
 	public IBeanDescriptor getBeanDescriptor() {
-		return getResourceDescriptor(IBeanDescriptor.class);
+		return getResourceDescriptor();
 	}
 
 	/**

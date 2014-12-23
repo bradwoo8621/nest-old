@@ -29,14 +29,15 @@ public class SpringEhCacheBeanFinder extends AbstractStaticCodeBeanOperator impl
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceOperator#handle(java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object handle(Object resource) {
+	public <T> T handle(Object resource) {
 		if (resource instanceof IBeanIdentity) {
 			return find((IBeanIdentity) resource);
 		} else if (resource instanceof IBeanCriteria) {
-			return find((IBeanCriteria) resource);
+			return (T) find((IBeanCriteria) resource);
 		} else {
-			return resource;
+			return (T) resource;
 		}
 	}
 
@@ -59,7 +60,7 @@ public class SpringEhCacheBeanFinder extends AbstractStaticCodeBeanOperator impl
 	 */
 	@Override
 	public <T> T find(IBeanIdentity beanIdentity) {
-		ICachedBeanDescriptor descriptor = this.getResourceDescriptor(ICachedBeanDescriptor.class);
+		ICachedBeanDescriptor descriptor = this.getResourceDescriptor();
 
 		IBeanCacheProvider provider = descriptor.getCacheProvider();
 		return provider.getFromCache(beanIdentity);

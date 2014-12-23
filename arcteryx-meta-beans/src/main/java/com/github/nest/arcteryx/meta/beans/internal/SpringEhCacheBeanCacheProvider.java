@@ -3,6 +3,8 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal;
 
+import java.util.Collection;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -24,9 +26,13 @@ import com.github.nest.arcteryx.meta.beans.ICachedBeanDescriptor;
  * @author brad.wu
  */
 public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperator implements IBeanCacheProvider {
+	private boolean initialized = false;
+
 	private String springContextId = null;
 	private String springCacheManagerId = null;
 	private IBeanIdentityExtracter identityExtracter = null;
+
+	private Collection<?> beans = null;
 
 	/**
 	 * Spring context id of cache manager bean
@@ -63,6 +69,57 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	}
 
 	/**
+	 * initialize beans
+	 * 
+	 * @return
+	 */
+	protected void initialize() {
+		if (!this.isInitialized()) {
+			synchronized (this) {
+				if (!this.isInitialized()) {
+					SpringCachedBeanDescriptor springDescriptor = getResourceDescriptor();
+					String beanId = springDescriptor.getSpringBeanId();
+					String contextId = springDescriptor.getSpringContextId();
+					this.beans = (Collection<?>) Context.getContext(contextId).getBean(beanId);
+					for (Object bean : beans) {
+						this.putIntoCache(bean);
+					}
+					this.setInitialized(true);
+				}
+			}
+		}
+	}
+
+	/**
+	 * @return the initialized
+	 */
+	protected boolean isInitialized() {
+		return initialized;
+	}
+
+	/**
+	 * @param initialized
+	 *            the initialized to set
+	 */
+	protected void setInitialized(boolean initialized) {
+		this.initialized = initialized;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanCacheProvider#getBeans()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> Collection<T> getBeans() {
+		if (!this.isInitialized()) {
+			this.initialize();
+		}
+		return (Collection<T>) this.beans;
+	}
+
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanCacheProvider#getIdentityExtracter()
@@ -86,24 +143,24 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceOperator#handle(java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object handle(Object resource) {
+	public <T> T handle(Object resource) {
 		assert resource != null : "Parameter cannot be null.";
 
 		if (resource instanceof IBeanIdentity) {
 			return this.getFromCache((IBeanIdentity) resource);
 		} else {
 			this.putIntoCache(resource);
-			return resource;
+			return (T) resource;
 		}
 	}
 
 	/**
-	 * (non-Javadoc)
+	 * put into cache
 	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IBeanCacheProvider#putIntoCache(java.lang.Object)
+	 * @param bean
 	 */
-	@Override
 	public void putIntoCache(Object bean) {
 		Cache cache = getCache();
 
@@ -120,8 +177,8 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	protected Cache getCache() {
 		CacheManager cacheManager = Context.getContext(this.getSpringContextId()).getBean(
 				this.getSpringCacheManagerId(), CacheManager.class);
-
-		return cacheManager.getCache(this.getResourceDescriptor(ICachedBeanDescriptor.class).getCacheName());
+		ICachedBeanDescriptor descriptor = this.getResourceDescriptor();
+		return cacheManager.getCache(descriptor.getCacheName());
 	}
 
 	/**
@@ -134,7 +191,12 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	public <T> T getFromCache(IBeanIdentity key) {
 		Cache cache = getCache();
 		Element element = cache.get(key);
-		return (T) (element == null ? null : element.getObjectValue());
+		if (element == null && !this.isInitialized()) {
+			this.initialize();
+			return this.getFromCache(key);
+		} else {
+			return (T) element.getObjectValue();
+		}
 	}
 
 	/**
@@ -154,8 +216,8 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	 */
 	@Override
 	public void setResourceDescriptor(IResourceDescriptor resourceDescriptor) {
-		assert resourceDescriptor instanceof ICachedBeanDescriptor : "Resource descriptor must be an instanceof "
-				+ ICachedBeanDescriptor.class;
+		assert resourceDescriptor instanceof SpringCachedBeanDescriptor : "Resource descriptor must be an instanceof "
+				+ SpringCachedBeanDescriptor.class;
 
 		super.setResourceDescriptor(resourceDescriptor);
 	}

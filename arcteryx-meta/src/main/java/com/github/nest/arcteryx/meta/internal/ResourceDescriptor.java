@@ -112,8 +112,9 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getOperator(java.lang.String)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public IResourceOperator getOperator(String code) {
+	public <T extends IResourceOperator> T getOperator(String code) {
 		assert StringUtils.isNotBlank(code) : "Code cannot be null or empty string.";
 
 		IResourceOperator operator = this.operators != null ? this.operators.get(code) : null;
@@ -121,19 +122,6 @@ public class ResourceDescriptor implements IResourceDescriptor {
 			throw new ResourceException("Operator[" + code + "] not found on resource[" + getName() + "].");
 		}
 
-		return operator;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getOperator(java.lang.String,
-	 *      java.lang.Class)
-	 */
-	@Override
-	@SuppressWarnings({ "unchecked" })
-	public <T extends IResourceOperator> T getOperator(String code, Class<T> operatorClass) {
-		IResourceOperator operator = getOperator(code);
 		return (T) operator;
 	}
 

@@ -28,14 +28,14 @@ public interface IResourceOperator {
 	 * 
 	 * @return
 	 */
-	IResourceDescriptor getResourceDescriptor();
+	<T extends IResourceDescriptor> T getResourceDescriptor();
 
 	/**
-	 * handle resource instance
+	 * handle parameter, see its implementation's explanation
 	 * 
-	 * @param resource
+	 * @param parameter
 	 * @param descriptor
 	 * @return
 	 */
-	Object handle(Object resource);
+	<T> T handle(Object parameter);
 }

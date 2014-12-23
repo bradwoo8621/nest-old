@@ -3,6 +3,8 @@
  */
 package com.github.nest.arcteryx.meta.beans;
 
+import java.util.Collection;
+
 /**
  * bean cache provider
  * 
@@ -12,11 +14,11 @@ public interface IBeanCacheProvider extends IBeanOperator {
 	String CODE = "meta.beans.cacheProvider";
 
 	/**
-	 * put bean into cache
+	 * get beans
 	 * 
-	 * @param bean
+	 * @return
 	 */
-	void putIntoCache(Object bean);
+	<T> Collection<T> getBeans();
 
 	/**
 	 * get bean from cache by given key

@@ -20,7 +20,7 @@
 	</bean>
 
 	<bean id="PreloadedBean"
-		class="com.github.nest.arcteryx.meta.beans.internal.SpringPreloadedNCachedBeanDescriptor"
+		class="com.github.nest.arcteryx.meta.beans.internal.SpringCachedBeanDescriptor"
 		scope="singleton" p:name="PreloadedBean" p:description="A preloaded bean"
 		p:springContextId="Beans.PreloadedBean" p:springBeanId="PreloadedBean.preload"
 		p:cacheName="PreloadedBean">
@@ -37,9 +37,6 @@
 				<!-- finder -->
 				<bean
 					class="com.github.nest.arcteryx.meta.beans.internal.SpringEhCacheBeanFinder" />
-				<!-- preloader -->
-				<bean
-					class="com.github.nest.arcteryx.meta.beans.internal.SpringBeanPreloader" />
 				<!-- cache provider -->
 				<bean
 					class="com.github.nest.arcteryx.meta.beans.internal.SpringEhCacheBeanCacheProvider"

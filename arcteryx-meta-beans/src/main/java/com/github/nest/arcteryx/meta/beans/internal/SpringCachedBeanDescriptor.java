@@ -8,7 +8,7 @@ package com.github.nest.arcteryx.meta.beans.internal;
  * 
  * @author brad.wu
  */
-public class SpringPreloadedBeanDescriptor extends PreloadedBeanDescriptor {
+public class SpringCachedBeanDescriptor extends CachedBeanDescriptor {
 	private static final long serialVersionUID = 1341925180862025155L;
 
 	private String springContextId = null;

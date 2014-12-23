@@ -43,12 +43,13 @@ public class BeanCreator extends AbstractStaticCodeBeanOperator implements IBean
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceOperator#handle(java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object handle(Object resource) {
+	public <T> T handle(Object resource) {
 		if (resource == null) {
 			return create();
 		} else {
-			return fillWithDefaultValues(resource);
+			return (T) fillWithDefaultValues(resource);
 		}
 	}
 

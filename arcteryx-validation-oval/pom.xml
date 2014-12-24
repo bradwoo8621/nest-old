@@ -9,6 +9,17 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>2.2.2</version>
+		</dependency>
+		<dependency>
 			<groupId>net.sf.oval</groupId>
 			<artifactId>oval</artifactId>
 			<version>1.84</version>
@@ -17,7 +28,6 @@
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>1.1.0.Final</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -35,9 +45,6 @@
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
-	<parent>
-		<groupId>com.github.nest</groupId>
-		<artifactId>arcteryx-validation</artifactId>
-		<version>0.0.1</version>
-	</parent>
+	<groupId>com.ebao.nest</groupId>
+	<version>0.0.1</version>
 </project>

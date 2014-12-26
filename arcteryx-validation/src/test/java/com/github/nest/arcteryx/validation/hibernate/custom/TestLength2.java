@@ -31,7 +31,7 @@ public class TestLength2 {
 	private String string = null;
 	private TestObject object = new TestObject("b");
 
-	@BeforeClass
+	@BeforeClass 
 	public static void setUp() {
 		HibernateValidatorConfiguration configuration = Validation.byProvider(HibernateValidator.class).configure();
 

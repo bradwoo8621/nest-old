@@ -42,14 +42,13 @@ public class SpringEhCacheBeanFinder extends AbstractStaticCodeBeanOperator impl
 	}
 
 	/**
-	 * (non-Javadoc)
+	 * Not supported yet. will throw {@linkplain UnsupportedOperationException}
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanFinder#find(com.github.nest.arcteryx.meta.beans.IBeanCriteria)
 	 */
 	@Override
 	public <T> List<T> find(IBeanCriteria criteria) {
-		// TODO Auto-generated method stub
-		// return null;
+		// TODO not supported yet, since criteria is on the way.
 		throw new UnsupportedOperationException("Not supported yet, use IBeanIdentity as paramter.");
 	}
 

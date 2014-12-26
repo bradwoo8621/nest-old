@@ -47,6 +47,16 @@ public class LengthValidator extends AbstractConstraintValidator<Length, Object>
 	/**
 	 * (non-Javadoc)
 	 * 
+	 * @see com.github.nest.arcteryx.validation.hibernate.validators.AbstractConstraintValidator#getWhen(java.lang.annotation.Annotation)
+	 */
+	@Override
+	protected String getWhen(Length parameters) {
+		return parameters.when();
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.nest.arcteryx.validation.hibernate.validators.AbstractConstraintValidator#isValueValid(java.lang.Object,
 	 *      javax.validation.ConstraintValidatorContext)
 	 */

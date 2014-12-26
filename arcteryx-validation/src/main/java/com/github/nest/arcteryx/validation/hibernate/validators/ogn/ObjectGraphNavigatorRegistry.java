@@ -10,21 +10,18 @@ import javax.validation.ValidationException;
 
 import org.slf4j.LoggerFactory;
 
+import com.github.nest.arcteryx.validation.hibernate.validators.util.ClassUtil;
+
 /**
  * object graph navigator registry, copy from OVal
  * 
  * @author brad.wu
  */
 public final class ObjectGraphNavigatorRegistry {
-	private static final String OGN_DEFAULT = "";
+	public static final String OGN_DEFAULT = "";
 	public static final String OGN_JXPATH = "jxpath";
-	
-	private static Map<String, IObjectGraphNavigator> cache = new HashMap<String, IObjectGraphNavigator>();
 
-	static {
-		initializeDefaultOGN(OGN_JXPATH);
-		initializeDefaultOGN(OGN_DEFAULT);
-	}
+	private static Map<String, IObjectGraphNavigator> cache = new HashMap<String, IObjectGraphNavigator>();
 
 	/**
 	 * initialize default navigator
@@ -34,7 +31,7 @@ public final class ObjectGraphNavigatorRegistry {
 	 */
 	private static IObjectGraphNavigator initializeDefaultOGN(final String id) {
 		// JXPath support
-		if (OGN_JXPATH.equals(id) && isClassPresent("org.apache.commons.jxpath.JXPathContext"))
+		if (OGN_JXPATH.equals(id) && ClassUtil.isClassPresent("org.apache.commons.jxpath.JXPathContext"))
 			return registerObjectGraphNavigator(OGN_JXPATH, new ObjectGraphNavigatorJXPathImpl());
 
 		if (OGN_DEFAULT.equals(id))
@@ -54,7 +51,12 @@ public final class ObjectGraphNavigatorRegistry {
 		IObjectGraphNavigator ogn = cache.get(id);
 
 		if (ogn == null)
-			ogn = initializeDefaultOGN(id);
+			synchronized (cache) {
+				ogn = cache.get(id);
+				if (ogn == null) {
+					ogn = initializeDefaultOGN(id);
+				}
+			}
 
 		if (ogn == null)
 			throw new ValidationException("Object graph navigator [" + id + "] not found.");
@@ -80,14 +82,5 @@ public final class ObjectGraphNavigatorRegistry {
 
 		cache.put(id, ogn);
 		return ogn;
-	}
-
-	private static boolean isClassPresent(final String className) {
-		try {
-			Class.forName(className);
-			return true;
-		} catch (final ClassNotFoundException e) {
-			return false;
-		}
 	}
 }

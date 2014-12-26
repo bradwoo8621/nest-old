@@ -4,12 +4,17 @@
 package com.github.nest.arcteryx.validation.hibernate.validators;
 
 import java.lang.annotation.Annotation;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import javax.validation.ValidationException;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.github.nest.arcteryx.validation.hibernate.validators.expression.ExpressionLanguage;
+import com.github.nest.arcteryx.validation.hibernate.validators.expression.ExpressionLanguageRegistry;
 import com.github.nest.arcteryx.validation.hibernate.validators.ogn.ObjectGraphNavigationResult;
 import com.github.nest.arcteryx.validation.hibernate.validators.ogn.ObjectGraphNavigatorRegistry;
 
@@ -21,6 +26,9 @@ import com.github.nest.arcteryx.validation.hibernate.validators.ogn.ObjectGraphN
  */
 public abstract class AbstractConstraintValidator<A extends Annotation, T> implements ConstraintValidator<A, T> {
 	private String target = null;
+	private boolean whenDefined = false;
+	private String whenExpr = null;
+	private String whenLang = null;
 
 	/**
 	 * (non-Javadoc)
@@ -30,6 +38,15 @@ public abstract class AbstractConstraintValidator<A extends Annotation, T> imple
 	@Override
 	public void initialize(A parameters) {
 		this.target = getTarget(parameters);
+		String when = getWhen(parameters);
+		if (!StringUtils.isBlank(when)) {
+			this.whenDefined = true;
+			final String[] parts = when.split(":", 2);
+			if (parts.length == 0)
+				throw new ValidationException("[when] is missing the scripting language declaration");
+			this.whenLang = parts[0];
+			this.whenExpr = parts[1];
+		}
 	}
 
 	/**
@@ -48,12 +65,47 @@ public abstract class AbstractConstraintValidator<A extends Annotation, T> imple
 	}
 
 	/**
-	 * is target appointed
+	 * check <code>target</code> is given or not
 	 * 
 	 * @return
 	 */
-	protected boolean isTargetAppointed() {
+	protected boolean isTargetDefined() {
 		return !StringUtils.isBlank(getTarget());
+	}
+
+	/**
+	 * get when from annotation
+	 * 
+	 * @param parameters
+	 * @return
+	 */
+	protected abstract String getWhen(A parameters);
+
+	/**
+	 * get when expression
+	 * 
+	 * @return
+	 */
+	protected String getWhenExpression() {
+		return this.whenExpr.trim();
+	}
+
+	/**
+	 * get when language
+	 * 
+	 * @return
+	 */
+	protected String getWhenLanguage() {
+		return this.whenLang.trim();
+	}
+
+	/**
+	 * check <code>when</code> is given or not
+	 * 
+	 * @return
+	 */
+	protected boolean isWhenDefined() {
+		return this.whenDefined;
 	}
 
 	/**
@@ -93,11 +145,35 @@ public abstract class AbstractConstraintValidator<A extends Annotation, T> imple
 	 */
 	@Override
 	public boolean isValid(T value, ConstraintValidatorContext context) {
-		if (this.isTargetAppointed()) {
+		// check when
+		// TODO, how to get current validateObject?
+		if (!isActive(value, null)) {
+			return true;
+		}
+
+		if (this.isTargetDefined()) {
 			return checkValue(getTargetValue(value), value, context);
 		} else {
 			return isValueValid(value, context);
 		}
+	}
+
+	/**
+	 * check <code>when</code> condition, if not passed, return false.
+	 * 
+	 * @return
+	 */
+	protected boolean isActive(T valueToValidate, Object validatedObject) {
+		if (!this.isWhenDefined()) {
+			return true;
+		}
+
+		Map<String, Object> values = new LinkedHashMap<String, Object>();
+		values.put("_value", valueToValidate);
+		values.put("_this", validatedObject);
+
+		final ExpressionLanguage el = ExpressionLanguageRegistry.getExpressionLanguage(this.getWhenLanguage());
+		return el.evaluateAsBoolean(this.getWhenExpression(), values);
 	}
 
 	/**

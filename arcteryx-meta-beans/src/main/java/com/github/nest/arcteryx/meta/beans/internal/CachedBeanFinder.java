@@ -14,11 +14,13 @@ import com.github.nest.arcteryx.meta.beans.IBeanIdentity;
 import com.github.nest.arcteryx.meta.beans.ICachedBeanDescriptor;
 
 /**
- * spring ehcache bean finder
+ * cached bean finder. must be registered in {@linkplain ICachedBeanDescriptor},
+ * and use {@linkplain ICachedBeanDescriptor#getCacheProvider()} to find the
+ * bean by given identity.
  * 
  * @author brad.wu
  */
-public class SpringEhCacheBeanFinder extends AbstractStaticCodeBeanOperator implements IBeanFinder {
+public class CachedBeanFinder extends AbstractStaticCodeBeanOperator implements IBeanFinder {
 	/**
 	 * if the parameter is<br>
 	 * <ul>

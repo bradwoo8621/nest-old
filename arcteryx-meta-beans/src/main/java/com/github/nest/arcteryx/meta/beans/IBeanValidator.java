@@ -17,5 +17,23 @@ public interface IBeanValidator extends IBeanOperator {
 	 * @param resource
 	 * @return
 	 */
-	Object validate(Object resource);
+	<T> T validate(Object resource);
+
+	/**
+	 * validate resource under given profile
+	 * 
+	 * @param resource
+	 * @param profile
+	 * @return
+	 */
+	<T> T validate(Object resource, String... profile);
+
+	/**
+	 * validate resource under give group. for JSR303.
+	 * 
+	 * @param resource
+	 * @param profile
+	 * @return
+	 */
+	<T> T validate(Object resource, Class<?>... group);
 }

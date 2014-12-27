@@ -190,9 +190,14 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	public <T> T getFromCache(IBeanIdentity key) {
 		Cache cache = getCache();
 		Element element = cache.get(key);
-		if (element == null && !this.isInitialized()) {
-			this.initialize();
-			return this.getFromCache(key);
+		if (element == null) {
+			if (!this.isInitialized()) {
+				this.initialize();
+				return this.getFromCache(key);
+			} else {
+				// not found
+				return null;
+			}
 		} else {
 			return (T) element.getObjectValue();
 		}

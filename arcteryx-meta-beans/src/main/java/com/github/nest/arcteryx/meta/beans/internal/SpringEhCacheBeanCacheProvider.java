@@ -160,7 +160,7 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	 * 
 	 * @param bean
 	 */
-	public void putIntoCache(Object bean) {
+	protected void putIntoCache(Object bean) {
 		Cache cache = getCache();
 
 		IBeanIdentity id = this.getIdentityExtracter().extract(bean);

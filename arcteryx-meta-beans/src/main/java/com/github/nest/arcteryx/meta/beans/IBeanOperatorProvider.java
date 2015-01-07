@@ -32,20 +32,4 @@ public interface IBeanOperatorProvider {
 	 * @return
 	 */
 	IBeanValidator createDefaultBeanValidator(IBeanDescriptor descriptor);
-
-	/**
-	 * create bean finder
-	 * 
-	 * @param descriptor
-	 * @return
-	 */
-	IBeanFinder createDefaultBeanFinder(IBeanDescriptor descriptor);
-
-	/**
-	 * create bean sorter
-	 * 
-	 * @param descriptor
-	 * @return
-	 */
-	IBeanSorter createDefaultBeanSorter(IBeanDescriptor descriptor);
 }

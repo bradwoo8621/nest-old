@@ -13,6 +13,8 @@ import com.github.nest.arcteryx.meta.IResourceDescriptor;
  * @author brad.wu
  */
 public interface IBeanDescriptor extends IResourceDescriptor {
+	IBeanDescriptorContext getBeanDescriptorContext();
+
 	/**
 	 * get bean class
 	 * 

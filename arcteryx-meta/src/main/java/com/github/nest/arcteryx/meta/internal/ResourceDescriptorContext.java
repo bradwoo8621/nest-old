@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.github.nest.arcteryx.meta.IOperatorProvider;
 import com.github.nest.arcteryx.meta.IDefaultOperatorProviderRegistry;
 import com.github.nest.arcteryx.meta.IResouceDescriptorContextInterceptor;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
@@ -23,7 +24,7 @@ import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	private Map<Class<?>, IResourceDescriptor> map = new HashMap<Class<?>, IResourceDescriptor>();
 	private IResouceDescriptorContextInterceptor contextInterceptor = null;
-	private IDefaultOperatorProviderRegistry operatorProvider = null;
+	private IDefaultOperatorProviderRegistry OperatorProviderRegistry = null;
 
 	/**
 	 * @return the contextInterceptor
@@ -103,10 +104,10 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 * will set/clear context if the resource descriptor is instance of
 	 * {@linkplain ResourceDescriptor}
 	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#put(com.github.nest.arcteryx.meta.IResourceDescriptor)
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#register(com.github.nest.arcteryx.meta.IResourceDescriptor)
 	 */
 	@Override
-	public IResourceDescriptor put(IResourceDescriptor descriptor) {
+	public IResourceDescriptor register(IResourceDescriptor descriptor) {
 		assert descriptor != null : "Resource descriptor cannot be null.";
 
 		synchronized (this.map) {
@@ -198,19 +199,18 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getDefaultOperatorProvider()
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getOperatorProviderRegistry()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends IDefaultOperatorProviderRegistry> T getDefaultOperatorProvider() {
-		if (this.operatorProvider == null) {
+	public IDefaultOperatorProviderRegistry getOperatorProviderRegistry() {
+		if (this.OperatorProviderRegistry == null) {
 			synchronized (this) {
-				if (this.operatorProvider == null) {
-					this.operatorProvider = createDefaultOperatorProvider();
+				if (this.OperatorProviderRegistry == null) {
+					this.OperatorProviderRegistry = createOperatorProviderRegistry();
 				}
 			}
 		}
-		return (T) this.operatorProvider;
+		return this.OperatorProviderRegistry;
 	}
 
 	/**
@@ -218,15 +218,47 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 * 
 	 * @return
 	 */
-	protected IDefaultOperatorProviderRegistry createDefaultOperatorProvider() {
+	protected IDefaultOperatorProviderRegistry createOperatorProviderRegistry() {
 		return new DefaultOperatorProviderRegistry();
 	}
 
 	/**
-	 * @param operatorProvider
-	 *            the operatorProvider to set
+	 * set operator provider registry
+	 * 
+	 * @param operatorProviderRegistry
+	 * 
 	 */
-	public void setOperatorProvider(IDefaultOperatorProviderRegistry operatorProvider) {
-		this.operatorProvider = operatorProvider;
+	public void setOperatorProviderRegistry(IDefaultOperatorProviderRegistry operatorProviderRegistry) {
+		this.OperatorProviderRegistry = operatorProviderRegistry;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#registerDefaultOperatorProvider(com.github.nest.arcteryx.meta.IOperatorProvider,
+	 *      java.lang.String)
+	 */
+	@Override
+	public void registerDefaultOperatorProvider(IOperatorProvider provider, String code) {
+		getOperatorProviderRegistry().register(code, provider);
+	}
+
+	/**
+	 * set default operator providers
+	 * 
+	 * @param providers
+	 */
+	public void setDefaultOperatorProviders(Map<String, IOperatorProvider> providers) {
+		assert providers != null : "Providers map cannot be null.";
+
+		IDefaultOperatorProviderRegistry registry = this.getOperatorProviderRegistry();
+		synchronized (registry) {
+			for (Map.Entry<String, IOperatorProvider> entry : providers.entrySet()) {
+				assert entry.getKey() != null : "Code of provider cannot be null.";
+				assert entry.getValue() != null : "Provider cannot be null.";
+
+				registry.register(entry.getKey(), entry.getValue());
+			}
+		}
 	}
 }

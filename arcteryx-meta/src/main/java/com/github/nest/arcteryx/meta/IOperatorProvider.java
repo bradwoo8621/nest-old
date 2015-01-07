@@ -6,7 +6,7 @@ package com.github.nest.arcteryx.meta;
  * @author brad.wu
  *
  */
-public interface IDefaultOperatorProvider {
+public interface IOperatorProvider {
 	/**
 	 * create default operator of given descriptor
 	 * 

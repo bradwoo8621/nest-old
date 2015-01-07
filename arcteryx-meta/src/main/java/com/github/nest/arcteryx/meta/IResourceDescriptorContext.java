@@ -35,7 +35,7 @@ public interface IResourceDescriptorContext {
 	 * 
 	 * @return
 	 */
-	IResourceDescriptor put(IResourceDescriptor descriptor);
+	IResourceDescriptor register(IResourceDescriptor descriptor);
 
 	/**
 	 * get all descriptors
@@ -53,9 +53,17 @@ public interface IResourceDescriptorContext {
 	<T> Collection<T> getDescriptors(Class<T> descriptorClass);
 
 	/**
-	 * get default operator provider
+	 * get operator provider registry, context level
 	 * 
 	 * @return
 	 */
-	<T extends IDefaultOperatorProviderRegistry> T getDefaultOperatorProvider();
+	IDefaultOperatorProviderRegistry getOperatorProviderRegistry();
+
+	/**
+	 * register
+	 * 
+	 * @param provider
+	 * @param code
+	 */
+	void registerDefaultOperatorProvider(IOperatorProvider provider, String code);
 }

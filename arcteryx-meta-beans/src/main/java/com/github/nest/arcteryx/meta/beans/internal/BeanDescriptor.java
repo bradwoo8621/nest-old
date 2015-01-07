@@ -87,7 +87,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 			synchronized (this) {
 				validator = this.getOperator(IBeanValidator.CODE);
 				if (validator == null) {
-					validator = getBeanDescriptorContext().getDefaultOperatorProvider().createDefaultOperator(this,
+					validator = getBeanDescriptorContext().getOperatorProviderRegistry().createDefaultOperator(this,
 							IBeanValidator.CODE);
 				}
 			}
@@ -107,7 +107,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 			synchronized (this) {
 				creator = this.getOperator(IBeanCreator.CODE);
 				if (creator == null) {
-					creator = getBeanDescriptorContext().getDefaultOperatorProvider().createDefaultOperator(this,
+					creator = getBeanDescriptorContext().getOperatorProviderRegistry().createDefaultOperator(this,
 							IBeanCreator.CODE);
 				}
 			}
@@ -127,7 +127,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 			synchronized (this) {
 				destroyer = this.getOperator(IBeanDestroyer.CODE);
 				if (destroyer == null) {
-					destroyer = getBeanDescriptorContext().getDefaultOperatorProvider().createDefaultOperator(this,
+					destroyer = getBeanDescriptorContext().getOperatorProviderRegistry().createDefaultOperator(this,
 							IBeanDestroyer.CODE);
 				}
 			}

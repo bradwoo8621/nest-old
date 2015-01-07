@@ -16,6 +16,26 @@
 				<ref bean="PreloadedBean" />
 			</list>
 		</property>
+		<property name="defaultOperatorProviders">
+			<map>
+				<entry>
+					<key>
+						<util:constant
+							static-field="com.github.nest.arcteryx.meta.beans.IBeanCreator.CODE" />
+					</key>
+					<bean
+						class="com.github.nest.arcteryx.meta.beans.internal.providers.BeanCreatorProvider" />
+				</entry>
+				<entry>
+					<key>
+						<util:constant
+							static-field="com.github.nest.arcteryx.meta.beans.IBeanDestroyer.CODE" />
+					</key>
+					<bean
+						class="com.github.nest.arcteryx.meta.beans.internal.providers.BeanDestroyerProvider" />
+				</entry>
+			</map>
+		</property>
 	</bean>
 
 	<bean id="PreloadedBean"

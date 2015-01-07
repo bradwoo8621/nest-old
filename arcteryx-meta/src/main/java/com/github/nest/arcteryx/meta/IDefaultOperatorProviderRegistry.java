@@ -23,5 +23,5 @@ public interface IDefaultOperatorProviderRegistry {
 	 * @param code
 	 * @param provider
 	 */
-	void register(String code, IDefaultOperatorProvider provider);
+	void register(String code, IOperatorProvider provider);
 }

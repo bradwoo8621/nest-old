@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.github.nest.arcteryx.meta.IDefaultOperatorProvider;
+import com.github.nest.arcteryx.meta.IOperatorProvider;
 import com.github.nest.arcteryx.meta.IDefaultOperatorProviderRegistry;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceOperator;
@@ -19,7 +19,7 @@ import com.github.nest.arcteryx.meta.IResourceOperator;
  * @author brad.wu
  */
 public class DefaultOperatorProviderRegistry implements IDefaultOperatorProviderRegistry {
-	private Map<String, IDefaultOperatorProvider> providerMap = new HashMap<String, IDefaultOperatorProvider>();
+	private Map<String, IOperatorProvider> providerMap = new HashMap<String, IOperatorProvider>();
 
 	/**
 	 * (non-Javadoc)
@@ -30,7 +30,7 @@ public class DefaultOperatorProviderRegistry implements IDefaultOperatorProvider
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends IResourceOperator> T createDefaultOperator(IResourceDescriptor descriptor, String code) {
-		IDefaultOperatorProvider provider = providerMap.get(code);
+		IOperatorProvider provider = providerMap.get(code);
 		return (T) (provider == null ? null : provider.createDefaultOperator(descriptor));
 	}
 
@@ -38,10 +38,10 @@ public class DefaultOperatorProviderRegistry implements IDefaultOperatorProvider
 	 * (non-Javadoc)
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IDefaultOperatorProviderRegistry#register(java.lang.String,
-	 *      com.github.nest.arcteryx.meta.IDefaultOperatorProvider)
+	 *      com.github.nest.arcteryx.meta.IOperatorProvider)
 	 */
 	@Override
-	public void register(String code, IDefaultOperatorProvider provider) {
+	public void register(String code, IOperatorProvider provider) {
 		assert StringUtils.isNotBlank(code) : "Code of operator provider cannot be empty.";
 		assert provider != null : "Operator provider cannot be null.";
 		

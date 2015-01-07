@@ -11,4 +11,17 @@ import java.io.Serializable;
  * @author brad.wu
  */
 public interface IBeanPropertyConstraint extends Serializable {
+	/**
+	 * get property descriptor
+	 * 
+	 * @return
+	 */
+	IBeanPropertyDescriptor getPropertyDescriptor();
+
+	/**
+	 * get bean descriptor
+	 * 
+	 * @return
+	 */
+	IBeanDescriptor getBeanDescriptor();
 }

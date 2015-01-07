@@ -4,7 +4,6 @@
 package com.github.nest.arcteryx.meta.beans.internal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -118,34 +117,6 @@ public class BeanSorter extends AbstractBeanOperator implements IBeanSorter {
 	 */
 	protected void setSortedBeans(List<?> sortedBeans) {
 		this.sortedBeans = sortedBeans;
-	}
-
-	/**
-	 * return {@linkplain List},
-	 * <ul>
-	 * <li>parameter is null, get cached sorted bean if existed,</li>
-	 * <li>parameter should be a {@linkplain Collection} or array,</li>
-	 * <li>otherwise return parameter itself.</li>
-	 * </ul>
-	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceOperator#handle(java.lang.Object)
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public <T> T handle(Object parameter) {
-		if (parameter == null && this.isCached()) {
-			return (T) sort();
-		}
-
-		if (parameter instanceof Collection) {
-			return (T) sort((Collection) parameter);
-		} else if (parameter.getClass().isArray()) {
-			List<?> list = Arrays.asList(parameter);
-			return (T) sort(list);
-		} else {
-			// maybe will throw ClassCastException
-			return (T) parameter;
-		}
 	}
 
 	/**

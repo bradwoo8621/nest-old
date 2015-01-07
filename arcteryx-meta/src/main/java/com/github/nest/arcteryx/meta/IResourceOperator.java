@@ -4,7 +4,8 @@
 package com.github.nest.arcteryx.meta;
 
 /**
- * Resource operator interface, must be stateless.
+ * Resource operator interface, must be stateless. Resource operator doesn't
+ * define the interface for how to handle resource, since it's uncertain.
  * 
  * @author brad.wu
  */
@@ -29,13 +30,4 @@ public interface IResourceOperator {
 	 * @return
 	 */
 	<T extends IResourceDescriptor> T getResourceDescriptor();
-
-	/**
-	 * handle parameter, see its implementation's explanation
-	 * 
-	 * @param parameter
-	 * @param descriptor
-	 * @return
-	 */
-	<T> T handle(Object parameter);
 }

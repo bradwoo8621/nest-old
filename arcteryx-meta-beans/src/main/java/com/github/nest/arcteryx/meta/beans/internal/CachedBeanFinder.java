@@ -22,28 +22,6 @@ import com.github.nest.arcteryx.meta.beans.ICachedBeanDescriptor;
  */
 public class CachedBeanFinder extends AbstractStaticCodeBeanOperator implements IBeanFinder {
 	/**
-	 * if the parameter is<br>
-	 * <ul>
-	 * <li>{@linkplain IBeanIdentity}, call {@linkplain #find(IBeanIdentity)},</li>
-	 * <li>{@linkplain IBeanCriteria}, call {@linkplain #find(IBeanCriteria)},</li>
-	 * <li>otherwise, return parameter itself.</li>
-	 * </ul>
-	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceOperator#handle(java.lang.Object)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T handle(Object resource) {
-		if (resource instanceof IBeanIdentity) {
-			return find((IBeanIdentity) resource);
-		} else if (resource instanceof IBeanCriteria) {
-			return (T) find((IBeanCriteria) resource);
-		} else {
-			return (T) resource;
-		}
-	}
-
-	/**
 	 * Not supported yet. will throw {@linkplain UnsupportedOperationException}
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanFinder#find(com.github.nest.arcteryx.meta.beans.IBeanCriteria)

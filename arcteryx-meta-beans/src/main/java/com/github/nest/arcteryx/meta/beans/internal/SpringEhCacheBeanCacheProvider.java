@@ -138,24 +138,6 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	}
 
 	/**
-	 * if the parameter is an instance of {@linkplain IBeanIdentity}, get object
-	 * from cache by the identity; otherwise return itself.
-	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceOperator#handle(java.lang.Object)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T handle(Object parameter) {
-		assert parameter != null : "Parameter cannot be null.";
-
-		if (parameter instanceof IBeanIdentity) {
-			return this.getFromCache((IBeanIdentity) parameter);
-		} else {
-			return (T) parameter;
-		}
-	}
-
-	/**
 	 * put into cache
 	 * 
 	 * @param bean

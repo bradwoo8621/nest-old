@@ -23,17 +23,6 @@ public class BeanDestroyer extends AbstractStaticCodeBeanOperator implements IBe
 	}
 
 	/**
-	 * return {@linkplain Boolean}, never be null.
-	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceOperator#handle(java.lang.Object)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T handle(Object resource) {
-		return (T) Boolean.valueOf(destroy(resource));
-	}
-
-	/**
 	 * do nothing, return true
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanDestroyer#destroy(java.lang.Object)

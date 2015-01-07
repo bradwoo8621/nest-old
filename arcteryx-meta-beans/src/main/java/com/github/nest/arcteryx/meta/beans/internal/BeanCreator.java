@@ -12,7 +12,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.ResourceException;
 import com.github.nest.arcteryx.meta.beans.AbstractStaticCodeBeanOperator;
 import com.github.nest.arcteryx.meta.beans.IBeanCreator;
@@ -34,23 +33,6 @@ public class BeanCreator extends AbstractStaticCodeBeanOperator implements IBean
 	@Override
 	protected String createCode() {
 		return CODE;
-	}
-
-	/**
-	 * if the parameter <code>resource</code> is null, call
-	 * {@linkplain #create(IResourceDescriptor)}, otherwise call
-	 * {@linkplain #fillWithDefaultValues(Object, IResourceDescriptor)}.
-	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceOperator#handle(java.lang.Object)
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T handle(Object resource) {
-		if (resource == null) {
-			return create();
-		} else {
-			return (T) fillWithDefaultValues(resource);
-		}
 	}
 
 	/**

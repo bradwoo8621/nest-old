@@ -72,7 +72,27 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 */
 	@Override
 	public IBeanValidator getValidator() {
+		IBeanValidator validator = this.getOperator(IBeanValidator.CODE);
+		if (validator == null) {
+			synchronized (this) {
+				validator = this.getOperator(IBeanValidator.CODE);
+				if (validator == null) {
+					validator = createDefaultBeanValiator();
+				}
+			}
+		}
 		return this.getOperator(IBeanValidator.CODE);
+	}
+
+	/**
+	 * create bean validator
+	 * 
+	 * @return
+	 */
+	protected IBeanValidator createDefaultBeanValiator() {
+		IBeanValidator creator = new BeanValidator();
+		creator.setResourceDescriptor(this);
+		return creator;
 	}
 
 	/**
@@ -87,7 +107,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 			synchronized (this) {
 				creator = this.getOperator(IBeanCreator.CODE);
 				if (creator == null) {
-					creator = createBeanCreator();
+					creator = createDefaultBeanCreator();
 				}
 			}
 		}
@@ -99,7 +119,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 * 
 	 * @return
 	 */
-	protected IBeanCreator createBeanCreator() {
+	protected IBeanCreator createDefaultBeanCreator() {
 		IBeanCreator creator = new BeanCreator();
 		creator.setResourceDescriptor(this);
 		return creator;
@@ -117,7 +137,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 			synchronized (this) {
 				destroyer = this.getOperator(IBeanDestroyer.CODE);
 				if (destroyer == null) {
-					destroyer = createDestoryer();
+					destroyer = createDefaultDestoryer();
 				}
 			}
 		}
@@ -129,7 +149,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 * 
 	 * @return
 	 */
-	protected IBeanDestroyer createDestoryer() {
+	protected IBeanDestroyer createDefaultDestoryer() {
 		return BeanDestroyer.DESTROYER;
 	}
 

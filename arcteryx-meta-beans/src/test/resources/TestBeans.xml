@@ -9,13 +9,12 @@
     http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<bean id="beans.context"
-		class="com.github.nest.arcteryx.meta.beans.BeanDescriptorContext"
+		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext"
 		scope="singleton">
-		<property name="mapping">
-			<map>
-				<entry key="com.github.nest.arcteryx.meta.beans.PreloadedBean"
-					value-ref="PreloadedBean" />
-			</map>
+		<property name="descriptors">
+			<list>
+				<ref bean="PreloadedBean" />
+			</list>
 		</property>
 	</bean>
 
@@ -23,7 +22,7 @@
 		class="com.github.nest.arcteryx.meta.beans.internal.SpringCachedBeanDescriptor"
 		scope="singleton" p:name="PreloadedBean" p:description="A preloaded bean"
 		p:springContextId="Beans.PreloadedBean" p:springBeanId="PreloadedBean.preload"
-		p:cacheName="PreloadedBean">
+		p:cacheName="PreloadedBean" p:resourceClass="com.github.nest.arcteryx.meta.beans.PreloadedBean">
 		<property name="properties">
 			<list>
 				<bean class="com.github.nest.arcteryx.meta.internal.PropertyDescriptor"
@@ -36,7 +35,7 @@
 			<list>
 				<!-- finder -->
 				<bean
-					class="com.github.nest.arcteryx.meta.beans.internal.SpringEhCacheBeanFinder" />
+					class="com.github.nest.arcteryx.meta.beans.internal.CachedBeanFinder" />
 				<!-- cache provider -->
 				<bean
 					class="com.github.nest.arcteryx.meta.beans.internal.SpringEhCacheBeanCacheProvider"

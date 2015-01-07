@@ -26,7 +26,6 @@ import com.github.nest.arcteryx.meta.internal.ResourceDescriptor;
 public class BeanDescriptor extends ResourceDescriptor implements IBeanDescriptor {
 	private static final long serialVersionUID = -292539093442024519L;
 
-	private Class<?> beanClass = null;
 	private IBeanConstraint constraint = null;
 	private Collection<IBeanPropertyDescriptor> beanDescriptors = null;
 
@@ -47,7 +46,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 */
 	@Override
 	public Class<?> getBeanClass() {
-		return this.beanClass;
+		return this.getResourceClass();
 	}
 
 	/**
@@ -55,7 +54,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 *            the beanClass to set
 	 */
 	public void setBeanClass(Class<?> beanClass) {
-		this.beanClass = beanClass;
+		this.setResourceClass(beanClass);
 	}
 
 	/**
@@ -88,7 +87,8 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 			synchronized (this) {
 				validator = this.getOperator(IBeanValidator.CODE);
 				if (validator == null) {
-					validator = getBeanDescriptorContext().getOperatorProvider().createDefaultBeanValidator(this);
+					validator = getBeanDescriptorContext().getDefaultOperatorProvider().createDefaultOperator(this,
+							IBeanValidator.CODE);
 				}
 			}
 		}
@@ -107,7 +107,8 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 			synchronized (this) {
 				creator = this.getOperator(IBeanCreator.CODE);
 				if (creator == null) {
-					creator = getBeanDescriptorContext().getOperatorProvider().createDefaultBeanCreator(this);
+					creator = getBeanDescriptorContext().getDefaultOperatorProvider().createDefaultOperator(this,
+							IBeanCreator.CODE);
 				}
 			}
 		}
@@ -126,7 +127,8 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 			synchronized (this) {
 				destroyer = this.getOperator(IBeanDestroyer.CODE);
 				if (destroyer == null) {
-					destroyer = getBeanDescriptorContext().getOperatorProvider().createDefaultBeanDestoryer(this);
+					destroyer = getBeanDescriptorContext().getDefaultOperatorProvider().createDefaultOperator(this,
+							IBeanDestroyer.CODE);
 				}
 			}
 		}

@@ -28,13 +28,14 @@ public interface IResourceDescriptorContext {
 	<T extends IResourceDescriptor> T get(Class<?> resourceClass);
 
 	/**
-	 * put resource class and its descriptor pair into repository
+	 * put resource descriptor pair into repository
 	 * 
-	 * @param resourceClass
 	 * @param descriptor
+	 *            old in context
+	 * 
 	 * @return
 	 */
-	IResourceDescriptor put(Class<? extends IResourceDescriptor> resourceClass, IResourceDescriptor descriptor);
+	IResourceDescriptor put(IResourceDescriptor descriptor);
 
 	/**
 	 * get all descriptors
@@ -50,4 +51,11 @@ public interface IResourceDescriptorContext {
 	 * @return
 	 */
 	<T> Collection<T> getDescriptors(Class<T> descriptorClass);
+
+	/**
+	 * get default operator provider
+	 * 
+	 * @return
+	 */
+	<T extends IDefaultOperatorProviderRegistry> T getDefaultOperatorProvider();
 }

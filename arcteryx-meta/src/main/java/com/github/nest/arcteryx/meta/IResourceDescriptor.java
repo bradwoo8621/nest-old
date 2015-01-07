@@ -21,6 +21,13 @@ public interface IResourceDescriptor extends Serializable {
 	String getName();
 
 	/**
+	 * get resource class
+	 * 
+	 * @return
+	 */
+	Class<?> getResourceClass();
+
+	/**
 	 * get description of object
 	 * 
 	 * @return
@@ -33,7 +40,7 @@ public interface IResourceDescriptor extends Serializable {
 	 * @return
 	 */
 	<T extends IResourceDescriptorContext> T getContext();
-	
+
 	/**
 	 * get properties which declared in current descriptor and its ancestor's
 	 * 

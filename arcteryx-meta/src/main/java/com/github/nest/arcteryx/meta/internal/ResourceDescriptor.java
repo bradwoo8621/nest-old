@@ -31,6 +31,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	private static final long serialVersionUID = 7187193550596533383L;
 
 	private String name = null;
+	private Class<?> resourceClass = null;
 	private String description = null;
 	private IResourceDescriptorContext context = null;
 	private Collection<IPropertyDescriptor> properties = null;
@@ -73,6 +74,26 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	@Override
 	public String getDescription() {
 		return this.description;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getResourceClass()
+	 */
+	@Override
+	public Class<?> getResourceClass() {
+		return this.resourceClass;
+	}
+
+	/**
+	 * @param resourceClass
+	 *            the resourceClass to set
+	 */
+	public void setResourceClass(Class<?> resourceClass) {
+		assert resourceClass != null : "Resource class cannot be null.";
+		
+		this.resourceClass = resourceClass;
 	}
 
 	/**

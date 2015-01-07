@@ -11,10 +11,4 @@ import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
  * @author brad.wu
  */
 public interface IBeanDescriptorContext extends IResourceDescriptorContext {
-	/**
-	 * get operator provider
-	 * 
-	 * @return
-	 */
-	IBeanOperatorProvider getOperatorProvider();
 }

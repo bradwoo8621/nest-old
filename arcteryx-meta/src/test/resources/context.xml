@@ -6,7 +6,8 @@
     http://www.springframework.org/schema/beans/spring-beans.xsd">
 	<bean id="descriptor.IPerson"
 		class="com.github.nest.arcteryx.meta.internal.ResourceDescriptor"
-		scope="singleton" p:name="Person" p:description="A person">
+		scope="singleton" p:name="Person" p:description="A person"
+		p:resourceClass="com.github.nest.arcteryx.meta.IPerson">
 		<property name="properties">
 			<bean class="com.github.nest.arcteryx.meta.internal.PropertyDescriptor"
 				p:name="name" p:description="Name of person" />
@@ -16,7 +17,7 @@
 	<bean id="descriptor.IStuduent"
 		class="com.github.nest.arcteryx.meta.internal.ResourceDescriptor"
 		scope="singleton" p:name="Student" p:description="A student"
-		p:parent-ref="descriptor.IPerson">
+		p:resourceClass="com.github.nest.arcteryx.meta.IStudent" p:parent-ref="descriptor.IPerson">
 		<property name="properties">
 			<list>
 				<bean class="com.github.nest.arcteryx.meta.internal.PropertyDescriptor"
@@ -28,13 +29,13 @@
 	</bean>
 
 	<bean id="descriptor.context"
-		class="com.github.nest.arcteryx.meta.ResourceDescriptorContext"
+		class="com.github.nest.arcteryx.meta.internal.ResourceDescriptorContext"
 		scope="singleton">
-		<property name="mapping">
-			<map>
-				<entry key="com.github.nest.arcteryx.meta.IPerson" value-ref="descriptor.IPerson" />
-				<entry key="com.github.nest.arcteryx.meta.IStudent" value-ref="descriptor.IStuduent" />
-			</map>
+		<property name="descriptors">
+			<list>
+				<ref bean="descriptor.IPerson" />
+				<ref bean="descriptor.IStuduent" />
+			</list>
 		</property>
 	</bean>
 </beans>

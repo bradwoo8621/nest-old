@@ -4,6 +4,7 @@
 package com.github.nest.arcteryx.meta.beans;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -29,6 +30,9 @@ public class TestPreloadedBeans {
 		BeanDescriptorContext context = Context.getContext("TestPreloadedBeans").getBean("beans.context",
 				BeanDescriptorContext.class);
 		ICachedBeanDescriptor descriptor = context.get(PreloadedBean.class);
+		assertNotNull(descriptor.getCreator());
+		assertNotNull(descriptor.getDestoryer());
+
 		IBeanFinder finder = descriptor.getFinder();
 
 		BeanID id = new BeanID();

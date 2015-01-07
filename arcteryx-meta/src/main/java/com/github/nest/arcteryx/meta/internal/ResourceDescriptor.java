@@ -92,7 +92,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 */
 	public void setResourceClass(Class<?> resourceClass) {
 		assert resourceClass != null : "Resource class cannot be null.";
-		
+
 		this.resourceClass = resourceClass;
 	}
 
@@ -159,7 +159,22 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	public <T extends IResourceOperator> T getOperator(String code) {
 		assert StringUtils.isNotBlank(code) : "Code cannot be null or empty string.";
 
-		IResourceOperator operator = this.operators != null ? this.operators.get(code) : null;
+		IResourceOperator operator = this.operators.get(code);
+		if (operator == null) {
+			synchronized (this.operators) {
+				operator = this.operators.get(code);
+				if (operator == null) {
+					// not existed or existed but is null
+					if (!this.operators.containsKey(code)) {
+						// initialize the operator, since key is not existed
+						// either
+						operator = this.getContext().getOperatorProviderRegistry().createDefaultOperator(this, code);
+						this.operators.put(code, operator);
+					}
+				}
+			}
+		}
+
 		if (operator == null) {
 			throw new ResourceException("Operator[" + code + "] not found on resource[" + getName() + "].");
 		}
@@ -281,7 +296,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 */
 	@Override
 	public String toString() {
-		return originalToString() + " [name=" + name + ", description=" + description + ", properties=" + properties
-				+ ", operators=" + operators + ", parent=" + parent + "]";
+		return originalToString() + " [name=" + name + ", resourceClass=" + resourceClass + ", description="
+				+ description + ", properties=" + properties + ", operators=" + operators + ", parent=" + parent + "]";
 	}
 }

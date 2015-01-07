@@ -1,17 +1,20 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans;
+package com.github.nest.arcteryx.meta.beans.internal;
 
-import com.github.nest.arcteryx.meta.AbstractResourceOperator;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
+import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
+import com.github.nest.arcteryx.meta.beans.IBeanOperator;
+import com.github.nest.arcteryx.meta.internal.AbstractStaticCodeResourceOperator;
 
 /**
- * abstract bean operator
+ * abstract static code bean operator
  * 
  * @author brad.wu
  */
-public abstract class AbstractBeanOperator extends AbstractResourceOperator implements IBeanOperator {
+public abstract class AbstractStaticCodeBeanOperator extends AbstractStaticCodeResourceOperator implements
+		IBeanOperator {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -25,7 +28,7 @@ public abstract class AbstractBeanOperator extends AbstractResourceOperator impl
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.AbstractResourceOperator#setResourceDescriptor(com.github.nest.arcteryx.meta.IResourceDescriptor)
+	 * @see com.github.nest.arcteryx.meta.internal.AbstractResourceOperator#setResourceDescriptor(com.github.nest.arcteryx.meta.IResourceDescriptor)
 	 */
 	@Override
 	public void setResourceDescriptor(IResourceDescriptor resourceDescriptor) {

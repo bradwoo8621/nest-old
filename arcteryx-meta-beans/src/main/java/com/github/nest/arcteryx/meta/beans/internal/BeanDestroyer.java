@@ -3,7 +3,6 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal;
 
-import com.github.nest.arcteryx.meta.beans.AbstractStaticCodeBeanOperator;
 import com.github.nest.arcteryx.meta.beans.IBeanDestroyer;
 
 /**
@@ -35,7 +34,7 @@ public class BeanDestroyer extends AbstractStaticCodeBeanOperator implements IBe
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.AbstractStaticCodeResourceOperator#createCode()
+	 * @see com.github.nest.arcteryx.meta.internal.AbstractStaticCodeResourceOperator#createCode()
 	 */
 	@Override
 	protected String createCode() {

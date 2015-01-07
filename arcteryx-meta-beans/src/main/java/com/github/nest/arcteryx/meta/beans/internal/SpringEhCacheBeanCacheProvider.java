@@ -11,7 +11,6 @@ import net.sf.ehcache.Element;
 
 import com.github.nest.arcteryx.context.Context;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
-import com.github.nest.arcteryx.meta.beans.AbstractStaticCodeBeanOperator;
 import com.github.nest.arcteryx.meta.beans.IBeanCacheProvider;
 import com.github.nest.arcteryx.meta.beans.IBeanIdentity;
 import com.github.nest.arcteryx.meta.beans.IBeanIdentityExtracter;
@@ -188,7 +187,7 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.AbstractStaticCodeResourceOperator#createCode()
+	 * @see com.github.nest.arcteryx.meta.internal.AbstractStaticCodeResourceOperator#createCode()
 	 */
 	@Override
 	protected String createCode() {
@@ -198,7 +197,7 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.AbstractStaticCodeBeanOperator#setResourceDescriptor(com.github.nest.arcteryx.meta.IResourceDescriptor)
+	 * @see com.github.nest.arcteryx.meta.beans.internal.AbstractStaticCodeBeanOperator#setResourceDescriptor(com.github.nest.arcteryx.meta.IResourceDescriptor)
 	 */
 	@Override
 	public void setResourceDescriptor(IResourceDescriptor resourceDescriptor) {

@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
+import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 import com.github.nest.arcteryx.meta.IResourceOperator;
 import com.github.nest.arcteryx.meta.ResourceException;
 
@@ -31,6 +32,7 @@ public class ResourceDescriptor implements IResourceDescriptor {
 
 	private String name = null;
 	private String description = null;
+	private IResourceDescriptorContext context = null;
 	private Collection<IPropertyDescriptor> properties = null;
 	private Map<String, IResourceOperator> operators = new HashMap<String, IResourceOperator>();
 	private IResourceDescriptor parent = null;
@@ -79,6 +81,25 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getContext()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends IResourceDescriptorContext> T getContext() {
+		return (T) this.context;
+	}
+
+	/**
+	 * @param context
+	 *            the context to set
+	 */
+	public void setContext(IResourceDescriptorContext context) {
+		this.context = context;
 	}
 
 	/**

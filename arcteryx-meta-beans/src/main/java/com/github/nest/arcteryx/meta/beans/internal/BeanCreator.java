@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.github.nest.arcteryx.meta.ResourceException;
-import com.github.nest.arcteryx.meta.beans.AbstractStaticCodeBeanOperator;
 import com.github.nest.arcteryx.meta.beans.IBeanCreator;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 
@@ -28,7 +27,7 @@ public class BeanCreator extends AbstractStaticCodeBeanOperator implements IBean
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.AbstractStaticCodeResourceOperator#createCode()
+	 * @see com.github.nest.arcteryx.meta.internal.AbstractStaticCodeResourceOperator#createCode()
 	 */
 	@Override
 	protected String createCode() {

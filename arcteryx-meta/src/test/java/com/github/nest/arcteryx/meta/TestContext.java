@@ -28,17 +28,17 @@ public class TestContext {
 	}
 
 	@Test
-	public void testSingletonRepository() {
-		IResourceDescriptorContext repository = context.getBean("descriptor.context", IResourceDescriptorContext.class);
-		IResourceDescriptorContext repository1 = context
+	public void testSingletonRegistry() {
+		IResourceDescriptorContext context1 = context.getBean("descriptor.context", IResourceDescriptorContext.class);
+		IResourceDescriptorContext context2 = context
 				.getBean("descriptor.context", IResourceDescriptorContext.class);
-		assertEquals(repository, repository1);
+		assertEquals(context1, context2);
 	}
 
 	@Test
 	public void testWorker() {
-		IResourceDescriptorContext repository = context.getBean("descriptor.context", IResourceDescriptorContext.class);
-		IResourceDescriptor descriptor = repository.get(Worker.class);
+		IResourceDescriptorContext resourceContext = context.getBean("descriptor.context", IResourceDescriptorContext.class);
+		IResourceDescriptor descriptor = resourceContext.get(Worker.class);
 		assertEquals("Person", descriptor.getName());
 		assertEquals("A person", descriptor.getDescription());
 
@@ -50,14 +50,14 @@ public class TestContext {
 			}
 		}
 
-		IResourceDescriptor descriptor1 = repository.get(new Worker());
+		IResourceDescriptor descriptor1 = resourceContext.get(new Worker());
 		assertEquals(descriptor, descriptor1);
 	}
 
 	@Test
 	public void testStudent() {
-		IResourceDescriptorContext repository = context.getBean("descriptor.context", IResourceDescriptorContext.class);
-		IResourceDescriptor descriptor = repository.get(IStudent.class);
+		IResourceDescriptorContext resourceContext = context.getBean("descriptor.context", IResourceDescriptorContext.class);
+		IResourceDescriptor descriptor = resourceContext.get(IStudent.class);
 		assertEquals("Student", descriptor.getName());
 		assertEquals("A student", descriptor.getDescription());
 
@@ -86,8 +86,8 @@ public class TestContext {
 
 	@Test
 	public void testPerson() {
-		IResourceDescriptorContext repository = context.getBean("descriptor.context", IResourceDescriptorContext.class);
-		IResourceDescriptor descriptor = repository.get(IPerson.class);
+		IResourceDescriptorContext resourceContext = context.getBean("descriptor.context", IResourceDescriptorContext.class);
+		IResourceDescriptor descriptor = resourceContext.get(IPerson.class);
 		assertEquals("Person", descriptor.getName());
 		assertEquals("A person", descriptor.getDescription());
 

@@ -1,7 +1,10 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta;
+package com.github.nest.arcteryx.meta.internal;
+
+import com.github.nest.arcteryx.meta.IResourceDescriptor;
+import com.github.nest.arcteryx.meta.IResourceOperator;
 
 /**
  * static code resource operator. code of operator will be created by

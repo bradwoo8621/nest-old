@@ -6,7 +6,6 @@ package com.github.nest.arcteryx.meta.beans.internal;
 import java.util.List;
 
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
-import com.github.nest.arcteryx.meta.beans.AbstractStaticCodeBeanOperator;
 import com.github.nest.arcteryx.meta.beans.IBeanCacheProvider;
 import com.github.nest.arcteryx.meta.beans.IBeanCriteria;
 import com.github.nest.arcteryx.meta.beans.IBeanFinder;
@@ -48,7 +47,7 @@ public class CachedBeanFinder extends AbstractStaticCodeBeanOperator implements 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.AbstractStaticCodeResourceOperator#createCode()
+	 * @see com.github.nest.arcteryx.meta.internal.AbstractStaticCodeResourceOperator#createCode()
 	 */
 	@Override
 	protected String createCode() {
@@ -58,7 +57,7 @@ public class CachedBeanFinder extends AbstractStaticCodeBeanOperator implements 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.AbstractStaticCodeBeanOperator#setResourceDescriptor(com.github.nest.arcteryx.meta.IResourceDescriptor)
+	 * @see com.github.nest.arcteryx.meta.beans.internal.AbstractStaticCodeBeanOperator#setResourceDescriptor(com.github.nest.arcteryx.meta.IResourceDescriptor)
 	 */
 	@Override
 	public void setResourceDescriptor(IResourceDescriptor resourceDescriptor) {

@@ -11,6 +11,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.github.nest.arcteryx.context.Context;
+import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext;
 
 /**
  * @author brad.wu

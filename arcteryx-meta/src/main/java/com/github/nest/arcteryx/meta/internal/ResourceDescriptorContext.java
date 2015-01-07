@@ -1,13 +1,17 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta;
+package com.github.nest.arcteryx.meta.internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.github.nest.arcteryx.meta.IResouceDescriptorContextInterceptor;
+import com.github.nest.arcteryx.meta.IResourceDescriptor;
+import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 
 /**
  * resource descriptor context
@@ -93,7 +97,8 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	}
 
 	/**
-	 * (non-Javadoc)
+	 * will set/clear context if the resource descriptor is instance of
+	 * {@linkplain ResourceDescriptor}
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#put(java.lang.Class,
 	 *      com.github.nest.arcteryx.meta.IResourceDescriptor)
@@ -105,6 +110,12 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 
 		synchronized (this.map) {
 			IResourceDescriptor old = map.put(resourceClass, descriptor);
+			if (old instanceof ResourceDescriptor) {
+				((ResourceDescriptor) old).setContext(null);
+			}
+			if (descriptor instanceof ResourceDescriptor) {
+				((ResourceDescriptor) descriptor).setContext(this);
+			}
 			IResouceDescriptorContextInterceptor interceptor = this.getContextInterceptor();
 			if (interceptor != null) {
 				interceptor.postPutIntoContext(resourceClass, descriptor);
@@ -114,7 +125,9 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	}
 
 	/**
-	 * set mapping, return old mapping.
+	 * set mapping, return old mapping.<br>
+	 * will set/clear context if the resource descriptor is instance of
+	 * {@linkplain ResourceDescriptor}
 	 * 
 	 * @param map
 	 * @return old configuration
@@ -129,6 +142,19 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 
 			this.map.clear();
 			this.map.putAll(map);
+
+			for (Map.Entry<Class<? extends IResourceDescriptor>, IResourceDescriptor> entry : oldMap.entrySet()) {
+				IResourceDescriptor descriptor = entry.getValue();
+				if (descriptor instanceof ResourceDescriptor) {
+					((ResourceDescriptor) descriptor).setContext(null);
+				}
+			}
+			for (Map.Entry<Class<? extends IResourceDescriptor>, IResourceDescriptor> entry : this.map.entrySet()) {
+				IResourceDescriptor descriptor = entry.getValue();
+				if (descriptor instanceof ResourceDescriptor) {
+					((ResourceDescriptor) descriptor).setContext(this);
+				}
+			}
 
 			IResouceDescriptorContextInterceptor interceptor = this.getContextInterceptor();
 			if (interceptor != null) {

@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import com.github.nest.arcteryx.meta.beans.AbstractBeanOperator;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanSorter;
 import com.github.nest.arcteryx.meta.beans.ICachedBeanDescriptor;

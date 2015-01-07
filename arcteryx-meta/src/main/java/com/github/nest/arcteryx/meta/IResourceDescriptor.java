@@ -28,6 +28,13 @@ public interface IResourceDescriptor extends Serializable {
 	String getDescription();
 
 	/**
+	 * get context of descriptor
+	 * 
+	 * @return
+	 */
+	<T extends IResourceDescriptorContext> T getContext();
+	
+	/**
 	 * get properties which declared in current descriptor and its ancestor's
 	 * 
 	 * @return

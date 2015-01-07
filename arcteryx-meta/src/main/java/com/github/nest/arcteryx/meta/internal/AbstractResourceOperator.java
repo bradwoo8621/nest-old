@@ -1,9 +1,12 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta;
+package com.github.nest.arcteryx.meta.internal;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.github.nest.arcteryx.meta.IResourceDescriptor;
+import com.github.nest.arcteryx.meta.IResourceOperator;
 
 /**
  * abstract resource operator

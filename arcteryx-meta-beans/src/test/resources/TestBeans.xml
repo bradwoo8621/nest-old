@@ -16,7 +16,8 @@
 				<ref bean="PreloadedBean" />
 			</list>
 		</property>
-		<property name="defaultOperatorProviders">
+		<!-- operator providers -->
+		<property name="operatorProviders">
 			<map>
 				<entry>
 					<key>
@@ -34,7 +35,24 @@
 					<bean
 						class="com.github.nest.arcteryx.meta.beans.internal.providers.BeanDestroyerProvider" />
 				</entry>
+				<entry>
+					<key>
+						<util:constant
+							static-field="com.github.nest.arcteryx.meta.beans.IBeanValidator.CODE" />
+					</key>
+					<bean
+						class="com.github.nest.arcteryx.meta.beans.internal.providers.OValBeanValidatorProvider">
+						<property name="loggerFactory">
+							<bean class="net.sf.oval.logging.LoggerFactorySLF4JImpl" />
+						</property>
+					</bean>
+				</entry>
 			</map>
+		</property>
+		<!-- validation configuration initializer -->
+		<property name="validationConfigurationInitializer">
+			<bean
+				class="com.github.nest.arcteryx.meta.beans.internal.validators.oval.OValValidationConfigurationInitializer" />
 		</property>
 	</bean>
 

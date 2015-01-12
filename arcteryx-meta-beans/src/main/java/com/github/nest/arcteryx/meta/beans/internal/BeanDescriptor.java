@@ -5,6 +5,7 @@ package com.github.nest.arcteryx.meta.beans.internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
@@ -128,7 +129,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 				if (this.beanDescriptors == null) {
 					List<IBeanPropertyDescriptor> beanDescriptors = new ArrayList<IBeanPropertyDescriptor>();
 
-					Collection<IPropertyDescriptor> descriptors = this.getProperties();
+					Collection<IPropertyDescriptor> descriptors = this.getDeclaredProperties();
 					for (IPropertyDescriptor descriptor : descriptors) {
 						if (descriptor instanceof IBeanPropertyDescriptor) {
 							beanDescriptors.add((IBeanPropertyDescriptor) descriptor);
@@ -139,5 +140,17 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 			}
 		}
 		return this.beanDescriptors;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanDescriptor#getDeclaredBeanProperties()
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<IBeanPropertyDescriptor> getDeclaredBeanProperties() {
+		return (Collection<IBeanPropertyDescriptor>) (this.beanDescriptors == null ? Collections.emptyList()
+				: this.beanDescriptors);
 	}
 }

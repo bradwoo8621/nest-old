@@ -27,7 +27,7 @@ public class TestPreloadedBeans {
 
 	@Test
 	public void testPreload() {
-		BeanDescriptorContext context = Context.getContext("TestPreloadedBeans").getBean("beans.context",
+		IBeanDescriptorContext context = Context.getContext("TestPreloadedBeans").getBean("beans.context",
 				BeanDescriptorContext.class);
 		ICachedBeanDescriptor descriptor = context.get(PreloadedBean.class);
 		assertNotNull(descriptor.getCreator());

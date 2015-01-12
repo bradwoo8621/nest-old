@@ -16,7 +16,6 @@ import com.github.nest.arcteryx.meta.IPropertyDescriptor;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 import com.github.nest.arcteryx.meta.IResourceOperator;
-import com.github.nest.arcteryx.meta.ResourceException;
 
 /**
  * Resource descriptor. <br>
@@ -37,7 +36,6 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	private Collection<IPropertyDescriptor> properties = null;
 	private Map<String, IResourceOperator> operators = new HashMap<String, IResourceOperator>();
 	private IResourceDescriptor parent = null;
-	private Collection<IPropertyDescriptor> allProperties = null;
 
 	public ResourceDescriptor() {
 	}
@@ -116,23 +114,42 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	}
 
 	/**
-	 * @param context
-	 *            the context to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#setContext(com.github.nest.arcteryx.meta.IResourceDescriptorContext)
 	 */
+	@Override
 	public void setContext(IResourceDescriptorContext context) {
 		this.context = context;
 	}
 
 	/**
 	 * never return null, if no properties described, return empty collection.
-	 * Call {@linkplain #getProperties(boolean)} and send parameter
-	 * <code>true</code>.
 	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getProperties()
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getDeclaredProperties()
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<IPropertyDescriptor> getProperties() {
-		return this.getProperties(true);
+	public Collection<IPropertyDescriptor> getDeclaredProperties() {
+		return (Collection<IPropertyDescriptor>) (this.properties == null ? Collections.emptyList() : this.properties);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getDeclaredProperty(java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends IPropertyDescriptor> T getDeclaredProperty(String name) {
+		assert StringUtils.isNotBlank(name) : "Name of property cannot be empty string.";
+
+		for (IPropertyDescriptor descriptor : this.getDeclaredProperties()) {
+			if (descriptor.getName().equals(name)) {
+				return (T) descriptor;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -146,6 +163,65 @@ public class ResourceDescriptor implements IResourceDescriptor {
 			for (IPropertyDescriptor property : properties) {
 				property.setResourceDescriptor(this);
 			}
+		}
+	}
+
+	/**
+	 * Will cache the ancestor's properties at first call when the parameter
+	 * <code>all</code> is true, and never change again.
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getProperties()
+	 */
+	@Override
+	public Collection<IPropertyDescriptor> getProperties() {
+		return this.getAllProperties();
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getProperty(java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends IPropertyDescriptor> T getProperty(String name) {
+		assert StringUtils.isNotBlank(name) : "Name of property cannot be empty string.";
+
+		for (IPropertyDescriptor descriptor : this.getProperties()) {
+			if (descriptor.getName().equals(name)) {
+				return (T) descriptor;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * get all properties which collect in this moment
+	 * 
+	 * @return
+	 */
+	protected Collection<IPropertyDescriptor> getAllProperties() {
+		List<IPropertyDescriptor> list = new ArrayList<IPropertyDescriptor>();
+		list.addAll(this.getDeclaredProperties());
+
+		IResourceDescriptor parent = this.getParent();
+		if (parent != null) {
+			Map<String, IPropertyDescriptor> map = new HashMap<String, IPropertyDescriptor>();
+			Collection<IPropertyDescriptor> parentProperties = parent.getProperties();
+			if (parentProperties != null) {
+				for (IPropertyDescriptor descriptor : parentProperties) {
+					map.put(descriptor.getName(), descriptor);
+				}
+			}
+
+			// replace the property
+			for (IPropertyDescriptor descriptor : list) {
+				map.put(descriptor.getName(), descriptor);
+			}
+
+			return map.values();
+		} else {
+			return list;
 		}
 	}
 
@@ -173,10 +249,6 @@ public class ResourceDescriptor implements IResourceDescriptor {
 					}
 				}
 			}
-		}
-
-		if (operator == null) {
-			throw new ResourceException("Operator[" + code + "] not found on resource[" + getName() + "].");
 		}
 
 		return (T) operator;
@@ -222,62 +294,6 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 */
 	public void setParent(IResourceDescriptor parent) {
 		this.parent = parent;
-	}
-
-	/**
-	 * Will cache the ancestor's properties at first call when the parameter
-	 * <code>all</code> is true, and never change again.
-	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getProperties(boolean)
-	 */
-	@Override
-	public Collection<IPropertyDescriptor> getProperties(boolean all) {
-		if (all) {
-			if (this.allProperties == null) {
-				synchronized (this) {
-					if (this.allProperties == null) {
-						this.allProperties = getAllProperties();
-					}
-				}
-			}
-			return this.allProperties;
-		} else {
-			if (this.properties == null) {
-				return Collections.emptyList();
-			} else {
-				return this.properties;
-			}
-		}
-	}
-
-	/**
-	 * get all properties which collect in this moment
-	 * 
-	 * @return
-	 */
-	protected Collection<IPropertyDescriptor> getAllProperties() {
-		List<IPropertyDescriptor> list = new ArrayList<IPropertyDescriptor>();
-		list.addAll(getProperties(false));
-
-		IResourceDescriptor parent = this.getParent();
-		if (parent != null) {
-			Map<String, IPropertyDescriptor> map = new HashMap<String, IPropertyDescriptor>();
-			Collection<IPropertyDescriptor> parentProperties = parent.getProperties(true);
-			if (parentProperties != null) {
-				for (IPropertyDescriptor descriptor : parentProperties) {
-					map.put(descriptor.getName(), descriptor);
-				}
-			}
-
-			// replace the property
-			for (IPropertyDescriptor descriptor : list) {
-				map.put(descriptor.getName(), descriptor);
-			}
-
-			return map.values();
-		} else {
-			return list;
-		}
 	}
 
 	/**

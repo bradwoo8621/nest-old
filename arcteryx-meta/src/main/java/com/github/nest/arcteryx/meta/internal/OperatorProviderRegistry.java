@@ -9,7 +9,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.github.nest.arcteryx.meta.IOperatorProvider;
-import com.github.nest.arcteryx.meta.IDefaultOperatorProviderRegistry;
+import com.github.nest.arcteryx.meta.IOperatorProviderRegistry;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceOperator;
 
@@ -18,13 +18,13 @@ import com.github.nest.arcteryx.meta.IResourceOperator;
  * 
  * @author brad.wu
  */
-public class DefaultOperatorProviderRegistry implements IDefaultOperatorProviderRegistry {
+public class OperatorProviderRegistry implements IOperatorProviderRegistry {
 	private Map<String, IOperatorProvider> providerMap = new HashMap<String, IOperatorProvider>();
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.IDefaultOperatorProviderRegistry#createDefaultOperator(com.github.nest.arcteryx.meta.IResourceDescriptor,
+	 * @see com.github.nest.arcteryx.meta.IOperatorProviderRegistry#createDefaultOperator(com.github.nest.arcteryx.meta.IResourceDescriptor,
 	 *      java.lang.String)
 	 */
 	@SuppressWarnings("unchecked")
@@ -37,14 +37,25 @@ public class DefaultOperatorProviderRegistry implements IDefaultOperatorProvider
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.IDefaultOperatorProviderRegistry#register(java.lang.String,
+	 * @see com.github.nest.arcteryx.meta.IOperatorProviderRegistry#register(java.lang.String,
 	 *      com.github.nest.arcteryx.meta.IOperatorProvider)
 	 */
 	@Override
 	public void register(String code, IOperatorProvider provider) {
 		assert StringUtils.isNotBlank(code) : "Code of operator provider cannot be empty.";
 		assert provider != null : "Operator provider cannot be null.";
-		
+
 		providerMap.put(code, provider);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IOperatorProviderRegistry#get(java.lang.String)
+	 */
+	@Override
+	public IOperatorProvider get(String code) {
+		assert StringUtils.isNotBlank(code) : "Code of operator provider cannot be empty.";
+		return providerMap.get(code);
 	}
 }

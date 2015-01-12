@@ -3,7 +3,6 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 
 /**
  * script constraint. script contains two parts, language and script body. eg.
@@ -15,10 +14,6 @@ public class Script extends AbstractBeanPropertyConstraint {
 	private static final long serialVersionUID = -2064084972261552830L;
 
 	private String script = null;
-
-	public Script(IBeanPropertyDescriptor propertyDescriptor) {
-		super(propertyDescriptor);
-	}
 
 	/**
 	 * @return the script

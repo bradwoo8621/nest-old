@@ -18,7 +18,7 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	private static final long serialVersionUID = -8690855571159823110L;
 
 	private Object defaultValue = null;
-	private IBeanPropertyConstraint contraint = null;
+	private IBeanPropertyConstraint constraint = null;
 
 	/**
 	 * (non-Javadoc)
@@ -31,16 +31,6 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	}
 
 	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor#getConstraint()
-	 */
-	@Override
-	public IBeanPropertyConstraint getConstraint() {
-		return this.contraint;
-	}
-
-	/**
 	 * @param defaultValue
 	 *            the defaultValue to set
 	 */
@@ -49,18 +39,21 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	}
 
 	/**
-	 * @return the contraint
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor#getConstraint()
 	 */
-	public IBeanPropertyConstraint getContraint() {
-		return contraint;
+	@Override
+	public IBeanPropertyConstraint getConstraint() {
+		return this.constraint;
 	}
 
 	/**
-	 * @param contraint
-	 *            the contraint to set
+	 * @param constraint
+	 *            the constraint to set
 	 */
-	public void setContraint(IBeanPropertyConstraint contraint) {
-		this.contraint = contraint;
+	public void setConstraint(IBeanPropertyConstraint constraint) {
+		this.constraint = constraint;
 	}
 
 	/**

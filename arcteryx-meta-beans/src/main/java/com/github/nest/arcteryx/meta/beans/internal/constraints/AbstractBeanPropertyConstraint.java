@@ -3,9 +3,10 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
-import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 
 /**
  * bean property constraint
@@ -15,7 +16,6 @@ import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyConstraint {
 	private static final long serialVersionUID = 7692841064131390892L;
 
-	private IBeanPropertyDescriptor propertyDescriptor = null;
 	private String errorCode = null;
 	private String messageTemplate = null;
 	private String when = null;
@@ -23,34 +23,13 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	private String[] profiles = null;
 	private ConstraintSeverity severity = ConstraintSeverity.ERROR;
 
-	public AbstractBeanPropertyConstraint(IBeanPropertyDescriptor propertyDescriptor) {
-		this.propertyDescriptor = propertyDescriptor;
-	}
-
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getPropertyDescriptor()
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getMessageTemplate()
 	 */
 	@Override
-	public IBeanPropertyDescriptor getPropertyDescriptor() {
-		return this.propertyDescriptor;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getBeanDescriptor()
-	 */
-	@Override
-	public IBeanDescriptor getBeanDescriptor() {
-		return this.getPropertyDescriptor().getBeanDescriptor();
-	}
-
-	/**
-	 * @return the messageTemplate
-	 */
-	protected String getMessageTemplate() {
+	public String getMessageTemplate() {
 		return messageTemplate;
 	}
 
@@ -58,14 +37,17 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	 * @param messageTemplate
 	 *            the messageTemplate to set
 	 */
-	protected void setMessageTemplate(String messageTemplate) {
+	public void setMessageTemplate(String messageTemplate) {
 		this.messageTemplate = messageTemplate;
 	}
 
 	/**
-	 * @return the when
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getWhen()
 	 */
-	protected String getWhen() {
+	@Override
+	public String getWhen() {
 		return when;
 	}
 
@@ -73,14 +55,17 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	 * @param when
 	 *            the when to set
 	 */
-	protected void setWhen(String when) {
+	public void setWhen(String when) {
 		this.when = when;
 	}
 
 	/**
-	 * @return the target
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getTarget()
 	 */
-	protected String getTarget() {
+	@Override
+	public String getTarget() {
 		return target;
 	}
 
@@ -88,14 +73,17 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	 * @param target
 	 *            the target to set
 	 */
-	protected void setTarget(String target) {
+	public void setTarget(String target) {
 		this.target = target;
 	}
 
 	/**
-	 * @return the errorCode
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getErrorCode()
 	 */
-	protected String getErrorCode() {
+	@Override
+	public String getErrorCode() {
 		return errorCode;
 	}
 
@@ -103,14 +91,17 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	 * @param errorCode
 	 *            the errorCode to set
 	 */
-	protected void setErrorCode(String errorCode) {
+	public void setErrorCode(String errorCode) {
 		this.errorCode = errorCode;
 	}
 
 	/**
-	 * @return the profiles
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getProfiles()
 	 */
-	protected String[] getProfiles() {
+	@Override
+	public String[] getProfiles() {
 		return profiles;
 	}
 
@@ -118,14 +109,17 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	 * @param profiles
 	 *            the profiles to set
 	 */
-	protected void setProfiles(String[] profiles) {
+	public void setProfiles(String[] profiles) {
 		this.profiles = profiles;
 	}
 
 	/**
-	 * @return the severity
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getSeverity()
 	 */
-	protected ConstraintSeverity getSeverity() {
+	@Override
+	public ConstraintSeverity getSeverity() {
 		return severity;
 	}
 
@@ -133,7 +127,19 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	 * @param severity
 	 *            the severity to set
 	 */
-	protected void setSeverity(ConstraintSeverity severity) {
+	public void setSeverity(ConstraintSeverity severity) {
 		this.severity = severity;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getConstraintsRecursive()
+	 */
+	@Override
+	public List<IBeanPropertyConstraint> getConstraintsRecursive() {
+		List<IBeanPropertyConstraint> list = new LinkedList<IBeanPropertyConstraint>();
+		list.add(this);
+		return list;
 	}
 }

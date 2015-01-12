@@ -58,9 +58,16 @@ public interface IBeanDescriptor extends IResourceDescriptor {
 	IBeanFinder getFinder();
 
 	/**
-	 * get bean properties
+	 * get bean properties, include parent's
 	 * 
 	 * @return
 	 */
 	Collection<IBeanPropertyDescriptor> getBeanProperties();
+
+	/**
+	 * get bean properties, only declared in this descriptor
+	 * 
+	 * @return
+	 */
+	Collection<IBeanPropertyDescriptor> getDeclaredBeanProperties();
 }

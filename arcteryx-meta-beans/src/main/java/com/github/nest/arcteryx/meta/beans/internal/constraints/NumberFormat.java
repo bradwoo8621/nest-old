@@ -3,7 +3,6 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 
 /**
  * number format constraint. default value of {@linkplain #integerDigits} and
@@ -16,10 +15,6 @@ public class NumberFormat extends AbstractBeanPropertyConstraint {
 
 	private int integerDigits = Integer.MAX_VALUE;
 	private int fractionDigits = Integer.MAX_VALUE;
-
-	public NumberFormat(IBeanPropertyDescriptor propertyDescriptor) {
-		super(propertyDescriptor);
-	}
 
 	/**
 	 * @return the integerDigits

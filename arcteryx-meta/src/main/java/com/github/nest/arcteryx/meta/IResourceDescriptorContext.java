@@ -57,7 +57,7 @@ public interface IResourceDescriptorContext {
 	 * 
 	 * @return
 	 */
-	IDefaultOperatorProviderRegistry getOperatorProviderRegistry();
+	IOperatorProviderRegistry getOperatorProviderRegistry();
 
 	/**
 	 * register
@@ -65,5 +65,5 @@ public interface IResourceDescriptorContext {
 	 * @param provider
 	 * @param code
 	 */
-	void registerDefaultOperatorProvider(IOperatorProvider provider, String code);
+	void registerOperatorProvider(IOperatorProvider provider, String code);
 }

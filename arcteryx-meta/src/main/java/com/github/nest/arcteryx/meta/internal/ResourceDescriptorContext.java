@@ -11,8 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.github.nest.arcteryx.meta.IOperatorProvider;
-import com.github.nest.arcteryx.meta.IDefaultOperatorProviderRegistry;
-import com.github.nest.arcteryx.meta.IResouceDescriptorContextInterceptor;
+import com.github.nest.arcteryx.meta.IOperatorProviderRegistry;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 
@@ -23,23 +22,7 @@ import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
  */
 public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	private Map<Class<?>, IResourceDescriptor> map = new HashMap<Class<?>, IResourceDescriptor>();
-	private IResouceDescriptorContextInterceptor contextInterceptor = null;
-	private IDefaultOperatorProviderRegistry OperatorProviderRegistry = null;
-
-	/**
-	 * @return the contextInterceptor
-	 */
-	public IResouceDescriptorContextInterceptor getContextInterceptor() {
-		return contextInterceptor;
-	}
-
-	/**
-	 * @param contextInterceptor
-	 *            the contextInterceptor to set
-	 */
-	public void setContextInterceptor(IResouceDescriptorContextInterceptor contextInterceptor) {
-		this.contextInterceptor = contextInterceptor;
-	}
+	private IOperatorProviderRegistry OperatorProviderRegistry = null;
 
 	/**
 	 * (non-Javadoc)
@@ -53,12 +36,7 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 
 		Class<?> clazz = resource.getClass();
 		IResourceDescriptor descriptor = get(clazz);
-		IResouceDescriptorContextInterceptor interceptor = this.getContextInterceptor();
-		if (interceptor != null) {
-			return (T) interceptor.decorateDescriptor(descriptor);
-		} else {
-			return (T) descriptor;
-		}
+		return (T) descriptor;
 	}
 
 	/**
@@ -112,16 +90,10 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 
 		synchronized (this.map) {
 			IResourceDescriptor old = map.put(descriptor.getResourceClass(), descriptor);
-			if (old instanceof ResourceDescriptor) {
-				((ResourceDescriptor) old).setContext(null);
+			if (old != null) {
+				old.setContext(null);
 			}
-			if (descriptor instanceof ResourceDescriptor) {
-				((ResourceDescriptor) descriptor).setContext(this);
-			}
-			IResouceDescriptorContextInterceptor interceptor = this.getContextInterceptor();
-			if (interceptor != null) {
-				interceptor.postPutIntoContext(descriptor.getResourceClass(), descriptor);
-			}
+			descriptor.setContext(this);
 			return old;
 		}
 	}
@@ -144,23 +116,11 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 			this.map.clear();
 
 			for (IResourceDescriptor oldDescriptor : oldDescriptors) {
-				IResourceDescriptor descriptor = oldDescriptor;
-				if (descriptor instanceof ResourceDescriptor) {
-					((ResourceDescriptor) descriptor).setContext(null);
-				}
+				oldDescriptor.setContext(null);
 			}
 			for (IResourceDescriptor descriptor : descriptors) {
-				if (descriptor instanceof ResourceDescriptor) {
-					((ResourceDescriptor) descriptor).setContext(this);
-				}
+				descriptor.setContext(this);
 				this.map.put(descriptor.getResourceClass(), descriptor);
-			}
-
-			IResouceDescriptorContextInterceptor interceptor = this.getContextInterceptor();
-			if (interceptor != null) {
-				for (Map.Entry<Class<?>, IResourceDescriptor> entry : this.map.entrySet()) {
-					interceptor.postPutIntoContext(entry.getKey(), entry.getValue());
-				}
 			}
 
 			return oldDescriptors;
@@ -202,7 +162,7 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getOperatorProviderRegistry()
 	 */
 	@Override
-	public IDefaultOperatorProviderRegistry getOperatorProviderRegistry() {
+	public IOperatorProviderRegistry getOperatorProviderRegistry() {
 		if (this.OperatorProviderRegistry == null) {
 			synchronized (this) {
 				if (this.OperatorProviderRegistry == null) {
@@ -218,8 +178,8 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 * 
 	 * @return
 	 */
-	protected IDefaultOperatorProviderRegistry createOperatorProviderRegistry() {
-		return new DefaultOperatorProviderRegistry();
+	protected IOperatorProviderRegistry createOperatorProviderRegistry() {
+		return new OperatorProviderRegistry();
 	}
 
 	/**
@@ -228,18 +188,18 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 * @param operatorProviderRegistry
 	 * 
 	 */
-	public void setOperatorProviderRegistry(IDefaultOperatorProviderRegistry operatorProviderRegistry) {
+	public void setOperatorProviderRegistry(IOperatorProviderRegistry operatorProviderRegistry) {
 		this.OperatorProviderRegistry = operatorProviderRegistry;
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#registerDefaultOperatorProvider(com.github.nest.arcteryx.meta.IOperatorProvider,
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#registerOperatorProvider(com.github.nest.arcteryx.meta.IOperatorProvider,
 	 *      java.lang.String)
 	 */
 	@Override
-	public void registerDefaultOperatorProvider(IOperatorProvider provider, String code) {
+	public void registerOperatorProvider(IOperatorProvider provider, String code) {
 		getOperatorProviderRegistry().register(code, provider);
 	}
 
@@ -248,10 +208,10 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 * 
 	 * @param providers
 	 */
-	public void setDefaultOperatorProviders(Map<String, IOperatorProvider> providers) {
+	public void setOperatorProviders(Map<String, IOperatorProvider> providers) {
 		assert providers != null : "Providers map cannot be null.";
 
-		IDefaultOperatorProviderRegistry registry = this.getOperatorProviderRegistry();
+		IOperatorProviderRegistry registry = this.getOperatorProviderRegistry();
 		synchronized (registry) {
 			for (Map.Entry<String, IOperatorProvider> entry : providers.entrySet()) {
 				assert entry.getKey() != null : "Code of provider cannot be null.";

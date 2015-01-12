@@ -3,8 +3,6 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
-
 /**
  * length of string. if object is not a string, use
  * {@linkplain Object#toString()} to get string value.<br>
@@ -18,10 +16,6 @@ public class Length extends AbstractBeanPropertyConstraint {
 
 	private int min = 0;
 	private int max = Integer.MAX_VALUE;
-
-	public Length(IBeanPropertyDescriptor propertyDescriptor) {
-		super(propertyDescriptor);
-	}
 
 	/**
 	 * @return the min

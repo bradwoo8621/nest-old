@@ -3,10 +3,6 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
-import java.util.Date;
-
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
-
 /**
  * date range constraint. default value of {@linkplain #excludeFrom} and
  * {@linkplain #excludeTo} are false.
@@ -16,19 +12,17 @@ import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 public class DateRange extends AbstractBeanPropertyConstraint {
 	private static final long serialVersionUID = 6400297560900055018L;
 
-	private Date from = null;
+	private String from = null;
 	private boolean excludeFrom = false;
-	private Date to = null;
+	private String to = null;
 	private boolean excludeTo = false;
-
-	public DateRange(IBeanPropertyDescriptor propertyDescriptor) {
-		super(propertyDescriptor);
-	}
+	private String format = null;
+	private int tolerance = 0;
 
 	/**
 	 * @return the from
 	 */
-	protected Date getFrom() {
+	public String getFrom() {
 		return from;
 	}
 
@@ -36,14 +30,14 @@ public class DateRange extends AbstractBeanPropertyConstraint {
 	 * @param from
 	 *            the from to set
 	 */
-	protected void setFrom(Date from) {
+	public void setFrom(String from) {
 		this.from = from;
 	}
 
 	/**
 	 * @return the excludeFrom
 	 */
-	protected boolean isExcludeFrom() {
+	public boolean isExcludeFrom() {
 		return excludeFrom;
 	}
 
@@ -51,14 +45,14 @@ public class DateRange extends AbstractBeanPropertyConstraint {
 	 * @param excludeFrom
 	 *            the excludeFrom to set
 	 */
-	protected void setExcludeFrom(boolean excludeFrom) {
+	public void setExcludeFrom(boolean excludeFrom) {
 		this.excludeFrom = excludeFrom;
 	}
 
 	/**
 	 * @return the to
 	 */
-	protected Date getTo() {
+	public String getTo() {
 		return to;
 	}
 
@@ -66,14 +60,14 @@ public class DateRange extends AbstractBeanPropertyConstraint {
 	 * @param to
 	 *            the to to set
 	 */
-	protected void setTo(Date to) {
+	public void setTo(String to) {
 		this.to = to;
 	}
 
 	/**
 	 * @return the excludeTo
 	 */
-	protected boolean isExcludeTo() {
+	public boolean isExcludeTo() {
 		return excludeTo;
 	}
 
@@ -81,7 +75,37 @@ public class DateRange extends AbstractBeanPropertyConstraint {
 	 * @param excludeTo
 	 *            the excludeTo to set
 	 */
-	protected void setExcludeTo(boolean excludeTo) {
+	public void setExcludeTo(boolean excludeTo) {
 		this.excludeTo = excludeTo;
+	}
+
+	/**
+	 * @return the format
+	 */
+	public String getFormat() {
+		return format;
+	}
+
+	/**
+	 * @param format
+	 *            the format to set
+	 */
+	public void setFormat(String format) {
+		this.format = format;
+	}
+
+	/**
+	 * @return the tolerance
+	 */
+	public int getTolerance() {
+		return tolerance;
+	}
+
+	/**
+	 * @param tolerance
+	 *            the tolerance to set
+	 */
+	public void setTolerance(int tolerance) {
+		this.tolerance = tolerance;
 	}
 }

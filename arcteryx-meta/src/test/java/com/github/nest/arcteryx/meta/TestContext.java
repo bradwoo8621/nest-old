@@ -30,19 +30,19 @@ public class TestContext {
 	@Test
 	public void testSingletonRegistry() {
 		IResourceDescriptorContext context1 = context.getBean("descriptor.context", IResourceDescriptorContext.class);
-		IResourceDescriptorContext context2 = context
-				.getBean("descriptor.context", IResourceDescriptorContext.class);
+		IResourceDescriptorContext context2 = context.getBean("descriptor.context", IResourceDescriptorContext.class);
 		assertEquals(context1, context2);
 	}
 
 	@Test
 	public void testWorker() {
-		IResourceDescriptorContext resourceContext = context.getBean("descriptor.context", IResourceDescriptorContext.class);
+		IResourceDescriptorContext resourceContext = context.getBean("descriptor.context",
+				IResourceDescriptorContext.class);
 		IResourceDescriptor descriptor = resourceContext.get(Worker.class);
 		assertEquals("Person", descriptor.getName());
 		assertEquals("A person", descriptor.getDescription());
 
-		Collection<IPropertyDescriptor> properties = descriptor.getProperties(false);
+		Collection<IPropertyDescriptor> properties = descriptor.getProperties();
 		assertEquals(1, properties.size());
 		for (IPropertyDescriptor property : properties) {
 			if ("name".equals(property.getName())) {
@@ -56,12 +56,13 @@ public class TestContext {
 
 	@Test
 	public void testStudent() {
-		IResourceDescriptorContext resourceContext = context.getBean("descriptor.context", IResourceDescriptorContext.class);
+		IResourceDescriptorContext resourceContext = context.getBean("descriptor.context",
+				IResourceDescriptorContext.class);
 		IResourceDescriptor descriptor = resourceContext.get(IStudent.class);
 		assertEquals("Student", descriptor.getName());
 		assertEquals("A student", descriptor.getDescription());
 
-		Collection<IPropertyDescriptor> properties = descriptor.getProperties(false);
+		Collection<IPropertyDescriptor> properties = descriptor.getDeclaredProperties();
 		assertEquals(2, properties.size());
 		for (IPropertyDescriptor property : properties) {
 			if ("school".equals(property.getName())) {
@@ -86,12 +87,13 @@ public class TestContext {
 
 	@Test
 	public void testPerson() {
-		IResourceDescriptorContext resourceContext = context.getBean("descriptor.context", IResourceDescriptorContext.class);
+		IResourceDescriptorContext resourceContext = context.getBean("descriptor.context",
+				IResourceDescriptorContext.class);
 		IResourceDescriptor descriptor = resourceContext.get(IPerson.class);
 		assertEquals("Person", descriptor.getName());
 		assertEquals("A person", descriptor.getDescription());
 
-		Collection<IPropertyDescriptor> properties = descriptor.getProperties(false);
+		Collection<IPropertyDescriptor> properties = descriptor.getProperties();
 		assertEquals(1, properties.size());
 		for (IPropertyDescriptor property : properties) {
 			if ("name".equals(property.getName())) {

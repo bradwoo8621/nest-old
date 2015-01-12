@@ -4,6 +4,9 @@
 package com.github.nest.arcteryx.meta.beans;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.github.nest.arcteryx.meta.beans.internal.constraints.ConstraintSeverity;
 
 /**
  * Bean property constraint
@@ -12,16 +15,51 @@ import java.io.Serializable;
  */
 public interface IBeanPropertyConstraint extends Serializable {
 	/**
-	 * get property descriptor
+	 * get constraints recursive
 	 * 
 	 * @return
 	 */
-	IBeanPropertyDescriptor getPropertyDescriptor();
+	List<IBeanPropertyConstraint> getConstraintsRecursive();
 
 	/**
-	 * get bean descriptor
+	 * get severity of constraint
 	 * 
 	 * @return
 	 */
-	IBeanDescriptor getBeanDescriptor();
+	ConstraintSeverity getSeverity();
+
+	/**
+	 * get profiles of constraint
+	 * 
+	 * @return
+	 */
+	String[] getProfiles();
+
+	/**
+	 * get error code of constraint
+	 * 
+	 * @return
+	 */
+	String getErrorCode();
+
+	/**
+	 * get target of constraint
+	 * 
+	 * @return
+	 */
+	String getTarget();
+
+	/**
+	 * get when of constraint
+	 * 
+	 * @return
+	 */
+	String getWhen();
+
+	/**
+	 * get message template of constraint
+	 * 
+	 * @return
+	 */
+	String getMessageTemplate();
 }

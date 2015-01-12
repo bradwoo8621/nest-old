@@ -8,7 +8,7 @@ package com.github.nest.arcteryx.meta;
  * 
  * @author brad.wu
  */
-public interface IDefaultOperatorProviderRegistry {
+public interface IOperatorProviderRegistry {
 	/**
 	 * create default resource operator
 	 * 
@@ -24,4 +24,12 @@ public interface IDefaultOperatorProviderRegistry {
 	 * @param provider
 	 */
 	void register(String code, IOperatorProvider provider);
+
+	/**
+	 * get operator provider
+	 * 
+	 * @param code
+	 * @return
+	 */
+	IOperatorProvider get(String code);
 }

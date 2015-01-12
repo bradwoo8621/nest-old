@@ -3,8 +3,6 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
-
 /**
  * size of collection or array.<br>
  * default value of {@linkplain #min} is 0, {@linkplain #max} is
@@ -17,10 +15,6 @@ public class Size extends AbstractBeanPropertyConstraint {
 
 	private int min = 0;
 	private int max = Integer.MAX_VALUE;
-
-	public Size(IBeanPropertyDescriptor propertyDescriptor) {
-		super(propertyDescriptor);
-	}
 
 	/**
 	 * @return the min

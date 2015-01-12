@@ -3,7 +3,6 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 
 /**
  * text format constraint
@@ -15,14 +14,10 @@ public class TextFormat extends AbstractBeanPropertyConstraint {
 
 	private String pattern = null;
 
-	public TextFormat(IBeanPropertyDescriptor propertyDescriptor) {
-		super(propertyDescriptor);
-	}
-
 	/**
 	 * @return the pattern
 	 */
-	protected String getPattern() {
+	public String getPattern() {
 		return pattern;
 	}
 
@@ -30,7 +25,7 @@ public class TextFormat extends AbstractBeanPropertyConstraint {
 	 * @param pattern
 	 *            the pattern to set
 	 */
-	protected void setPattern(String pattern) {
+	public void setPattern(String pattern) {
 		this.pattern = pattern;
 	}
 }

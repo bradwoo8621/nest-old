@@ -5,8 +5,6 @@ package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
 import java.math.BigDecimal;
 
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
-
 /**
  * constraint of number.<br>
  * default value of {@linkplain #excludeMin} and {@linkplain #excludeMax} are
@@ -21,10 +19,6 @@ public class Number extends AbstractBeanPropertyConstraint {
 	private boolean excludeMin = false;
 	private BigDecimal max = null;
 	private boolean excludeMax = false;
-
-	public Number(IBeanPropertyDescriptor propertyDescriptor) {
-		super(propertyDescriptor);
-	}
 
 	/**
 	 * @return the min

@@ -3,10 +3,10 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 
 /**
  * property constraints, which can contain more than one constraint. constraints
@@ -19,14 +19,10 @@ public class PropertyConstraints extends AbstractBeanPropertyConstraint {
 
 	private List<IBeanPropertyConstraint> constraints = null;
 
-	public PropertyConstraints(IBeanPropertyDescriptor propertyDescriptor) {
-		super(propertyDescriptor);
-	}
-
 	/**
 	 * @return the constraints
 	 */
-	protected List<IBeanPropertyConstraint> getConstraints() {
+	public List<IBeanPropertyConstraint> getConstraints() {
 		return constraints;
 	}
 
@@ -34,7 +30,21 @@ public class PropertyConstraints extends AbstractBeanPropertyConstraint {
 	 * @param constraints
 	 *            the constraints to set
 	 */
-	protected void setConstraints(List<IBeanPropertyConstraint> constraints) {
+	public void setConstraints(List<IBeanPropertyConstraint> constraints) {
 		this.constraints = constraints;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.internal.constraints.AbstractBeanPropertyConstraint#getConstraintsRecursive()
+	 */
+	@Override
+	public List<IBeanPropertyConstraint> getConstraintsRecursive() {
+		List<IBeanPropertyConstraint> list = new LinkedList<IBeanPropertyConstraint>();
+		for (IBeanPropertyConstraint constraint : this.getConstraints()) {
+			list.addAll(constraint.getConstraintsRecursive());
+		}
+		return list;
 	}
 }

@@ -4,7 +4,8 @@
 package com.github.nest.arcteryx.meta.beans;
 
 /**
- * Bean validator
+ * Bean validator<br>
+ * TODO convert the valdation result to pre-defined interface
  * 
  * @author brad.wu
  */

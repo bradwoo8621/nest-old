@@ -21,7 +21,8 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	private String when = null;
 	private String target = null;
 	private String[] profiles = null;
-	private ConstraintSeverity severity = ConstraintSeverity.ERROR;
+	private Severity severity = Severity.ERROR;
+	private ApplyTo appliesTo = ApplyTo.VALUES;
 
 	/**
 	 * (non-Javadoc)
@@ -119,7 +120,7 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getSeverity()
 	 */
 	@Override
-	public ConstraintSeverity getSeverity() {
+	public Severity getSeverity() {
 		return severity;
 	}
 
@@ -127,8 +128,26 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	 * @param severity
 	 *            the severity to set
 	 */
-	public void setSeverity(ConstraintSeverity severity) {
+	public void setSeverity(Severity severity) {
 		this.severity = severity;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getAppliesTo()
+	 */
+	@Override
+	public ApplyTo getAppliesTo() {
+		return this.appliesTo;
+	}
+
+	/**
+	 * @param appliesTo
+	 *            the appliesTo to set
+	 */
+	public void setAppliesTo(ApplyTo appliesTo) {
+		this.appliesTo = appliesTo;
 	}
 
 	/**

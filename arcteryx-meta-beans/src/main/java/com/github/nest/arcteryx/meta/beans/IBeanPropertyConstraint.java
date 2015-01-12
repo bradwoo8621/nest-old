@@ -6,14 +6,43 @@ package com.github.nest.arcteryx.meta.beans;
 import java.io.Serializable;
 import java.util.List;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.ConstraintSeverity;
-
 /**
  * Bean property constraint
  * 
  * @author brad.wu
  */
 public interface IBeanPropertyConstraint extends Serializable {
+	/**
+	 * severity of constraint
+	 * 
+	 * @author brad.wu
+	 */
+	public enum Severity {
+		FATAL(8), ERROR(4), WARN(2), INFO(1);
+
+		private int severity = 1;
+
+		private Severity(final int severity) {
+			this.severity = severity;
+		}
+
+		/**
+		 * @return the severity
+		 */
+		public int getSeverity() {
+			return severity;
+		}
+	}
+
+	/**
+	 * target which constraint applies to. default is {@linkplain #VALUES}
+	 * 
+	 * @author brad.wu
+	 */
+	public enum ApplyTo {
+		KEYS, VALUES, CONTAINER
+	}
+
 	/**
 	 * get constraints recursive
 	 * 
@@ -26,7 +55,7 @@ public interface IBeanPropertyConstraint extends Serializable {
 	 * 
 	 * @return
 	 */
-	ConstraintSeverity getSeverity();
+	Severity getSeverity();
 
 	/**
 	 * get profiles of constraint
@@ -62,4 +91,11 @@ public interface IBeanPropertyConstraint extends Serializable {
 	 * @return
 	 */
 	String getMessageTemplate();
+
+	/**
+	 * get applies to
+	 * 
+	 * @return
+	 */
+	ApplyTo getAppliesTo();
 }

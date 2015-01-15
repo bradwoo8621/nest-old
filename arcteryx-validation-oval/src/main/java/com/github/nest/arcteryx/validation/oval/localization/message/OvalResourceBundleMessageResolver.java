@@ -49,7 +49,7 @@ public class OvalResourceBundleMessageResolver implements MessageResolver {
 		Assert.argumentNotNull("bundleLocation", bundleLocation);
 		if (!this.bundleLocations.contains(bundleLocation)) {
 			synchronized (this.bundleLocations) {
-				if (this.bundleLocations.contains(bundleLocation)) {
+				if (!this.bundleLocations.contains(bundleLocation)) {
 					this.bundleLocations.add(bundleLocation);
 				}
 			}
@@ -76,13 +76,14 @@ public class OvalResourceBundleMessageResolver implements MessageResolver {
 	 * @return
 	 */
 	protected boolean addMessageBundle(final ResourceBundle messageBundle, Locale locale) {
-		final List<ResourceBundle> messageBundles = getMessageBundlesForLocale(locale);
-
-		if (messageBundles.contains(messageBundle))
-			return false;
-
-		messageBundles.add(0, messageBundle);
-
+		// final List<ResourceBundle> messageBundles =
+		// getMessageBundlesForLocale(locale);
+		//
+		// if (messageBundles.contains(messageBundle))
+		// return false;
+		//
+		// messageBundles.add(0, messageBundle);
+		//
 		if (!messageBundleKeys.containsKey(messageBundle)) {
 			final List<String> keys = getCollectionFactory().createList();
 			for (final Enumeration<String> keysEnum = messageBundle.getKeys(); keysEnum.hasMoreElements();)
@@ -140,15 +141,18 @@ public class OvalResourceBundleMessageResolver implements MessageResolver {
 				mbs = messageBundlesByLocale.get(locale);
 				if (mbs == null) {
 					mbs = new ArrayList<ResourceBundle>();
-					messageBundlesByLocale.put(locale, mbs);
+
 					// add the message bundle for the pre-built constraints
 					for (String bundleLocation : this.bundleLocations) {
 						try {
-							addMessageBundle(ResourceBundle.getBundle(bundleLocation, locale), locale);
+							ResourceBundle bundle = ResourceBundle.getBundle(bundleLocation, locale);
+							addMessageBundle(bundle, locale);
+							mbs.add(bundle);
 						} catch (final MissingResourceException ex) {
 							LOG.warn("No message bundle {3} for locale %s found.", ex, locale, bundleLocation);
 						}
 					}
+					messageBundlesByLocale.put(locale, mbs);
 				}
 			}
 		}

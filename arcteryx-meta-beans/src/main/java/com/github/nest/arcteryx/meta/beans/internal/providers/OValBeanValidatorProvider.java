@@ -28,7 +28,7 @@ public class OValBeanValidatorProvider implements IOperatorProvider {
 	public OValBeanValidatorProvider() {
 		OvalResourceBundleMessageResolver messageResolver = new OvalResourceBundleMessageResolver();
 		messageResolver
-				.addMessageBundle("/com/github/nest/arcteryx/meta/beans/internal/validators/oval/constraints/Messages");
+				.addMessageBundle("com/github/nest/arcteryx/meta/beans/internal/validators/oval/constraints/Messages");
 		Validator.setMessageResolver(messageResolver);
 	}
 

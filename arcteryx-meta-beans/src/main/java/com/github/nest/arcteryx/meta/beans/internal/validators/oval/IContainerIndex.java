@@ -14,6 +14,13 @@ import java.util.Map;
  */
 public interface IContainerIndex extends Serializable {
 	/**
+	 * get index key
+	 * 
+	 * @return
+	 */
+	String getIndexKey();
+
+	/**
 	 * index of collection, for {@linkplain Collection} and array.
 	 * 
 	 * @author brad.wu
@@ -43,6 +50,26 @@ public interface IContainerIndex extends Serializable {
 		@Override
 		public int getIndex() {
 			return this.index;
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.IContainerIndex#getIndexKey()
+		 */
+		@Override
+		public String getIndexKey() {
+			return String.valueOf(getIndex());
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return "CollectionIndex [index=" + index + "]";
 		}
 	}
 
@@ -86,6 +113,26 @@ public interface IContainerIndex extends Serializable {
 		public Object getKey() {
 			return this.key;
 		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.IContainerIndex#getIndexKey()
+		 */
+		@Override
+		public String getIndexKey() {
+			return String.valueOf(getKey());
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return "MapKeyIndex [key=" + key + "]";
+		}
 	}
 
 	/**
@@ -118,6 +165,26 @@ public interface IContainerIndex extends Serializable {
 		@Override
 		public Object getKey() {
 			return this.key;
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.IContainerIndex#getIndexKey()
+		 */
+		@Override
+		public String getIndexKey() {
+			return String.valueOf(getKey());
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see java.lang.Object#toString()
+		 */
+		@Override
+		public String toString() {
+			return "MapValueIndex [key=" + key + "]";
 		}
 	}
 }

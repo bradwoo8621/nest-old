@@ -16,6 +16,7 @@ import com.github.nest.arcteryx.meta.beans.IBeanDestroyer;
 import com.github.nest.arcteryx.meta.beans.IBeanFinder;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanValidator;
+import com.github.nest.arcteryx.meta.beans.internal.constraints.BeanConstraints;
 import com.github.nest.arcteryx.meta.internal.ResourceDescriptor;
 
 /**
@@ -74,6 +75,19 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 */
 	public void setConstraint(IBeanConstraint constraint) {
 		this.constraint = constraint;
+	}
+
+	/**
+	 * set constraints
+	 * 
+	 * @param constraints
+	 */
+	public void setConstraints(List<IBeanConstraint> constraints) {
+		assert constraints != null : "Constraints cannot be null.";
+
+		BeanConstraints all = new BeanConstraints();
+		all.setConstraints(constraints);
+		setConstraint(all);
 	}
 
 	/**

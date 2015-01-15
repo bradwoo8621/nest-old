@@ -59,4 +59,11 @@ public interface IConstraintViolation {
 	 * @return
 	 */
 	List<IConstraintViolation> getConstraintCauses();
+
+	/**
+	 * get relative path of value to validate
+	 * 
+	 * @return
+	 */
+	String getRelativePath();
 }

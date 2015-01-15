@@ -3,11 +3,17 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.validators.oval;
 
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.sf.oval.Check;
 import net.sf.oval.ConstraintViolation;
+import net.sf.oval.context.ClassContext;
+import net.sf.oval.context.FieldContext;
+import net.sf.oval.context.MethodReturnValueContext;
 import net.sf.oval.context.OValContext;
 
 import com.github.nest.arcteryx.meta.beans.ConstraintSeverity;
@@ -115,5 +121,72 @@ public class OValConstraintViolation extends ConstraintViolation implements ICon
 	 */
 	public String getWhen() {
 		return when;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IConstraintViolation#getRelativePath()
+	 */
+	@Override
+	public String getRelativePath() {
+		OValContext context = this.getCheckDeclaringContext();
+		// name
+		String name = convertContextToName(context);
+		// index
+		String indexKey = null;
+		if (getIndex() != null) {
+			indexKey = getIndex().getIndexKey();
+		}
+		// target
+		String target = null;
+		if (StringUtils.isNotEmpty(this.getTarget())) {
+			target = this.getTarget();
+			int pos = target.indexOf(':');
+			if (pos != -1) {
+				// jxpath target
+				target = target.substring(pos + 1).replace('/', '.');
+			}
+		}
+
+		StringBuilder sb = new StringBuilder(name);
+		if (indexKey != null) {
+			sb.append('[').append(indexKey).append(']');
+		}
+		if (target != null) {
+			sb.append('.').append(target);
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * convert context to name
+	 * 
+	 * @param context
+	 * @return
+	 */
+	protected String convertContextToName(OValContext context) {
+		String name;
+		if (context instanceof MethodReturnValueContext) {
+			Method method = ((MethodReturnValueContext) context).getMethod();
+			name = method.getName();
+			if (name.startsWith("get")) {
+				name = name.substring(3);
+			} else if (name.startsWith("is")) {
+				name = name.substring(2);
+			}
+			if (name.length() == 1) {
+				name = name.toLowerCase();
+			} else {
+				name = name.substring(0, 1).toLowerCase() + name.substring(1);
+			}
+		} else if (context instanceof FieldContext) {
+			name = ((FieldContext) context).getField().getName();
+		} else if (context instanceof ClassContext) {
+			name = "self";
+		} else {
+			name = context.toString();
+		}
+		return name;
 	}
 }

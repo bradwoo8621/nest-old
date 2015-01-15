@@ -5,14 +5,14 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.oval;
 
 import net.sf.oval.Check;
 
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
+import com.github.nest.arcteryx.meta.beans.IConstraint;
 
 /**
  * OVal check convertor
  * 
  * @author brad.wu
  */
-public interface IOValCheckConvertor<C extends IBeanPropertyConstraint> {
+public interface IOValCheckConvertor<C extends IConstraint> {
 	/**
 	 * convert property contraint to OVal check
 	 * 

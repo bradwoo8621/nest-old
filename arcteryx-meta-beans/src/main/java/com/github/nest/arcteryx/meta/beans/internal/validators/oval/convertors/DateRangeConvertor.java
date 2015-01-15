@@ -6,13 +6,14 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors;
 import net.sf.oval.Check;
 
 import com.github.nest.arcteryx.meta.beans.internal.constraints.DateRange;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.DateRangeCheck;
 
 /**
  * date range convertor
  * 
  * @author brad.wu
  */
-public class DateRangeConvertor extends AbstractOValCheckConvertor<DateRange> {
+public class DateRangeConvertor extends AbstractOValPropertyCheckConvertor<DateRange> {
 	/**
 	 * (non-Javadoc)
 	 * 

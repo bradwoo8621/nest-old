@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors;
+package com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -64,12 +64,12 @@ public @interface DateRange {
 	 * <b>Note:</b> This setting is ignored for object types other than array,
 	 * map and collection.
 	 */
-	ConstraintTarget[] appliesTo() default ConstraintTarget.VALUES;
+	ConstraintTarget[] appliesTo() default { ConstraintTarget.VALUES, ConstraintTarget.CONTAINER };
 
 	/**
 	 * error code passed to the ConstraintViolation object
 	 */
-	String errorCode() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.DateRange";
+	String errorCode() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.DateRange";
 
 	/**
 	 * The format of the specified dates in a form understandable by the
@@ -104,7 +104,7 @@ public @interface DateRange {
 	 * 
 	 * @see ConstraintViolation
 	 */
-	String message() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.DateRange.violated";
+	String message() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.DateRange.violated";
 
 	/**
 	 * The lower date compared against in the format specified with the

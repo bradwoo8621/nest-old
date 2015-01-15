@@ -16,18 +16,32 @@ import net.sf.oval.configuration.pojo.elements.ClassConfiguration;
 import net.sf.oval.configuration.pojo.elements.FieldConfiguration;
 import net.sf.oval.configuration.pojo.elements.MethodConfiguration;
 import net.sf.oval.configuration.pojo.elements.MethodReturnValueConfiguration;
+import net.sf.oval.configuration.pojo.elements.ObjectConfiguration;
 import net.sf.oval.internal.util.ReflectionUtils;
 
+import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
+import com.github.nest.arcteryx.meta.beans.IConstraint;
 import com.github.nest.arcteryx.meta.beans.IValidationConfigurationInitializer;
 import com.github.nest.arcteryx.meta.beans.internal.IValidationConfiguration;
 import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationException;
 import com.github.nest.arcteryx.meta.beans.internal.validators.ValidationConfiguration;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.AssertValidConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.BeanScriptConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.DateRangeConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.EmailConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.LengthConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NotBlankConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NotEmptyConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NotNegativeConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NotNullConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NumberConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NumberFormatConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.PropertyScriptConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.SizeConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TextFormatConvertor;
 
 /**
@@ -59,9 +73,23 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 	 */
 	protected Collection<IOValCheckConvertor<?>> createDefaultConvertors() {
 		List<IOValCheckConvertor<?>> convertors = new LinkedList<IOValCheckConvertor<?>>();
-		convertors.add(new NotNullConvertor());
+
+		convertors.add(new AssertValidConvertor());
 		convertors.add(new DateRangeConvertor());
+		convertors.add(new EmailConvertor());
+		convertors.add(new LengthConvertor());
+		convertors.add(new NotBlankConvertor());
+		convertors.add(new NotEmptyConvertor());
+		convertors.add(new NotNegativeConvertor());
+		convertors.add(new NotNullConvertor());
+		convertors.add(new NumberConvertor());
+		convertors.add(new NumberFormatConvertor());
+		convertors.add(new SizeConvertor());
+		convertors.add(new PropertyScriptConvertor());
 		convertors.add(new TextFormatConvertor());
+		
+		convertors.add(new BeanScriptConvertor());
+
 		return convertors;
 	}
 
@@ -136,14 +164,28 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 	 * @param descriptor
 	 */
 	protected void initialize(IBeanDescriptor descriptor) {
-		for (IBeanPropertyDescriptor property : descriptor.getBeanProperties()) {
-			if (property.getBeanDescriptor() != descriptor) {
-				continue;
-			}
-			ClassConfiguration config = buildPropertyConstraint(property);
-			if (hasConstraint(config)) {
-				this.getConfigurer().addClassConfiguration(config);
-			}
+		ClassConfiguration classConfiguration = new ClassConfiguration();
+		classConfiguration.type = descriptor.getBeanClass();
+
+		IBeanConstraint constraint = descriptor.getConstraint();
+		if (constraint != null) {
+			classConfiguration.objectConfiguration = new ObjectConfiguration();
+			classConfiguration.objectConfiguration.checks = convertToChecks(constraint.getConstraintsRecursive());
+		}
+
+		// initialize field and method configurations. method configurations
+		// only will be used when getterFirst is true.
+		classConfiguration.fieldConfigurations = new HashSet<FieldConfiguration>();
+		if (this.isGetterFirst()) {
+			classConfiguration.methodConfigurations = new HashSet<MethodConfiguration>();
+		}
+
+		for (IBeanPropertyDescriptor property : descriptor.getDeclaredBeanProperties()) {
+			buildPropertyConstraint(property, classConfiguration);
+		}
+
+		if (hasConstraint(classConfiguration)) {
+			this.getConfigurer().addClassConfiguration(classConfiguration);
 		}
 	}
 
@@ -164,38 +206,18 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 	 * build constraint for property
 	 * 
 	 * @param property
-	 * @return
+	 * @param classConfiguration
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected ClassConfiguration buildPropertyConstraint(IBeanPropertyDescriptor property) {
+	protected void buildPropertyConstraint(IBeanPropertyDescriptor property, ClassConfiguration classConfiguration) {
 		IBeanDescriptor bean = property.getBeanDescriptor();
 		Class<?> beanClass = bean.getBeanClass();
-
-		// initialize field and method configurations. method configurations
-		// only will be used when getterFirst is true.
-		ClassConfiguration configuration = new ClassConfiguration();
-		configuration.type = beanClass;
-		configuration.fieldConfigurations = new HashSet<FieldConfiguration>();
-		if (this.isGetterFirst()) {
-			configuration.methodConfigurations = new HashSet<MethodConfiguration>();
-		}
 
 		// get property name
 		String propertyName = property.getName();
 
-		List<Check> checkList = new LinkedList<Check>();
 		// get constraint recursive. exclude the constraint collection object
 		List<IBeanPropertyConstraint> constraints = property.getConstraint().getConstraintsRecursive();
-		for (IBeanPropertyConstraint constraint : constraints) {
-			// convert constraint to OVal check
-			IOValCheckConvertor convertor = convertors.get(constraint.getClass());
-			if (convertor == null) {
-				throw new BeanValidationException("Convertor of [" + constraint + "] not found.");
-			}
-
-			Check check = convertor.convert(constraint);
-			checkList.add(check);
-		}
+		List<Check> checkList = convertToChecks(constraints);
 
 		MethodConfiguration mc = null;
 		if (this.isGetterFirst()) {
@@ -207,15 +229,37 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 				MethodReturnValueConfiguration mrvc = new MethodReturnValueConfiguration();
 				mrvc.checks = checkList;
 				mc.returnValueConfiguration = mrvc;
-				configuration.methodConfigurations.add(mc);
+				classConfiguration.methodConfigurations.add(mc);
 			}
 		}
 		if (mc == null) {
 			FieldConfiguration fc = new FieldConfiguration();
 			fc.name = propertyName;
 			fc.checks = checkList;
-			configuration.fieldConfigurations.add(fc);
+			classConfiguration.fieldConfigurations.add(fc);
 		}
-		return configuration;
+	}
+
+	/**
+	 * convert to OVal checks
+	 * 
+	 * @param constraints
+	 * @return
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	protected List<Check> convertToChecks(List<?> constraints) {
+		List<Check> checkList = new LinkedList<Check>();
+		for (int index = 0, count = constraints.size(); index < count; index++) {
+			IConstraint constraint = (IConstraint) constraints.get(index);
+			// convert constraint to OVal check
+			IOValCheckConvertor convertor = convertors.get(constraint.getClass());
+			if (convertor == null) {
+				throw new BeanValidationException("Convertor of [" + constraint + "] not found.");
+			}
+
+			Check check = convertor.convert(constraint);
+			checkList.add(check);
+		}
+		return checkList;
 	}
 }

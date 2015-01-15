@@ -3,46 +3,94 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
+import java.util.Arrays;
 
 /**
- * number format constraint. default value of {@linkplain #integerDigits} and
- * {@linkplain #fractionDigits} is {@linkplain Integer#MAX_VALUE}.
+ * number format constraint. default value of {@linkplain #minIntegerDigits} and
+ * {@linkplain #minFractionDigits} is 0.
  * 
  * @author brad.wu
  */
 public class NumberFormat extends AbstractBeanPropertyConstraint {
 	private static final long serialVersionUID = 2409550204243550060L;
 
-	private int integerDigits = Integer.MAX_VALUE;
-	private int fractionDigits = Integer.MAX_VALUE;
+	private int minIntegerDigits = 0;
+	private int minFractionDigits = 0;
+	private int maxIntegerDigits = Integer.MAX_VALUE;
+	private int maxFractionDigits = Integer.MAX_VALUE;
 
 	/**
-	 * @return the integerDigits
+	 * @return the minIntegerDigits
 	 */
-	protected int getIntegerDigits() {
-		return integerDigits;
+	public int getMinIntegerDigits() {
+		return minIntegerDigits;
 	}
 
 	/**
-	 * @param integerDigits
-	 *            the integerDigits to set
+	 * @param minIntegerDigits
+	 *            the minIntegerDigits to set
 	 */
-	protected void setIntegerDigits(int integerDigits) {
-		this.integerDigits = integerDigits;
+	public void setMinIntegerDigits(int minIntegerDigits) {
+		this.minIntegerDigits = minIntegerDigits;
 	}
 
 	/**
-	 * @return the fractionDigits
+	 * @return the minFractionDigits
 	 */
-	protected int getFractionDigits() {
-		return fractionDigits;
+	public int getMinFractionDigits() {
+		return minFractionDigits;
 	}
 
 	/**
-	 * @param fractionDigits
-	 *            the fractionDigits to set
+	 * @param minFractionDigits
+	 *            the minFractionDigits to set
 	 */
-	protected void setFractionDigits(int fractionDigits) {
-		this.fractionDigits = fractionDigits;
+	public void setMinFractionDigits(int minFractionDigits) {
+		this.minFractionDigits = minFractionDigits;
+	}
+
+	/**
+	 * @return the maxIntegerDigits
+	 */
+	public int getMaxIntegerDigits() {
+		return maxIntegerDigits;
+	}
+
+	/**
+	 * @param maxIntegerDigits
+	 *            the maxIntegerDigits to set
+	 */
+	public void setMaxIntegerDigits(int maxIntegerDigits) {
+		this.maxIntegerDigits = maxIntegerDigits;
+	}
+
+	/**
+	 * @return the maxFractionDigits
+	 */
+	public int getMaxFractionDigits() {
+		return maxFractionDigits;
+	}
+
+	/**
+	 * @param maxFractionDigits
+	 *            the maxFractionDigits to set
+	 */
+	public void setMaxFractionDigits(int maxFractionDigits) {
+		this.maxFractionDigits = maxFractionDigits;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "NumberFormat [minIntegerDigits=" + minIntegerDigits + ", minFractionDigits=" + minFractionDigits
+				+ ", maxIntegerDigits=" + maxIntegerDigits + ", maxFractionDigits=" + maxFractionDigits
+				+ ", getMessageTemplate()=" + getMessageTemplate() + ", getWhen()=" + getWhen() + ", getTarget()="
+				+ getTarget() + ", getErrorCode()=" + getErrorCode() + ", getProfiles()="
+				+ Arrays.toString(getProfiles()) + ", getSeverity()=" + getSeverity() + ", getAppliesTo()="
+				+ getAppliesTo() + "]";
 	}
 }

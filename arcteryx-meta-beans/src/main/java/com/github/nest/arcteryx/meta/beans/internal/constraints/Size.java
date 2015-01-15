@@ -3,6 +3,10 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
+import java.util.Arrays;
+
+import com.github.nest.arcteryx.meta.beans.ConstraintApplyTo;
+
 /**
  * size of collection or array.<br>
  * default value of {@linkplain #min} is 0, {@linkplain #max} is
@@ -19,7 +23,7 @@ public class Size extends AbstractBeanPropertyConstraint {
 	/**
 	 * @return the min
 	 */
-	protected int getMin() {
+	public int getMin() {
 		return min;
 	}
 
@@ -27,14 +31,14 @@ public class Size extends AbstractBeanPropertyConstraint {
 	 * @param min
 	 *            the min to set
 	 */
-	protected void setMin(int min) {
+	public void setMin(int min) {
 		this.min = min;
 	}
 
 	/**
 	 * @return the max
 	 */
-	protected int getMax() {
+	public int getMax() {
 		return max;
 	}
 
@@ -42,7 +46,30 @@ public class Size extends AbstractBeanPropertyConstraint {
 	 * @param max
 	 *            the max to set
 	 */
-	protected void setMax(int max) {
+	public void setMax(int max) {
 		this.max = max;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.internal.constraints.AbstractBeanPropertyConstraint#getAppliesTo()
+	 */
+	@Override
+	public ConstraintApplyTo getAppliesTo() {
+		return ConstraintApplyTo.CONTAINER;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.originalToString() + " [min=" + min + ", max=" + max + ", getMessageTemplate()="
+				+ getMessageTemplate() + ", getWhen()=" + getWhen() + ", getTarget()=" + getTarget()
+				+ ", getErrorCode()=" + getErrorCode() + ", getProfiles()=" + Arrays.toString(getProfiles())
+				+ ", getSeverity()=" + getSeverity() + ", getConstraintsRecursive()=" + getConstraintsRecursive() + "]";
 	}
 }

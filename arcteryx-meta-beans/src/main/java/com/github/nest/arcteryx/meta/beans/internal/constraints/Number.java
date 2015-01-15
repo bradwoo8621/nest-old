@@ -3,7 +3,7 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
-import java.math.BigDecimal;
+import java.util.Arrays;
 
 /**
  * constraint of number.<br>
@@ -15,15 +15,15 @@ import java.math.BigDecimal;
 public class Number extends AbstractBeanPropertyConstraint {
 	private static final long serialVersionUID = 3305823600464488631L;
 
-	private BigDecimal min = null;
+	private double min = Double.NEGATIVE_INFINITY;
 	private boolean excludeMin = false;
-	private BigDecimal max = null;
+	private double max = Double.POSITIVE_INFINITY;
 	private boolean excludeMax = false;
 
 	/**
 	 * @return the min
 	 */
-	protected BigDecimal getMin() {
+	public double getMin() {
 		return min;
 	}
 
@@ -31,14 +31,14 @@ public class Number extends AbstractBeanPropertyConstraint {
 	 * @param min
 	 *            the min to set
 	 */
-	protected void setMin(BigDecimal min) {
+	public void setMin(double min) {
 		this.min = min;
 	}
 
 	/**
 	 * @return the excludeMin
 	 */
-	protected boolean isExcludeMin() {
+	public boolean isExcludeMin() {
 		return excludeMin;
 	}
 
@@ -46,14 +46,14 @@ public class Number extends AbstractBeanPropertyConstraint {
 	 * @param excludeMin
 	 *            the excludeMin to set
 	 */
-	protected void setExcludeMin(boolean excludeMin) {
+	public void setExcludeMin(boolean excludeMin) {
 		this.excludeMin = excludeMin;
 	}
 
 	/**
 	 * @return the max
 	 */
-	protected BigDecimal getMax() {
+	public double getMax() {
 		return max;
 	}
 
@@ -61,14 +61,14 @@ public class Number extends AbstractBeanPropertyConstraint {
 	 * @param max
 	 *            the max to set
 	 */
-	protected void setMax(BigDecimal max) {
+	public void setMax(double max) {
 		this.max = max;
 	}
 
 	/**
 	 * @return the excludeMax
 	 */
-	protected boolean isExcludeMax() {
+	public boolean isExcludeMax() {
 		return excludeMax;
 	}
 
@@ -76,7 +76,21 @@ public class Number extends AbstractBeanPropertyConstraint {
 	 * @param excludeMax
 	 *            the excludeMax to set
 	 */
-	protected void setExcludeMax(boolean excludeMax) {
+	public void setExcludeMax(boolean excludeMax) {
 		this.excludeMax = excludeMax;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.originalToString() + " [min=" + min + ", excludeMin=" + excludeMin + ", max=" + max
+				+ ", excludeMax=" + excludeMax + ", getMessageTemplate()=" + getMessageTemplate() + ", getWhen()="
+				+ getWhen() + ", getTarget()=" + getTarget() + ", getErrorCode()=" + getErrorCode()
+				+ ", getProfiles()=" + Arrays.toString(getProfiles()) + ", getSeverity()=" + getSeverity()
+				+ ", getAppliesTo()=" + getAppliesTo() + "]";
 	}
 }

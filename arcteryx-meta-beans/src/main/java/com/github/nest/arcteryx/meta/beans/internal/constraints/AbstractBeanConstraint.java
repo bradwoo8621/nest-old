@@ -3,31 +3,27 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.github.nest.arcteryx.meta.beans.ConstraintApplyTo;
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
 import com.github.nest.arcteryx.meta.beans.ConstraintSeverity;
+import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
 
 /**
- * bean property constraint
+ * abstract bean constraint
  * 
  * @author brad.wu
  */
-public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyConstraint {
-	private static final long serialVersionUID = 7692841064131390892L;
+public class AbstractBeanConstraint implements IBeanConstraint {
+	private static final long serialVersionUID = 1279763956572608181L;
 
 	private String errorCode = null;
 	private String messageTemplate = null;
 	private String when = null;
-	private String target = null;
 	private String[] profiles = null;
 	private ConstraintSeverity severity = ConstraintSeverity.defaultSeverity();
-	private ConstraintApplyTo appliesTo = ConstraintApplyTo.defaultApplyTo();
 
 	/**
 	 * (non-Javadoc)
@@ -63,24 +59,6 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	 */
 	public void setWhen(String when) {
 		this.when = when;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getTarget()
-	 */
-	@Override
-	public String getTarget() {
-		return target;
-	}
-
-	/**
-	 * @param target
-	 *            the target to set
-	 */
-	public void setTarget(String target) {
-		this.target = target;
 	}
 
 	/**
@@ -153,29 +131,11 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getAppliesTo()
-	 */
-	@Override
-	public ConstraintApplyTo getAppliesTo() {
-		return this.appliesTo;
-	}
-
-	/**
-	 * @param appliesTo
-	 *            the appliesTo to set
-	 */
-	public void setAppliesTo(ConstraintApplyTo appliesTo) {
-		this.appliesTo = appliesTo;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getConstraintsRecursive()
 	 */
 	@Override
-	public List<IBeanPropertyConstraint> getConstraintsRecursive() {
-		List<IBeanPropertyConstraint> list = new LinkedList<IBeanPropertyConstraint>();
+	public List<IBeanConstraint> getConstraintsRecursive() {
+		List<IBeanConstraint> list = new LinkedList<IBeanConstraint>();
 		list.add(this);
 		return list;
 	}
@@ -187,17 +147,5 @@ public abstract class AbstractBeanPropertyConstraint implements IBeanPropertyCon
 	 */
 	protected final String originalToString() {
 		return super.toString();
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return originalToString() + " [errorCode=" + errorCode + ", messageTemplate=" + messageTemplate + ", when="
-				+ when + ", target=" + target + ", profiles=" + Arrays.toString(profiles) + ", severity=" + severity
-				+ ", appliesTo=" + appliesTo + "]";
 	}
 }

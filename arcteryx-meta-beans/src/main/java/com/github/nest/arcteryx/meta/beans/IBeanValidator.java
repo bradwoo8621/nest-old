@@ -3,9 +3,10 @@
  */
 package com.github.nest.arcteryx.meta.beans;
 
+import java.util.List;
+
 /**
  * Bean validator<br>
- * TODO convert the valdation result to pre-defined interface
  * 
  * @author brad.wu
  */
@@ -18,7 +19,7 @@ public interface IBeanValidator extends IBeanOperator {
 	 * @param resource
 	 * @return
 	 */
-	<T> T validate(Object resource);
+	List<IConstraintViolation> validate(Object resource);
 
 	/**
 	 * validate resource under given profile
@@ -27,7 +28,7 @@ public interface IBeanValidator extends IBeanOperator {
 	 * @param profiles
 	 * @return
 	 */
-	<T> T validate(Object resource, String... profiles);
+	List<IConstraintViolation> validate(Object resource, String... profiles);
 
 	/**
 	 * validate resource under give group. for JSR303.
@@ -36,5 +37,5 @@ public interface IBeanValidator extends IBeanOperator {
 	 * @param groups
 	 * @return
 	 */
-	<T> T validate(Object resource, Class<?>... groups);
+	List<IConstraintViolation> validate(Object resource, Class<?>... groups);
 }

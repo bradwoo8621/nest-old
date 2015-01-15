@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors;
+package com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints;
 
 import static net.sf.oval.Validator.getCollectionFactory;
 
@@ -64,6 +64,7 @@ public class DateRangeCheck extends AbstractAnnotationCheck<DateRange> {
 		messageVariables.put("format", format);
 		messageVariables.put("excludeMax", String.valueOf(this.isExcludeMax()));
 		messageVariables.put("excludeMin", String.valueOf(this.isExcludeMin()));
+		messageVariables.put("tolerance", String.valueOf(this.getTolerance()));
 		return messageVariables;
 	}
 
@@ -302,6 +303,7 @@ public class DateRangeCheck extends AbstractAnnotationCheck<DateRange> {
 		this.tolerance = tolerance;
 		minMillis = null;
 		maxMillis = null;
+		requireMessageVariablesRecreation();
 	}
 
 	/**
@@ -317,6 +319,7 @@ public class DateRangeCheck extends AbstractAnnotationCheck<DateRange> {
 	 */
 	public void setExcludeMax(boolean excludeMax) {
 		this.excludeMax = excludeMax;
+		requireMessageVariablesRecreation();
 	}
 
 	/**
@@ -332,5 +335,6 @@ public class DateRangeCheck extends AbstractAnnotationCheck<DateRange> {
 	 */
 	public void setExcludeMin(boolean excludeMin) {
 		this.excludeMin = excludeMin;
+		requireMessageVariablesRecreation();
 	}
 }

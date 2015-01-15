@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors;
+package com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -15,15 +15,15 @@ import net.sf.oval.configuration.annotation.Constraint;
 import net.sf.oval.configuration.annotation.Constraints;
 
 /**
- * text format
+ * number
  * 
  * @author brad.wu
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
-@Constraint(checkWith = TextFormatCheck.class)
-public @interface TextFormat {
+@Constraint(checkWith = NumberCheck.class)
+public @interface Number {
 	@Documented
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
@@ -32,7 +32,7 @@ public @interface TextFormat {
 		/**
 		 * The DateRange constraints.
 		 */
-		TextFormat[] value();
+		Number[] value();
 
 		/**
 		 * Formula returning <code>true</code> if this constraint shall be
@@ -64,26 +64,19 @@ public @interface TextFormat {
 	 * <b>Note:</b> This setting is ignored for object types other than array,
 	 * map and collection.
 	 */
-	ConstraintTarget[] appliesTo() default ConstraintTarget.VALUES;
+	ConstraintTarget[] appliesTo() default { ConstraintTarget.VALUES, ConstraintTarget.CONTAINER };
 
 	/**
 	 * error code passed to the ConstraintViolation object
 	 */
-	String errorCode() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TextFormat";
-
-	/**
-	 * The format of the specified dates in a form understandable by the
-	 * SimpleDateFormat class. Defaults to the default format style of the
-	 * default locale.
-	 */
-	String format() default "";
+	String errorCode() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.Number";
 
 	/**
 	 * message to be used for the ContraintsViolatedException
 	 * 
 	 * @see ConstraintViolation
 	 */
-	String message() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TextFormat.violated";
+	String message() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.Number.violated";
 
 	/**
 	 * The associated constraint profiles.
@@ -109,4 +102,32 @@ public @interface TextFormat {
 	 * applied.
 	 */
 	String target() default "";
+
+	/**
+	 * min value
+	 * 
+	 * @return
+	 */
+	double min() default Double.NEGATIVE_INFINITY;
+
+	/**
+	 * exclude min or not
+	 * 
+	 * @return
+	 */
+	boolean excludeMin() default false;
+
+	/**
+	 * max value
+	 * 
+	 * @return
+	 */
+	double max() default Double.POSITIVE_INFINITY;
+
+	/**
+	 * exclude max or not
+	 * 
+	 * @return
+	 */
+	boolean excludeMax() default false;
 }

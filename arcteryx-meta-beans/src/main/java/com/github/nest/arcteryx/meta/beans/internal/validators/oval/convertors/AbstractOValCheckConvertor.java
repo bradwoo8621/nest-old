@@ -6,9 +6,9 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors;
 import net.sf.oval.Check;
 import net.sf.oval.ConstraintTarget;
 
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint.ApplyTo;
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint.Severity;
+import com.github.nest.arcteryx.meta.beans.ConstraintApplyTo;
+import com.github.nest.arcteryx.meta.beans.ConstraintSeverity;
+import com.github.nest.arcteryx.meta.beans.IConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationException;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.IOValCheckConvertor;
 
@@ -17,7 +17,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.oval.IOValCheckCo
  * 
  * @author brad.wu
  */
-public abstract class AbstractOValCheckConvertor<C extends IBeanPropertyConstraint> implements IOValCheckConvertor<C> {
+public abstract class AbstractOValCheckConvertor<C extends IConstraint> implements IOValCheckConvertor<C> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -31,9 +31,7 @@ public abstract class AbstractOValCheckConvertor<C extends IBeanPropertyConstrai
 		check.setMessage(constraint.getMessageTemplate());
 		check.setProfiles(constraint.getProfiles());
 		check.setSeverity(convertSeverity(constraint.getSeverity()));
-		check.setTarget(constraint.getTarget());
 		check.setWhen(constraint.getWhen());
-		check.setAppliesTo(convertAppliesTo(constraint.getAppliesTo()));
 
 		return check;
 	}
@@ -44,9 +42,9 @@ public abstract class AbstractOValCheckConvertor<C extends IBeanPropertyConstrai
 	 * @param severity
 	 * @return
 	 */
-	protected int convertSeverity(Severity severity) {
+	protected int convertSeverity(ConstraintSeverity severity) {
 		if (severity == null) {
-			return Severity.WARN.getSeverity();
+			return ConstraintSeverity.WARN.getSeverity();
 		} else {
 			return severity.getSeverity();
 		}
@@ -58,14 +56,14 @@ public abstract class AbstractOValCheckConvertor<C extends IBeanPropertyConstrai
 	 * @param appliesTo
 	 * @return
 	 */
-	protected ConstraintTarget convertAppliesTo(ApplyTo appliesTo) {
+	protected ConstraintTarget convertAppliesTo(ConstraintApplyTo appliesTo) {
 		if (appliesTo == null) {
 			return ConstraintTarget.VALUES;
-		} else if (ApplyTo.KEYS.equals(appliesTo)) {
+		} else if (ConstraintApplyTo.KEYS.equals(appliesTo)) {
 			return ConstraintTarget.KEYS;
-		} else if (ApplyTo.VALUES.equals(appliesTo)) {
+		} else if (ConstraintApplyTo.VALUES.equals(appliesTo)) {
 			return ConstraintTarget.VALUES;
-		} else if (ApplyTo.CONTAINER.equals(appliesTo)) {
+		} else if (ConstraintApplyTo.CONTAINER.equals(appliesTo)) {
 			return ConstraintTarget.CONTAINER;
 		}
 		throw new BeanValidationException("ApplyTo [" + appliesTo + "] is not supported.");

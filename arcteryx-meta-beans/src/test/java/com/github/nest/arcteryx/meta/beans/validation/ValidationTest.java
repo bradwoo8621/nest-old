@@ -6,17 +6,22 @@ package com.github.nest.arcteryx.meta.beans.validation;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.github.nest.arcteryx.context.Context;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext;
+import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
+import com.github.nest.arcteryx.meta.beans.IBeanValidator;
+import com.github.nest.arcteryx.meta.beans.IConstraintViolation;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext;
-import com.github.nest.arcteryx.meta.beans.internal.constraints.NotNull;
+import com.github.nest.arcteryx.meta.beans.internal.constraints.PropertyConstraints;
 
 /**
  * @author brad.wu
@@ -24,29 +29,104 @@ import com.github.nest.arcteryx.meta.beans.internal.constraints.NotNull;
 public class ValidationTest {
 	@BeforeClass
 	public static void initialize() {
-		Context.createApplicationContextByClassPath("Beans", "/validation/ValidationTest.xml");
+		Context.createApplicationContextByClassPath(ValidationTest.class.getName(), "/validation/ValidationTest.xml");
 	}
 
 	@Test
-	public void test() {
-		IBeanDescriptorContext context = Context.getContext("Beans").getBean("beans.context",
+	public void testDefinition() {
+		IBeanDescriptorContext context = Context.getContext(ValidationTest.class.getName()).getBean("beans.context",
 				BeanDescriptorContext.class);
 		BeanDescriptor descriptor = context.get(Person.class);
 		assertEquals("Person", descriptor.getName());
 		assertEquals("A person", descriptor.getDescription());
 
 		Collection<IBeanPropertyDescriptor> properties = descriptor.getDeclaredBeanProperties();
-		assertEquals(1, properties.size());
+		assertEquals(6, properties.size());
 
 		IBeanPropertyDescriptor property = descriptor.getProperty("name");
 		assertNotNull(property);
 		assertEquals("Name of person", property.getDescription());
 
 		assertNotNull(property.getConstraint());
-		assertEquals(NotNull.class, property.getConstraint().getClass());
+		assertEquals(PropertyConstraints.class, property.getConstraint().getClass());
+		IBeanPropertyConstraint constraint = property.getConstraint();
+		List<IBeanPropertyConstraint> constraints = constraint.getConstraintsRecursive();
+		assertEquals(5, constraints.size());
+	}
+
+	@Test
+	public void testName() {
+		IBeanDescriptorContext context = Context.getContext(ValidationTest.class.getName()).getBean("beans.context",
+				BeanDescriptorContext.class);
+		BeanDescriptor descriptor = context.get(Person.class);
+		IBeanValidator validator = descriptor.getValidator();
 
 		Person person = new Person();
-		Object o = descriptor.getValidator().validate(person);
-		assertNotNull(o);
+		List<IConstraintViolation> results = validator.validate(person, "notnull");
+		assertNotNull(results);
+
+		person.setName("");
+		results = validator.validate(person, "notempty");
+		assertNotNull(results);
+
+		person.setName(" ");
+		results = validator.validate(person, "notblank");
+		assertNotNull(results);
+
+		person.setName("1234567890123456789012345678901");
+		results = validator.validate(person, "length");
+		assertNotNull(results);
+
+		results = validator.validate(person, "textformat");
+		assertNotNull(results);
+	}
+
+	@Test
+	public void testFather() {
+		IBeanDescriptorContext context = Context.getContext(ValidationTest.class.getName()).getBean("beans.context",
+				BeanDescriptorContext.class);
+		BeanDescriptor descriptor = context.get(Person.class);
+		IBeanValidator validator = descriptor.getValidator();
+
+		Person person = new Person();
+		Person father = new Person();
+		person.setFather(father);
+		List<IConstraintViolation> results = validator.validate(person);
+		assertNotNull(results);
+
+		results = validator.validate(person, "target");
+		assertNotNull(results);
+	}
+
+	@Test
+	public void testChildren() {
+		IBeanDescriptorContext context = Context.getContext(ValidationTest.class.getName()).getBean("beans.context",
+				BeanDescriptorContext.class);
+		BeanDescriptor descriptor = context.get(Person.class);
+		IBeanValidator validator = descriptor.getValidator();
+
+		Person person = new Person();
+		List<Person> children = new ArrayList<Person>();
+		Person child = new Person();
+		child.setName("APerson");
+		child.setAge(10);
+		children.add(child);
+		child = new Person();
+		children.add(child);
+		person.setChildren(children);
+		List<IConstraintViolation> results = validator.validate(person);
+		assertNotNull(results);
+	}
+
+	@Test
+	public void testBean() {
+		IBeanDescriptorContext context = Context.getContext(ValidationTest.class.getName()).getBean("beans.context",
+				BeanDescriptorContext.class);
+		BeanDescriptor descriptor = context.get(Person.class);
+		IBeanValidator validator = descriptor.getValidator();
+
+		Person person = new Person();
+		List<IConstraintViolation> results = validator.validate(person, "beanscript");
+		assertNotNull(results);
 	}
 }

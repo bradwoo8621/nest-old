@@ -5,7 +5,6 @@ package com.github.nest.arcteryx.meta.beans.internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
@@ -29,6 +28,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 
 	private IBeanConstraint constraint = null;
 	private Collection<IBeanPropertyDescriptor> beanDescriptors = null;
+	private Collection<IBeanPropertyDescriptor> allBeanDescriptors = null;
 
 	/**
 	 * (non-Javadoc)
@@ -124,6 +124,31 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 */
 	@Override
 	public Collection<IBeanPropertyDescriptor> getBeanProperties() {
+		if (this.allBeanDescriptors == null) {
+			synchronized (this) {
+				if (this.allBeanDescriptors == null) {
+					List<IBeanPropertyDescriptor> beanDescriptors = new ArrayList<IBeanPropertyDescriptor>();
+
+					Collection<IPropertyDescriptor> descriptors = this.getProperties();
+					for (IPropertyDescriptor descriptor : descriptors) {
+						if (descriptor instanceof IBeanPropertyDescriptor) {
+							beanDescriptors.add((IBeanPropertyDescriptor) descriptor);
+						}
+					}
+					this.allBeanDescriptors = beanDescriptors;
+				}
+			}
+		}
+		return this.allBeanDescriptors;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanDescriptor#getDeclaredBeanProperties()
+	 */
+	@Override
+	public Collection<IBeanPropertyDescriptor> getDeclaredBeanProperties() {
 		if (this.beanDescriptors == null) {
 			synchronized (this) {
 				if (this.beanDescriptors == null) {
@@ -140,17 +165,5 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 			}
 		}
 		return this.beanDescriptors;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IBeanDescriptor#getDeclaredBeanProperties()
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public Collection<IBeanPropertyDescriptor> getDeclaredBeanProperties() {
-		return (Collection<IBeanPropertyDescriptor>) (this.beanDescriptors == null ? Collections.emptyList()
-				: this.beanDescriptors);
 	}
 }

@@ -3,6 +3,8 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.constraints;
 
+import java.util.Arrays;
+
 /**
  * date range constraint. default value of {@linkplain #excludeFrom} and
  * {@linkplain #excludeTo} are false.
@@ -10,6 +12,11 @@ package com.github.nest.arcteryx.meta.beans.internal.constraints;
  * @author brad.wu
  */
 public class DateRange extends AbstractBeanPropertyConstraint {
+	public static final String NOW = "now";
+	public static final String TODAY = "today";
+	public static final String YESTERDAY = "yesterday";
+	public static final String TOMORROW = "tomorrow";
+
 	private static final long serialVersionUID = 6400297560900055018L;
 
 	private String from = null;
@@ -107,5 +114,20 @@ public class DateRange extends AbstractBeanPropertyConstraint {
 	 */
 	public void setTolerance(int tolerance) {
 		this.tolerance = tolerance;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return this.originalToString() + " [from=" + from + ", excludeFrom=" + excludeFrom + ", to=" + to
+				+ ", excludeTo=" + excludeTo + ", format=" + format + ", tolerance=" + tolerance
+				+ ", getMessageTemplate()=" + getMessageTemplate() + ", getWhen()=" + getWhen() + ", getTarget()="
+				+ getTarget() + ", getErrorCode()=" + getErrorCode() + ", getProfiles()="
+				+ Arrays.toString(getProfiles()) + ", getSeverity()=" + getSeverity() + ", getAppliesTo()="
+				+ getAppliesTo() + "]";
 	}
 }

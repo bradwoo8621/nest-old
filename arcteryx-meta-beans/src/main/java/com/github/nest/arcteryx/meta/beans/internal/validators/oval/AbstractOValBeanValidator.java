@@ -11,6 +11,7 @@ import net.sf.oval.ConstraintViolation;
 import net.sf.oval.Validator;
 import net.sf.oval.configuration.Configurer;
 
+import com.github.nest.arcteryx.meta.beans.IConstraintViolation;
 import com.github.nest.arcteryx.meta.beans.internal.AbstractBeanValidator;
 
 /**
@@ -18,18 +19,34 @@ import com.github.nest.arcteryx.meta.beans.internal.AbstractBeanValidator;
  * 
  * @author brad.wu
  */
-public class OValBeanValidator extends AbstractBeanValidator {
+public abstract class AbstractOValBeanValidator extends AbstractBeanValidator {
 	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanValidator#validate(java.lang.Object)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T validate(Object resource) {
-		List<ConstraintViolation> result = new Validator(getConfiguration()).validate(resource);
-		return (T) result;
+	public List<IConstraintViolation> validate(Object resource) {
+		List<ConstraintViolation> result = createValidator(getConfiguration()).validate(resource);
+		return this.decorate(result);
 	}
+
+	/**
+	 * create validator
+	 * 
+	 * @param configurer
+	 * 
+	 * @return
+	 */
+	protected abstract Validator createValidator(Configurer configurer);
+
+	/**
+	 * decorate violation list
+	 * 
+	 * @param violations
+	 * @return
+	 */
+	protected abstract List<IConstraintViolation> decorate(List<ConstraintViolation> violations);
 
 	/**
 	 * get validation configuration
@@ -46,11 +63,10 @@ public class OValBeanValidator extends AbstractBeanValidator {
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanValidator#validate(java.lang.Object,
 	 *      java.lang.String[])
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T validate(Object resource, String... profiles) {
-		List<ConstraintViolation> result = new Validator(getConfiguration()).validate(resource, profiles);
-		return (T) result;
+	public List<IConstraintViolation> validate(Object resource, String... profiles) {
+		List<ConstraintViolation> result = createValidator(getConfiguration()).validate(resource, profiles);
+		return this.decorate(result);
 	}
 
 	/**
@@ -60,7 +76,7 @@ public class OValBeanValidator extends AbstractBeanValidator {
 	 *      java.lang.Class[])
 	 */
 	@Override
-	public <T> T validate(Object resource, Class<?>... groups) {
+	public List<IConstraintViolation> validate(Object resource, Class<?>... groups) {
 		Set<String> profiles = new HashSet<String>();
 		if (groups != null) {
 			for (Class<?> group : groups) {

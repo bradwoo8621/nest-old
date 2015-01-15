@@ -11,8 +11,11 @@ import net.sf.oval.logging.LoggerFactory;
 
 import com.github.nest.arcteryx.meta.IOperatorProvider;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
+import com.github.nest.arcteryx.meta.ResourceException;
 import com.github.nest.arcteryx.meta.beans.IBeanValidator;
-import com.github.nest.arcteryx.meta.beans.internal.validators.oval.OValBeanValidator;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.AbstractOValBeanValidator;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.OValBeanValidator184;
+import com.github.nest.arcteryx.validation.oval.localization.message.OvalResourceBundleMessageResolver;
 
 /**
  * OVal bean validator provider
@@ -20,6 +23,30 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.oval.OValBeanVali
  * @author brad.wu
  */
 public class OValBeanValidatorProvider implements IOperatorProvider {
+	private Class<? extends AbstractOValBeanValidator> validatorClass = null;
+
+	public OValBeanValidatorProvider() {
+		OvalResourceBundleMessageResolver messageResolver = new OvalResourceBundleMessageResolver();
+		messageResolver
+				.addMessageBundle("/com/github/nest/arcteryx/meta/beans/internal/validators/oval/constraints/Messages");
+		Validator.setMessageResolver(messageResolver);
+	}
+
+	/**
+	 * @return the validatorClass
+	 */
+	public Class<? extends AbstractOValBeanValidator> getValidatorClass() {
+		return this.validatorClass == null ? OValBeanValidator184.class : this.validatorClass;
+	}
+
+	/**
+	 * @param validatorClass
+	 *            the validatorClass to set
+	 */
+	public void setValidatorClass(Class<? extends AbstractOValBeanValidator> validatorClass) {
+		this.validatorClass = validatorClass;
+	}
+
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -28,7 +55,14 @@ public class OValBeanValidatorProvider implements IOperatorProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public IBeanValidator createDefaultOperator(IResourceDescriptor descriptor) {
-		IBeanValidator validator = new OValBeanValidator();
+		IBeanValidator validator;
+		try {
+			validator = this.getValidatorClass().newInstance();
+		} catch (InstantiationException e) {
+			throw new ResourceException("Failed to create validator of [" + descriptor + "]");
+		} catch (IllegalAccessException e) {
+			throw new ResourceException("Failed to create validator of [" + descriptor + "]");
+		}
 		validator.setResourceDescriptor(descriptor);
 		return validator;
 	}

@@ -12,6 +12,14 @@ import java.util.List;
  */
 public interface IConstraint {
 	/**
+	 * get name of constraint. name can be null, if don't want to be removed by
+	 * name in sub classes.
+	 * 
+	 * @return
+	 */
+	String getName();
+
+	/**
 	 * get constraints recursive
 	 * 
 	 * @return
@@ -52,4 +60,11 @@ public interface IConstraint {
 	 * @return
 	 */
 	String getMessageTemplate();
+
+	/**
+	 * get level of constraint
+	 * 
+	 * @return
+	 */
+	ConstraintLevel getLevel();
 }

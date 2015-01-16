@@ -16,6 +16,7 @@ import com.github.nest.arcteryx.meta.beans.ICachedBeanDescriptor;
  * 
  * @author brad.wu
  */
+@SuppressWarnings("unchecked")
 public class CachedBeanDescriptor extends BeanDescriptor implements ICachedBeanDescriptor {
 	private static final long serialVersionUID = 5153757122375819187L;
 
@@ -106,7 +107,6 @@ public class CachedBeanDescriptor extends BeanDescriptor implements ICachedBeanD
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IPreloadedBeanDescriptor#getSortedBeans(java.lang.String)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getSortedBeans(String sorterCode) {
 		return (List<T>) getSorter(sorterCode).sort();
@@ -117,7 +117,6 @@ public class CachedBeanDescriptor extends BeanDescriptor implements ICachedBeanD
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IPreloadedBeanDescriptor#getSortedBeans()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public <T> List<T> getSortedBeans() {
 		return (List<T>) getSorter(this.getDefaultSorterCode()).sort();

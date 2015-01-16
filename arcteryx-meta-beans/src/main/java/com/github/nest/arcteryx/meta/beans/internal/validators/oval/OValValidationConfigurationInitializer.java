@@ -20,13 +20,17 @@ import net.sf.oval.configuration.pojo.elements.ObjectConfiguration;
 import net.sf.oval.internal.util.ReflectionUtils;
 
 import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
+import com.github.nest.arcteryx.meta.beans.IBeanConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
+import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.IConstraint;
 import com.github.nest.arcteryx.meta.beans.IValidationConfigurationInitializer;
 import com.github.nest.arcteryx.meta.beans.internal.IValidationConfiguration;
+import com.github.nest.arcteryx.meta.beans.internal.validators.BeanConstraintReorganizer;
+import com.github.nest.arcteryx.meta.beans.internal.validators.BeanPropertyConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationException;
 import com.github.nest.arcteryx.meta.beans.internal.validators.ValidationConfiguration;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.AssertValidConvertor;
@@ -60,6 +64,8 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 	private IOValConfigurer configurer = null;
 
 	private Map<Class<?>, IOValCheckConvertor<?>> convertors = new HashMap<Class<?>, IOValCheckConvertor<?>>();
+	private IBeanConstraintReorganizer beanConstraintReorganizer = null;
+	private IBeanPropertyConstraintReorganizer propertyConstraintReorganizer = null;
 
 	public OValValidationConfigurationInitializer() {
 		this.configurer = createConfigurer();
@@ -87,7 +93,7 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 		convertors.add(new SizeConvertor());
 		convertors.add(new PropertyScriptConvertor());
 		convertors.add(new TextFormatConvertor());
-		
+
 		convertors.add(new BeanScriptConvertor());
 
 		return convertors;
@@ -167,12 +173,21 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 		ClassConfiguration classConfiguration = new ClassConfiguration();
 		classConfiguration.type = descriptor.getBeanClass();
 
-		IBeanConstraint constraint = descriptor.getConstraint();
-		if (constraint != null) {
-			classConfiguration.objectConfiguration = new ObjectConfiguration();
-			classConfiguration.objectConfiguration.checks = convertToChecks(constraint.getConstraintsRecursive());
-		}
+		generateTypeLevelConstraints(descriptor, classConfiguration);
+		generatePropertyLevelConstraints(descriptor, classConfiguration);
 
+		if (hasConstraint(classConfiguration)) {
+			this.getConfigurer().addClassConfiguration(classConfiguration);
+		}
+	}
+
+	/**
+	 * generate property level constraints
+	 * 
+	 * @param descriptor
+	 * @param classConfiguration
+	 */
+	protected void generatePropertyLevelConstraints(IBeanDescriptor descriptor, ClassConfiguration classConfiguration) {
 		// initialize field and method configurations. method configurations
 		// only will be used when getterFirst is true.
 		classConfiguration.fieldConfigurations = new HashSet<FieldConfiguration>();
@@ -180,13 +195,66 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 			classConfiguration.methodConfigurations = new HashSet<MethodConfiguration>();
 		}
 
-		for (IBeanPropertyDescriptor property : descriptor.getDeclaredBeanProperties()) {
+		// get all bean properties
+		for (IBeanPropertyDescriptor property : descriptor.getBeanProperties()) {
 			buildPropertyConstraint(property, classConfiguration);
 		}
+	}
 
-		if (hasConstraint(classConfiguration)) {
-			this.getConfigurer().addClassConfiguration(classConfiguration);
+	/**
+	 * generate type level constraints
+	 * 
+	 * @param descriptor
+	 * @param classConfiguration
+	 */
+	protected void generateTypeLevelConstraints(IBeanDescriptor descriptor, ClassConfiguration classConfiguration) {
+		// find constraints of parents
+		IBeanConstraintReorganizer reorganizer = descriptor.getConstraintReorganizer();
+		if (reorganizer == null) {
+			reorganizer = getBeanConstraintReorganizer();
 		}
+		List<IBeanConstraint> list = reorganizer.getEffectiveConstraints(descriptor);
+
+		// add into object configuration
+		if (list.size() > 0) {
+			classConfiguration.objectConfiguration = new ObjectConfiguration();
+			classConfiguration.objectConfiguration.checks = convertToChecks(list);
+		}
+	}
+
+	/**
+	 * get default bean constraint reorganizer
+	 * 
+	 * @return
+	 */
+	protected IBeanConstraintReorganizer getBeanConstraintReorganizer() {
+		if (this.beanConstraintReorganizer == null) {
+			synchronized (this) {
+				if (this.beanConstraintReorganizer == null) {
+					this.beanConstraintReorganizer = createDefaultBeanConstraintReorganizer();
+				}
+			}
+		}
+		return this.beanConstraintReorganizer;
+	}
+
+	/**
+	 * create default bean constraint reorganizer
+	 * 
+	 * @return
+	 */
+	protected IBeanConstraintReorganizer createDefaultBeanConstraintReorganizer() {
+		return new BeanConstraintReorganizer() {
+			/**
+			 * (non-Javadoc)
+			 * 
+			 * @see com.github.nest.arcteryx.meta.beans.internal.validators.AbstractConstraintReorganizer#getEffectiveConstraints(com.github.nest.arcteryx.meta.beans.IConstraintContainer)
+			 */
+			@Override
+			public List<IBeanConstraint> getEffectiveConstraints(IBeanDescriptor descriptor) {
+				return this.getAllConstraints(descriptor);
+			}
+		};
 	}
 
 	/**
@@ -216,7 +284,11 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 		String propertyName = property.getName();
 
 		// get constraint recursive. exclude the constraint collection object
-		List<IBeanPropertyConstraint> constraints = property.getConstraint().getConstraintsRecursive();
+		IBeanPropertyConstraintReorganizer reorganizer = property.getConstraintReorganizer();
+		if (reorganizer == null) {
+			reorganizer = getPropertyConstraintReorganizer();
+		}
+		List<IBeanPropertyConstraint> constraints = reorganizer.getEffectiveConstraints(property);
 		List<Check> checkList = convertToChecks(constraints);
 
 		MethodConfiguration mc = null;
@@ -238,6 +310,41 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 			fc.checks = checkList;
 			classConfiguration.fieldConfigurations.add(fc);
 		}
+	}
+
+	/**
+	 * get property constraint reorganizer
+	 * 
+	 * @return
+	 */
+	protected IBeanPropertyConstraintReorganizer getPropertyConstraintReorganizer() {
+		if (this.propertyConstraintReorganizer == null) {
+			synchronized (this) {
+				if (this.propertyConstraintReorganizer == null) {
+					this.propertyConstraintReorganizer = createDefaultPropertyConstraintReorganizer();
+				}
+			}
+		}
+		return this.propertyConstraintReorganizer;
+	}
+
+	/**
+	 * create default property constraint reorganizer
+	 * 
+	 * @return
+	 */
+	protected IBeanPropertyConstraintReorganizer createDefaultPropertyConstraintReorganizer() {
+		return new BeanPropertyConstraintReorganizer() {
+			/**
+			 * (non-Javadoc)
+			 * 
+			 * @see com.github.nest.arcteryx.meta.beans.internal.validators.AbstractConstraintReorganizer#getEffectiveConstraints(com.github.nest.arcteryx.meta.beans.IConstraintContainer)
+			 */
+			@Override
+			public List<IBeanPropertyConstraint> getEffectiveConstraints(IBeanPropertyDescriptor descriptor) {
+				return this.getAllConstraints(descriptor);
+			}
+		};
 	}
 
 	/**

@@ -10,7 +10,7 @@ import com.github.nest.arcteryx.meta.IPropertyDescriptor;
  * 
  * @author brad.wu
  */
-public interface IBeanPropertyDescriptor extends IPropertyDescriptor {
+public interface IBeanPropertyDescriptor extends IPropertyDescriptor, IConstraintContainer {
 	/**
 	 * get default value
 	 * 
@@ -23,7 +23,15 @@ public interface IBeanPropertyDescriptor extends IPropertyDescriptor {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	IBeanPropertyConstraint getConstraint();
+
+	/**
+	 * get constraint reorganizer
+	 * 
+	 * @return
+	 */
+	IBeanPropertyConstraintReorganizer getConstraintReorganizer();
 
 	/**
 	 * get bean descriptor

@@ -101,5 +101,5 @@ public interface IResourceDescriptor extends Serializable {
 	 * 
 	 * @return
 	 */
-	IResourceDescriptor getParent();
+	<T extends IResourceDescriptor> T getParent();
 }

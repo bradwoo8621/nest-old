@@ -283,9 +283,10 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getParent()
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public IResourceDescriptor getParent() {
-		return this.parent;
+	public <T extends IResourceDescriptor> T getParent() {
+		return (T) this.parent;
 	}
 
 	/**

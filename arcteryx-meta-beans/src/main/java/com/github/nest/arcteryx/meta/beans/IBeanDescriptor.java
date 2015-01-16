@@ -12,7 +12,7 @@ import com.github.nest.arcteryx.meta.IResourceDescriptor;
  * 
  * @author brad.wu
  */
-public interface IBeanDescriptor extends IResourceDescriptor {
+public interface IBeanDescriptor extends IResourceDescriptor, IConstraintContainer {
 	IBeanDescriptorContext getBeanDescriptorContext();
 
 	/**
@@ -27,7 +27,15 @@ public interface IBeanDescriptor extends IResourceDescriptor {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	IBeanConstraint getConstraint();
+
+	/**
+	 * get constraint reorganizer
+	 * 
+	 * @return
+	 */
+	IBeanConstraintReorganizer getConstraintReorganizer();
 
 	/**
 	 * get validator

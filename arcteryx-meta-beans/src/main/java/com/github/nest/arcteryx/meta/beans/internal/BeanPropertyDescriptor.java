@@ -8,6 +8,7 @@ import java.util.List;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
+import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.internal.constraints.PropertyConstraints;
 import com.github.nest.arcteryx.meta.internal.PropertyDescriptor;
@@ -22,6 +23,7 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 
 	private Object defaultValue = null;
 	private IBeanPropertyConstraint constraint = null;
+	private IBeanPropertyConstraintReorganizer constraintReorganizer = null;
 
 	/**
 	 * (non-Javadoc)
@@ -46,6 +48,7 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor#getConstraint()
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public IBeanPropertyConstraint getConstraint() {
 		return this.constraint;
@@ -57,6 +60,24 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	 */
 	public void setConstraint(IBeanPropertyConstraint constraint) {
 		this.constraint = constraint;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor#getConstraintReorganizer()
+	 */
+	@Override
+	public IBeanPropertyConstraintReorganizer getConstraintReorganizer() {
+		return this.constraintReorganizer;
+	}
+
+	/**
+	 * @param constraintReorganizer
+	 *            the constraintReorganizer to set
+	 */
+	public void setConstraintReorganizer(IBeanPropertyConstraintReorganizer constraintReorganizer) {
+		this.constraintReorganizer = constraintReorganizer;
 	}
 
 	/**

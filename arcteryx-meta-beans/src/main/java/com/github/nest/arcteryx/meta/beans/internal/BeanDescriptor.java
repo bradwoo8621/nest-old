@@ -16,6 +16,7 @@ import com.github.nest.arcteryx.meta.beans.IBeanDestroyer;
 import com.github.nest.arcteryx.meta.beans.IBeanFinder;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanValidator;
+import com.github.nest.arcteryx.meta.beans.IBeanConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.internal.constraints.BeanConstraints;
 import com.github.nest.arcteryx.meta.internal.ResourceDescriptor;
 
@@ -28,6 +29,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	private static final long serialVersionUID = -292539093442024519L;
 
 	private IBeanConstraint constraint = null;
+	private IBeanConstraintReorganizer constraintReorganizer = null;
 	private Collection<IBeanPropertyDescriptor> beanDescriptors = null;
 	private Collection<IBeanPropertyDescriptor> allBeanDescriptors = null;
 
@@ -64,6 +66,7 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanDescriptor#getConstraint()
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public IBeanConstraint getConstraint() {
 		return this.constraint;
@@ -75,6 +78,24 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 */
 	public void setConstraint(IBeanConstraint constraint) {
 		this.constraint = constraint;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanDescriptor#getConstraintReorganizer()
+	 */
+	@Override
+	public IBeanConstraintReorganizer getConstraintReorganizer() {
+		return this.constraintReorganizer;
+	}
+
+	/**
+	 * @param constraintReorganizer
+	 *            the constraintReplacement to set
+	 */
+	public void setConstraintReorganizer(IBeanConstraintReorganizer constraintReorganizer) {
+		this.constraintReorganizer = constraintReorganizer;
 	}
 
 	/**

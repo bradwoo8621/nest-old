@@ -26,22 +26,32 @@ import net.sf.oval.constraint.AssertFieldConstraintsCheck;
 import net.sf.oval.constraint.AssertValid;
 import net.sf.oval.constraint.AssertValidCheck;
 import net.sf.oval.context.ConstructorParameterContext;
+import net.sf.oval.context.FieldContext;
 import net.sf.oval.context.MethodParameterContext;
 import net.sf.oval.context.MethodReturnValueContext;
 import net.sf.oval.context.OValContext;
 import net.sf.oval.exception.FieldNotFoundException;
 import net.sf.oval.exception.OValException;
 import net.sf.oval.exception.UndefinedConstraintSetException;
+import net.sf.oval.exception.ValidationFailedException;
 import net.sf.oval.internal.ClassChecks;
 import net.sf.oval.internal.ContextCache;
 import net.sf.oval.internal.Log;
 import net.sf.oval.internal.util.ArrayUtils;
+import net.sf.oval.internal.util.Assert;
 import net.sf.oval.internal.util.ReflectionUtils;
 import net.sf.oval.ogn.ObjectGraphNavigationResult;
 
 /**
  * OVal validator.<br>
- * enhancement of add path of value to be validated into violation.<br>
+ * Changes:<br>
+ * <ul>
+ * <li>
+ * add path of value to be validated into violation. for collection and array,
+ * use index (note the index of set or bag is get from iterator). for map, use
+ * key of element.</li>
+ * <li>remove the super class validation.</li>
+ * </ul>
  * <strong>Code is copy from {@linkplain Validator} 1.84. if use OVal 1.8.4+,
  * please verify it is still worked or not.
  * 
@@ -399,5 +409,90 @@ public class OValValidator184 extends Validator {
 		// else use JDK collection classes by default
 		else
 			return new CollectionFactoryJDKImpl();
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see net.sf.oval.Validator#validateInvariants(java.lang.Object,
+	 *      java.util.List, java.lang.String[])
+	 */
+	@Override
+	protected void validateInvariants(Object validatedObject, List<ConstraintViolation> violations, String[] profiles)
+			throws IllegalArgumentException, ValidationFailedException {
+		Assert.argumentNotNull("validatedObject", validatedObject);
+
+		if (validatedObject instanceof Class<?>) {
+			super.validateInvariants(validatedObject, violations, profiles);
+		} else {
+			currentlyValidatedObjects.get().getLast().add(validatedObject);
+			_validateObjectInvariants(validatedObject, validatedObject.getClass(), violations, profiles);
+		}
+	}
+
+	/**
+	 * validate object invariants
+	 * 
+	 * @param validatedObject
+	 * @param clazz
+	 * @param violations
+	 * @param profiles
+	 * @throws ValidationFailedException
+	 */
+	protected void _validateObjectInvariants(final Object validatedObject, final Class<?> clazz,
+			final List<ConstraintViolation> violations, final String[] profiles) throws ValidationFailedException {
+		assert validatedObject != null;
+		assert clazz != null;
+		assert violations != null;
+
+		// abort if the root class has been reached
+		if (clazz == Object.class)
+			return;
+
+		try {
+			final ClassChecks cc = getClassChecks(clazz);
+
+			// validate field constraints
+			for (final Field field : cc.constrainedFields) {
+				final Collection<Check> checks = cc.checksForFields.get(field);
+
+				if (checks != null && checks.size() > 0) {
+					final FieldContext ctx = ContextCache.getFieldContext(field);
+					final Object valueToValidate = resolveValue(ctx, validatedObject);
+
+					for (final Check check : checks)
+						checkConstraint(violations, check, validatedObject, valueToValidate, ctx, profiles, false);
+				}
+			}
+
+			// validate constraints on getter methods
+			for (final Method getter : cc.constrainedMethods) {
+				final Collection<Check> checks = cc.checksForMethodReturnValues.get(getter);
+
+				if (checks != null && checks.size() > 0) {
+					final MethodReturnValueContext ctx = ContextCache.getMethodReturnValueContext(getter);
+					final Object valueToValidate = resolveValue(ctx, validatedObject);
+
+					for (final Check check : checks)
+						checkConstraint(violations, check, validatedObject, valueToValidate, ctx, profiles, false);
+				}
+			}
+
+			// validate object constraints
+			if (cc.checksForObject.size() > 0) {
+				final OValContext ctx = ContextCache.getClassContext(clazz);
+				for (final Check check : cc.checksForObject)
+					checkConstraint(violations, check, validatedObject, validatedObject, ctx, profiles, false);
+			}
+
+			// if the super class is annotated to be validatable also validate
+			// it against the object
+			// remove the recursive validation
+			// _validateObjectInvariants(validatedObject, clazz.getSuperclass(),
+			// violations, profiles);
+		} catch (final OValException ex) {
+			throw new ValidationFailedException("Object validation failed. Class: " + clazz + " Validated object: "
+					+ validatedObject, ex);
+		}
 	}
 }

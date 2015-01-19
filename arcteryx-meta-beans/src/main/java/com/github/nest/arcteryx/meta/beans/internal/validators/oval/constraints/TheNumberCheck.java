@@ -13,14 +13,14 @@ import net.sf.oval.configuration.annotation.AbstractAnnotationCheck;
 import net.sf.oval.context.OValContext;
 import net.sf.oval.exception.OValException;
 
-import com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.Number;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber;
 
 /**
  * number check
  * 
  * @author brad.wu
  */
-public class NumberCheck extends AbstractAnnotationCheck<Number> {
+public class TheNumberCheck extends AbstractAnnotationCheck<TheNumber> {
 	private static final long serialVersionUID = -8382185790571457677L;
 
 	private double min = Double.NEGATIVE_INFINITY;
@@ -77,7 +77,7 @@ public class NumberCheck extends AbstractAnnotationCheck<Number> {
 	 * @see net.sf.oval.configuration.annotation.AbstractAnnotationCheck#configure(java.lang.annotation.Annotation)
 	 */
 	@Override
-	public void configure(Number constraintAnnotation) {
+	public void configure(TheNumber constraintAnnotation) {
 		super.configure(constraintAnnotation);
 		this.setMin(constraintAnnotation.min());
 		this.setMax(constraintAnnotation.max());

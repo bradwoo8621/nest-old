@@ -108,7 +108,7 @@
 					<property name="constraints">
 						<list>
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.Number"
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber"
 								p:min="1" p:max="200" p:profile="number" />
 							<bean
 								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NotNegative"
@@ -141,7 +141,7 @@
 							<bean
 								class="com.github.nest.arcteryx.meta.beans.internal.constraints.AssertValid" />
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.Number"
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber"
 								p:min="25" p:max="200" p:profile="target" p:target="age" />
 						</list>
 					</property>

@@ -12,7 +12,7 @@ import java.util.Arrays;
  * 
  * @author brad.wu
  */
-public class Number extends AbstractBeanPropertyConstraint {
+public class TheNumber extends AbstractBeanPropertyConstraint {
 	private static final long serialVersionUID = 3305823600464488631L;
 
 	private double min = Double.NEGATIVE_INFINITY;

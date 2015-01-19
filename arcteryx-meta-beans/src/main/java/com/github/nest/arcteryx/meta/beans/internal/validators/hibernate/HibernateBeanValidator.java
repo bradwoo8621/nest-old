@@ -3,10 +3,18 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+
+import org.hibernate.validator.HibernateValidatorConfiguration;
 
 import com.github.nest.arcteryx.meta.beans.IConstraintViolation;
 import com.github.nest.arcteryx.meta.beans.internal.AbstractBeanValidator;
+import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationException;
 
 /**
  * hibernate bean validator
@@ -21,20 +29,36 @@ public class HibernateBeanValidator extends AbstractBeanValidator {
 	 */
 	@Override
 	public List<IConstraintViolation> validate(Object resource) {
-		// TODO Auto-generated method stub
-		return null;
+		Validator validator = getConfiguration().buildValidatorFactory().getValidator();
+		Set<ConstraintViolation<Object>> violations = validator.validate(resource);
+		return convertViolations(violations);
 	}
 
 	/**
-	 * (non-Javadoc)
+	 * profile must be name of class.
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanValidator#validate(java.lang.Object,
 	 *      java.lang.String[])
 	 */
 	@Override
 	public List<IConstraintViolation> validate(Object resource, String... profiles) {
-		// TODO Auto-generated method stub
-		return null;
+		if (profiles == null || profiles.length == 0) {
+			return validate(resource);
+		} else {
+			List<Class<?>> list = new LinkedList<Class<?>>();
+			for (String profile : profiles) {
+				try {
+					list.add(Class.forName(profile));
+				} catch (ClassNotFoundException e) {
+					throw new BeanValidationException("Profile [" + profile + "]cannot case to class.");
+				}
+			}
+			if (list.size() == 0) {
+				return validate(resource);
+			}
+			Class<?>[] groups = list.toArray(new Class<?>[list.size()]);
+			return validate(resource, groups);
+		}
 	}
 
 	/**
@@ -45,7 +69,28 @@ public class HibernateBeanValidator extends AbstractBeanValidator {
 	 */
 	@Override
 	public List<IConstraintViolation> validate(Object resource, Class<?>... groups) {
-		// TODO Auto-generated method stub
+		Validator validator = getConfiguration().buildValidatorFactory().getValidator();
+		Set<ConstraintViolation<Object>> violations = validator.validate(resource, groups);
+		return convertViolations(violations);
+	}
+
+	/**
+	 * get configuration
+	 * 
+	 * @return
+	 */
+	protected HibernateValidatorConfiguration getConfiguration() {
+		return this.getBeanDescriptor().getBeanDescriptorContext().getValidationConfiguration().getRealConfiguration();
+	}
+
+	/**
+	 * convert violations
+	 * 
+	 * @param violations
+	 * @return
+	 */
+	protected List<IConstraintViolation> convertViolations(Set<ConstraintViolation<Object>> violations) {
+		// TODO convert hibernate violations to customized
 		return null;
 	}
 }

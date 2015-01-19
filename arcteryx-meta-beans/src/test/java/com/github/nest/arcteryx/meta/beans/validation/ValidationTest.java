@@ -133,7 +133,7 @@ public class ValidationTest {
 		assertEquals(4, results.size());
 		for (IConstraintViolation violation : results) {
 			String errorCode = violation.getErrorCode();
-			if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.Number.class.getName().equals(
+			if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber.class.getName().equals(
 					errorCode)) {
 				assertEquals("age", violation.getRelativePath());
 			} else if (NotNull.class.getName().equals(errorCode)) {
@@ -149,7 +149,7 @@ public class ValidationTest {
 				assertEquals(3, sub.size());
 				for (IConstraintViolation subV : sub) {
 					errorCode = subV.getErrorCode();
-					if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.Number.class.getName()
+					if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber.class.getName()
 							.equals(errorCode)) {
 						assertEquals("age", subV.getRelativePath());
 					} else if (NotNull.class.getName().equals(errorCode)) {

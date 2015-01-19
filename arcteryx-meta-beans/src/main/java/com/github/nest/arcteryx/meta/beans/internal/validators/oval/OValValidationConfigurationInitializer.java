@@ -42,7 +42,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.N
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NotEmptyConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NotNegativeConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NotNullConvertor;
-import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NumberConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TheNumberConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NumberFormatConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.PropertyScriptConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.SizeConvertor;
@@ -88,7 +88,7 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 		convertors.add(new NotEmptyConvertor());
 		convertors.add(new NotNegativeConvertor());
 		convertors.add(new NotNullConvertor());
-		convertors.add(new NumberConvertor());
+		convertors.add(new TheNumberConvertor());
 		convertors.add(new NumberFormatConvertor());
 		convertors.add(new SizeConvertor());
 		convertors.add(new PropertyScriptConvertor());

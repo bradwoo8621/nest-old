@@ -22,8 +22,8 @@ import net.sf.oval.configuration.annotation.Constraints;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
-@Constraint(checkWith = NumberCheck.class)
-public @interface Number {
+@Constraint(checkWith = TheNumberCheck.class)
+public @interface TheNumber {
 	@Documented
 	@Retention(RetentionPolicy.RUNTIME)
 	@Target({ ElementType.FIELD, ElementType.PARAMETER, ElementType.METHOD })
@@ -32,7 +32,7 @@ public @interface Number {
 		/**
 		 * The DateRange constraints.
 		 */
-		Number[] value();
+		TheNumber[] value();
 
 		/**
 		 * Formula returning <code>true</code> if this constraint shall be

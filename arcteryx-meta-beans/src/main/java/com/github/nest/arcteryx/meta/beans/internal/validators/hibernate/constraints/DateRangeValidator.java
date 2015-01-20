@@ -29,7 +29,7 @@ public class DateRangeValidator implements ConstraintValidator<DateRange, Object
 	private boolean excludeMax = false;
 	private String min;
 	private boolean excludeMin = false;
-	private long tolerance;
+	private int tolerance;
 
 	private transient Long maxMillis;
 	private transient Long minMillis;
@@ -182,7 +182,7 @@ public class DateRangeValidator implements ConstraintValidator<DateRange, Object
 	/**
 	 * @return the tolerance
 	 */
-	public long getTolerance() {
+	public int getTolerance() {
 		return tolerance;
 	}
 
@@ -190,7 +190,7 @@ public class DateRangeValidator implements ConstraintValidator<DateRange, Object
 	 * @param tolerance
 	 *            the tolerance to set
 	 */
-	public void setTolerance(long tolerance) {
+	public void setTolerance(int tolerance) {
 		this.tolerance = tolerance;
 	}
 

@@ -3,6 +3,7 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -90,7 +91,10 @@ public class HibernateBeanValidator extends AbstractBeanValidator {
 	 * @return
 	 */
 	protected List<IConstraintViolation> convertViolations(Set<ConstraintViolation<Object>> violations) {
-		// TODO convert hibernate violations to customized
+		// convert hibernate violations to customized
+		if (violations == null || violations.size() == 0) {
+			return Collections.emptyList();
+		}
 		return null;
 	}
 }

@@ -31,16 +31,17 @@ import com.github.nest.arcteryx.meta.beans.internal.constraints.PropertyConstrai
 /**
  * @author brad.wu
  */
-public class ValidationTest {
+public class HibernateValidationTest {
 	@BeforeClass
 	public static void initialize() {
-		Context.createApplicationContextByClassPath(ValidationTest.class.getName(), "/validation/ValidationTest.xml");
+		Context.createApplicationContextByClassPath(HibernateValidationTest.class.getName(),
+				"/validation/HibernateValidationTest.xml");
 	}
 
 	@Test
 	public void testDefinition() {
-		IBeanDescriptorContext context = Context.getContext(ValidationTest.class.getName()).getBean("beans.context",
-				BeanDescriptorContext.class);
+		IBeanDescriptorContext context = Context.getContext(HibernateValidationTest.class.getName()).getBean(
+				"beans.context", BeanDescriptorContext.class);
 		BeanDescriptor descriptor = context.get(Person.class);
 		assertEquals("Person", descriptor.getName());
 		assertEquals("A person", descriptor.getDescription());
@@ -61,35 +62,35 @@ public class ValidationTest {
 
 	@Test
 	public void testName() {
-		IBeanDescriptorContext context = Context.getContext(ValidationTest.class.getName()).getBean("beans.context",
-				BeanDescriptorContext.class);
+		IBeanDescriptorContext context = Context.getContext(HibernateValidationTest.class.getName()).getBean(
+				"beans.context", BeanDescriptorContext.class);
 		BeanDescriptor descriptor = context.get(Person.class);
 		IBeanValidator validator = descriptor.getValidator();
 
 		Person person = new Person();
-		List<IConstraintViolation> results = validator.validate(person, "notnull");
+		List<IConstraintViolation> results = validator.validate(person);
 		assertNotNull(results);
 
 		person.setName("");
-		results = validator.validate(person, "notempty");
+		results = validator.validate(person);
 		assertNotNull(results);
 
 		person.setName(" ");
-		results = validator.validate(person, "notblank");
+		results = validator.validate(person);
 		assertNotNull(results);
 
 		person.setName("1234567890123456789012345678901");
-		results = validator.validate(person, "length");
+		results = validator.validate(person);
 		assertNotNull(results);
 
-		results = validator.validate(person, "textformat");
+		results = validator.validate(person);
 		assertNotNull(results);
 	}
 
 	@Test
 	public void testFather() {
-		IBeanDescriptorContext context = Context.getContext(ValidationTest.class.getName()).getBean("beans.context",
-				BeanDescriptorContext.class);
+		IBeanDescriptorContext context = Context.getContext(HibernateValidationTest.class.getName()).getBean(
+				"beans.context", BeanDescriptorContext.class);
 		BeanDescriptor descriptor = context.get(Person.class);
 		IBeanValidator validator = descriptor.getValidator();
 
@@ -100,7 +101,7 @@ public class ValidationTest {
 		List<IConstraintViolation> results = validator.validate(person);
 		assertNotNull(results);
 
-		results = validator.validate(person, "target");
+		results = validator.validate(person);
 		assertNotNull(results);
 		assertEquals(1, results.size());
 
@@ -110,8 +111,8 @@ public class ValidationTest {
 
 	@Test
 	public void testChildren() {
-		IBeanDescriptorContext context = Context.getContext(ValidationTest.class.getName()).getBean("beans.context",
-				BeanDescriptorContext.class);
+		IBeanDescriptorContext context = Context.getContext(HibernateValidationTest.class.getName()).getBean(
+				"beans.context", BeanDescriptorContext.class);
 		BeanDescriptor descriptor = context.get(Person.class);
 		IBeanValidator validator = descriptor.getValidator();
 
@@ -133,8 +134,8 @@ public class ValidationTest {
 		assertEquals(4, results.size());
 		for (IConstraintViolation violation : results) {
 			String errorCode = violation.getErrorCode();
-			if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber.class.getName().equals(
-					errorCode)) {
+			if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber.class.getName()
+					.equals(errorCode)) {
 				assertEquals("age", violation.getRelativePath());
 			} else if (NotNull.class.getName().equals(errorCode)) {
 				assertEquals("name", violation.getRelativePath());
@@ -149,8 +150,8 @@ public class ValidationTest {
 				assertEquals(3, sub.size());
 				for (IConstraintViolation subV : sub) {
 					errorCode = subV.getErrorCode();
-					if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber.class.getName()
-							.equals(errorCode)) {
+					if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber.class
+							.getName().equals(errorCode)) {
 						assertEquals("age", subV.getRelativePath());
 					} else if (NotNull.class.getName().equals(errorCode)) {
 						assertEquals("name", subV.getRelativePath());
@@ -164,13 +165,13 @@ public class ValidationTest {
 
 	@Test
 	public void testBean() {
-		IBeanDescriptorContext context = Context.getContext(ValidationTest.class.getName()).getBean("beans.context",
-				BeanDescriptorContext.class);
+		IBeanDescriptorContext context = Context.getContext(HibernateValidationTest.class.getName()).getBean(
+				"beans.context", BeanDescriptorContext.class);
 		BeanDescriptor descriptor = context.get(Person.class);
 		IBeanValidator validator = descriptor.getValidator();
 
 		Person person = new Person();
-		List<IConstraintViolation> results = validator.validate(person, "beanscript");
+		List<IConstraintViolation> results = validator.validate(person);
 		assertNotNull(results);
 		assertEquals(1, results.size());
 		assertEquals("self", results.get(0).getRelativePath());

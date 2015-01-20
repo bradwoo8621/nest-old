@@ -3,6 +3,7 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.validators.oval;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,11 +43,11 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.N
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NotEmptyConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NotNegativeConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NotNullConvertor;
-import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TheNumberConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NumberFormatConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.PropertyScriptConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.SizeConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TextFormatConvertor;
+import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TheNumberConvertor;
 
 /**
  * OVal configurer initializer
@@ -291,8 +292,8 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 		List<IBeanPropertyConstraint> constraints = reorganizer.getEffectiveConstraints(property);
 		List<Check> checkList = convertToChecks(constraints);
 
-		MethodConfiguration mc = null;
 		if (this.isGetterFirst()) {
+			MethodConfiguration mc = null;
 			Method method = ReflectionUtils.getGetterRecursive(beanClass, propertyName);
 			if (method != null) {
 				mc = new MethodConfiguration();
@@ -303,12 +304,31 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 				mc.returnValueConfiguration = mrvc;
 				classConfiguration.methodConfigurations.add(mc);
 			}
-		}
-		if (mc == null) {
-			FieldConfiguration fc = new FieldConfiguration();
-			fc.name = propertyName;
-			fc.checks = checkList;
-			classConfiguration.fieldConfigurations.add(fc);
+			if (mc == null) {
+				FieldConfiguration fc = new FieldConfiguration();
+				fc.name = propertyName;
+				fc.checks = checkList;
+				classConfiguration.fieldConfigurations.add(fc);
+			}
+		} else {
+			FieldConfiguration fc = null;
+			Field field = ReflectionUtils.getFieldRecursive(beanClass, propertyName);
+			if (field != null) {
+				fc = new FieldConfiguration();
+				fc.name = propertyName;
+				fc.checks = checkList;
+				classConfiguration.fieldConfigurations.add(fc);
+			}
+			if (fc == null) {
+				Method method = ReflectionUtils.getGetterRecursive(beanClass, propertyName);
+				MethodConfiguration mc = new MethodConfiguration();
+				mc.name = method.getName();
+				mc.isInvariant = Boolean.TRUE;
+				MethodReturnValueConfiguration mrvc = new MethodReturnValueConfiguration();
+				mrvc.checks = checkList;
+				mc.returnValueConfiguration = mrvc;
+				classConfiguration.methodConfigurations.add(mc);
+			}
 		}
 	}
 

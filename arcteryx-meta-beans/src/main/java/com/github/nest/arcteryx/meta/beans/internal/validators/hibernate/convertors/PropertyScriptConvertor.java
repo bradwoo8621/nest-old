@@ -4,6 +4,8 @@
 package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors;
 
 import org.hibernate.validator.cfg.ConstraintDef;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.nest.arcteryx.meta.beans.internal.constraints.PropertyScript;
 import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationException;
@@ -14,6 +16,11 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationExc
  * @author brad.wu
  */
 public class PropertyScriptConvertor extends AbstractHibernateConstraintConvertor<PropertyScript> {
+	static {
+		Logger logger = LoggerFactory.getLogger(PropertyScriptConvertor.class);
+		logger.error("Note: PropertyScript is not supported by Hibernate Validator 5.1.x, will throw BeanValidationException.");
+	}
+
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -32,6 +39,6 @@ public class PropertyScriptConvertor extends AbstractHibernateConstraintConverto
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected ConstraintDef createConstraintDef(PropertyScript constraint) {
-		throw new BeanValidationException("PropertyScript constraint not supported by hibernate validator yet.");
+		throw new BeanValidationException("PropertyScript constraint doesn't supported by hibernate validator yet.");
 	}
 }

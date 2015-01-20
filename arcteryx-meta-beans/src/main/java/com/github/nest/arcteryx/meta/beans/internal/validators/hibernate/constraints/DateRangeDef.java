@@ -40,7 +40,7 @@ public class DateRangeDef extends ConstraintDef<DateRangeDef, DateRange> {
 		return this;
 	}
 
-	public DateRangeDef tolerance(long tolerance) {
+	public DateRangeDef tolerance(int tolerance) {
 		addParameter("tolerance", tolerance);
 		return this;
 	}

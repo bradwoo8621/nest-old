@@ -34,5 +34,4 @@ public class LengthConvertor extends AbstractHibernateConstraintConvertor<Length
 	public Class<Length> getSupportedConstraintType() {
 		return Length.class;
 	}
-
 }

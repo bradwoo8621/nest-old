@@ -4,10 +4,13 @@
 package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate;
 
 import java.lang.annotation.ElementType;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.validation.Validation;
@@ -18,6 +21,8 @@ import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.ConstraintMapping;
 import org.hibernate.validator.cfg.context.PropertyConstraintMappingContext;
 import org.hibernate.validator.cfg.context.TypeConstraintMappingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanConstraintReorganizer;
@@ -55,6 +60,12 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convert
  * @author brad.wu
  */
 public class HibernateValidationConfigurationInitializer implements IValidationConfigurationInitializer {
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
+	/**
+	 * when initialize the configuration, use getter method first or not
+	 */
+	private boolean getterFirst = true;
 	private HibernateValidatorConfiguration configuration = null;
 	private IBeanConstraintReorganizer beanConstraintReorganizer = null;
 	private IBeanPropertyConstraintReorganizer propertyConstraintReorganizer = null;
@@ -151,11 +162,16 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 	 */
 	@SuppressWarnings("rawtypes")
 	protected void initialize(IBeanDescriptor descriptor) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("Initialize bean descriptor [" + descriptor + "].");
+		}
 		ConstraintMapping mapping = getConfiguration().createConstraintMapping();
 		TypeConstraintMappingContext context = mapping.type(descriptor.getBeanClass());
 
 		this.generateTypeLevelConstraints(descriptor, context);
 		this.generatePropertyLevelConstraints(descriptor, context);
+
+		getConfiguration().addMapping(mapping);
 	}
 
 	/**
@@ -185,7 +201,8 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 	 * @param context
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	protected void generatePropertyLevelConstraints(IBeanDescriptor descriptor, TypeConstraintMappingContext context) {
+	protected void generatePropertyLevelConstraints(IBeanDescriptor descriptor,
+			final TypeConstraintMappingContext context) {
 		for (IBeanPropertyDescriptor property : descriptor.getBeanProperties()) {
 			IBeanPropertyConstraintReorganizer reorganizer = property.getConstraintReorganizer();
 			if (reorganizer == null) {
@@ -194,8 +211,24 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 			List<IBeanPropertyConstraint> constraints = reorganizer.getEffectiveConstraints(property);
 			List<ConstraintDef> defines = this.convertToHibernateConstraintDefines(constraints);
 
+			PropertyConstraintMappingContext propertyContext = null;
 			String propertyName = property.getName();
-			PropertyConstraintMappingContext propertyContext = context.property(propertyName, ElementType.FIELD);
+			if (this.isGetterFirst()) {
+				Method method = this.getGetterRecursive(descriptor.getBeanClass(), propertyName);
+				if (method == null) {
+					propertyContext = context.property(propertyName, ElementType.FIELD);
+				} else {
+					propertyContext = context.property(propertyName, ElementType.METHOD);
+				}
+			} else {
+				Field field = this.getFieldRecursive(descriptor.getBeanClass(), propertyName);
+				if (field == null) {
+					propertyContext = context.property(propertyName, ElementType.METHOD);
+				} else {
+					propertyContext = context.property(propertyName, ElementType.FIELD);
+				}
+			}
+			
 			for (ConstraintDef define : defines) {
 				if (define instanceof AssertValidDef) {
 					propertyContext.valid();
@@ -297,5 +330,68 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 			checkList.add(check);
 		}
 		return checkList;
+	}
+
+	/**
+	 * @return the getterFirst
+	 */
+	public boolean isGetterFirst() {
+		return getterFirst;
+	}
+
+	/**
+	 * @param getterFirst
+	 *            the getterFirst to set
+	 */
+	public void setGetterFirst(boolean getterFirst) {
+		this.getterFirst = getterFirst;
+	}
+
+	public Method getGetterRecursive(final Class<?> clazz, final String propertyName) {
+		final Method m = getGetter(clazz, propertyName);
+		if (m != null)
+			return m;
+
+		final Class<?> superclazz = clazz.getSuperclass();
+		if (superclazz == null)
+			return null;
+
+		return getGetterRecursive(superclazz, propertyName);
+	}
+
+	public Method getGetter(final Class<?> clazz, final String propertyName) {
+		final String appendix = propertyName.substring(0, 1).toUpperCase(Locale.getDefault())
+				+ propertyName.substring(1);
+		try {
+			return clazz.getDeclaredMethod("get" + appendix);
+		} catch (final NoSuchMethodException ex) {
+			logger.trace("getXXX method not found.", ex);
+		}
+		try {
+			return clazz.getDeclaredMethod("is" + appendix);
+		} catch (final NoSuchMethodException ex) {
+			logger.trace("isXXX method not found.", ex);
+			return null;
+		}
+	}
+
+	public Field getFieldRecursive(final Class<?> clazz, final String fieldName) {
+		final Field f = getField(clazz, fieldName);
+		if (f != null)
+			return f;
+
+		final Class<?> superclazz = clazz.getSuperclass();
+		if (superclazz == null)
+			return null;
+
+		return getFieldRecursive(superclazz, fieldName);
+	}
+
+	public Field getField(final Class<?> clazz, final String fieldName) {
+		try {
+			return clazz.getDeclaredField(fieldName);
+		} catch (final NoSuchFieldException e) {
+			return null;
+		}
 	}
 }

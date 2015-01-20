@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
+    http://www.springframework.org/schema/util 
+    http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="beans.context"
+		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext"
+		scope="singleton" init-method="afterBeanContextInitialized">
+		<property name="descriptors">
+			<list>
+				<ref bean="Person" />
+			</list>
+		</property>
+		<!-- operator providers -->
+		<property name="operatorProviders">
+			<map>
+				<entry>
+					<key>
+						<util:constant
+							static-field="com.github.nest.arcteryx.meta.beans.IBeanValidator.CODE" />
+					</key>
+					<bean
+						class="com.github.nest.arcteryx.meta.beans.internal.providers.HibernateBeanValidatorProvider" />
+				</entry>
+			</map>
+		</property>
+		<!-- validation configuration initializer -->
+		<property name="validationConfigurationInitializer">
+			<bean
+				class="com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateValidationConfigurationInitializer">
+				<!-- just for a sample, default convertor initialized by itself. only 
+					the convertor which is customized need to be declared here -->
+				<property name="convertors">
+					<list>
+						<bean
+							class="com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.NotNullConvertor" />
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="Person"
+		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor"
+		scope="singleton" p:name="Person" p:description="A person"
+		p:resourceClass="com.github.nest.arcteryx.meta.beans.validation.Person">
+		<property name="constraint">
+			<bean
+				class="com.github.nest.arcteryx.meta.beans.internal.constraints.BeanScript"
+				p:script="groovy:_this.age > 0" />
+		</property>
+		<property name="properties">
+			<list>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="name" p:description="Name of person">
+					<property name="constraints">
+						<list>
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NotNull" />
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NotBlank" />
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NotEmpty" />
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.Length"
+								p:min="1" p:max="30" />
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.TextFormat"
+								p:pattern="^([A-Z]+.*)$" />
+						</list>
+					</property>
+				</bean>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="birthday" p:description="Birthday of person">
+					<property name="constraint">
+						<bean
+							class="com.github.nest.arcteryx.meta.beans.internal.constraints.DateRange"
+							p:from="1900/01/01" p:format="yyyy/MM/dd" p:to="today" />
+					</property>
+				</bean>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="email" p:description="Email of person">
+					<property name="constraint">
+						<bean
+							class="com.github.nest.arcteryx.meta.beans.internal.constraints.Email" />
+					</property>
+				</bean>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="age" p:description="Age of person">
+					<property name="constraints">
+						<list>
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber"
+								p:min="1" p:max="200" />
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NotNegative" />
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NumberFormat"
+								p:minIntegerDigits="1" p:maxIntegerDigits="3"
+								p:maxFractionDigits="0" />
+						</list>
+					</property>
+				</bean>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="children" p:description="Children of person">
+					<property name="constraints">
+						<list>
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.Size"
+								p:min="1" />
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.AssertValid" />
+						</list>
+					</property>
+				</bean>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="father" p:description="Father of person">
+					<property name="constraints">
+						<list>
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.AssertValid" />
+						</list>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+</beans>

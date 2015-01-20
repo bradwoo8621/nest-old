@@ -21,7 +21,6 @@ import com.github.nest.arcteryx.meta.beans.IConstraintViolation;
 
 /**
  * Oval constraint violation. <br>
- * TODO How to build message and hierarchy(target), i18n?
  * 
  * @author brad.wu
  */

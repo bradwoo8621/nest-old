@@ -69,14 +69,14 @@ public @interface TheNumber {
 	/**
 	 * error code passed to the ConstraintViolation object
 	 */
-	String errorCode() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.Number";
+	String errorCode() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber";
 
 	/**
 	 * message to be used for the ContraintsViolatedException
 	 * 
 	 * @see ConstraintViolation
 	 */
-	String message() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.Number.violated";
+	String message() default "com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber.violated";
 
 	/**
 	 * The associated constraint profiles.

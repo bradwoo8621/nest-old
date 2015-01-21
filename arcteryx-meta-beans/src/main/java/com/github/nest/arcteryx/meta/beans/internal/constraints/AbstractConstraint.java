@@ -47,7 +47,16 @@ public abstract class AbstractConstraint implements IConstraint {
 	 */
 	@Override
 	public String getMessageTemplate() {
-		return messageTemplate;
+		return StringUtils.isBlank(this.messageTemplate) ? this.createDefaultMessageTemplate() : this.messageTemplate;
+	}
+
+	/**
+	 * to standardize the message template
+	 * 
+	 * @return
+	 */
+	protected String createDefaultMessageTemplate() {
+		return getClass().getSimpleName() + ".violated";
 	}
 
 	/**
@@ -83,7 +92,16 @@ public abstract class AbstractConstraint implements IConstraint {
 	 */
 	@Override
 	public String getErrorCode() {
-		return errorCode;
+		return StringUtils.isBlank(this.errorCode) ? this.createDefaultErrorCode() : this.errorCode;
+	}
+
+	/**
+	 * to standardize the error code
+	 * 
+	 * @return
+	 */
+	protected String createDefaultErrorCode() {
+		return getClass().getSimpleName();
 	}
 
 	/**

@@ -228,7 +228,7 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 					propertyContext = context.property(propertyName, ElementType.FIELD);
 				}
 			}
-			
+
 			for (ConstraintDef define : defines) {
 				if (define instanceof AssertValidDef) {
 					propertyContext.valid();
@@ -347,7 +347,7 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 		this.getterFirst = getterFirst;
 	}
 
-	public Method getGetterRecursive(final Class<?> clazz, final String propertyName) {
+	protected Method getGetterRecursive(final Class<?> clazz, final String propertyName) {
 		final Method m = getGetter(clazz, propertyName);
 		if (m != null)
 			return m;
@@ -359,7 +359,7 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 		return getGetterRecursive(superclazz, propertyName);
 	}
 
-	public Method getGetter(final Class<?> clazz, final String propertyName) {
+	protected Method getGetter(final Class<?> clazz, final String propertyName) {
 		final String appendix = propertyName.substring(0, 1).toUpperCase(Locale.getDefault())
 				+ propertyName.substring(1);
 		try {
@@ -375,7 +375,7 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 		}
 	}
 
-	public Field getFieldRecursive(final Class<?> clazz, final String fieldName) {
+	protected Field getFieldRecursive(final Class<?> clazz, final String fieldName) {
 		final Field f = getField(clazz, fieldName);
 		if (f != null)
 			return f;
@@ -387,7 +387,7 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 		return getFieldRecursive(superclazz, fieldName);
 	}
 
-	public Field getField(final Class<?> clazz, final String fieldName) {
+	protected Field getField(final Class<?> clazz, final String fieldName) {
 		try {
 			return clazz.getDeclaredField(fieldName);
 		} catch (final NoSuchFieldException e) {

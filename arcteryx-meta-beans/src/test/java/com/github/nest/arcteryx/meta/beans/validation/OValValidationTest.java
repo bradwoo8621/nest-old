@@ -128,7 +128,7 @@ public class OValValidationTest {
 		// children[1] assert
 		assertEquals(6, results.size());
 		for (IConstraintViolation violation: results) {
-			System.out.println(violation.getPath());
+			System.out.println(violation.getPath() + " " + violation.getErrorCode());
 		}
 	}
 

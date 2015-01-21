@@ -177,6 +177,16 @@ public class OValConstraintViolation extends ConstraintViolation implements ICon
 	}
 
 	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see net.sf.oval.ConstraintViolation#getErrorCode()
+	 */
+	@Override
+	public String getErrorCode() {
+		return super.getErrorCode();
+	}
+
+	/**
 	 * @return the parent
 	 */
 	protected IConstraintViolation getParent() {

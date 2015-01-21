@@ -3,14 +3,14 @@
  */
 package com.github.nest.arcteryx.meta.beans;
 
-import java.util.List;
-
 /**
  * bean constraint violation
  * 
  * @author brad.wu
  */
 public interface IConstraintViolation {
+	String SELF = "_self";
+
 	/**
 	 * get error code
 	 * 
@@ -54,16 +54,9 @@ public interface IConstraintViolation {
 	ConstraintSeverity getConstraintSeverity();
 
 	/**
-	 * get causes
+	 * get path of value to validate
 	 * 
 	 * @return
 	 */
-	List<IConstraintViolation> getConstraintCauses();
-
-	/**
-	 * get relative path of value to validate
-	 * 
-	 * @return
-	 */
-	String getRelativePath();
+	String getPath();
 }

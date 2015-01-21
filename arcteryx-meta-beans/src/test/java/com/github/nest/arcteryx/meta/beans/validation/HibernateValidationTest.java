@@ -10,11 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
-import net.sf.oval.constraint.Assert;
-import net.sf.oval.constraint.AssertValid;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -98,15 +93,10 @@ public class HibernateValidationTest {
 		Person father = new Person();
 		father.setAge(10);
 		person.setFather(father);
-		List<IConstraintViolation> results = validator.validate(person);
+		List<IConstraintViolation> results = validator.validate(person, FatherGroup.class);
 		assertNotNull(results);
-
-		results = validator.validate(person);
-		assertNotNull(results);
-		assertEquals(1, results.size());
-
 		IConstraintViolation violation = results.get(0);
-		assertEquals("father.age", violation.getRelativePath());
+		assertEquals("father.age", violation.getPath());
 	}
 
 	@Test
@@ -131,35 +121,9 @@ public class HibernateValidationTest {
 		// age in 1..200
 		// age > 0 in class level
 		// children[1] assert
-		assertEquals(4, results.size());
+		assertEquals(9, results.size());
 		for (IConstraintViolation violation : results) {
-			String errorCode = violation.getErrorCode();
-			if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber.class.getName()
-					.equals(errorCode)) {
-				assertEquals("age", violation.getRelativePath());
-			} else if (NotNull.class.getName().equals(errorCode)) {
-				assertEquals("name", violation.getRelativePath());
-			} else if (Assert.class.getName().equals(errorCode)) {
-				assertEquals("self", violation.getRelativePath());
-			} else if (AssertValid.class.getName().equals(errorCode)) {
-				assertEquals("children[1]", violation.getRelativePath());
-				// name not null
-				// age in 1..200
-				// age > 0 in class level
-				List<IConstraintViolation> sub = violation.getConstraintCauses();
-				assertEquals(3, sub.size());
-				for (IConstraintViolation subV : sub) {
-					errorCode = subV.getErrorCode();
-					if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber.class
-							.getName().equals(errorCode)) {
-						assertEquals("age", subV.getRelativePath());
-					} else if (NotNull.class.getName().equals(errorCode)) {
-						assertEquals("name", subV.getRelativePath());
-					} else if (Assert.class.getName().equals(errorCode)) {
-						assertEquals("self", subV.getRelativePath());
-					}
-				}
-			}
+			System.out.println(violation.getPath() + " " + violation.getErrorCode());
 		}
 	}
 
@@ -171,9 +135,9 @@ public class HibernateValidationTest {
 		IBeanValidator validator = descriptor.getValidator();
 
 		Person person = new Person();
-		List<IConstraintViolation> results = validator.validate(person);
+		List<IConstraintViolation> results = validator.validate(person, BeanGroup.class);
 		assertNotNull(results);
 		assertEquals(1, results.size());
-		assertEquals("self", results.get(0).getRelativePath());
+		assertEquals(IConstraintViolation.SELF, results.get(0).getPath());
 	}
 }

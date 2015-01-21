@@ -4,10 +4,7 @@
 package com.github.nest.arcteryx.meta.beans.internal.validators.oval;
 
 import java.lang.reflect.Method;
-import java.util.LinkedList;
 import java.util.List;
-
-import org.apache.commons.lang3.StringUtils;
 
 import net.sf.oval.Check;
 import net.sf.oval.ConstraintViolation;
@@ -15,6 +12,8 @@ import net.sf.oval.context.ClassContext;
 import net.sf.oval.context.FieldContext;
 import net.sf.oval.context.MethodReturnValueContext;
 import net.sf.oval.context.OValContext;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.github.nest.arcteryx.meta.beans.ConstraintSeverity;
 import com.github.nest.arcteryx.meta.beans.IConstraintViolation;
@@ -29,6 +28,7 @@ public class OValConstraintViolation extends ConstraintViolation implements ICon
 	private IContainerIndex index = null;
 	private String target = null;
 	private String when = null;
+	private IConstraintViolation parent = null;
 
 	public OValConstraintViolation(Check check, String message, Object validatedObject, Object invalidValue,
 			OValContext context, IContainerIndex index, OValConstraintViolation... causes) {
@@ -85,23 +85,6 @@ public class OValConstraintViolation extends ConstraintViolation implements ICon
 	}
 
 	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IConstraintViolation#getConstraintCauses()
-	 */
-	@Override
-	public List<IConstraintViolation> getConstraintCauses() {
-		ConstraintViolation[] originalViolations = this.getCauses();
-		List<IConstraintViolation> violations = new LinkedList<IConstraintViolation>();
-		if (originalViolations != null) {
-			for (ConstraintViolation violation : originalViolations) {
-				violations.add((IConstraintViolation) violation);
-			}
-		}
-		return violations;
-	}
-
-	/**
 	 * @return the index
 	 */
 	public IContainerIndex getIndex() {
@@ -125,10 +108,10 @@ public class OValConstraintViolation extends ConstraintViolation implements ICon
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IConstraintViolation#getRelativePath()
+	 * @see com.github.nest.arcteryx.meta.beans.IConstraintViolation#getPath()
 	 */
 	@Override
-	public String getRelativePath() {
+	public String getPath() {
 		OValContext context = this.getCheckDeclaringContext();
 		// name
 		String name = convertContextToName(context);
@@ -154,6 +137,10 @@ public class OValConstraintViolation extends ConstraintViolation implements ICon
 		}
 		if (target != null) {
 			sb.append('.').append(target);
+		}
+
+		if (getParent() != null) {
+			sb.insert(0, '.').insert(0, getParent().getPath());
 		}
 		return sb.toString();
 	}
@@ -182,10 +169,25 @@ public class OValConstraintViolation extends ConstraintViolation implements ICon
 		} else if (context instanceof FieldContext) {
 			name = ((FieldContext) context).getField().getName();
 		} else if (context instanceof ClassContext) {
-			name = "self";
+			name = SELF;
 		} else {
 			name = context.toString();
 		}
 		return name;
+	}
+
+	/**
+	 * @return the parent
+	 */
+	protected IConstraintViolation getParent() {
+		return parent;
+	}
+
+	/**
+	 * @param parent
+	 *            the parent to set
+	 */
+	protected void setParent(IConstraintViolation parent) {
+		this.parent = parent;
 	}
 }

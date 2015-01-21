@@ -4,9 +4,9 @@
 package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors;
 
 import org.hibernate.validator.cfg.ConstraintDef;
-import org.hibernate.validator.cfg.defs.NotBlankDef;
 
 import com.github.nest.arcteryx.meta.beans.internal.constraints.NotBlank;
+import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.NotBlankDef;
 
 /**
  * not blank convertor

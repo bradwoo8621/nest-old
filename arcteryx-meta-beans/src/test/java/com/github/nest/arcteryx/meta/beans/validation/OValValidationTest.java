@@ -10,11 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
-import net.sf.oval.constraint.Assert;
-import net.sf.oval.constraint.AssertValid;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -34,13 +29,14 @@ import com.github.nest.arcteryx.meta.beans.internal.constraints.PropertyConstrai
 public class OValValidationTest {
 	@BeforeClass
 	public static void initialize() {
-		Context.createApplicationContextByClassPath(OValValidationTest.class.getName(), "/validation/OValValidationTest.xml");
+		Context.createApplicationContextByClassPath(OValValidationTest.class.getName(),
+				"/validation/OValValidationTest.xml");
 	}
 
 	@Test
 	public void testDefinition() {
-		IBeanDescriptorContext context = Context.getContext(OValValidationTest.class.getName()).getBean("beans.context",
-				BeanDescriptorContext.class);
+		IBeanDescriptorContext context = Context.getContext(OValValidationTest.class.getName()).getBean(
+				"beans.context", BeanDescriptorContext.class);
 		BeanDescriptor descriptor = context.get(Person.class);
 		assertEquals("Person", descriptor.getName());
 		assertEquals("A person", descriptor.getDescription());
@@ -61,8 +57,8 @@ public class OValValidationTest {
 
 	@Test
 	public void testName() {
-		IBeanDescriptorContext context = Context.getContext(OValValidationTest.class.getName()).getBean("beans.context",
-				BeanDescriptorContext.class);
+		IBeanDescriptorContext context = Context.getContext(OValValidationTest.class.getName()).getBean(
+				"beans.context", BeanDescriptorContext.class);
 		BeanDescriptor descriptor = context.get(Person.class);
 		IBeanValidator validator = descriptor.getValidator();
 
@@ -88,8 +84,8 @@ public class OValValidationTest {
 
 	@Test
 	public void testFather() {
-		IBeanDescriptorContext context = Context.getContext(OValValidationTest.class.getName()).getBean("beans.context",
-				BeanDescriptorContext.class);
+		IBeanDescriptorContext context = Context.getContext(OValValidationTest.class.getName()).getBean(
+				"beans.context", BeanDescriptorContext.class);
 		BeanDescriptor descriptor = context.get(Person.class);
 		IBeanValidator validator = descriptor.getValidator();
 
@@ -105,13 +101,13 @@ public class OValValidationTest {
 		assertEquals(1, results.size());
 
 		IConstraintViolation violation = results.get(0);
-		assertEquals("father.age", violation.getRelativePath());
+		assertEquals("father.age", violation.getPath());
 	}
 
 	@Test
 	public void testChildren() {
-		IBeanDescriptorContext context = Context.getContext(OValValidationTest.class.getName()).getBean("beans.context",
-				BeanDescriptorContext.class);
+		IBeanDescriptorContext context = Context.getContext(OValValidationTest.class.getName()).getBean(
+				"beans.context", BeanDescriptorContext.class);
 		BeanDescriptor descriptor = context.get(Person.class);
 		IBeanValidator validator = descriptor.getValidator();
 
@@ -130,42 +126,16 @@ public class OValValidationTest {
 		// age in 1..200
 		// age > 0 in class level
 		// children[1] assert
-		assertEquals(4, results.size());
-		for (IConstraintViolation violation : results) {
-			String errorCode = violation.getErrorCode();
-			if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber.class.getName().equals(
-					errorCode)) {
-				assertEquals("age", violation.getRelativePath());
-			} else if (NotNull.class.getName().equals(errorCode)) {
-				assertEquals("name", violation.getRelativePath());
-			} else if (Assert.class.getName().equals(errorCode)) {
-				assertEquals("self", violation.getRelativePath());
-			} else if (AssertValid.class.getName().equals(errorCode)) {
-				assertEquals("children[1]", violation.getRelativePath());
-				// name not null
-				// age in 1..200
-				// age > 0 in class level
-				List<IConstraintViolation> sub = violation.getConstraintCauses();
-				assertEquals(3, sub.size());
-				for (IConstraintViolation subV : sub) {
-					errorCode = subV.getErrorCode();
-					if (com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumber.class.getName()
-							.equals(errorCode)) {
-						assertEquals("age", subV.getRelativePath());
-					} else if (NotNull.class.getName().equals(errorCode)) {
-						assertEquals("name", subV.getRelativePath());
-					} else if (Assert.class.getName().equals(errorCode)) {
-						assertEquals("self", subV.getRelativePath());
-					}
-				}
-			}
+		assertEquals(6, results.size());
+		for (IConstraintViolation violation: results) {
+			System.out.println(violation.getPath());
 		}
 	}
 
 	@Test
 	public void testBean() {
-		IBeanDescriptorContext context = Context.getContext(OValValidationTest.class.getName()).getBean("beans.context",
-				BeanDescriptorContext.class);
+		IBeanDescriptorContext context = Context.getContext(OValValidationTest.class.getName()).getBean(
+				"beans.context", BeanDescriptorContext.class);
 		BeanDescriptor descriptor = context.get(Person.class);
 		IBeanValidator validator = descriptor.getValidator();
 
@@ -173,6 +143,6 @@ public class OValValidationTest {
 		List<IConstraintViolation> results = validator.validate(person, "beanscript");
 		assertNotNull(results);
 		assertEquals(1, results.size());
-		assertEquals("self", results.get(0).getRelativePath());
+		assertEquals(IConstraintViolation.SELF, results.get(0).getPath());
 	}
 }

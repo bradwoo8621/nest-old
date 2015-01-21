@@ -3,8 +3,8 @@
  */
 package com.github.nest.arcteryx.meta.beans.internal.validators.oval;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.sf.oval.ConstraintViolation;
@@ -20,8 +20,8 @@ import com.github.nest.arcteryx.meta.beans.IConstraintViolation;
  */
 public class OValBeanValidator184 extends AbstractOValBeanValidator {
 	/**
-	 * (non-Javadoc) 
-	 *   
+	 * (non-Javadoc)
+	 * 
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.AbstractOValBeanValidator#createValidator(net.sf.oval.configuration.Configurer)
 	 */
@@ -37,14 +37,28 @@ public class OValBeanValidator184 extends AbstractOValBeanValidator {
 	 */
 	@Override
 	protected List<IConstraintViolation> decorate(List<ConstraintViolation> violations) {
-		if (violations == null) {
+		if (violations == null || violations.size() == 0) {
 			return Collections.emptyList();
 		} else {
-			List<IConstraintViolation> list = new ArrayList<IConstraintViolation>(violations.size());
+			List<IConstraintViolation> list = new LinkedList<IConstraintViolation>();
 			for (ConstraintViolation violation : violations) {
-				list.add((IConstraintViolation) violation);
+				convertViolation(violation, list);
 			}
 			return list;
+		}
+	}
+
+	protected void convertViolation(ConstraintViolation violation, List<IConstraintViolation> list) {
+		ConstraintViolation[] causes = violation.getCauses();
+		if (causes != null && causes.length != 0) {
+			// violation which caused by other violations.
+			// skip itself
+			for (ConstraintViolation cause : causes) {
+				((OValConstraintViolation) cause).setParent((IConstraintViolation) violation);
+				convertViolation(cause, list);
+			}
+		} else {
+			list.add((IConstraintViolation) violation);
 		}
 	}
 }

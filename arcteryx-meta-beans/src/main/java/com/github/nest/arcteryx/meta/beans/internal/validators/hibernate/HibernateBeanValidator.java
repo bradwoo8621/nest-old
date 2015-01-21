@@ -91,10 +91,14 @@ public class HibernateBeanValidator extends AbstractBeanValidator {
 	 * @return
 	 */
 	protected List<IConstraintViolation> convertViolations(Set<ConstraintViolation<Object>> violations) {
-		// convert hibernate violations to customized
 		if (violations == null || violations.size() == 0) {
 			return Collections.emptyList();
 		}
-		return null;
+
+		List<IConstraintViolation> list = new LinkedList<IConstraintViolation>();
+		for (ConstraintViolation<Object> violation : violations) {
+			list.add(new HibernateConstraintViolation(violation));
+		}
+		return list;
 	}
 }

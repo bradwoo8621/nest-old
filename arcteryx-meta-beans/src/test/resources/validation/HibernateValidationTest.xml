@@ -52,7 +52,7 @@
 		<property name="constraint">
 			<bean
 				class="com.github.nest.arcteryx.meta.beans.internal.constraints.BeanScript"
-				p:script="groovy:_this.age > 0" />
+				p:script="groovy:_this.age > 0" p:profile="com.github.nest.arcteryx.meta.beans.validation.BeanGroup"/>
 		</property>
 		<property name="properties">
 			<list>
@@ -107,6 +107,10 @@
 								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NumberFormat"
 								p:minIntegerDigits="1" p:maxIntegerDigits="3"
 								p:maxFractionDigits="0" />
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber"
+								p:min="25" p:max="200"
+								p:profile="com.github.nest.arcteryx.meta.beans.validation.FatherGroup" />
 						</list>
 					</property>
 				</bean>
@@ -129,7 +133,8 @@
 					<property name="constraints">
 						<list>
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.AssertValid" />
+								class="com.github.nest.arcteryx.meta.beans.internal.constraints.AssertValid"
+								p:profile="com.github.nest.arcteryx.meta.beans.validation.FatherGroup" />
 						</list>
 					</property>
 				</bean>

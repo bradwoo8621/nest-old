@@ -11,12 +11,12 @@ import javax.validation.constraints.NotNull;
  *
  */
 public class Person {
-	@NotNull
 	private String name = null;
 
 	/**
 	 * @return the name
 	 */
+	@NotNull
 	public String getName() {
 		return name;
 	}

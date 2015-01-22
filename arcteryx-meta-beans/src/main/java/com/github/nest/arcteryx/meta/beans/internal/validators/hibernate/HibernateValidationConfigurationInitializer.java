@@ -6,6 +6,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate;
 import java.lang.annotation.ElementType;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -14,8 +15,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.validation.Validation;
+import javax.validation.ValidationProviderResolver;
+import javax.validation.spi.ValidationProvider;
 
-import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.HibernateValidatorConfiguration;
 import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.ConstraintMapping;
@@ -152,7 +154,20 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 	 * @return
 	 */
 	protected HibernateValidatorConfiguration createConfiguration() {
-		return Validation.byProvider(HibernateValidator.class).configure();
+		ValidationProviderResolver resolver = new ValidationProviderResolver() {
+			/**
+			 * (non-Javadoc)
+			 * 
+			 * @see javax.validation.ValidationProviderResolver#getValidationProviders()
+			 */
+			@Override
+			public List<ValidationProvider<?>> getValidationProviders() {
+				List<ValidationProvider<?>> providers = new ArrayList<ValidationProvider<?>>(1);
+				providers.add(new HibernateValidator513());
+				return providers;
+			}
+		};
+		return Validation.byProvider(HibernateValidator513.class).providerResolver(resolver).configure();
 	}
 
 	/**

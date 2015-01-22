@@ -20,18 +20,17 @@ import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext;
 
 /**
  * @author brad.wu
- *
  */
-public class ExtendHibernateValidationTest {
+public class ExtendOValValidationTest {
 	@BeforeClass
 	public static void initialize() {
-		Context.createApplicationContextByClassPath(ExtendHibernateValidationTest.class.getName(),
-				"/extend/HibernateValidationTest.xml");
+		Context.createApplicationContextByClassPath(ExtendOValValidationTest.class.getName(),
+				"/extend/OValValidationTest.xml");
 	}
 
 	@Test
 	public void test() {
-		IBeanDescriptorContext context = Context.getContext(ExtendHibernateValidationTest.class.getName()).getBean(
+		IBeanDescriptorContext context = Context.getContext(ExtendOValValidationTest.class.getName()).getBean(
 				"beans.context", BeanDescriptorContext.class);
 		{
 			BeanDescriptor descriptor = context.get(Person.class);

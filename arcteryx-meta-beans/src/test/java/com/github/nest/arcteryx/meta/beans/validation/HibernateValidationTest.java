@@ -90,6 +90,7 @@ public class HibernateValidationTest {
 		IBeanValidator validator = descriptor.getValidator();
 
 		Person person = new Person();
+		person.setAge(30);
 		Person father = new Person();
 		father.setAge(10);
 		person.setFather(father);

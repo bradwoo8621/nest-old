@@ -34,13 +34,20 @@ public class HibernateConstraintViolation implements IConstraintViolation {
 	}
 
 	/**
-	 * (non-Javadoc)
+	 * get error code from {@linkplain HibernateErrorCodeRegistry}, if not
+	 * exists, return class name of annotation.
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IConstraintViolation#getErrorCode()
 	 */
 	@Override
 	public String getErrorCode() {
-		return this.getViolation().getConstraintDescriptor().getAnnotation().annotationType().getName();
+		Class<?> annotationClass = this.getViolation().getConstraintDescriptor().getAnnotation().annotationType();
+		String errorCode = HibernateErrorCodeRegistry.getErrorCode(annotationClass);
+		if (StringUtils.isBlank(errorCode)) {
+			return annotationClass.getName();
+		} else {
+			return errorCode;
+		}
 	}
 
 	/**

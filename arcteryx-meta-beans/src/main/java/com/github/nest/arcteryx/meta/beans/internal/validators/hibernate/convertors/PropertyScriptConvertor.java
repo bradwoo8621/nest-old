@@ -22,6 +22,16 @@ public class PropertyScriptConvertor extends AbstractHibernateConstraintConverto
 	}
 
 	/**
+	 * PropertyScript constraint doesn't supported by hibernate validator yet,
+	 * do nothing
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.AbstractHibernateConstraintConvertor#registerErrorCode()
+	 */
+	@Override
+	protected void registerErrorCode() {
+	}
+
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()

@@ -7,6 +7,7 @@ import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.defs.LengthDef;
 
 import com.github.nest.arcteryx.meta.beans.internal.constraints.Length;
+import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 
 /**
  * length convertor
@@ -14,6 +15,17 @@ import com.github.nest.arcteryx.meta.beans.internal.constraints.Length;
  * @author brad.wu
  */
 public class LengthConvertor extends AbstractHibernateConstraintConvertor<Length> {
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.AbstractHibernateConstraintConvertor#registerErrorCode()
+	 */
+	@Override
+	protected void registerErrorCode() {
+		HibernateErrorCodeRegistry.registerErrorCode(org.hibernate.validator.constraints.Length.class,
+				Length.class.getSimpleName());
+	}
+
 	/**
 	 * (non-Javadoc)
 	 * 

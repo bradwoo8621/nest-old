@@ -7,6 +7,7 @@ import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.defs.NotNullDef;
 
 import com.github.nest.arcteryx.meta.beans.internal.constraints.NotNull;
+import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 
 /**
  * not null convertor
@@ -14,6 +15,17 @@ import com.github.nest.arcteryx.meta.beans.internal.constraints.NotNull;
  * @author brad.wu
  */
 public class NotNullConvertor extends AbstractHibernateConstraintConvertor<NotNull> {
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.AbstractHibernateConstraintConvertor#registerErrorCode()
+	 */
+	@Override
+	protected void registerErrorCode() {
+		HibernateErrorCodeRegistry.registerErrorCode(javax.validation.constraints.NotNull.class,
+				NotNull.class.getSimpleName());
+	}
+
 	/**
 	 * (non-Javadoc)
 	 * 

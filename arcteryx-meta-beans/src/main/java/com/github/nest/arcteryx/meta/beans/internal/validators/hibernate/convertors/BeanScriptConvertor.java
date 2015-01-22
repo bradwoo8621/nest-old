@@ -6,9 +6,11 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.defs.ScriptAssertDef;
+import org.hibernate.validator.constraints.ScriptAssert;
 
 import com.github.nest.arcteryx.meta.beans.internal.constraints.BeanScript;
 import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationException;
+import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 
 /**
  * bean script convertor
@@ -16,6 +18,16 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationExc
  * @author brad.wu
  */
 public class BeanScriptConvertor extends AbstractHibernateConstraintConvertor<BeanScript> {
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.AbstractHibernateConstraintConvertor#registerErrorCode()
+	 */
+	@Override
+	protected void registerErrorCode() {
+		HibernateErrorCodeRegistry.registerErrorCode(ScriptAssert.class, BeanScript.class.getSimpleName());
+	}
+
 	/**
 	 * (non-Javadoc)
 	 * 

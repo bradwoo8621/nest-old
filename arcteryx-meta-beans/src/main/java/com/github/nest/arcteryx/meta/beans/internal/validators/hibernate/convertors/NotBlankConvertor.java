@@ -6,6 +6,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 import org.hibernate.validator.cfg.ConstraintDef;
 
 import com.github.nest.arcteryx.meta.beans.internal.constraints.NotBlank;
+import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.NotBlankDef;
 
 /**
@@ -14,6 +15,18 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constra
  * @author brad.wu
  */
 public class NotBlankConvertor extends AbstractHibernateConstraintConvertor<NotBlank> {
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.AbstractHibernateConstraintConvertor#registerErrorCode()
+	 */
+	@Override
+	protected void registerErrorCode() {
+		HibernateErrorCodeRegistry.registerErrorCode(
+				com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.NotBlank.class,
+				NotBlank.class.getSimpleName());
+	}
+
 	/**
 	 * (non-Javadoc)
 	 * 

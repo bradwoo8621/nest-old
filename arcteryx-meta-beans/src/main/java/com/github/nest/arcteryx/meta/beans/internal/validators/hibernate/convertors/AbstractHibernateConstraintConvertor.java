@@ -36,6 +36,16 @@ public abstract class AbstractHibernateConstraintConvertor<C extends IConstraint
 		logger.warn("Note: Property \"appliesTo\" is not supported yet, will be skipped.");
 	}
 
+	public AbstractHibernateConstraintConvertor() {
+		registerErrorCode();
+	}
+
+	/**
+	 * register error code to {@linkplain HibernateErrorCodeRegistry}. default
+	 * do nothing, overwrite this method to register.
+	 */
+	protected abstract void registerErrorCode();
+
 	/**
 	 * (non-Javadoc)
 	 * 

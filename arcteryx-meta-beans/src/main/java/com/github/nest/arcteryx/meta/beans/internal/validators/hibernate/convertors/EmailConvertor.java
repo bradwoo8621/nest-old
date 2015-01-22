@@ -6,6 +6,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 import org.hibernate.validator.cfg.ConstraintDef;
 
 import com.github.nest.arcteryx.meta.beans.internal.constraints.Email;
+import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.EmailDef;
 
 /**
@@ -14,6 +15,18 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constra
  * @author brad.wu
  */
 public class EmailConvertor extends AbstractHibernateConstraintConvertor<Email> {
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.AbstractHibernateConstraintConvertor#registerErrorCode()
+	 */
+	@Override
+	protected void registerErrorCode() {
+		HibernateErrorCodeRegistry.registerErrorCode(
+				com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.Email.class,
+				Email.class.getSimpleName());
+	}
+
 	/**
 	 * (non-Javadoc)
 	 * 

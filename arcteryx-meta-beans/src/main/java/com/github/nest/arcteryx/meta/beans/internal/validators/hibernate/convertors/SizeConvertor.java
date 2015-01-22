@@ -7,6 +7,7 @@ import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.defs.SizeDef;
 
 import com.github.nest.arcteryx.meta.beans.internal.constraints.Size;
+import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 
 /**
  * size convertor
@@ -14,6 +15,17 @@ import com.github.nest.arcteryx.meta.beans.internal.constraints.Size;
  * @author brad.wu
  */
 public class SizeConvertor extends AbstractHibernateConstraintConvertor<Size> {
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.AbstractHibernateConstraintConvertor#registerErrorCode()
+	 */
+	@Override
+	protected void registerErrorCode() {
+		HibernateErrorCodeRegistry.registerErrorCode(javax.validation.constraints.Size.class,
+				Size.class.getSimpleName());
+	}
+
 	/**
 	 * (non-Javadoc)
 	 * 

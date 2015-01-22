@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
+    http://www.springframework.org/schema/util 
+    http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean id="beans.context"
+		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext"
+		scope="singleton" init-method="afterBeanContextInitialized">
+		<property name="descriptors">
+			<list>
+				<ref bean="Person" />
+				<ref bean="Worker" />
+			</list>
+		</property>
+		<!-- operator providers -->
+		<property name="operatorProviders">
+			<map>
+				<entry>
+					<key>
+						<util:constant
+							static-field="com.github.nest.arcteryx.meta.beans.IBeanValidator.CODE" />
+					</key>
+					<bean
+						class="com.github.nest.arcteryx.meta.beans.internal.providers.HibernateBeanValidatorProvider" />
+				</entry>
+			</map>
+		</property>
+		<!-- validation configuration initializer -->
+		<property name="validationConfigurationInitializer">
+			<bean
+				class="com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateValidationConfigurationInitializer" />
+		</property>
+	</bean>
+
+	<bean id="Person"
+		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor"
+		scope="singleton" p:name="Person" p:description="A person"
+		p:resourceClass="com.github.nest.arcteryx.meta.beans.extend.Person">
+		<property name="properties">
+			<list>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="age" p:description="Age of Worker">
+					<property name="constraint">
+						<bean
+							class="com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber"
+							p:min="1" />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<bean id="Worker"
+		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor"
+		scope="singleton" p:name="Worker" p:description="A worker"
+		p:resourceClass="com.github.nest.arcteryx.meta.beans.extend.Worker"
+		p:parent-ref="Person">
+		<property name="properties">
+			<list>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="age" p:description="Age of Worker">
+					<property name="constraint">
+						<bean
+							class="com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber"
+							p:min="20" />
+					</property>
+					<property name="constraintReorganizer">
+						<bean
+							class="com.github.nest.arcteryx.meta.beans.internal.validators.BeanPropertyConstraintReorganizer"
+							p:overwrite="true" />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+</beans>

@@ -29,7 +29,6 @@ import org.hibernate.validator.internal.engine.ConfigurationImpl;
 import org.hibernate.validator.internal.engine.ValidatorFactoryImpl;
 import org.hibernate.validator.internal.engine.ValidatorImpl;
 import org.hibernate.validator.internal.engine.constraintvalidation.ConstraintValidatorManager;
-import org.hibernate.validator.internal.metadata.BeanMetaDataManager;
 import org.hibernate.validator.internal.metadata.core.ConstraintHelper;
 import org.hibernate.validator.internal.metadata.provider.MetaDataProvider;
 import org.hibernate.validator.internal.metadata.provider.XmlMetaDataProvider;
@@ -109,10 +108,10 @@ public class ValidatorFactoryImpl513 implements HibernateValidatorFactory {
 	 * {@code Validator}s. {@code ParameterNameProvider} makes parts of the meta
 	 * data and Bean Validation element descriptors dynamic, since depending of
 	 * the used provider different parameter names could be used. To still have
-	 * the metadata static we create a {@code BeanMetaDataManager} per parameter
+	 * the metadata static we create a {@code BeanMetaDataManager513} per parameter
 	 * name provider. See also HV-659.
 	 */
-	private final Map<ParameterNameProvider, BeanMetaDataManager> beanMetaDataManagerMap;
+	private final Map<ParameterNameProvider, BeanMetaDataManager513> beanMetaDataManagerMap;
 
 	/**
 	 * Contains handlers to be applied to the validated value when validating
@@ -125,7 +124,7 @@ public class ValidatorFactoryImpl513 implements HibernateValidatorFactory {
 		this.traversableResolver = configurationState.getTraversableResolver();
 		this.parameterNameProvider = configurationState.getParameterNameProvider();
 		this.beanMetaDataManagerMap = Collections
-				.synchronizedMap(new IdentityHashMap<ParameterNameProvider, BeanMetaDataManager>());
+				.synchronizedMap(new IdentityHashMap<ParameterNameProvider, BeanMetaDataManager513>());
 		this.constraintHelper = new ConstraintHelper();
 		this.typeResolutionHelper = new TypeResolutionHelper();
 		this.executableHelper = new ExecutableHelper(typeResolutionHelper);
@@ -219,7 +218,7 @@ public class ValidatorFactoryImpl513 implements HibernateValidatorFactory {
 	@Override
 	public void close() {
 		constraintValidatorManager.clear();
-		for (BeanMetaDataManager beanMetaDataManager : beanMetaDataManagerMap.values()) {
+		for (BeanMetaDataManager513 beanMetaDataManager : beanMetaDataManagerMap.values()) {
 			beanMetaDataManager.clear();
 		}
 	}
@@ -239,9 +238,9 @@ public class ValidatorFactoryImpl513 implements HibernateValidatorFactory {
 			MessageInterpolator messageInterpolator, TraversableResolver traversableResolver,
 			ParameterNameProvider parameterNameProvider, boolean failFast,
 			List<ValidatedValueUnwrapper<?>> validatedValueHandlers) {
-		BeanMetaDataManager beanMetaDataManager;
+		BeanMetaDataManager513 beanMetaDataManager;
 		if (!beanMetaDataManagerMap.containsKey(parameterNameProvider)) {
-			beanMetaDataManager = new BeanMetaDataManager(constraintHelper, executableHelper, parameterNameProvider,
+			beanMetaDataManager = new BeanMetaDataManager513(constraintHelper, executableHelper, parameterNameProvider,
 					buildDataProviders(parameterNameProvider));
 			beanMetaDataManagerMap.put(parameterNameProvider, beanMetaDataManager);
 		} else {

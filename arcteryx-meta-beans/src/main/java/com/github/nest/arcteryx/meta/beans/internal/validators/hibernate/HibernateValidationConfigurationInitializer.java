@@ -18,6 +18,7 @@ import javax.validation.Validation;
 import javax.validation.ValidationProviderResolver;
 import javax.validation.spi.ValidationProvider;
 
+import org.hibernate.validator.HibernateValidator;
 import org.hibernate.validator.HibernateValidatorConfiguration;
 import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.ConstraintMapping;
@@ -57,7 +58,11 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convert
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.TheNumberConvertor;
 
 /**
- * hibernate validation configuration initializer
+ * hibernate validation configuration initializer.<br>
+ * Note: if the {@linkplain #isIgnoreClassHierarchy()} is true, use the
+ * customized {@linkplain HibernateValidator513} to ignore the class hierarchy;
+ * otherwise use the default {@linkplain HibernateValidator}. Default value is
+ * true. The customized HibernateValidator only supports 5.1.3.Final.
  * 
  * @author brad.wu
  */
@@ -68,6 +73,7 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 	 * when initialize the configuration, use getter method first or not
 	 */
 	private boolean getterFirst = true;
+	private boolean ignoreClassHierarchy = true;
 	private HibernateValidatorConfiguration configuration = null;
 	private IBeanConstraintReorganizer beanConstraintReorganizer = null;
 	private IBeanPropertyConstraintReorganizer propertyConstraintReorganizer = null;
@@ -154,20 +160,24 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 	 * @return
 	 */
 	protected HibernateValidatorConfiguration createConfiguration() {
-		ValidationProviderResolver resolver = new ValidationProviderResolver() {
-			/**
-			 * (non-Javadoc)
-			 * 
-			 * @see javax.validation.ValidationProviderResolver#getValidationProviders()
-			 */
-			@Override
-			public List<ValidationProvider<?>> getValidationProviders() {
-				List<ValidationProvider<?>> providers = new ArrayList<ValidationProvider<?>>(1);
-				providers.add(new HibernateValidator513());
-				return providers;
-			}
-		};
-		return Validation.byProvider(HibernateValidator513.class).providerResolver(resolver).configure();
+		if (this.isIgnoreClassHierarchy()) {
+			ValidationProviderResolver resolver = new ValidationProviderResolver() {
+				/**
+				 * (non-Javadoc)
+				 * 
+				 * @see javax.validation.ValidationProviderResolver#getValidationProviders()
+				 */
+				@Override
+				public List<ValidationProvider<?>> getValidationProviders() {
+					List<ValidationProvider<?>> providers = new ArrayList<ValidationProvider<?>>(1);
+					providers.add(new HibernateValidator513());
+					return providers;
+				}
+			};
+			return Validation.byProvider(HibernateValidator513.class).providerResolver(resolver).configure();
+		} else {
+			return Validation.byProvider(HibernateValidator.class).configure();
+		}
 	}
 
 	/**
@@ -360,6 +370,21 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 	 */
 	public void setGetterFirst(boolean getterFirst) {
 		this.getterFirst = getterFirst;
+	}
+
+	/**
+	 * @return the ignoreClassHierarchy
+	 */
+	public boolean isIgnoreClassHierarchy() {
+		return ignoreClassHierarchy;
+	}
+
+	/**
+	 * @param ignoreClassHierarchy
+	 *            the ignoreClassHierarchy to set
+	 */
+	public void setIgnoreClassHierarchy(boolean ignoreClassHierarchy) {
+		this.ignoreClassHierarchy = ignoreClassHierarchy;
 	}
 
 	protected Method getGetterRecursive(final Class<?> clazz, final String propertyName) {

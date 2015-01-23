@@ -5,7 +5,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 
 import org.hibernate.validator.cfg.ConstraintDef;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.Email;
+import com.github.nest.arcteryx.meta.beans.constraints.EmailConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.EmailDef;
 
@@ -14,7 +14,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constra
  * 
  * @author brad.wu
  */
-public class EmailConvertor extends AbstractHibernateConstraintConvertor<Email> {
+public class EmailConvertor extends AbstractHibernateConstraintConvertor<EmailConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -24,7 +24,7 @@ public class EmailConvertor extends AbstractHibernateConstraintConvertor<Email> 
 	protected void registerErrorCode() {
 		HibernateErrorCodeRegistry.registerErrorCode(
 				com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.Email.class,
-				Email.class.getSimpleName());
+				EmailConstraint.class.getSimpleName());
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class EmailConvertor extends AbstractHibernateConstraintConvertor<Email> 
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(Email constraint) {
+	protected ConstraintDef createConstraintDef(EmailConstraint constraint) {
 		return new EmailDef().allowPersonalName(constraint.isAllowPersonalName());
 	}
 
@@ -44,7 +44,7 @@ public class EmailConvertor extends AbstractHibernateConstraintConvertor<Email> 
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<Email> getSupportedConstraintType() {
-		return Email.class;
+	public Class<EmailConstraint> getSupportedConstraintType() {
+		return EmailConstraint.class;
 	}
 }

@@ -6,7 +6,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.defs.SizeDef;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.Size;
+import com.github.nest.arcteryx.meta.beans.constraints.SizeConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 
 /**
@@ -14,7 +14,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.Hiberna
  * 
  * @author brad.wu
  */
-public class SizeConvertor extends AbstractHibernateConstraintConvertor<Size> {
+public class SizeConvertor extends AbstractHibernateConstraintConvertor<SizeConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -23,7 +23,7 @@ public class SizeConvertor extends AbstractHibernateConstraintConvertor<Size> {
 	@Override
 	protected void registerErrorCode() {
 		HibernateErrorCodeRegistry.registerErrorCode(javax.validation.constraints.Size.class,
-				Size.class.getSimpleName());
+				SizeConstraint.class.getSimpleName());
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class SizeConvertor extends AbstractHibernateConstraintConvertor<Size> {
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(Size constraint) {
+	protected ConstraintDef createConstraintDef(SizeConstraint constraint) {
 		return new SizeDef().min(constraint.getMin()).max(constraint.getMax());
 	}
 
@@ -43,7 +43,7 @@ public class SizeConvertor extends AbstractHibernateConstraintConvertor<Size> {
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<Size> getSupportedConstraintType() {
-		return Size.class;
+	public Class<SizeConstraint> getSupportedConstraintType() {
+		return SizeConstraint.class;
 	}
 }

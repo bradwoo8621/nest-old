@@ -8,7 +8,7 @@ import net.sf.oval.constraint.AssertCheck;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.PropertyScript;
+import com.github.nest.arcteryx.meta.beans.constraints.PropertyScriptConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationException;
 
 /**
@@ -16,15 +16,15 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationExc
  * 
  * @author brad.wu
  */
-public class PropertyScriptConvertor extends AbstractOValPropertyCheckConvertor<PropertyScript> {
+public class PropertyScriptConvertor extends AbstractOValPropertyCheckConvertor<PropertyScriptConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.IOValCheckConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<PropertyScript> getSupportedConstraintType() {
-		return PropertyScript.class;
+	public Class<PropertyScriptConstraint> getSupportedConstraintType() {
+		return PropertyScriptConstraint.class;
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class PropertyScriptConvertor extends AbstractOValPropertyCheckConvertor<
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.AbstractOValCheckConvertor#createCheck(com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint)
 	 */
 	@Override
-	protected Check createCheck(PropertyScript constraint) {
+	protected Check createCheck(PropertyScriptConstraint constraint) {
 		AssertCheck check = new AssertCheck();
 		String script = constraint.getScript();
 		if (StringUtils.isBlank(script)) {

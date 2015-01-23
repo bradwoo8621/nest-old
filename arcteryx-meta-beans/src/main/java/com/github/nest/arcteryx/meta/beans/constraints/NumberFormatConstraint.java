@@ -1,9 +1,11 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.constraints;
+package com.github.nest.arcteryx.meta.beans.constraints;
 
 import java.util.Arrays;
+
+import com.github.nest.arcteryx.meta.beans.annotation.NumberFormat;
 
 /**
  * number format constraint. default value of {@linkplain #minIntegerDigits} and
@@ -11,7 +13,7 @@ import java.util.Arrays;
  * 
  * @author brad.wu
  */
-public class NumberFormat extends AbstractBeanPropertyConstraint {
+public class NumberFormatConstraint extends AbstractBeanPropertyConstraint<NumberFormat> {
 	private static final long serialVersionUID = 2409550204243550060L;
 
 	private int minIntegerDigits = 0;
@@ -77,6 +79,20 @@ public class NumberFormat extends AbstractBeanPropertyConstraint {
 	 */
 	public void setMaxFractionDigits(int maxFractionDigits) {
 		this.maxFractionDigits = maxFractionDigits;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.constraints.AbstractBeanPropertyConstraint#configure(java.lang.annotation.Annotation)
+	 */
+	@Override
+	public void configure(NumberFormat annotation) {
+		super.configure(annotation);
+		this.setMinIntegerDigits(annotation.minIntegerDigits());
+		this.setMaxIntegerDigits(annotation.maxIntegerDigits());
+		this.setMinFractionDigits(annotation.minFractionDigits());
+		this.setMaxFractionDigits(annotation.maxFractionDigits());
 	}
 
 	/**

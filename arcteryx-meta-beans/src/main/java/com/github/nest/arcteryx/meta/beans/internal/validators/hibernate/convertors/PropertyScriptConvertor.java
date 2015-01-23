@@ -7,7 +7,7 @@ import org.hibernate.validator.cfg.ConstraintDef;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.PropertyScript;
+import com.github.nest.arcteryx.meta.beans.constraints.PropertyScriptConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationException;
 
 /**
@@ -15,7 +15,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationExc
  * 
  * @author brad.wu
  */
-public class PropertyScriptConvertor extends AbstractHibernateConstraintConvertor<PropertyScript> {
+public class PropertyScriptConvertor extends AbstractHibernateConstraintConvertor<PropertyScriptConstraint> {
 	static {
 		Logger logger = LoggerFactory.getLogger(PropertyScriptConvertor.class);
 		logger.error("Note: PropertyScript is not supported by Hibernate Validator 5.1.x, will throw BeanValidationException.");
@@ -37,8 +37,8 @@ public class PropertyScriptConvertor extends AbstractHibernateConstraintConverto
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<PropertyScript> getSupportedConstraintType() {
-		return PropertyScript.class;
+	public Class<PropertyScriptConstraint> getSupportedConstraintType() {
+		return PropertyScriptConstraint.class;
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class PropertyScriptConvertor extends AbstractHibernateConstraintConverto
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(PropertyScript constraint) {
+	protected ConstraintDef createConstraintDef(PropertyScriptConstraint constraint) {
 		throw new BeanValidationException("PropertyScript constraint doesn't supported by hibernate validator yet.");
 	}
 }

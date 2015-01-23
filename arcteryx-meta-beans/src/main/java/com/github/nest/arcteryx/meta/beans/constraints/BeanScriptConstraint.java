@@ -1,9 +1,11 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.constraints;
+package com.github.nest.arcteryx.meta.beans.constraints;
 
 import java.util.Arrays;
+
+import com.github.nest.arcteryx.meta.beans.annotation.BeanScript;
 
 /**
  * script constraint. script contains two parts, language and script body. eg.
@@ -11,7 +13,7 @@ import java.util.Arrays;
  * 
  * @author brad.wu
  */
-public class PropertyScript extends AbstractBeanPropertyConstraint {
+public class BeanScriptConstraint extends AbstractBeanConstraint<BeanScript> {
 	private static final long serialVersionUID = -2064084972261552830L;
 
 	private String script = null;
@@ -34,13 +36,23 @@ public class PropertyScript extends AbstractBeanPropertyConstraint {
 	/**
 	 * (non-Javadoc)
 	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.constraints.AbstractConstraint#configure(java.lang.annotation.Annotation)
+	 */
+	@Override
+	public void configure(BeanScript annotation) {
+		super.configure(annotation);
+		this.setScript(annotation.script());
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return this.originalToString() + " [script=" + script + ", getMessageTemplate()=" + getMessageTemplate()
-				+ ", getWhen()=" + getWhen() + ", getTarget()=" + getTarget() + ", getErrorCode()=" + getErrorCode()
-				+ ", getProfiles()=" + Arrays.toString(getProfiles()) + ", getSeverity()=" + getSeverity()
-				+ ", getAppliesTo()=" + getAppliesTo() + "]";
+				+ ", getWhen()=" + getWhen() + ", getErrorCode()=" + getErrorCode() + ", getProfiles()="
+				+ Arrays.toString(getProfiles()) + ", getSeverity()=" + getSeverity() + "]";
 	}
 }

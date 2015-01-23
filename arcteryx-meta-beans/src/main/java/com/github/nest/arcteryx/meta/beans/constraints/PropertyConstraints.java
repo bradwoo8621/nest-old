@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.constraints;
+package com.github.nest.arcteryx.meta.beans.constraints;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +13,7 @@ import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public class PropertyConstraints extends AbstractBeanPropertyConstraint {
 	private static final long serialVersionUID = -7579419987708092073L;
 
@@ -36,7 +37,7 @@ public class PropertyConstraints extends AbstractBeanPropertyConstraint {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.internal.constraints.AbstractBeanPropertyConstraint#getConstraintsRecursive()
+	 * @see com.github.nest.arcteryx.meta.beans.constraints.AbstractBeanPropertyConstraint#getConstraintsRecursive()
 	 */
 	@SuppressWarnings("unchecked")
 	@Override

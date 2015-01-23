@@ -5,7 +5,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 
 import org.hibernate.validator.cfg.ConstraintDef;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.NotNegative;
+import com.github.nest.arcteryx.meta.beans.constraints.NotNegativeConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.NotNegativeDef;
 
@@ -14,7 +14,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constra
  * 
  * @author brad.wu
  */
-public class NotNegativeConvertor extends AbstractHibernateConstraintConvertor<NotNegative> {
+public class NotNegativeConvertor extends AbstractHibernateConstraintConvertor<NotNegativeConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -24,7 +24,7 @@ public class NotNegativeConvertor extends AbstractHibernateConstraintConvertor<N
 	protected void registerErrorCode() {
 		HibernateErrorCodeRegistry.registerErrorCode(
 				com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.NotNegative.class,
-				NotNegative.class.getSimpleName());
+				NotNegativeConstraint.class.getSimpleName());
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class NotNegativeConvertor extends AbstractHibernateConstraintConvertor<N
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(NotNegative constraint) {
+	protected ConstraintDef createConstraintDef(NotNegativeConstraint constraint) {
 		return new NotNegativeDef();
 	}
 
@@ -44,7 +44,7 @@ public class NotNegativeConvertor extends AbstractHibernateConstraintConvertor<N
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<NotNegative> getSupportedConstraintType() {
-		return NotNegative.class;
+	public Class<NotNegativeConstraint> getSupportedConstraintType() {
+		return NotNegativeConstraint.class;
 	}
 }

@@ -6,7 +6,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.defs.NotNullDef;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.NotNull;
+import com.github.nest.arcteryx.meta.beans.constraints.NotNullConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 
 /**
@@ -14,7 +14,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.Hiberna
  * 
  * @author brad.wu
  */
-public class NotNullConvertor extends AbstractHibernateConstraintConvertor<NotNull> {
+public class NotNullConvertor extends AbstractHibernateConstraintConvertor<NotNullConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -23,7 +23,7 @@ public class NotNullConvertor extends AbstractHibernateConstraintConvertor<NotNu
 	@Override
 	protected void registerErrorCode() {
 		HibernateErrorCodeRegistry.registerErrorCode(javax.validation.constraints.NotNull.class,
-				NotNull.class.getSimpleName());
+				NotNullConstraint.class.getSimpleName());
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class NotNullConvertor extends AbstractHibernateConstraintConvertor<NotNu
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(NotNull constraint) {
+	protected ConstraintDef createConstraintDef(NotNullConstraint constraint) {
 		return new NotNullDef();
 	}
 
@@ -43,7 +43,7 @@ public class NotNullConvertor extends AbstractHibernateConstraintConvertor<NotNu
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<NotNull> getSupportedConstraintType() {
-		return NotNull.class;
+	public Class<NotNullConstraint> getSupportedConstraintType() {
+		return NotNullConstraint.class;
 	}
 }

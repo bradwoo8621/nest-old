@@ -18,7 +18,6 @@ import net.sf.oval.configuration.pojo.elements.FieldConfiguration;
 import net.sf.oval.configuration.pojo.elements.MethodConfiguration;
 import net.sf.oval.configuration.pojo.elements.MethodReturnValueConfiguration;
 import net.sf.oval.configuration.pojo.elements.ObjectConfiguration;
-import net.sf.oval.internal.util.ReflectionUtils;
 
 import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanConstraintReorganizer;
@@ -48,6 +47,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.P
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.SizeConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TextFormatConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TheNumberConvertor;
+import com.github.nest.arcteryx.meta.beans.utils.ReflectionUtils;
 
 /**
  * OVal configurer initializer
@@ -208,6 +208,7 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 	 * @param descriptor
 	 * @param classConfiguration
 	 */
+	@SuppressWarnings("rawtypes")
 	protected void generateTypeLevelConstraints(IBeanDescriptor descriptor, ClassConfiguration classConfiguration) {
 		// find constraints of parents
 		IBeanConstraintReorganizer reorganizer = descriptor.getConstraintReorganizer();
@@ -251,6 +252,7 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 			 * 
 			 * @see com.github.nest.arcteryx.meta.beans.internal.validators.AbstractConstraintReorganizer#getEffectiveConstraints(com.github.nest.arcteryx.meta.beans.IConstraintContainer)
 			 */
+			@SuppressWarnings("rawtypes")
 			@Override
 			public List<IBeanConstraint> getEffectiveConstraints(IBeanDescriptor descriptor) {
 				return this.getAllConstraints(descriptor);
@@ -277,6 +279,7 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 	 * @param property
 	 * @param classConfiguration
 	 */
+	@SuppressWarnings("rawtypes")
 	protected void buildPropertyConstraint(IBeanPropertyDescriptor property, ClassConfiguration classConfiguration) {
 		IBeanDescriptor bean = property.getBeanDescriptor();
 		Class<?> beanClass = bean.getBeanClass();
@@ -360,6 +363,7 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 			 * 
 			 * @see com.github.nest.arcteryx.meta.beans.internal.validators.AbstractConstraintReorganizer#getEffectiveConstraints(com.github.nest.arcteryx.meta.beans.IConstraintContainer)
 			 */
+			@SuppressWarnings("rawtypes")
 			@Override
 			public List<IBeanPropertyConstraint> getEffectiveConstraints(IBeanPropertyDescriptor descriptor) {
 				return this.getAllConstraints(descriptor);

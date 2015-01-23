@@ -1,18 +1,20 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.constraints;
+package com.github.nest.arcteryx.meta.beans.constraints;
 
 import java.util.Arrays;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.github.nest.arcteryx.meta.beans.annotation.TextFormat;
 
 /**
  * text format constraint
  * 
  * @author brad.wu
  */
-public class TextFormat extends AbstractBeanPropertyConstraint {
+public class TextFormatConstraint extends AbstractBeanPropertyConstraint<TextFormat> {
 	private static final long serialVersionUID = -1615346046005948029L;
 
 	private String[] patterns = null;
@@ -57,6 +59,18 @@ public class TextFormat extends AbstractBeanPropertyConstraint {
 	 */
 	public void setMatchAll(boolean matchAll) {
 		this.matchAll = matchAll;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.constraints.AbstractBeanPropertyConstraint#configure(java.lang.annotation.Annotation)
+	 */
+	@Override
+	public void configure(TextFormat annotation) {
+		super.configure(annotation);
+		this.setPatterns(annotation.patterns());
+		this.setMatchAll(annotation.matchAll());
 	}
 
 	/**

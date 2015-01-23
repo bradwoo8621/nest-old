@@ -6,7 +6,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.defs.LengthDef;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.Length;
+import com.github.nest.arcteryx.meta.beans.constraints.LengthConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 
 /**
@@ -14,7 +14,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.Hiberna
  * 
  * @author brad.wu
  */
-public class LengthConvertor extends AbstractHibernateConstraintConvertor<Length> {
+public class LengthConvertor extends AbstractHibernateConstraintConvertor<LengthConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -23,7 +23,7 @@ public class LengthConvertor extends AbstractHibernateConstraintConvertor<Length
 	@Override
 	protected void registerErrorCode() {
 		HibernateErrorCodeRegistry.registerErrorCode(org.hibernate.validator.constraints.Length.class,
-				Length.class.getSimpleName());
+				LengthConstraint.class.getSimpleName());
 	}
 
 	/**
@@ -33,7 +33,7 @@ public class LengthConvertor extends AbstractHibernateConstraintConvertor<Length
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(Length constraint) {
+	protected ConstraintDef createConstraintDef(LengthConstraint constraint) {
 		return new LengthDef().min(constraint.getMin()).max(constraint.getMax());
 	}
 
@@ -43,7 +43,7 @@ public class LengthConvertor extends AbstractHibernateConstraintConvertor<Length
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<Length> getSupportedConstraintType() {
-		return Length.class;
+	public Class<LengthConstraint> getSupportedConstraintType() {
+		return LengthConstraint.class;
 	}
 }

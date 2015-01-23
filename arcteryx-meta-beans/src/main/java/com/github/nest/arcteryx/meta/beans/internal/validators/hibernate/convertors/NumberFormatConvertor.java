@@ -5,7 +5,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 
 import org.hibernate.validator.cfg.ConstraintDef;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.NumberFormat;
+import com.github.nest.arcteryx.meta.beans.constraints.NumberFormatConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.NumberFormatDef;
 
@@ -14,7 +14,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constra
  * 
  * @author brad.wu
  */
-public class NumberFormatConvertor extends AbstractHibernateConstraintConvertor<NumberFormat> {
+public class NumberFormatConvertor extends AbstractHibernateConstraintConvertor<NumberFormatConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -24,7 +24,7 @@ public class NumberFormatConvertor extends AbstractHibernateConstraintConvertor<
 	protected void registerErrorCode() {
 		HibernateErrorCodeRegistry.registerErrorCode(
 				com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.NumberFormat.class,
-				NumberFormat.class.getSimpleName());
+				NumberFormatConstraint.class.getSimpleName());
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class NumberFormatConvertor extends AbstractHibernateConstraintConvertor<
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(NumberFormat constraint) {
+	protected ConstraintDef createConstraintDef(NumberFormatConstraint constraint) {
 		return new NumberFormatDef().minIntegerDigits(constraint.getMinIntegerDigits())
 				.maxIntegerDigits(constraint.getMaxIntegerDigits())
 				.minFractionDigits(constraint.getMinFractionDigits())
@@ -47,7 +47,7 @@ public class NumberFormatConvertor extends AbstractHibernateConstraintConvertor<
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<NumberFormat> getSupportedConstraintType() {
-		return NumberFormat.class;
+	public Class<NumberFormatConstraint> getSupportedConstraintType() {
+		return NumberFormatConstraint.class;
 	}
 }

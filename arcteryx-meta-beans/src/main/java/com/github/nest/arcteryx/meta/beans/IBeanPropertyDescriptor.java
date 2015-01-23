@@ -23,7 +23,7 @@ public interface IBeanPropertyDescriptor extends IPropertyDescriptor, IConstrain
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	IBeanPropertyConstraint getConstraint();
 
 	/**

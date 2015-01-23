@@ -1,9 +1,11 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.constraints;
+package com.github.nest.arcteryx.meta.beans.constraints;
 
 import java.util.Arrays;
+
+import com.github.nest.arcteryx.meta.beans.annotation.DateRange;
 
 /**
  * date range constraint. default value of {@linkplain #excludeFrom} and
@@ -11,7 +13,7 @@ import java.util.Arrays;
  * 
  * @author brad.wu
  */
-public class DateRange extends AbstractBeanPropertyConstraint {
+public class DateRangeConstraint extends AbstractBeanPropertyConstraint<DateRange> {
 	public static final String NOW = "now";
 	public static final String TODAY = "today";
 	public static final String YESTERDAY = "yesterday";
@@ -114,6 +116,22 @@ public class DateRange extends AbstractBeanPropertyConstraint {
 	 */
 	public void setTolerance(int tolerance) {
 		this.tolerance = tolerance;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.constraints.AbstractBeanPropertyConstraint#configure(java.lang.annotation.Annotation)
+	 */
+	@Override
+	public void configure(DateRange annotation) {
+		super.configure(annotation);
+		this.setFrom(annotation.from());
+		this.setExcludeFrom(annotation.excludeFrom());
+		this.setTo(annotation.to());
+		this.setExcludeTo(annotation.excludeTo());
+		this.setFormat(annotation.format());
+		this.setTolerance(annotation.tolerance());
 	}
 
 	/**

@@ -12,6 +12,7 @@ import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public abstract class AbstractOValPropertyCheckConvertor<C extends IBeanPropertyConstraint> extends
 		AbstractOValCheckConvertor<C> {
 	/**

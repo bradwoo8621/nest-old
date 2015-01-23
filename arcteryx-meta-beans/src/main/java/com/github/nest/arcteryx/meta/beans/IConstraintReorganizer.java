@@ -10,6 +10,7 @@ import java.util.List;
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public interface IConstraintReorganizer<CC extends IConstraintContainer, C extends IConstraint> {
 	/**
 	 * get effective constraints

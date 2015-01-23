@@ -12,6 +12,7 @@ import com.github.nest.arcteryx.meta.beans.IConstraint;
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public interface IHibernateConstraintConvertor<C extends IConstraint> {
 	/**
 	 * convert constraint to hibernate format
@@ -19,7 +20,6 @@ public interface IHibernateConstraintConvertor<C extends IConstraint> {
 	 * @param constraint
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	ConstraintDef convert(C constraint);
 
 	/**

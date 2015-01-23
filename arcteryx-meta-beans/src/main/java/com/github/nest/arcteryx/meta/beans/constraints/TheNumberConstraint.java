@@ -1,9 +1,11 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.constraints;
+package com.github.nest.arcteryx.meta.beans.constraints;
 
 import java.util.Arrays;
+
+import com.github.nest.arcteryx.meta.beans.annotation.TheNumber;
 
 /**
  * constraint of number.<br>
@@ -12,7 +14,7 @@ import java.util.Arrays;
  * 
  * @author brad.wu
  */
-public class TheNumber extends AbstractBeanPropertyConstraint {
+public class TheNumberConstraint extends AbstractBeanPropertyConstraint<TheNumber> {
 	private static final long serialVersionUID = 3305823600464488631L;
 
 	private double min = Double.NEGATIVE_INFINITY;
@@ -78,6 +80,20 @@ public class TheNumber extends AbstractBeanPropertyConstraint {
 	 */
 	public void setExcludeMax(boolean excludeMax) {
 		this.excludeMax = excludeMax;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.constraints.AbstractBeanPropertyConstraint#configure(java.lang.annotation.Annotation)
+	 */
+	@Override
+	public void configure(TheNumber annotation) {
+		super.configure(annotation);
+		this.setMin(annotation.min());
+		this.setExcludeMin(annotation.excludeMin());
+		this.setMax(annotation.max());
+		this.setExcludeMax(annotation.excludeMax());
 	}
 
 	/**

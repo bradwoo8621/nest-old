@@ -21,6 +21,7 @@ import com.github.nest.arcteryx.meta.beans.IConstraint;
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public class BeanPropertyConstraintReorganizer extends
 		AbstractConstraintReorganizer<IBeanPropertyDescriptor, IBeanPropertyConstraint> implements
 		IBeanPropertyConstraintReorganizer {
@@ -29,6 +30,7 @@ public class BeanPropertyConstraintReorganizer extends
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.AbstractConstraintReorganizer#getAllConstraints(com.github.nest.arcteryx.meta.beans.IConstraintContainer)
 	 */
+	@SuppressWarnings("unchecked")
 	public List<IBeanPropertyConstraint> getAllConstraints(IBeanPropertyDescriptor descriptor) {
 		List<IBeanPropertyConstraint> list = new LinkedList<IBeanPropertyConstraint>();
 

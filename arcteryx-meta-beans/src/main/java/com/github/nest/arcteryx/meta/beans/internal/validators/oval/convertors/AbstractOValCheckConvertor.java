@@ -17,6 +17,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.oval.IOValCheckCo
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public abstract class AbstractOValCheckConvertor<C extends IConstraint> implements IOValCheckConvertor<C> {
 	/**
 	 * (non-Javadoc)

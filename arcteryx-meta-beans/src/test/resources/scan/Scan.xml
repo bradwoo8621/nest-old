@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util 
+    	http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<!-- recommended, use bean name generator (will add ArcteryxBeanNameGenerator.PREFIX 
+		as prefix) to simple class name (decapitalize first character) -->
+	<context:component-scan base-package="com.github.nest.arcteryx.meta.beans.scan"
+		name-generator="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanNameGenerator">
+		<context:include-filter type="annotation"
+			expression="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBean" />
+	</context:component-scan>
+
+	<!-- normal, only add special annotation -->
+	<context:component-scan base-package="com.github.nest.arcteryx.meta.beans.scan">
+		<context:include-filter type="annotation"
+			expression="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBean" />
+	</context:component-scan>
+
+	<bean id="ArcteryxBeanHandler"
+		class="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder"
+		p:beanContext-ref="beans.context" />
+
+	<bean id="beans.context"
+		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext"
+		scope="singleton">
+		<!-- operator providers -->
+		<property name="operatorProviders">
+			<map>
+				<entry>
+					<key>
+						<util:constant
+							static-field="com.github.nest.arcteryx.meta.beans.IBeanValidator.CODE" />
+					</key>
+					<bean
+						class="com.github.nest.arcteryx.meta.beans.internal.providers.OValBeanValidatorProvider">
+						<property name="loggerFactory">
+							<bean class="net.sf.oval.logging.LoggerFactorySLF4JImpl" />
+						</property>
+					</bean>
+				</entry>
+			</map>
+		</property>
+		<!-- validation configuration initializer -->
+		<property name="validationConfigurationInitializer">
+			<bean
+				class="com.github.nest.arcteryx.meta.beans.internal.validators.oval.OValValidationConfigurationInitializer" />
+		</property>
+	</bean>
+</beans>

@@ -4,6 +4,7 @@
 package com.github.nest.arcteryx.meta.beans;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
@@ -11,13 +12,14 @@ import java.util.List;
  * 
  * @author brad.wu
  */
-public interface IBeanConstraint extends IConstraint, Serializable {
+public interface IBeanConstraint<ConstraintAnnotatoin extends Annotation> extends IConstraint<ConstraintAnnotatoin>,
+		Serializable {
 	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IConstraint#getConstraintsRecursive()
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	List<IBeanConstraint> getConstraintsRecursive();
 }

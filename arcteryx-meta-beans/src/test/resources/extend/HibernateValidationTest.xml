@@ -48,7 +48,7 @@
 					p:name="age" p:description="Age of Worker">
 					<property name="constraint">
 						<bean
-							class="com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber"
+							class="com.github.nest.arcteryx.meta.beans.constraints.TheNumberConstraint"
 							p:min="1" />
 					</property>
 				</bean>
@@ -67,7 +67,7 @@
 					p:name="age" p:description="Age of Worker">
 					<property name="constraint">
 						<bean
-							class="com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber"
+							class="com.github.nest.arcteryx.meta.beans.constraints.TheNumberConstraint"
 							p:min="20" />
 					</property>
 					<property name="constraintReorganizer">

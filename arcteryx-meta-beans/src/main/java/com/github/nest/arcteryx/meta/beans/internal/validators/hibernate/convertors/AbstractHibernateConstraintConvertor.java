@@ -26,6 +26,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibern
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public abstract class AbstractHibernateConstraintConvertor<C extends IConstraint> implements
 		IHibernateConstraintConvertor<C> {
 	private static Logger logger = LoggerFactory.getLogger(AbstractHibernateConstraintConvertor.class);
@@ -51,7 +52,7 @@ public abstract class AbstractHibernateConstraintConvertor<C extends IConstraint
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#convert(com.github.nest.arcteryx.meta.beans.IConstraint)
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "unchecked" })
 	@Override
 	public ConstraintDef convert(C constraint) {
 		ConstraintDef def = createConstraintDef(constraint);
@@ -127,6 +128,5 @@ public abstract class AbstractHibernateConstraintConvertor<C extends IConstraint
 	 * @param constraint
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
 	protected abstract ConstraintDef createConstraintDef(C constraint);
 }

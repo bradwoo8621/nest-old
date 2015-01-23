@@ -19,9 +19,9 @@ import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanValidator;
 import com.github.nest.arcteryx.meta.beans.IConstraintViolation;
+import com.github.nest.arcteryx.meta.beans.constraints.PropertyConstraints;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext;
-import com.github.nest.arcteryx.meta.beans.internal.constraints.PropertyConstraints;
 
 /**
  * @author brad.wu
@@ -33,6 +33,7 @@ public class OValValidationTest {
 				"/validation/OValValidationTest.xml");
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Test
 	public void testDefinition() {
 		IBeanDescriptorContext context = Context.getContext(OValValidationTest.class.getName()).getBean(

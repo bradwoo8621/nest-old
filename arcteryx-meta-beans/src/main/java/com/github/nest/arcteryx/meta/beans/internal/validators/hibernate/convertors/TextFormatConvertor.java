@@ -5,7 +5,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 
 import org.hibernate.validator.cfg.ConstraintDef;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.TextFormat;
+import com.github.nest.arcteryx.meta.beans.constraints.TextFormatConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.TextFormatDef;
 
@@ -14,7 +14,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constra
  * 
  * @author brad.wu
  */
-public class TextFormatConvertor extends AbstractHibernateConstraintConvertor<TextFormat> {
+public class TextFormatConvertor extends AbstractHibernateConstraintConvertor<TextFormatConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -24,7 +24,7 @@ public class TextFormatConvertor extends AbstractHibernateConstraintConvertor<Te
 	protected void registerErrorCode() {
 		HibernateErrorCodeRegistry.registerErrorCode(
 				com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.TextFormat.class,
-				TextFormat.class.getSimpleName());
+				TextFormatConstraint.class.getSimpleName());
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class TextFormatConvertor extends AbstractHibernateConstraintConvertor<Te
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(TextFormat constraint) {
+	protected ConstraintDef createConstraintDef(TextFormatConstraint constraint) {
 		return new TextFormatDef().matchAll(constraint.isMatchAll()).patterns(constraint.getPatterns());
 	}
 
@@ -44,7 +44,7 @@ public class TextFormatConvertor extends AbstractHibernateConstraintConvertor<Te
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<TextFormat> getSupportedConstraintType() {
-		return TextFormat.class;
+	public Class<TextFormatConstraint> getSupportedConstraintType() {
+		return TextFormatConstraint.class;
 	}
 }

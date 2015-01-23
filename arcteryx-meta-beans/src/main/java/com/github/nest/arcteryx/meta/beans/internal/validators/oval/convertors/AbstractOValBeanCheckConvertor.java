@@ -10,5 +10,6 @@ import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public abstract class AbstractOValBeanCheckConvertor<C extends IBeanConstraint> extends AbstractOValCheckConvertor<C> {
 }

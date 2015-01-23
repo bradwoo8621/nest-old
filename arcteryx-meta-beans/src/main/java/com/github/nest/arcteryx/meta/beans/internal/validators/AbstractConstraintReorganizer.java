@@ -16,6 +16,7 @@ import com.github.nest.arcteryx.meta.beans.IConstraintReorganizer;
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public abstract class AbstractConstraintReorganizer<CC extends IConstraintContainer, C extends IConstraint> implements
 		IConstraintReorganizer<CC, C> {
 	private Map<String, Object> names = null;

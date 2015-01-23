@@ -1,9 +1,15 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.constraints;
+package com.github.nest.arcteryx.meta.beans.constraints;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.nest.arcteryx.meta.beans.ConstraintLevel;
 import com.github.nest.arcteryx.meta.beans.ConstraintSeverity;
@@ -14,7 +20,10 @@ import com.github.nest.arcteryx.meta.beans.IConstraint;
  * 
  * @author brad.wu
  */
-public abstract class AbstractConstraint implements IConstraint {
+public abstract class AbstractConstraint<ConstraintAnnotatoin extends Annotation> implements
+		IConstraint<ConstraintAnnotatoin> {
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	private String name = null;
 	private String errorCode = null;
 	private String messageTemplate = null;
@@ -178,5 +187,55 @@ public abstract class AbstractConstraint implements IConstraint {
 	 */
 	protected final String originalToString() {
 		return super.toString();
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IConstraint#configure(java.lang.annotation.Annotation)
+	 */
+	@Override
+	public void configure(ConstraintAnnotatoin annotation) {
+		Class<?> annotationClass = annotation.getClass();
+		this.setName((String) getValue(getMethod(annotationClass, "name"), annotation));
+		this.setErrorCode((String) getValue(getMethod(annotationClass, "errorCode"), annotation));
+		this.setMessageTemplate((String) getValue(getMethod(annotationClass, "messageTemplate"), annotation));
+		this.setProfiles((String[]) getValue(getMethod(annotationClass, "profiles"), annotation));
+		this.setSeverity((ConstraintSeverity) getValue(getMethod(annotationClass, "severity"), annotation));
+		this.setWhen((String) getValue(getMethod(annotationClass, "when"), annotation));
+	}
+
+	protected Method getMethod(Class<?> clazz, String methodName) {
+		try {
+			return clazz.getDeclaredMethod(methodName, (Class<?>[]) null);
+		} catch (SecurityException e) {
+			if (logger.isWarnEnabled())
+				logger.warn("Method [" + methodName + "] not found in class [" + clazz.getName() + "].", e);
+		} catch (NoSuchMethodException e) {
+			if (logger.isWarnEnabled())
+				logger.warn("Method [" + methodName + "] not found in class [" + clazz.getName() + "].", e);
+		}
+
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> T getValue(Method method, ConstraintAnnotatoin annotation) {
+		try {
+			return (T) method.invoke(annotation, (Object[]) null);
+		} catch (IllegalArgumentException e) {
+			if (logger.isErrorEnabled())
+				logger.error("Failed to get value by method [" + method.getClass().getName() + "#" + method.getName()
+						+ "].", e);
+		} catch (IllegalAccessException e) {
+			if (logger.isErrorEnabled())
+				logger.error("Failed to get value by method [" + method.getClass().getName() + "#" + method.getName()
+						+ "].", e);
+		} catch (InvocationTargetException e) {
+			if (logger.isErrorEnabled())
+				logger.error("Failed to get value by method [" + method.getClass().getName() + "#" + method.getName()
+						+ "].", e);
+		}
+		return null;
 	}
 }

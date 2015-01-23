@@ -5,7 +5,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 
 import org.hibernate.validator.cfg.ConstraintDef;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.NotEmpty;
+import com.github.nest.arcteryx.meta.beans.constraints.NotEmptyConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.NotEmptyDef;
 
@@ -14,7 +14,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constra
  * 
  * @author brad.wu
  */
-public class NotEmptyConvertor extends AbstractHibernateConstraintConvertor<NotEmpty> {
+public class NotEmptyConvertor extends AbstractHibernateConstraintConvertor<NotEmptyConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -24,7 +24,7 @@ public class NotEmptyConvertor extends AbstractHibernateConstraintConvertor<NotE
 	protected void registerErrorCode() {
 		HibernateErrorCodeRegistry.registerErrorCode(
 				com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.NotEmpty.class,
-				NotEmpty.class.getSimpleName());
+				NotEmptyConstraint.class.getSimpleName());
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class NotEmptyConvertor extends AbstractHibernateConstraintConvertor<NotE
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(NotEmpty constraint) {
+	protected ConstraintDef createConstraintDef(NotEmptyConstraint constraint) {
 		return new NotEmptyDef();
 	}
 
@@ -44,7 +44,7 @@ public class NotEmptyConvertor extends AbstractHibernateConstraintConvertor<NotE
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<NotEmpty> getSupportedConstraintType() {
-		return NotEmpty.class;
+	public Class<NotEmptyConstraint> getSupportedConstraintType() {
+		return NotEmptyConstraint.class;
 	}
 }

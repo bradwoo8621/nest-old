@@ -5,7 +5,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 
 import org.hibernate.validator.cfg.ConstraintDef;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.DateRange;
+import com.github.nest.arcteryx.meta.beans.constraints.DateRangeConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.DateRangeDef;
 
@@ -14,7 +14,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constra
  * 
  * @author brad.wu
  */
-public class DateRangeConvertor extends AbstractHibernateConstraintConvertor<DateRange> {
+public class DateRangeConvertor extends AbstractHibernateConstraintConvertor<DateRangeConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -22,7 +22,7 @@ public class DateRangeConvertor extends AbstractHibernateConstraintConvertor<Dat
 	 */
 	@Override
 	protected void registerErrorCode() {
-		HibernateErrorCodeRegistry.registerErrorCode(DateRange.class, DateRange.class.getSimpleName());
+		HibernateErrorCodeRegistry.registerErrorCode(DateRangeConstraint.class, DateRangeConstraint.class.getSimpleName());
 	}
 
 	/**
@@ -32,7 +32,7 @@ public class DateRangeConvertor extends AbstractHibernateConstraintConvertor<Dat
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(DateRange constraint) {
+	protected ConstraintDef createConstraintDef(DateRangeConstraint constraint) {
 		return new DateRangeDef().max(constraint.getTo()).excludeMax(constraint.isExcludeTo())
 				.min(constraint.getFrom()).excludeMin(constraint.isExcludeFrom()).format(constraint.getFormat())
 				.tolerance(constraint.getTolerance());
@@ -44,7 +44,7 @@ public class DateRangeConvertor extends AbstractHibernateConstraintConvertor<Dat
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<DateRange> getSupportedConstraintType() {
-		return DateRange.class;
+	public Class<DateRangeConstraint> getSupportedConstraintType() {
+		return DateRangeConstraint.class;
 	}
 }

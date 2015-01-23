@@ -5,7 +5,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors;
 
 import net.sf.oval.Check;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.DateRange;
+import com.github.nest.arcteryx.meta.beans.constraints.DateRangeConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.DateRangeCheck;
 
 /**
@@ -13,15 +13,15 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.
  * 
  * @author brad.wu
  */
-public class DateRangeConvertor extends AbstractOValPropertyCheckConvertor<DateRange> {
+public class DateRangeConvertor extends AbstractOValPropertyCheckConvertor<DateRangeConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.IOValCheckConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<DateRange> getSupportedConstraintType() {
-		return DateRange.class;
+	public Class<DateRangeConstraint> getSupportedConstraintType() {
+		return DateRangeConstraint.class;
 	}
 
 	/**
@@ -30,7 +30,7 @@ public class DateRangeConvertor extends AbstractOValPropertyCheckConvertor<DateR
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.AbstractOValCheckConvertor#createCheck(com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint)
 	 */
 	@Override
-	protected Check createCheck(DateRange constraint) {
+	protected Check createCheck(DateRangeConstraint constraint) {
 		DateRangeCheck check = new DateRangeCheck();
 		check.setMax(constraint.getTo());
 		check.setExcludeMax(constraint.isExcludeTo());

@@ -3,6 +3,7 @@
  */
 package com.github.nest.arcteryx.meta.beans;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * 
  * @author brad.wu
  */
-public interface IConstraint {
+public interface IConstraint<ConstraintAnnotation extends Annotation> {
 	/**
 	 * get name of constraint. name can be null, if don't want to be removed by
 	 * name in sub classes.
@@ -24,6 +25,7 @@ public interface IConstraint {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	<T extends IConstraint> List<T> getConstraintsRecursive();
 
 	/**
@@ -67,4 +69,11 @@ public interface IConstraint {
 	 * @return
 	 */
 	ConstraintLevel getLevel();
+
+	/**
+	 * configure by annotation
+	 * 
+	 * @param annotation
+	 */
+	void configure(ConstraintAnnotation annotation);
 }

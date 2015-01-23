@@ -1,8 +1,9 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.constraints;
+package com.github.nest.arcteryx.meta.beans.constraints;
 
+import java.lang.annotation.Annotation;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,7 +16,8 @@ import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
  * 
  * @author brad.wu
  */
-public abstract class AbstractBeanPropertyConstraint extends AbstractConstraint implements IBeanPropertyConstraint {
+public abstract class AbstractBeanPropertyConstraint<ConstraintAnnotatoin extends Annotation> extends
+		AbstractConstraint<ConstraintAnnotatoin> implements IBeanPropertyConstraint<ConstraintAnnotatoin> {
 	private static final long serialVersionUID = 7692841064131390892L;
 
 	private String target = null;
@@ -62,6 +64,7 @@ public abstract class AbstractBeanPropertyConstraint extends AbstractConstraint 
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getConstraintsRecursive()
 	 */
+	@SuppressWarnings("rawtypes")
 	@Override
 	public List<IBeanPropertyConstraint> getConstraintsRecursive() {
 		List<IBeanPropertyConstraint> list = new LinkedList<IBeanPropertyConstraint>();
@@ -77,5 +80,18 @@ public abstract class AbstractBeanPropertyConstraint extends AbstractConstraint 
 	@Override
 	public ConstraintLevel getLevel() {
 		return ConstraintLevel.PROPERTY;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.constraints.AbstractConstraint#configure(java.lang.annotation.Annotation)
+	 */
+	@Override
+	public void configure(ConstraintAnnotatoin annotation) {
+		super.configure(annotation);
+		Class<?> annotationClass = annotation.getClass();
+		this.setAppliesTo((ConstraintApplyTo) getValue(getMethod(annotationClass, "appliesTo"), annotation));
+		this.setTarget((String) getValue(getMethod(annotationClass, "target"), annotation));
 	}
 }

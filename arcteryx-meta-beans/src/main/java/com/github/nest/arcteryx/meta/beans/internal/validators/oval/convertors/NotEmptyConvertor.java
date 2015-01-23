@@ -6,21 +6,21 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors;
 import net.sf.oval.Check;
 import net.sf.oval.constraint.NotEmptyCheck;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.NotEmpty;
+import com.github.nest.arcteryx.meta.beans.constraints.NotEmptyConstraint;
 
 /**
  * Not empty convertor
  * 
  * @author brad.wu
  */
-public class NotEmptyConvertor extends AbstractOValPropertyCheckConvertor<NotEmpty> {
+public class NotEmptyConvertor extends AbstractOValPropertyCheckConvertor<NotEmptyConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.AbstractOValCheckConvertor#createCheck(com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint)
 	 */
 	@Override
-	protected Check createCheck(NotEmpty constraint) {
+	protected Check createCheck(NotEmptyConstraint constraint) {
 		return new NotEmptyCheck();
 	}
 
@@ -30,7 +30,7 @@ public class NotEmptyConvertor extends AbstractOValPropertyCheckConvertor<NotEmp
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.IOValCheckConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<NotEmpty> getSupportedConstraintType() {
-		return NotEmpty.class;
+	public Class<NotEmptyConstraint> getSupportedConstraintType() {
+		return NotEmptyConstraint.class;
 	}
 }

@@ -4,6 +4,7 @@
 package com.github.nest.arcteryx.meta.beans;
 
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
 import java.util.List;
 
 /**
@@ -11,7 +12,9 @@ import java.util.List;
  * 
  * @author brad.wu
  */
-public interface IBeanPropertyConstraint extends IConstraint, Serializable {
+@SuppressWarnings("rawtypes")
+public interface IBeanPropertyConstraint<ConstraintAnnotatoin extends Annotation> extends
+		IConstraint<ConstraintAnnotatoin>, Serializable {
 	/**
 	 * (non-Javadoc)
 	 * 

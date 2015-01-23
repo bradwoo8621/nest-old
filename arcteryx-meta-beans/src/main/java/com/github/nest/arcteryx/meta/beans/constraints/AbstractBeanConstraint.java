@@ -1,8 +1,9 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.internal.constraints;
+package com.github.nest.arcteryx.meta.beans.constraints;
 
+import java.lang.annotation.Annotation;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,7 +14,8 @@ import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
  * 
  * @author brad.wu
  */
-public class AbstractBeanConstraint extends AbstractConstraint implements IBeanConstraint {
+public abstract class AbstractBeanConstraint<ConstraintAnnotatoin extends Annotation> extends
+		AbstractConstraint<ConstraintAnnotatoin> implements IBeanConstraint<ConstraintAnnotatoin> {
 	private static final long serialVersionUID = 1279763956572608181L;
 
 	/**
@@ -21,6 +23,7 @@ public class AbstractBeanConstraint extends AbstractConstraint implements IBeanC
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint#getConstraintsRecursive()
 	 */
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public List<IBeanConstraint> getConstraintsRecursive() {
 		List<IBeanConstraint> list = new LinkedList<IBeanConstraint>();

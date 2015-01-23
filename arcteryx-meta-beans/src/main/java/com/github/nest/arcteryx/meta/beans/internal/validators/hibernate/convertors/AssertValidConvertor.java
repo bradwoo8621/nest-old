@@ -7,7 +7,7 @@ import javax.validation.Valid;
 
 import org.hibernate.validator.cfg.ConstraintDef;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.AssertValid;
+import com.github.nest.arcteryx.meta.beans.constraints.AssertValidConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.AssertValidDef;
 
@@ -16,7 +16,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constra
  * 
  * @author brad.wu
  */
-public class AssertValidConvertor extends AbstractHibernateConstraintConvertor<AssertValid> {
+public class AssertValidConvertor extends AbstractHibernateConstraintConvertor<AssertValidConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -24,7 +24,7 @@ public class AssertValidConvertor extends AbstractHibernateConstraintConvertor<A
 	 */
 	@Override
 	protected void registerErrorCode() {
-		HibernateErrorCodeRegistry.registerErrorCode(Valid.class, AssertValid.class.getSimpleName());
+		HibernateErrorCodeRegistry.registerErrorCode(Valid.class, AssertValidConstraint.class.getSimpleName());
 	}
 	/**
 	 * (non-Javadoc)
@@ -33,7 +33,7 @@ public class AssertValidConvertor extends AbstractHibernateConstraintConvertor<A
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(AssertValid constraint) {
+	protected ConstraintDef createConstraintDef(AssertValidConstraint constraint) {
 		return new AssertValidDef();
 	}
 
@@ -43,7 +43,7 @@ public class AssertValidConvertor extends AbstractHibernateConstraintConvertor<A
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<AssertValid> getSupportedConstraintType() {
-		return AssertValid.class;
+	public Class<AssertValidConstraint> getSupportedConstraintType() {
+		return AssertValidConstraint.class;
 	}
 }

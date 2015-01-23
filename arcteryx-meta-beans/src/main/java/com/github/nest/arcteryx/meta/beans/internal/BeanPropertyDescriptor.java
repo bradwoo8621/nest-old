@@ -10,7 +10,7 @@ import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
-import com.github.nest.arcteryx.meta.beans.internal.constraints.PropertyConstraints;
+import com.github.nest.arcteryx.meta.beans.constraints.PropertyConstraints;
 import com.github.nest.arcteryx.meta.internal.PropertyDescriptor;
 
 /**
@@ -22,6 +22,7 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	private static final long serialVersionUID = -8690855571159823110L;
 
 	private Object defaultValue = null;
+	@SuppressWarnings("rawtypes")
 	private IBeanPropertyConstraint constraint = null;
 	private IBeanPropertyConstraintReorganizer constraintReorganizer = null;
 
@@ -48,7 +49,7 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor#getConstraint()
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public IBeanPropertyConstraint getConstraint() {
 		return this.constraint;
@@ -58,6 +59,7 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	 * @param constraint
 	 *            the constraint to set
 	 */
+	@SuppressWarnings("rawtypes")
 	public void setConstraint(IBeanPropertyConstraint constraint) {
 		this.constraint = constraint;
 	}
@@ -85,6 +87,7 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	 * 
 	 * @param constraints
 	 */
+	@SuppressWarnings("rawtypes")
 	public void setConstraints(List<IBeanPropertyConstraint> constraints) {
 		assert constraints != null : "Constraints cannot be null.";
 

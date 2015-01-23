@@ -5,7 +5,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.conver
 
 import org.hibernate.validator.cfg.ConstraintDef;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber;
+import com.github.nest.arcteryx.meta.beans.constraints.TheNumberConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.TheNumberDef;
 
@@ -14,7 +14,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constra
  * 
  * @author brad.wu
  */
-public class TheNumberConvertor extends AbstractHibernateConstraintConvertor<TheNumber> {
+public class TheNumberConvertor extends AbstractHibernateConstraintConvertor<TheNumberConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -24,7 +24,7 @@ public class TheNumberConvertor extends AbstractHibernateConstraintConvertor<The
 	protected void registerErrorCode() {
 		HibernateErrorCodeRegistry.registerErrorCode(
 				com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.TheNumber.class,
-				TheNumber.class.getSimpleName());
+				TheNumberConstraint.class.getSimpleName());
 	}
 
 	/**
@@ -34,7 +34,7 @@ public class TheNumberConvertor extends AbstractHibernateConstraintConvertor<The
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(TheNumber constraint) {
+	protected ConstraintDef createConstraintDef(TheNumberConstraint constraint) {
 		return new TheNumberDef().min(constraint.getMin()).excludeMin(constraint.isExcludeMin())
 				.max(constraint.getMax()).excludeMax(constraint.isExcludeMax());
 	}
@@ -45,7 +45,7 @@ public class TheNumberConvertor extends AbstractHibernateConstraintConvertor<The
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<TheNumber> getSupportedConstraintType() {
-		return TheNumber.class;
+	public Class<TheNumberConstraint> getSupportedConstraintType() {
+		return TheNumberConstraint.class;
 	}
 }

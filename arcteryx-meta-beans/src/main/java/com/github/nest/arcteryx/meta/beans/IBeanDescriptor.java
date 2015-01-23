@@ -27,7 +27,7 @@ public interface IBeanDescriptor extends IResourceDescriptor, IConstraintContain
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	IBeanConstraint getConstraint();
 
 	/**

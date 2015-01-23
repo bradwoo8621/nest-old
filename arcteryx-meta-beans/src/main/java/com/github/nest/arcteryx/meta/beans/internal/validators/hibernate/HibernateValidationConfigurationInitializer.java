@@ -11,7 +11,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import javax.validation.Validation;
@@ -56,6 +55,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convert
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.SizeConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.TextFormatConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.TheNumberConvertor;
+import com.github.nest.arcteryx.meta.beans.utils.ReflectionUtils;
 
 /**
  * hibernate validation configuration initializer.<br>
@@ -239,14 +239,14 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 			PropertyConstraintMappingContext propertyContext = null;
 			String propertyName = property.getName();
 			if (this.isGetterFirst()) {
-				Method method = this.getGetterRecursive(descriptor.getBeanClass(), propertyName);
+				Method method = ReflectionUtils.getGetterRecursive(descriptor.getBeanClass(), propertyName);
 				if (method == null) {
 					propertyContext = context.property(propertyName, ElementType.FIELD);
 				} else {
 					propertyContext = context.property(propertyName, ElementType.METHOD);
 				}
 			} else {
-				Field field = this.getFieldRecursive(descriptor.getBeanClass(), propertyName);
+				Field field = ReflectionUtils.getFieldRecursive(descriptor.getBeanClass(), propertyName);
 				if (field == null) {
 					propertyContext = context.property(propertyName, ElementType.METHOD);
 				} else {
@@ -292,6 +292,7 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 			 * 
 			 * @see com.github.nest.arcteryx.meta.beans.internal.validators.AbstractConstraintReorganizer#getEffectiveConstraints(com.github.nest.arcteryx.meta.beans.IConstraintContainer)
 			 */
+			@SuppressWarnings("rawtypes")
 			@Override
 			public List<IBeanConstraint> getEffectiveConstraints(IBeanDescriptor descriptor) {
 				return this.getAllConstraints(descriptor);
@@ -327,6 +328,7 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 			 * 
 			 * @see com.github.nest.arcteryx.meta.beans.internal.validators.AbstractConstraintReorganizer#getEffectiveConstraints(com.github.nest.arcteryx.meta.beans.IConstraintContainer)
 			 */
+			@SuppressWarnings("rawtypes")
 			@Override
 			public List<IBeanPropertyConstraint> getEffectiveConstraints(IBeanPropertyDescriptor descriptor) {
 				return this.getAllConstraints(descriptor);
@@ -385,53 +387,5 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 	 */
 	public void setIgnoreClassHierarchy(boolean ignoreClassHierarchy) {
 		this.ignoreClassHierarchy = ignoreClassHierarchy;
-	}
-
-	protected Method getGetterRecursive(final Class<?> clazz, final String propertyName) {
-		final Method m = getGetter(clazz, propertyName);
-		if (m != null)
-			return m;
-
-		final Class<?> superclazz = clazz.getSuperclass();
-		if (superclazz == null)
-			return null;
-
-		return getGetterRecursive(superclazz, propertyName);
-	}
-
-	protected Method getGetter(final Class<?> clazz, final String propertyName) {
-		final String appendix = propertyName.substring(0, 1).toUpperCase(Locale.getDefault())
-				+ propertyName.substring(1);
-		try {
-			return clazz.getDeclaredMethod("get" + appendix);
-		} catch (final NoSuchMethodException ex) {
-			logger.trace("getXXX method not found.", ex);
-		}
-		try {
-			return clazz.getDeclaredMethod("is" + appendix);
-		} catch (final NoSuchMethodException ex) {
-			logger.trace("isXXX method not found.", ex);
-			return null;
-		}
-	}
-
-	protected Field getFieldRecursive(final Class<?> clazz, final String fieldName) {
-		final Field f = getField(clazz, fieldName);
-		if (f != null)
-			return f;
-
-		final Class<?> superclazz = clazz.getSuperclass();
-		if (superclazz == null)
-			return null;
-
-		return getFieldRecursive(superclazz, fieldName);
-	}
-
-	protected Field getField(final Class<?> clazz, final String fieldName) {
-		try {
-			return clazz.getDeclaredField(fieldName);
-		} catch (final NoSuchFieldException e) {
-			return null;
-		}
 	}
 }

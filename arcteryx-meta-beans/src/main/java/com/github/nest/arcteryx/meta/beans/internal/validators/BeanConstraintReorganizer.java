@@ -20,6 +20,7 @@ import com.github.nest.arcteryx.meta.beans.IConstraint;
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public class BeanConstraintReorganizer extends AbstractConstraintReorganizer<IBeanDescriptor, IBeanConstraint>
 		implements IBeanConstraintReorganizer {
 	/**
@@ -27,6 +28,7 @@ public class BeanConstraintReorganizer extends AbstractConstraintReorganizer<IBe
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.AbstractConstraintReorganizer#getAllConstraints(com.github.nest.arcteryx.meta.beans.IConstraintContainer)
 	 */
+	@SuppressWarnings("unchecked")
 	protected List<IBeanConstraint> getAllConstraints(IBeanDescriptor descriptor) {
 		List<IBeanConstraint> list = new LinkedList<IBeanConstraint>();
 		// get all constraints

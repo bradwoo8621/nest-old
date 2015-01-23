@@ -12,6 +12,7 @@ import com.github.nest.arcteryx.meta.beans.IConstraint;
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public interface IOValCheckConvertor<C extends IConstraint> {
 	/**
 	 * convert property contraint to OVal check

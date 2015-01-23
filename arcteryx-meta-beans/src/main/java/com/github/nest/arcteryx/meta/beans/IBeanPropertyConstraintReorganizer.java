@@ -8,6 +8,7 @@ package com.github.nest.arcteryx.meta.beans;
  * 
  * @author brad.wu
  */
+@SuppressWarnings("rawtypes")
 public interface IBeanPropertyConstraintReorganizer extends
 		IConstraintReorganizer<IBeanPropertyDescriptor, IBeanPropertyConstraint> {
 }

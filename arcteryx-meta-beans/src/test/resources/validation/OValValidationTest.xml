@@ -56,7 +56,7 @@
 		p:resourceClass="com.github.nest.arcteryx.meta.beans.validation.Person">
 		<property name="constraint">
 			<bean
-				class="com.github.nest.arcteryx.meta.beans.internal.constraints.BeanScript"
+				class="com.github.nest.arcteryx.meta.beans.constraints.BeanScriptConstraint"
 				p:script="groovy:_this.age > 0" p:profile="beanscript" />
 		</property>
 		<property name="properties">
@@ -67,19 +67,19 @@
 					<property name="constraints">
 						<list>
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NotNull"
+								class="com.github.nest.arcteryx.meta.beans.constraints.NotNullConstraint"
 								p:profile="notnull" />
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NotBlank"
+								class="com.github.nest.arcteryx.meta.beans.constraints.NotBlankConstraint"
 								p:profile="notblank" />
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NotEmpty"
+								class="com.github.nest.arcteryx.meta.beans.constraints.NotEmptyConstraint"
 								p:profile="notempty" />
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.Length"
+								class="com.github.nest.arcteryx.meta.beans.constraints.LengthConstraint"
 								p:profile="length" p:min="1" p:max="30" />
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.TextFormat"
+								class="com.github.nest.arcteryx.meta.beans.constraints.TextFormatConstraint"
 								p:profile="textformat" p:pattern="^([A-Z]+.*)$" />
 						</list>
 					</property>
@@ -89,7 +89,7 @@
 					p:name="birthday" p:description="Birthday of person">
 					<property name="constraint">
 						<bean
-							class="com.github.nest.arcteryx.meta.beans.internal.constraints.DateRange"
+							class="com.github.nest.arcteryx.meta.beans.constraints.DateRangeConstraint"
 							p:from="1900/01/01" p:format="yyyy/MM/dd" p:to="today" p:profile="daterange" />
 					</property>
 				</bean>
@@ -98,7 +98,7 @@
 					p:name="email" p:description="Email of person">
 					<property name="constraint">
 						<bean
-							class="com.github.nest.arcteryx.meta.beans.internal.constraints.Email"
+							class="com.github.nest.arcteryx.meta.beans.constraints.EmailConstraint"
 							p:profile="email" />
 					</property>
 				</bean>
@@ -108,13 +108,13 @@
 					<property name="constraints">
 						<list>
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber"
+								class="com.github.nest.arcteryx.meta.beans.constraints.TheNumberConstraint"
 								p:min="1" p:max="200" p:profile="number" />
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NotNegative"
+								class="com.github.nest.arcteryx.meta.beans.constraints.NotNegativeConstraint"
 								p:profile="notnegative" />
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.NumberFormat"
+								class="com.github.nest.arcteryx.meta.beans.constraints.NumberFormatConstraint"
 								p:profile="numberformat" p:minIntegerDigits="1"
 								p:maxIntegerDigits="3" p:maxFractionDigits="0" />
 						</list>
@@ -126,10 +126,10 @@
 					<property name="constraints">
 						<list>
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.Size"
+								class="com.github.nest.arcteryx.meta.beans.constraints.SizeConstraint"
 								p:profile="size" p:min="1" />
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.AssertValid" />
+								class="com.github.nest.arcteryx.meta.beans.constraints.AssertValidConstraint" />
 						</list>
 					</property>
 				</bean>
@@ -139,9 +139,9 @@
 					<property name="constraints">
 						<list>
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.AssertValid" />
+								class="com.github.nest.arcteryx.meta.beans.constraints.AssertValidConstraint" />
 							<bean
-								class="com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber"
+								class="com.github.nest.arcteryx.meta.beans.constraints.TheNumberConstraint"
 								p:min="25" p:max="200" p:profile="target" p:target="age" />
 						</list>
 					</property>

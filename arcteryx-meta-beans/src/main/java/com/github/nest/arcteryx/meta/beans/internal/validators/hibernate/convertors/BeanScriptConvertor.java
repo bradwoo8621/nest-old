@@ -8,7 +8,7 @@ import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.defs.ScriptAssertDef;
 import org.hibernate.validator.constraints.ScriptAssert;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.BeanScript;
+import com.github.nest.arcteryx.meta.beans.constraints.BeanScriptConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationException;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.HibernateErrorCodeRegistry;
 
@@ -17,7 +17,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.Hiberna
  * 
  * @author brad.wu
  */
-public class BeanScriptConvertor extends AbstractHibernateConstraintConvertor<BeanScript> {
+public class BeanScriptConvertor extends AbstractHibernateConstraintConvertor<BeanScriptConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -25,7 +25,7 @@ public class BeanScriptConvertor extends AbstractHibernateConstraintConvertor<Be
 	 */
 	@Override
 	protected void registerErrorCode() {
-		HibernateErrorCodeRegistry.registerErrorCode(ScriptAssert.class, BeanScript.class.getSimpleName());
+		HibernateErrorCodeRegistry.registerErrorCode(ScriptAssert.class, BeanScriptConstraint.class.getSimpleName());
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class BeanScriptConvertor extends AbstractHibernateConstraintConvertor<Be
 	 */
 	@SuppressWarnings("rawtypes")
 	@Override
-	protected ConstraintDef createConstraintDef(BeanScript constraint) {
+	protected ConstraintDef createConstraintDef(BeanScriptConstraint constraint) {
 		String script = constraint.getScript();
 		if (StringUtils.isBlank(script)) {
 			throw new BeanValidationException("Script cannot be empty string.");
@@ -61,7 +61,7 @@ public class BeanScriptConvertor extends AbstractHibernateConstraintConvertor<Be
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.IHibernateConstraintConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<BeanScript> getSupportedConstraintType() {
-		return BeanScript.class;
+	public Class<BeanScriptConstraint> getSupportedConstraintType() {
+		return BeanScriptConstraint.class;
 	}
 }

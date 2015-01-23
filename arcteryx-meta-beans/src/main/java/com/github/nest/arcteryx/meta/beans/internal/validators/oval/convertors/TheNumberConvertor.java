@@ -5,7 +5,7 @@ package com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors;
 
 import net.sf.oval.Check;
 
-import com.github.nest.arcteryx.meta.beans.internal.constraints.TheNumber;
+import com.github.nest.arcteryx.meta.beans.constraints.TheNumberConstraint;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.TheNumberCheck;
 
 /**
@@ -13,15 +13,15 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.oval.constraints.
  * 
  * @author brad.wu
  */
-public class TheNumberConvertor extends AbstractOValPropertyCheckConvertor<TheNumber> {
+public class TheNumberConvertor extends AbstractOValPropertyCheckConvertor<TheNumberConstraint> {
 	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.IOValCheckConvertor#getSupportedConstraintType()
 	 */
 	@Override
-	public Class<TheNumber> getSupportedConstraintType() {
-		return TheNumber.class;
+	public Class<TheNumberConstraint> getSupportedConstraintType() {
+		return TheNumberConstraint.class;
 	}
 
 	/**
@@ -30,7 +30,7 @@ public class TheNumberConvertor extends AbstractOValPropertyCheckConvertor<TheNu
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.AbstractOValCheckConvertor#createCheck(com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint)
 	 */
 	@Override
-	protected Check createCheck(TheNumber constraint) {
+	protected Check createCheck(TheNumberConstraint constraint) {
 		TheNumberCheck check = new TheNumberCheck();
 		check.setMax(constraint.getMax());
 		check.setExcludeMax(constraint.isExcludeMax());

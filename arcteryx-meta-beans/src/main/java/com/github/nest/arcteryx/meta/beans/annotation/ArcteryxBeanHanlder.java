@@ -46,15 +46,27 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 	private Map<Class<? extends IBeanPropertyDescriptor>, IBeanPropertyDescriptorGenerator> propertyDescriptorGenerators = new HashMap<Class<? extends IBeanPropertyDescriptor>, IBeanPropertyDescriptorGenerator>();
 
 	public ArcteryxBeanHanlder() {
-		this.setBeanDescriptorGenerators(initializeGenerators());
+		this.setBeanDescriptorGenerators(initializeBeanDescriptorGenerators());
+		this.setPropertyDescriptorGenerators(initializePropertyDescriptorGenerators());
 	}
 
 	/**
-	 * initialize generators
+	 * initialize bean property descriptor generators
 	 * 
 	 * @return
 	 */
-	protected List<IBeanDescriptorGenerator> initializeGenerators() {
+	protected List<IBeanPropertyDescriptorGenerator> initializePropertyDescriptorGenerators() {
+		List<IBeanPropertyDescriptorGenerator> generators = new LinkedList<IBeanPropertyDescriptorGenerator>();
+		generators.add(new BeanPropertyDescriptorGenerator());
+		return generators;
+	}
+
+	/**
+	 * initialize bean descriptor generators
+	 * 
+	 * @return
+	 */
+	protected List<IBeanDescriptorGenerator> initializeBeanDescriptorGenerators() {
 		List<IBeanDescriptorGenerator> generators = new LinkedList<IBeanDescriptorGenerator>();
 		generators.add(new BeanDescriptorGenerator());
 		return generators;
@@ -172,6 +184,32 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		IConstraint constraint = constraintAnnotation.constraintClass().newInstance();
 		constraint.configure(annotation);
 		return constraint;
+	}
+
+	/**
+	 * generate annotation to constraints
+	 * 
+	 * @param annotations
+	 * @return
+	 * @throws Exception
+	 */
+	@SuppressWarnings("rawtypes")
+	public static List<IConstraint> generateConstraints(Annotation[] annotations) throws Exception {
+		List<IConstraint> constraints = new LinkedList<IConstraint>();
+		if (annotations != null && annotations.length != 0) {
+			for (Annotation annotation : annotations) {
+				if (annotation.annotationType().isAnnotationPresent(Constraint.class)) {
+					constraints.add(createConstraint(annotation));
+				} else if (annotation.annotationType().isAnnotationPresent(Constraints.class)) {
+					final Method getValue = annotation.annotationType().getDeclaredMethod("values", (Class<?>[]) null);
+					final Object[] children = (Object[]) getValue.invoke(annotation, (Object[]) null);
+					for (Object child : children) {
+						constraints.add(createConstraint((Annotation) child));
+					}
+				}
+			}
+		}
+		return constraints;
 	}
 
 	/**
@@ -397,21 +435,8 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		 */
 		@SuppressWarnings("rawtypes")
 		protected void readTypeConstraints(Class<?> beanClass, BeanDescriptor descriptor) throws Exception {
-			Annotation[] annotations = beanClass.getAnnotations();
-			if (annotations != null && annotations.length != 0) {
-				List<IConstraint> constraints = new LinkedList<IConstraint>();
-				for (Annotation annotation : annotations) {
-					if (annotation.annotationType().isAnnotationPresent(Constraint.class)) {
-						constraints.add(createConstraint(annotation));
-					} else if (annotation.annotationType().isAnnotationPresent(Constraints.class)) {
-						final Method getValue = annotation.annotationType().getDeclaredMethod("values",
-								(Class<?>[]) null);
-						final Object[] children = (Object[]) getValue.invoke(annotation, (Object[]) null);
-						for (Object child : children) {
-							constraints.add(createConstraint((Annotation) child));
-						}
-					}
-				}
+			List<IConstraint> constraints = generateConstraints(beanClass.getAnnotations());
+			if (constraints != null && constraints.size() != 0) {
 				descriptor.setConstraints(this.convertToBeanConstraints(constraints));
 			}
 		}
@@ -525,20 +550,8 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 			}
 			// constraints
 			Annotation[] annotations = getAnnotations(field, getter, setter);
-			if (annotations != null && annotations.length != 0) {
-				List<IConstraint> constraints = new LinkedList<IConstraint>();
-				for (Annotation annotation : annotations) {
-					if (annotation.annotationType().isAnnotationPresent(Constraint.class)) {
-						constraints.add(createConstraint(annotation));
-					} else if (annotation.annotationType().isAnnotationPresent(Constraints.class)) {
-						final Method getValue = annotation.annotationType().getDeclaredMethod("values",
-								(Class<?>[]) null);
-						final Object[] children = (Object[]) getValue.invoke(annotation, (Object[]) null);
-						for (Object child : children) {
-							constraints.add(createConstraint((Annotation) child));
-						}
-					}
-				}
+			List<IConstraint> constraints = generateConstraints(annotations);
+			if (constraints != null && constraints.size() != 0) {
 				descriptor.setConstraints(this.convertToPropertyConstraints(constraints));
 			}
 

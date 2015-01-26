@@ -53,26 +53,26 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 		if (descriptor != null) {
 			return (T) descriptor;
 		} else {
-			// find by super class
-			Class<?> superClass = resourceClass.getSuperclass();
-			if (superClass != null) {
-				descriptor = get(superClass);
-			}
-
-			// not defined by super class or no super class
-			if (descriptor != null) {
-				return (T) descriptor;
-			} else {
-				// find by interfaces, traverse all interfaces and their
-				// interfaces until find the first interface with descriptor
-				Class<?>[] interfaces = resourceClass.getInterfaces();
-				for (Class<?> interfaceClass : interfaces) {
-					descriptor = get(interfaceClass);
-					if (descriptor != null) {
-						return (T) descriptor;
-					}
-				}
-			}
+			// // find by super class
+			// Class<?> superClass = resourceClass.getSuperclass();
+			// if (superClass != null) {
+			// descriptor = get(superClass);
+			// }
+			//
+			// // not defined by super class or no super class
+			// if (descriptor != null) {
+			// return (T) descriptor;
+			// } else {
+			// // find by interfaces, traverse all interfaces and their
+			// // interfaces until find the first interface with descriptor
+			// Class<?>[] interfaces = resourceClass.getInterfaces();
+			// for (Class<?> interfaceClass : interfaces) {
+			// descriptor = get(interfaceClass);
+			// if (descriptor != null) {
+			// return (T) descriptor;
+			// }
+			// }
+			// }
 
 			return null;
 		}

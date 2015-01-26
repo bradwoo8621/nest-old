@@ -3,18 +3,40 @@
  */
 package com.github.nest.arcteryx.meta.beans.annotation;
 
-import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraintReorganizer;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * constraint reorganizer
+ * bean property constraint reorganizer
  * 
  * @author brad.wu
  */
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.FIELD, ElementType.METHOD })
+@ConstraintReorganizer(reorganizerClass = com.github.nest.arcteryx.meta.beans.internal.validators.BeanPropertyConstraintReorganizer.class)
 public @interface BeanPropertyConstraintReorganizer {
 	/**
-	 * class of reorganizer
+	 * names to filter
 	 * 
 	 * @return
 	 */
-	Class<? extends IBeanPropertyConstraintReorganizer> reorganizerClass();
+	String[] names() default {};
+
+	/**
+	 * types to filter
+	 * 
+	 * @return
+	 */
+	Class<?>[] types() default {};
+
+	/**
+	 * overwrite all or not, default is true.
+	 * 
+	 * @return
+	 */
+	boolean overwrite() default true;
 }

@@ -49,7 +49,7 @@
 			<list>
 				<bean
 					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
-					p:name="age" p:description="Age of Worker">
+					p:name="age" p:description="Age of Person">
 					<property name="constraint">
 						<bean
 							class="com.github.nest.arcteryx.meta.beans.constraints.TheNumberConstraint"

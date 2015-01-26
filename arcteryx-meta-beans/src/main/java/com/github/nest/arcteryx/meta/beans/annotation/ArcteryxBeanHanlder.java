@@ -7,6 +7,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,11 +24,14 @@ import org.springframework.context.ApplicationContextAware;
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
 import com.github.nest.arcteryx.meta.annotation.AnnotationDefineException;
 import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
+import com.github.nest.arcteryx.meta.beans.IBeanConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
+import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.IConstraint;
+import com.github.nest.arcteryx.meta.beans.IConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.utils.ReflectionUtils;
@@ -45,10 +49,13 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 
 	private Map<Class<? extends IBeanDescriptor>, IBeanDescriptorGenerator> beanDescriptorGenerators = new HashMap<Class<? extends IBeanDescriptor>, IBeanDescriptorGenerator>();
 	private Map<Class<? extends IBeanPropertyDescriptor>, IBeanPropertyDescriptorGenerator> propertyDescriptorGenerators = new HashMap<Class<? extends IBeanPropertyDescriptor>, IBeanPropertyDescriptorGenerator>();
+	@SuppressWarnings("rawtypes")
+	private Map<Class<? extends IConstraintReorganizer>, IConstraintReorganizerGenerator> reorganizerGenerators = new HashMap<Class<? extends IConstraintReorganizer>, IConstraintReorganizerGenerator>();
 
 	public ArcteryxBeanHanlder() {
 		this.setBeanDescriptorGenerators(initializeBeanDescriptorGenerators());
 		this.setPropertyDescriptorGenerators(initializePropertyDescriptorGenerators());
+		this.setConstraintReorganizerGenerators(this.initializeConstraintReorganizerGenerators());
 	}
 
 	/**
@@ -74,6 +81,19 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 	}
 
 	/**
+	 * initialize constraint reorganizer generators
+	 * 
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	protected List<IConstraintReorganizerGenerator> initializeConstraintReorganizerGenerators() {
+		List<IConstraintReorganizerGenerator> generators = new LinkedList<IConstraintReorganizerGenerator>();
+		generators.add(new BeanConstraintReorganizerGenerator());
+		generators.add(new BeanPropetyConstraintReorganizerGenerator());
+		return generators;
+	}
+
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
@@ -90,7 +110,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 				if (logger.isInfoEnabled()) {
 					logger.info("Auto scan bean [" + beanClass.getName() + "]");
 				}
-				initializeBean(beanClass);
+				this.getBeanContext().register(initializeBean(beanClass));
 			}
 		}
 		this.getBeanContext().afterBeanContextInitialized();
@@ -102,26 +122,29 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 	 * @param beanClass
 	 * @throws Exception
 	 */
-	protected void initializeBean(Class<?> beanClass) throws Exception {
+	protected IBeanDescriptor initializeBean(Class<?> beanClass) throws Exception {
 		IBeanDescriptorContext context = this.getBeanContext();
 
 		ArcteryxBean bean = beanClass.getAnnotation(ArcteryxBean.class);
 		Class<?> parentClass = bean.parent();
+		IBeanDescriptor parent = null;
 		if (parentClass != Object.class) {
 			// parent is defined
-			if (context.get(parentClass) == null) {
+			parent = context.get(parentClass);
+			if (parent == null) {
 				// not initialized yet, initialize parent first
-				this.initializeBean(parentClass);
+				parent = this.initializeBean(parentClass);
+				context.register(parent);
 			}
 		}
 		// current bean might be initialized since it is another bean's parent
+		IBeanDescriptor descriptor = context.get(beanClass);
 		if (context.get(beanClass) != null) {
-			return;
+			return descriptor;
 		}
 
 		Class<? extends IBeanDescriptor> descriptorClass = bean.descriptorClass();
-		IBeanDescriptor descriptor = getBeanDescriptorGenerator(descriptorClass).createDescriptor(beanClass);
-		context.register(descriptor);
+		return getBeanDescriptorGenerator(descriptorClass).createDescriptor(beanClass, parent);
 	}
 
 	/**
@@ -143,6 +166,18 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 	protected IBeanPropertyDescriptorGenerator getPropertyDescriptorGenerator(
 			Class<? extends IBeanPropertyDescriptor> descriptorClass) {
 		return propertyDescriptorGenerators.get(descriptorClass);
+	}
+
+	/**
+	 * get constraint reorganizer generator
+	 * 
+	 * @param reorganizerClass
+	 * @return
+	 */
+	@SuppressWarnings("rawtypes")
+	protected IConstraintReorganizerGenerator getConstraintReorganizerGenerator(
+			Class<? extends IConstraintReorganizer> reorganizerClass) {
+		return this.reorganizerGenerators.get(reorganizerClass);
 	}
 
 	/**
@@ -199,6 +234,20 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 	}
 
 	/**
+	 * set constraint reogranizer generators
+	 * 
+	 * @param generators
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void setConstraintReorganizerGenerators(List<IConstraintReorganizerGenerator> generators) {
+		if (generators != null) {
+			for (IConstraintReorganizerGenerator generator : generators) {
+				this.reorganizerGenerators.put(generator.getSupportedClass(), generator);
+			}
+		}
+	}
+
+	/**
 	 * create constraint
 	 * 
 	 * @param annotation
@@ -206,7 +255,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 	 * @throws Exception
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static IConstraint createConstraint(Annotation annotation) throws Exception {
+	protected static IConstraint createConstraint(Annotation annotation) throws Exception {
 		final Constraint constraintAnnotation = annotation.annotationType().getAnnotation(Constraint.class);
 		IConstraint constraint = constraintAnnotation.constraintClass().newInstance();
 		constraint.configure(annotation);
@@ -221,7 +270,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 	 * @throws Exception
 	 */
 	@SuppressWarnings("rawtypes")
-	public static List<IConstraint> generateConstraints(Annotation[] annotations) throws Exception {
+	protected static List<IConstraint> generateConstraints(Annotation[] annotations) throws Exception {
 		List<IConstraint> constraints = new LinkedList<IConstraint>();
 		if (annotations != null && annotations.length != 0) {
 			for (Annotation annotation : annotations) {
@@ -237,6 +286,72 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 			}
 		}
 		return constraints;
+	}
+
+	/**
+	 * 
+	 * @param beanClass
+	 * @return
+	 */
+	protected static Annotation getConstraintReorganizer(Class<?> beanClass) {
+		Annotation reorganizer = null;
+		Annotation[] annotations = beanClass.getAnnotations();
+		for (Annotation annotation : annotations) {
+			if (annotation.annotationType().isAnnotationPresent(ConstraintReorganizer.class)) {
+				if (reorganizer == null) {
+					reorganizer = annotation;
+				} else {
+					throw new AnnotationDefineException("Only one constraint reorganizer annotation can be defined.");
+				}
+			}
+		}
+		return reorganizer;
+	}
+
+	/**
+	 * get constraint reorganizer
+	 * 
+	 * @param field
+	 * @param getter
+	 * @param setter
+	 * @return
+	 */
+	protected static Annotation getConstraintReorganizer(Field field, Method getter, Method setter) {
+		Annotation[] a1 = field == null ? null : field.getAnnotations();
+		Annotation[] a2 = getter == null ? null : getter.getAnnotations();
+		Annotation[] a3 = setter == null ? null : setter.getAnnotations();
+		List<Annotation> all = new LinkedList<Annotation>();
+		all.addAll(filterAnnotations(a1, ConstraintReorganizer.class));
+		all.addAll(filterAnnotations(a2, ConstraintReorganizer.class));
+		all.addAll(filterAnnotations(a3, ConstraintReorganizer.class));
+		if (all.size() == 0) {
+			return null;
+		} else if (all.size() == 1) {
+			return all.get(0);
+		} else {
+			throw new AnnotationDefineException("Constraint reogranizer @ property [" + field.getName() + "@"
+					+ field.getType().getName() + "] defines repeated, only one is allowed.");
+		}
+	}
+
+	/**
+	 * filter annotations by given class
+	 * 
+	 * @param annotations
+	 * @param annotationClass
+	 * @return
+	 */
+	protected static Collection<Annotation> filterAnnotations(Annotation[] annotations,
+			Class<? extends Annotation> annotationClass) {
+		List<Annotation> all = new LinkedList<Annotation>();
+		if (annotations != null) {
+			for (Annotation annotation : annotations) {
+				if (annotation.annotationType().isAnnotationPresent(annotationClass)) {
+					all.add(annotation);
+				}
+			}
+		}
+		return all;
 	}
 
 	/**
@@ -271,11 +386,12 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		 * create descriptor
 		 * 
 		 * @param beanClass
+		 * @param parent
 		 * 
 		 * @return
 		 * @throws Exception
 		 */
-		IBeanDescriptor createDescriptor(Class<?> beanClass) throws Exception;
+		IBeanDescriptor createDescriptor(Class<?> beanClass, IBeanDescriptor parent) throws Exception;
 	}
 
 	/**
@@ -373,20 +489,25 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		/**
 		 * (non-Javadoc)
 		 * 
-		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.IBeanDescriptorGenerator#createDescriptor(java.lang.Class)
+		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.IBeanDescriptorGenerator#createDescriptor(java.lang.Class,
+		 *      com.github.nest.arcteryx.meta.beans.IBeanDescriptor)
 		 */
+		@SuppressWarnings("unchecked")
 		@Override
-		public IBeanDescriptor createDescriptor(Class<?> beanClass) throws Exception {
+		public IBeanDescriptor createDescriptor(Class<?> beanClass, IBeanDescriptor parent) throws Exception {
 			BeanDescriptor descriptor = createDescriptor();
 			ArcteryxBean bean = beanClass.getAnnotation(ArcteryxBean.class);
 			descriptor.setName(bean.name());
 			descriptor.setBeanClass(beanClass);
 			descriptor.setDescription(bean.description());
-			// TODO how to set parent?
+			descriptor.setParent(parent);
 			// constraint reorganizer
-			BeanConstraintReorganizer reorganizer = beanClass.getAnnotation(BeanConstraintReorganizer.class);
+			Annotation reorganizer = getConstraintReorganizer(beanClass);
 			if (reorganizer != null) {
-				descriptor.setConstraintReorganizer(reorganizer.reorganizerClass().newInstance());
+				descriptor.setConstraintReorganizer((IBeanConstraintReorganizer) getHandler()
+						.getConstraintReorganizerGenerator(
+								reorganizer.annotationType().getAnnotation(ConstraintReorganizer.class)
+										.reorganizerClass()).createReorganizer(reorganizer));
 			}
 			// constraints
 			readTypeConstraints(beanClass, descriptor);
@@ -560,7 +681,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		 * 
 		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.IBeanPropertyDescriptorGenerator#readAdvanced(com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor)
 		 */
-		@SuppressWarnings("rawtypes")
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		@Override
 		public void readAdvanced(IBeanPropertyDescriptor property) throws Exception {
 			BeanPropertyDescriptor descriptor = (BeanPropertyDescriptor) property;
@@ -572,9 +693,12 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 			Method setter = ReflectionUtils.getSetter(beanClass, propertyName);
 
 			// reorganizer
-			BeanPropertyConstraintReorganizer reorganizer = getConstraintReorganizer(field, getter, setter);
+			Annotation reorganizer = getConstraintReorganizer(field, getter, setter);
 			if (reorganizer != null) {
-				descriptor.setConstraintReorganizer(reorganizer.reorganizerClass().newInstance());
+				descriptor.setConstraintReorganizer((IBeanPropertyConstraintReorganizer) getHandler()
+						.getConstraintReorganizerGenerator(
+								reorganizer.annotationType().getAnnotation(ConstraintReorganizer.class)
+										.reorganizerClass()).createReorganizer(reorganizer));
 			}
 			// constraints
 			Annotation[] annotations = getAnnotations(field, getter, setter);
@@ -661,31 +785,124 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 			}
 			return list.toArray(new Annotation[list.size()]);
 		}
+	}
 
+	/**
+	 * constraint reorganizer generator
+	 * 
+	 * @author brad.wu
+	 *
+	 */
+	public static interface IConstraintReorganizerGenerator<A extends Annotation> {
 		/**
-		 * get constraint reorganizer
+		 * get supported class
 		 * 
-		 * @param field
-		 * @param getter
-		 * @param setter
 		 * @return
 		 */
-		protected BeanPropertyConstraintReorganizer getConstraintReorganizer(Field field, Method getter, Method setter) {
-			BeanPropertyConstraintReorganizer r1 = field == null ? null : field
-					.getAnnotation(BeanPropertyConstraintReorganizer.class);
-			BeanPropertyConstraintReorganizer r2 = getter == null ? null : getter
-					.getAnnotation(BeanPropertyConstraintReorganizer.class);
-			BeanPropertyConstraintReorganizer r3 = setter == null ? null : setter
-					.getAnnotation(BeanPropertyConstraintReorganizer.class);
-			if (r1 == null && r2 == null && r3 == null) {
-				return null;
-			} else if ((r1 != null && (r2 != null || r3 != null)) || (r2 != null && (r1 != null || r3 != null))
-					|| (r3 != null && (r1 != null || r2 != null))) {
-				throw new AnnotationDefineException("Constraint reogranizer @ property [" + field.getName() + "@"
-						+ field.getType().getName() + "] defines repeated, only one is allowed.");
-			} else {
-				return r1 == null ? (r2 == null ? r3 : r2) : r1;
+		@SuppressWarnings("rawtypes")
+		Class<? extends IConstraintReorganizer> getSupportedClass();
+
+		/**
+		 * create reorganizer
+		 * 
+		 * @param annotation
+		 * @return
+		 */
+		@SuppressWarnings("rawtypes")
+		IConstraintReorganizer createReorganizer(A annotation);
+	}
+
+	public static class BeanConstraintReorganizerGenerator implements
+			IConstraintReorganizerGenerator<BeanConstraintReorganizer> {
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.IConstraintReorganizerGenerator#getSupportedClass()
+		 */
+		@SuppressWarnings("rawtypes")
+		@Override
+		public Class<? extends IConstraintReorganizer> getSupportedClass() {
+			return com.github.nest.arcteryx.meta.beans.internal.validators.BeanConstraintReorganizer.class;
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.IConstraintReorganizerGenerator#createReorganizer(java.lang.annotation.Annotation)
+		 */
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@Override
+		public IConstraintReorganizer createReorganizer(BeanConstraintReorganizer annotation) {
+			com.github.nest.arcteryx.meta.beans.internal.validators.BeanConstraintReorganizer reorganizer = new com.github.nest.arcteryx.meta.beans.internal.validators.BeanConstraintReorganizer();
+			String[] names = annotation.names();
+			if (names != null) {
+				reorganizer.setSkippedConstraintNames(Arrays.asList(names));
 			}
+			Class<?>[] types = annotation.types();
+			if (types != null) {
+				List<Class<? extends IBeanConstraint>> list = new LinkedList<Class<? extends IBeanConstraint>>();
+				for (Class<?> type : types) {
+					if (IBeanConstraint.class.isAssignableFrom(type)) {
+						list.add((Class<? extends IBeanConstraint>) type);
+					} else if (type.isAnnotation()) {
+						list.add((Class<? extends IBeanConstraint>) type.getAnnotation(Constraint.class)
+								.constraintClass());
+					} else {
+						throw new AnnotationDefineException("Type [" + type
+								+ "] of BeanConstraintReorganizer is not accepted.");
+					}
+				}
+				reorganizer.setSkippedConstraintTypes(list);
+			}
+			reorganizer.setOverwrite(annotation.overwrite());
+			return reorganizer;
+		}
+	}
+
+	public static class BeanPropetyConstraintReorganizerGenerator implements
+			IConstraintReorganizerGenerator<BeanPropertyConstraintReorganizer> {
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.IConstraintReorganizerGenerator#getSupportedClass()
+		 */
+		@SuppressWarnings("rawtypes")
+		@Override
+		public Class<? extends IConstraintReorganizer> getSupportedClass() {
+			return com.github.nest.arcteryx.meta.beans.internal.validators.BeanPropertyConstraintReorganizer.class;
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.IConstraintReorganizerGenerator#createReorganizer(java.lang.annotation.Annotation)
+		 */
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@Override
+		public IConstraintReorganizer createReorganizer(BeanPropertyConstraintReorganizer annotation) {
+			com.github.nest.arcteryx.meta.beans.internal.validators.BeanPropertyConstraintReorganizer reorganizer = new com.github.nest.arcteryx.meta.beans.internal.validators.BeanPropertyConstraintReorganizer();
+			String[] names = annotation.names();
+			if (names != null) {
+				reorganizer.setSkippedConstraintNames(Arrays.asList(names));
+			}
+			Class<?>[] types = annotation.types();
+			if (types != null) {
+				List<Class<? extends IBeanPropertyConstraint>> list = new LinkedList<Class<? extends IBeanPropertyConstraint>>();
+				for (Class<?> type : types) {
+					if (IBeanConstraint.class.isAssignableFrom(type)) {
+						list.add((Class<? extends IBeanPropertyConstraint>) type);
+					} else if (type.isAnnotation()) {
+						list.add((Class<? extends IBeanPropertyConstraint>) type.getAnnotation(Constraint.class)
+								.constraintClass());
+					} else {
+						throw new AnnotationDefineException("Type [" + type
+								+ "] of BeanPropertyConstraintReorganizer is not accepted.");
+					}
+				}
+				reorganizer.setSkippedConstraintTypes(list);
+			}
+			reorganizer.setOverwrite(annotation.overwrite());
+			return reorganizer;
 		}
 	}
 }

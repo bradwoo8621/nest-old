@@ -55,7 +55,7 @@ public @interface BeanScript {
 	 * 
 	 * @return
 	 */
-	ConstraintSeverity severity();
+	ConstraintSeverity severity() default ConstraintSeverity.ERROR;
 
 	/**
 	 * when

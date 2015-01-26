@@ -58,7 +58,7 @@ public class SizeConstraint extends AbstractBeanPropertyConstraint<Size> {
 	 */
 	@Override
 	public ConstraintApplyTo getAppliesTo() {
-		return ConstraintApplyTo.CONTAINER;
+		return super.getAppliesTo() == null ? ConstraintApplyTo.CONTAINER : super.getAppliesTo();
 	}
 
 	/**

@@ -56,7 +56,7 @@ public @interface TextFormat {
 	 * 
 	 * @return
 	 */
-	ConstraintSeverity severity();
+	ConstraintSeverity severity() default ConstraintSeverity.ERROR;
 
 	/**
 	 * when
@@ -70,7 +70,7 @@ public @interface TextFormat {
 	 * 
 	 * @return
 	 */
-	ConstraintApplyTo appliesTo();
+	ConstraintApplyTo appliesTo() default ConstraintApplyTo.VALUES;
 
 	/**
 	 * target

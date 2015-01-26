@@ -90,12 +90,38 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 				if (logger.isInfoEnabled()) {
 					logger.info("Auto scan bean [" + beanClass.getName() + "]");
 				}
-				ArcteryxBean bean = beanClass.getAnnotation(ArcteryxBean.class);
-				Class<? extends IBeanDescriptor> descriptorClass = bean.descriptorClass();
-				IBeanDescriptor descriptor = getBeanDescriptorGenerator(descriptorClass).createDescriptor(beanClass);
-				this.getBeanContext().register(descriptor);
+				initializeBean(beanClass);
 			}
 		}
+		this.getBeanContext().afterBeanContextInitialized();
+	}
+
+	/**
+	 * initialize bean
+	 * 
+	 * @param beanClass
+	 * @throws Exception
+	 */
+	protected void initializeBean(Class<?> beanClass) throws Exception {
+		IBeanDescriptorContext context = this.getBeanContext();
+
+		ArcteryxBean bean = beanClass.getAnnotation(ArcteryxBean.class);
+		Class<?> parentClass = bean.parent();
+		if (parentClass != Object.class) {
+			// parent is defined
+			if (context.get(parentClass) == null) {
+				// not initialized yet, initialize parent first
+				this.initializeBean(parentClass);
+			}
+		}
+		// current bean might be initialized since it is another bean's parent
+		if (context.get(beanClass) != null) {
+			return;
+		}
+
+		Class<? extends IBeanDescriptor> descriptorClass = bean.descriptorClass();
+		IBeanDescriptor descriptor = getBeanDescriptorGenerator(descriptorClass).createDescriptor(beanClass);
+		context.register(descriptor);
 	}
 
 	/**

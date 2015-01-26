@@ -44,4 +44,11 @@ public @interface ArcteryxBean {
 	 * @return
 	 */
 	Class<? extends IBeanDescriptor> descriptorClass() default BeanDescriptor.class;
+
+	/**
+	 * parent of bean, normally is super class, or choose one of the interfaces.
+	 * 
+	 * @return
+	 */
+	Class<?> parent() default Object.class;
 }

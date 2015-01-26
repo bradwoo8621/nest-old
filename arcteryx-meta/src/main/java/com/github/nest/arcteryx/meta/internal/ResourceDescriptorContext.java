@@ -42,6 +42,21 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	/**
 	 * (non-Javadoc)
 	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getRecursive(java.lang.Object)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends IResourceDescriptor> T getRecursive(Object resource) {
+		assert resource != null : "Resource instance cannot be null.";
+
+		Class<?> clazz = resource.getClass();
+		IResourceDescriptor descriptor = getRecursive(clazz);
+		return (T) descriptor;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#get(java.lang.Class)
 	 */
 	@SuppressWarnings("unchecked")
@@ -53,26 +68,52 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 		if (descriptor != null) {
 			return (T) descriptor;
 		} else {
-			// // find by super class
-			// Class<?> superClass = resourceClass.getSuperclass();
-			// if (superClass != null) {
-			// descriptor = get(superClass);
-			// }
-			//
-			// // not defined by super class or no super class
-			// if (descriptor != null) {
-			// return (T) descriptor;
-			// } else {
-			// // find by interfaces, traverse all interfaces and their
-			// // interfaces until find the first interface with descriptor
-			// Class<?>[] interfaces = resourceClass.getInterfaces();
-			// for (Class<?> interfaceClass : interfaces) {
-			// descriptor = get(interfaceClass);
-			// if (descriptor != null) {
-			// return (T) descriptor;
-			// }
-			// }
-			// }
+			return null;
+		}
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getRecursive(java.lang.Class)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends IResourceDescriptor> T getRecursive(Class<?> resourceClass) {
+		assert resourceClass != null : "Resource class cannot be null.";
+
+		IResourceDescriptor descriptor = map.get(resourceClass);
+		if (descriptor != null) {
+			return (T) descriptor;
+		} else {
+			// find by super class
+			Class<?> superClass = resourceClass.getSuperclass();
+			if (superClass != null) {
+				descriptor = get(superClass);
+			}
+
+			// not defined by super class or no super class
+			if (descriptor != null) {
+				return (T) descriptor;
+			} else {
+				// find by interfaces, traverse all interfaces and their
+				// interfaces until find the first interface with descriptor
+				Class<?>[] interfaces = resourceClass.getInterfaces();
+				for (Class<?> interfaceClass : interfaces) {
+					descriptor = getRecursive(interfaceClass);
+					if (descriptor != null) {
+						return (T) descriptor;
+					}
+				}
+				
+				interfaces = superClass.getInterfaces();
+				for (Class<?> interfaceClass : interfaces) {
+					descriptor = getRecursive(interfaceClass);
+					if (descriptor != null) {
+						return (T) descriptor;
+					}
+				}
+			}
 
 			return null;
 		}

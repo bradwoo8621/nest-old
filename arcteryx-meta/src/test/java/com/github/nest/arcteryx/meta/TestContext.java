@@ -38,7 +38,7 @@ public class TestContext {
 	public void testWorker() {
 		IResourceDescriptorContext resourceContext = context.getBean("descriptor.context",
 				IResourceDescriptorContext.class);
-		IResourceDescriptor descriptor = resourceContext.get(Worker.class);
+		IResourceDescriptor descriptor = resourceContext.getRecursive(Worker.class);
 		assertEquals("Person", descriptor.getName());
 		assertEquals("A person", descriptor.getDescription());
 
@@ -50,7 +50,7 @@ public class TestContext {
 			}
 		}
 
-		IResourceDescriptor descriptor1 = resourceContext.get(new Worker());
+		IResourceDescriptor descriptor1 = resourceContext.getRecursive(new Worker());
 		assertEquals(descriptor, descriptor1);
 	}
 

@@ -20,12 +20,28 @@ public interface IResourceDescriptorContext {
 	<T extends IResourceDescriptor> T get(Object resource);
 
 	/**
+	 * get descriptor by given resource, or its ancestors
+	 * 
+	 * @param resource
+	 * @return
+	 */
+	<T extends IResourceDescriptor> T getRecursive(Object resource);
+
+	/**
 	 * get descriptor by given resource class
 	 * 
 	 * @param resourceClass
 	 * @return
 	 */
 	<T extends IResourceDescriptor> T get(Class<?> resourceClass);
+
+	/**
+	 * get descriptor by given resource class, or its ancestors
+	 * 
+	 * @param resourceClass
+	 * @return
+	 */
+	<T extends IResourceDescriptor> T getRecursive(Class<?> resourceClass);
 
 	/**
 	 * put resource descriptor pair into repository

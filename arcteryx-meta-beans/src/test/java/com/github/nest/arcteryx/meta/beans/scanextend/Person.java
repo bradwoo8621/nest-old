@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.scan.extend;
+package com.github.nest.arcteryx.meta.beans.scanextend;
 
 import com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBean;
 import com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanProperty;

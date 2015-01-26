@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.scan.extend;
+package com.github.nest.arcteryx.meta.beans.scanextend;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,7 +25,7 @@ public class ScanExtendOValValidationTest {
 	@BeforeClass
 	public static void initialize() {
 		Context.createApplicationContextByClassPath(ScanExtendOValValidationTest.class.getName(),
-				"/scan/extend/OValValidationTest.xml");
+				"/scanextend/ScanExtend.xml");
 	}
 
 	@Test

@@ -20,7 +20,7 @@ import com.github.nest.arcteryx.meta.beans.constraints.PropertyScriptConstraint;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.TYPE })
+@Target({ ElementType.FIELD, ElementType.METHOD })
 @Constraint(constraintClass = PropertyScriptConstraint.class)
 public @interface PropertyScript {
 	/**

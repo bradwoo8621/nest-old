@@ -12,6 +12,8 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.nest.arcteryx.meta.ResourceException;
+
 /**
  * reflection utils
  * 
@@ -112,7 +114,7 @@ public class ReflectionUtils {
 		} else if (StringUtils.startsWith(name, "get") && length > 3) {
 			name = WordUtils.uncapitalize(StringUtils.substring(name, 3));
 		} else {
-			throw new RuntimeException("Method [" + getterOrSetter.getClass().getName() + "#" + name
+			throw new ResourceException("Method [" + getterOrSetter.getClass().getName() + "#" + name
 					+ "] is not a getter/setter method.");
 		}
 		return name;

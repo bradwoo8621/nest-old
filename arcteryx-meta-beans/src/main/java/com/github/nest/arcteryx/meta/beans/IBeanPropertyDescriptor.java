@@ -19,6 +19,13 @@ public interface IBeanPropertyDescriptor extends IPropertyDescriptor, IConstrain
 	Object getDefaultValue();
 
 	/**
+	 * get default value format
+	 * 
+	 * @return
+	 */
+	String getDefaultValueFormat();
+
+	/**
 	 * get property constraint
 	 * 
 	 * @return

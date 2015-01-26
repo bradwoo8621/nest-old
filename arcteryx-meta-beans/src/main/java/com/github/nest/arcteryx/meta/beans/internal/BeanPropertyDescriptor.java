@@ -22,6 +22,7 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	private static final long serialVersionUID = -8690855571159823110L;
 
 	private Object defaultValue = null;
+	private String defaultValueFormat = null;
 	@SuppressWarnings("rawtypes")
 	private IBeanPropertyConstraint constraint = null;
 	private IBeanPropertyConstraintReorganizer constraintReorganizer = null;
@@ -42,6 +43,24 @@ public class BeanPropertyDescriptor extends PropertyDescriptor implements IBeanP
 	 */
 	public void setDefaultValue(Object defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor#getDefaultValueFormat()
+	 */
+	@Override
+	public String getDefaultValueFormat() {
+		return defaultValueFormat;
+	}
+
+	/**
+	 * @param defaultValueFormat
+	 *            the defaultValueFormat to set
+	 */
+	public void setDefaultValueFormat(String defaultValueFormat) {
+		this.defaultValueFormat = defaultValueFormat;
 	}
 
 	/**

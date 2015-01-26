@@ -3,12 +3,14 @@
  */
 package com.github.nest.sparrow.enums;
 
+import com.github.nest.arcteryx.meta.ResourceException;
+
 /**
  * enumeration exception
  * 
  * @author brad.wu
  */
-public class EnumException extends RuntimeException {
+public class EnumException extends ResourceException {
 	private static final long serialVersionUID = 282834873361285381L;
 
 	public EnumException() {

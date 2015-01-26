@@ -21,6 +21,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
+import com.github.nest.arcteryx.meta.annotation.AnnotationDefineException;
 import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext;
@@ -418,10 +419,11 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 				IBeanPropertyDescriptor property = this.getHandler().getPropertyDescriptorGenerator(descriptorClass)
 						.createDescriptor(method);
 				if (map.containsKey(property.getName())) {
-					throw new RuntimeException("Property [" + property.getName() + "@" + beanClass.getName()
+					throw new AnnotationDefineException("Property [" + property.getName() + "@" + beanClass.getName()
 							+ "] already defined in other field/method, only one is allowed.");
 				}
 				properties.add(property);
+				map.put(property.getName(), null);
 			}
 			descriptor.setProperties(properties);
 		}
@@ -555,7 +557,35 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 				descriptor.setConstraints(this.convertToPropertyConstraints(constraints));
 			}
 
-			// TODO default value
+			// default value
+			DefaultValue defaultValue = getDefaultValue(field, getter, setter);
+			if (defaultValue != null) {
+				descriptor.setDefaultValue(defaultValue.value());
+				descriptor.setDefaultValueFormat(defaultValue.format());
+			}
+		}
+
+		/**
+		 * get default value annotation
+		 * 
+		 * @param field
+		 * @param getter
+		 * @param setter
+		 * @return
+		 */
+		protected DefaultValue getDefaultValue(Field field, Method getter, Method setter) {
+			DefaultValue dv1 = field == null ? null : field.getAnnotation(DefaultValue.class);
+			DefaultValue dv2 = getter == null ? null : getter.getAnnotation(DefaultValue.class);
+			DefaultValue dv3 = setter == null ? null : setter.getAnnotation(DefaultValue.class);
+			if (dv1 == null && dv2 == null && dv3 == null) {
+				return null;
+			} else if ((dv1 != null && (dv2 != null || dv3 != null)) || (dv2 != null && (dv1 != null || dv3 != null))
+					|| (dv3 != null && (dv1 != null || dv2 != null))) {
+				throw new AnnotationDefineException("Default value @ property [" + field.getName() + "@"
+						+ field.getType().getName() + "] defines repeated, only one is allowed.");
+			} else {
+				return dv1 == null ? (dv2 == null ? dv3 : dv2) : dv1;
+			}
 		}
 
 		/**
@@ -573,6 +603,14 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 			return list;
 		}
 
+		/**
+		 * get all annotations in field/getter/setter
+		 * 
+		 * @param field
+		 * @param getter
+		 * @param setter
+		 * @return
+		 */
 		protected Annotation[] getAnnotations(Field field, Method getter, Method setter) {
 			Annotation[] a1 = field == null ? null : field.getAnnotations();
 			Annotation[] a2 = getter == null ? null : getter.getAnnotations();
@@ -617,7 +655,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 				return null;
 			} else if ((r1 != null && (r2 != null || r3 != null)) || (r2 != null && (r1 != null || r3 != null))
 					|| (r3 != null && (r1 != null || r2 != null))) {
-				throw new RuntimeException("Constraint reogranizer @ property [" + field.getName() + "@"
+				throw new AnnotationDefineException("Constraint reogranizer @ property [" + field.getName() + "@"
 						+ field.getType().getName() + "] defines repeated, only one is allowed.");
 			} else {
 				return r1 == null ? (r2 == null ? r3 : r2) : r1;

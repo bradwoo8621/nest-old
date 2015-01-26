@@ -51,7 +51,7 @@ public class HibernateBeanValidator extends AbstractBeanValidator {
 				try {
 					list.add(Class.forName(profile));
 				} catch (ClassNotFoundException e) {
-					throw new BeanValidationException("Profile [" + profile + "]cannot case to class.");
+					throw new BeanValidationException("Profile [" + profile + "] cannot cast to class.");
 				}
 			}
 			if (list.size() == 0) {

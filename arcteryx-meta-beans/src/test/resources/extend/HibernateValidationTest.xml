@@ -58,8 +58,7 @@
 	<bean id="Worker"
 		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor"
 		scope="singleton" p:name="Worker" p:description="A worker"
-		p:resourceClass="com.github.nest.arcteryx.meta.beans.extend.Worker"
-		p:parent-ref="Person">
+		p:resourceClass="com.github.nest.arcteryx.meta.beans.extend.Worker">
 		<property name="properties">
 			<list>
 				<bean

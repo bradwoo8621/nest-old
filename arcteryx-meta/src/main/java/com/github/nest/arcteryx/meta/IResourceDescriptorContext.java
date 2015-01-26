@@ -4,6 +4,7 @@
 package com.github.nest.arcteryx.meta;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * resource descriptor repository interface
@@ -25,7 +26,7 @@ public interface IResourceDescriptorContext {
 	 * @param resource
 	 * @return
 	 */
-	<T extends IResourceDescriptor> T getRecursive(Object resource);
+	<T extends IResourceDescriptor> List<T> getRecursive(Object resource);
 
 	/**
 	 * get descriptor by given resource class
@@ -36,12 +37,30 @@ public interface IResourceDescriptorContext {
 	<T extends IResourceDescriptor> T get(Class<?> resourceClass);
 
 	/**
-	 * get descriptor by given resource class, or its ancestors
+	 * get descriptor by given resource class, and its ancestors. super class
+	 * has higher priority than interfaces.<br>
+	 * eg.<br>
+	 * <ul>
+	 * <li>interface IInterface</li>
+	 * <li>interface IInterface2</li>
+	 * <li>class SuperClass implements IInterface, IInterface2</li>
+	 * <li>interface IInterface3</li>
+	 * <li>class AClass extends SuperClass implements IInterface3</li>
+	 * </ul>
+	 * the elements of return list is
+	 * <ul>
+	 * <li>AClass</li>
+	 * <li>SuperClass</li>
+	 * <li>IInterface2</li>
+	 * <li>IInterface</li>
+	 * <li>IInterface3</li>
+	 * </ul>
+	 * 
 	 * 
 	 * @param resourceClass
 	 * @return
 	 */
-	<T extends IResourceDescriptor> T getRecursive(Class<?> resourceClass);
+	<T extends IResourceDescriptor> List<T> getRecursive(Class<?> resourceClass);
 
 	/**
 	 * put resource descriptor pair into repository

@@ -17,7 +17,7 @@
 	<bean id="descriptor.IStuduent"
 		class="com.github.nest.arcteryx.meta.internal.ResourceDescriptor"
 		scope="singleton" p:name="Student" p:description="A student"
-		p:resourceClass="com.github.nest.arcteryx.meta.IStudent" p:parent-ref="descriptor.IPerson">
+		p:resourceClass="com.github.nest.arcteryx.meta.IStudent">
 		<property name="properties">
 			<list>
 				<bean class="com.github.nest.arcteryx.meta.internal.PropertyDescriptor"

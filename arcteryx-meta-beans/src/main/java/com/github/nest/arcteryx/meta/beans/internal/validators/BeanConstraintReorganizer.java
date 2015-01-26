@@ -32,16 +32,15 @@ public class BeanConstraintReorganizer extends AbstractConstraintReorganizer<IBe
 	protected List<IBeanConstraint> getAllConstraints(IBeanDescriptor descriptor) {
 		List<IBeanConstraint> list = new LinkedList<IBeanConstraint>();
 		// get all constraints
-		IBeanDescriptor parent = descriptor;
-		while (parent != null) {
-			if (parent != null && parent.getConstraint() != null) {
-				list.addAll(parent.getConstraint().getConstraintsRecursive());
+		List<IBeanDescriptor> descriptors = descriptor.getBeanDescriptorContext().getRecursive(
+				descriptor.getBeanClass());
+		for (IBeanDescriptor bean : descriptors) {
+			if (bean.getConstraint() != null) {
+				list.addAll(bean.getConstraint().getConstraintsRecursive());
 			}
-			// do not get constraints from ancestors if overwrite is true
 			if (this.isOverwrite()) {
 				break;
 			}
-			parent = parent.getParent();
 		}
 
 		// now the constraints are sorted of myself to root.

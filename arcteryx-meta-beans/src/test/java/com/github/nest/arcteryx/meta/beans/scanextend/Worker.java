@@ -12,7 +12,7 @@ import com.github.nest.arcteryx.meta.beans.annotation.TheNumber;
  * @author brad.wu
  *
  */
-@ArcteryxBean(name = "Worker", description = "A worker", parent = Person.class)
+@ArcteryxBean(name = "Worker", description = "A worker")
 public class Worker extends Person {
 	/**
 	 * @return the age

@@ -95,11 +95,4 @@ public interface IResourceDescriptor extends Serializable {
 	 * @return
 	 */
 	Collection<IResourceOperator> getOperators();
-
-	/**
-	 * get parent descriptor
-	 * 
-	 * @return
-	 */
-	<T extends IResourceDescriptor> T getParent();
 }

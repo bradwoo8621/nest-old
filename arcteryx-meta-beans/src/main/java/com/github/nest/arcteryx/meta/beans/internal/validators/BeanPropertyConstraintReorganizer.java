@@ -31,26 +31,20 @@ public class BeanPropertyConstraintReorganizer extends
 	 * @see com.github.nest.arcteryx.meta.beans.internal.validators.AbstractConstraintReorganizer#getAllConstraints(com.github.nest.arcteryx.meta.beans.IConstraintContainer)
 	 */
 	@SuppressWarnings("unchecked")
-	public List<IBeanPropertyConstraint> getAllConstraints(IBeanPropertyDescriptor descriptor) {
+	protected List<IBeanPropertyConstraint> getAllConstraints(IBeanPropertyDescriptor descriptor) {
 		List<IBeanPropertyConstraint> list = new LinkedList<IBeanPropertyConstraint>();
 
 		// get all constraints
-		IBeanDescriptor parent = descriptor.getBeanDescriptor();
-		IBeanPropertyDescriptor property = descriptor;
-		while (parent != null) {
-			if (property != null) {
-				IBeanPropertyConstraint constraint = property.getConstraint();
-				if (constraint != null) {
-					list.addAll(constraint.getConstraintsRecursive());
-				}
+		List<IBeanDescriptor> descriptors = descriptor.getBeanDescriptor().getBeanDescriptorContext()
+				.getRecursive(descriptor.getBeanDescriptor().getBeanClass());
+		String propertyName = descriptor.getName();
+		for (IBeanDescriptor bean : descriptors) {
+			IBeanPropertyDescriptor property = bean.getDeclaredProperty(propertyName);
+			if (property != null && property.getConstraint() != null) {
+				list.addAll(property.getConstraint().getConstraintsRecursive());
 			}
-			// do not get constraints from ancestors if overwrite is true
 			if (this.isOverwrite()) {
 				break;
-			}
-			parent = parent.getParent();
-			if (parent != null) {
-				property = parent.getProperty(descriptor.getName());
 			}
 		}
 

@@ -16,6 +16,7 @@ import com.github.nest.arcteryx.meta.IPropertyDescriptor;
 import com.github.nest.arcteryx.meta.IResourceOperator;
 import com.github.nest.arcteryx.meta.beans.internal.BeanCreator;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
+import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext;
 import com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor;
 
 /**
@@ -25,6 +26,8 @@ public class TestBeans {
 
 	@Test
 	public void test() {
+		BeanDescriptorContext context = new BeanDescriptorContext();
+		
 		BeanDescriptor bd = new BeanDescriptor();
 		bd.setBeanClass(Bean.class);
 
@@ -38,6 +41,8 @@ public class TestBeans {
 		Collection<IResourceOperator> ros = new ArrayList<IResourceOperator>();
 		ros.add(new BeanCreator());
 		bd.setOperators(ros);
+		
+		context.register(bd);
 
 		IBeanCreator creator = bd.getCreator();
 		Bean bean = creator.create();

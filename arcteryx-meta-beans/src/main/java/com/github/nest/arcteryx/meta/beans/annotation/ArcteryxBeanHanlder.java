@@ -126,17 +126,6 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		IBeanDescriptorContext context = this.getBeanContext();
 
 		ArcteryxBean bean = beanClass.getAnnotation(ArcteryxBean.class);
-		Class<?> parentClass = bean.parent();
-		IBeanDescriptor parent = null;
-		if (parentClass != Object.class) {
-			// parent is defined
-			parent = context.get(parentClass);
-			if (parent == null) {
-				// not initialized yet, initialize parent first
-				parent = this.initializeBean(parentClass);
-				context.register(parent);
-			}
-		}
 		// current bean might be initialized since it is another bean's parent
 		IBeanDescriptor descriptor = context.get(beanClass);
 		if (context.get(beanClass) != null) {
@@ -144,7 +133,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		}
 
 		Class<? extends IBeanDescriptor> descriptorClass = bean.descriptorClass();
-		return getBeanDescriptorGenerator(descriptorClass).createDescriptor(beanClass, parent);
+		return getBeanDescriptorGenerator(descriptorClass).createDescriptor(beanClass);
 	}
 
 	/**
@@ -386,12 +375,11 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		 * create descriptor
 		 * 
 		 * @param beanClass
-		 * @param parent
 		 * 
 		 * @return
 		 * @throws Exception
 		 */
-		IBeanDescriptor createDescriptor(Class<?> beanClass, IBeanDescriptor parent) throws Exception;
+		IBeanDescriptor createDescriptor(Class<?> beanClass) throws Exception;
 	}
 
 	/**
@@ -494,13 +482,12 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		 */
 		@SuppressWarnings("unchecked")
 		@Override
-		public IBeanDescriptor createDescriptor(Class<?> beanClass, IBeanDescriptor parent) throws Exception {
+		public IBeanDescriptor createDescriptor(Class<?> beanClass) throws Exception {
 			BeanDescriptor descriptor = createDescriptor();
 			ArcteryxBean bean = beanClass.getAnnotation(ArcteryxBean.class);
 			descriptor.setName(bean.name());
 			descriptor.setBeanClass(beanClass);
 			descriptor.setDescription(bean.description());
-			descriptor.setParent(parent);
 			// constraint reorganizer
 			Annotation reorganizer = getConstraintReorganizer(beanClass);
 			if (reorganizer != null) {
@@ -528,7 +515,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 			prereadProperties(beanClass, descriptor);
 			// loop the created properties and find their field/getter/setter,
 			// read the constraints, reorganizer and default value
-			Collection<IBeanPropertyDescriptor> properties = descriptor.getBeanProperties();
+			Collection<IBeanPropertyDescriptor> properties = descriptor.getDeclaredBeanProperties();
 			for (IBeanPropertyDescriptor property : properties) {
 				getHandler().getPropertyDescriptorGenerator(property.getClass()).readAdvanced(property);
 			}

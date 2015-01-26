@@ -3,7 +3,6 @@
  */
 package com.github.nest.arcteryx.meta.internal;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,13 +34,8 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	private IResourceDescriptorContext context = null;
 	private Collection<IPropertyDescriptor> properties = null;
 	private Map<String, IResourceOperator> operators = new HashMap<String, IResourceOperator>();
-	private IResourceDescriptor parent = null;
 
 	public ResourceDescriptor() {
-	}
-
-	public ResourceDescriptor(IResourceDescriptor parent) {
-		setParent(parent);
 	}
 
 	/**
@@ -201,28 +195,20 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	 * @return
 	 */
 	protected Collection<IPropertyDescriptor> getAllProperties() {
-		List<IPropertyDescriptor> list = new ArrayList<IPropertyDescriptor>();
-		list.addAll(this.getDeclaredProperties());
-
-		IResourceDescriptor parent = this.getParent();
-		if (parent != null) {
-			Map<String, IPropertyDescriptor> map = new HashMap<String, IPropertyDescriptor>();
-			Collection<IPropertyDescriptor> parentProperties = parent.getProperties();
-			if (parentProperties != null) {
-				for (IPropertyDescriptor descriptor : parentProperties) {
-					map.put(descriptor.getName(), descriptor);
+		Map<String, IPropertyDescriptor> map = new HashMap<String, IPropertyDescriptor>();
+		List<IResourceDescriptor> descriptors = this.getContext().getRecursive(this.getResourceClass());
+		for (IResourceDescriptor descriptor : descriptors) {
+			Collection<IPropertyDescriptor> properties = descriptor.getDeclaredProperties();
+			if (properties != null) {
+				for (IPropertyDescriptor property : properties) {
+					// property might be overwritten
+					if (!map.containsKey(property.getName())) {
+						map.put(property.getName(), property);
+					}
 				}
 			}
-
-			// replace the property
-			for (IPropertyDescriptor descriptor : list) {
-				map.put(descriptor.getName(), descriptor);
-			}
-
-			return map.values();
-		} else {
-			return list;
 		}
+		return map.values();
 	}
 
 	/**
@@ -279,25 +265,6 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	}
 
 	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.meta.IResourceDescriptor#getParent()
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T extends IResourceDescriptor> T getParent() {
-		return (T) this.parent;
-	}
-
-	/**
-	 * @param parent
-	 *            the parent to set
-	 */
-	public void setParent(IResourceDescriptor parent) {
-		this.parent = parent;
-	}
-
-	/**
 	 * return super.toString();
 	 * 
 	 * @return
@@ -314,6 +281,6 @@ public class ResourceDescriptor implements IResourceDescriptor {
 	@Override
 	public String toString() {
 		return originalToString() + " [name=" + name + ", resourceClass=" + resourceClass + ", description="
-				+ description + ", properties=" + properties + ", operators=" + operators + ", parent=" + parent + "]";
+				+ description + ", properties=" + properties + ", operators=" + operators + "]";
 	}
 }

@@ -14,6 +14,7 @@ import com.github.nest.arcteryx.meta.IOperatorProvider;
 import com.github.nest.arcteryx.meta.IOperatorProviderRegistry;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
+import com.github.nest.arcteryx.meta.util.ClassUtils;
 
 /**
  * resource descriptor context
@@ -44,14 +45,12 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getRecursive(java.lang.Object)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends IResourceDescriptor> T getRecursive(Object resource) {
+	public <T extends IResourceDescriptor> List<T> getRecursive(Object resource) {
 		assert resource != null : "Resource instance cannot be null.";
 
 		Class<?> clazz = resource.getClass();
-		IResourceDescriptor descriptor = getRecursive(clazz);
-		return (T) descriptor;
+		return getRecursive(clazz);
 	}
 
 	/**
@@ -79,44 +78,17 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends IResourceDescriptor> T getRecursive(Class<?> resourceClass) {
+	public <T extends IResourceDescriptor> List<T> getRecursive(Class<?> resourceClass) {
 		assert resourceClass != null : "Resource class cannot be null.";
-
-		IResourceDescriptor descriptor = map.get(resourceClass);
-		if (descriptor != null) {
-			return (T) descriptor;
-		} else {
-			// find by super class
-			Class<?> superClass = resourceClass.getSuperclass();
-			if (superClass != null) {
-				descriptor = get(superClass);
-			}
-
-			// not defined by super class or no super class
+		List<T> list = new LinkedList<T>();
+		List<Class<?>> ancestors = ClassUtils.getAncestorClasses(resourceClass);
+		for (Class<?> clazz : ancestors) {
+			T descriptor = (T) this.map.get(clazz);
 			if (descriptor != null) {
-				return (T) descriptor;
-			} else {
-				// find by interfaces, traverse all interfaces and their
-				// interfaces until find the first interface with descriptor
-				Class<?>[] interfaces = resourceClass.getInterfaces();
-				for (Class<?> interfaceClass : interfaces) {
-					descriptor = getRecursive(interfaceClass);
-					if (descriptor != null) {
-						return (T) descriptor;
-					}
-				}
-				
-				interfaces = superClass.getInterfaces();
-				for (Class<?> interfaceClass : interfaces) {
-					descriptor = getRecursive(interfaceClass);
-					if (descriptor != null) {
-						return (T) descriptor;
-					}
-				}
+				list.add(descriptor);
 			}
-
-			return null;
 		}
+		return list;
 	}
 
 	/**

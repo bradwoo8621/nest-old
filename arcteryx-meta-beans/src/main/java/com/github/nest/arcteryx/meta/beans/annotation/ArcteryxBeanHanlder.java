@@ -34,6 +34,8 @@ import com.github.nest.arcteryx.meta.beans.IConstraint;
 import com.github.nest.arcteryx.meta.beans.IConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor;
+import com.github.nest.arcteryx.meta.beans.internal.CachedBeanDescriptor;
+import com.github.nest.arcteryx.meta.beans.internal.SpringCachedBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.utils.ReflectionUtils;
 
 /**
@@ -77,6 +79,8 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 	protected List<IBeanDescriptorGenerator> initializeBeanDescriptorGenerators() {
 		List<IBeanDescriptorGenerator> generators = new LinkedList<IBeanDescriptorGenerator>();
 		generators.add(new BeanDescriptorGenerator());
+		generators.add(new CachedBeanDescriptorGenerator());
+		generators.add(new SpringCachedBeanDescriptorGenerator());
 		return generators;
 	}
 
@@ -599,6 +603,88 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		 */
 		protected BeanDescriptor createDescriptor() {
 			return new BeanDescriptor();
+		}
+	}
+
+	public static class CachedBeanDescriptorGenerator extends BeanDescriptorGenerator {
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.BeanDescriptorGenerator#getSupportedClass()
+		 */
+		@Override
+		public Class<? extends IBeanDescriptor> getSupportedClass() {
+			return CachedBeanDescriptor.class;
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.BeanDescriptorGenerator#createDescriptor(java.lang.Class)
+		 */
+		@Override
+		public IBeanDescriptor createDescriptor(Class<?> beanClass) throws Exception {
+			CachedBeanDescriptor descriptor = (CachedBeanDescriptor) super.createDescriptor(beanClass);
+			CachedBeanParameters annotation = beanClass.getAnnotation(CachedBeanParameters.class);
+			if (annotation == null) {
+				throw new AnnotationDefineException("Annotation [" + CachedBeanParameters.class.getName()
+						+ "] is not found.");
+			}
+			descriptor.setCacheName(annotation.cacheName());
+			descriptor.setDefaultSorterCode(annotation.defaultSorterCode());
+
+			return descriptor;
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.BeanDescriptorGenerator#createDescriptor()
+		 */
+		@Override
+		protected BeanDescriptor createDescriptor() {
+			return new CachedBeanDescriptor();
+		}
+	}
+
+	public static class SpringCachedBeanDescriptorGenerator extends CachedBeanDescriptorGenerator {
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.BeanDescriptorGenerator#getSupportedClass()
+		 */
+		@Override
+		public Class<? extends IBeanDescriptor> getSupportedClass() {
+			return SpringCachedBeanDescriptor.class;
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.BeanDescriptorGenerator#createDescriptor(java.lang.Class)
+		 */
+		@Override
+		public IBeanDescriptor createDescriptor(Class<?> beanClass) throws Exception {
+			SpringCachedBeanDescriptor descriptor = (SpringCachedBeanDescriptor) super.createDescriptor(beanClass);
+			SpringCachedBeanParameters annotation = beanClass.getAnnotation(SpringCachedBeanParameters.class);
+			if (annotation == null) {
+				throw new AnnotationDefineException("Annotation [" + SpringCachedBeanParameters.class.getName()
+						+ "] is not found.");
+			}
+			descriptor.setSpringContextId(annotation.springContextId());
+			descriptor.setSpringBeanId(annotation.springBeanId());
+
+			return descriptor;
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.BeanDescriptorGenerator#createDescriptor()
+		 */
+		@Override
+		protected BeanDescriptor createDescriptor() {
+			return new SpringCachedBeanDescriptor();
 		}
 	}
 

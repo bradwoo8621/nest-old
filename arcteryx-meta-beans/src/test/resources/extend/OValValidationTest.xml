@@ -26,18 +26,18 @@
 							static-field="com.github.nest.arcteryx.meta.beans.IBeanValidator.CODE" />
 					</key>
 					<bean
-						class="com.github.nest.arcteryx.meta.beans.internal.providers.OValBeanValidatorProvider">
-						<property name="loggerFactory">
-							<bean class="net.sf.oval.logging.LoggerFactorySLF4JImpl" />
-						</property>
-					</bean>
+						class="com.github.nest.arcteryx.meta.beans.internal.providers.OValBeanValidatorProvider" />
 				</entry>
 			</map>
 		</property>
 		<!-- validation configuration initializer -->
 		<property name="validationConfigurationInitializer">
 			<bean
-				class="com.github.nest.arcteryx.meta.beans.internal.validators.oval.OValValidationConfigurationInitializer" />
+				class="com.github.nest.arcteryx.meta.beans.internal.validators.oval.OValValidationConfigurationInitializer">
+				<property name="loggerFactory">
+					<bean class="net.sf.oval.logging.LoggerFactorySLF4JImpl" />
+				</property>
+			</bean>
 		</property>
 	</bean>
 

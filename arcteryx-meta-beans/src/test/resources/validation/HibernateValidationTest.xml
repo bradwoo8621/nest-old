@@ -61,10 +61,14 @@
 					p:name="name" p:description="Name of person">
 					<property name="constraints">
 						<list>
-							<bean class="com.github.nest.arcteryx.meta.beans.constraints.NotNullConstraint" />
-							<bean class="com.github.nest.arcteryx.meta.beans.constraints.NotBlankConstraint" />
-							<bean class="com.github.nest.arcteryx.meta.beans.constraints.NotEmptyConstraint" />
-							<bean class="com.github.nest.arcteryx.meta.beans.constraints.LengthConstraint"
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.constraints.NotNullConstraint" />
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.constraints.NotBlankConstraint" />
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.constraints.NotEmptyConstraint" />
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.constraints.LengthConstraint"
 								p:min="1" p:max="30" />
 							<bean
 								class="com.github.nest.arcteryx.meta.beans.constraints.TextFormatConstraint"
@@ -76,7 +80,8 @@
 					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
 					p:name="birthday" p:description="Birthday of person">
 					<property name="constraint">
-						<bean class="com.github.nest.arcteryx.meta.beans.constraints.DateRangeConstraint"
+						<bean
+							class="com.github.nest.arcteryx.meta.beans.constraints.DateRangeConstraint"
 							p:from="1900/01/01" p:format="yyyy/MM/dd" p:to="today" />
 					</property>
 				</bean>
@@ -84,7 +89,8 @@
 					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
 					p:name="email" p:description="Email of person">
 					<property name="constraint">
-						<bean class="com.github.nest.arcteryx.meta.beans.constraints.EmailConstraint" />
+						<bean
+							class="com.github.nest.arcteryx.meta.beans.constraints.EmailConstraint" />
 					</property>
 				</bean>
 				<bean
@@ -92,7 +98,8 @@
 					p:name="age" p:description="Age of person">
 					<property name="constraints">
 						<list>
-							<bean class="com.github.nest.arcteryx.meta.beans.constraints.TheNumberConstraint"
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.constraints.TheNumberConstraint"
 								p:min="1" p:max="200" />
 							<bean
 								class="com.github.nest.arcteryx.meta.beans.constraints.NotNegativeConstraint" />
@@ -100,9 +107,11 @@
 								class="com.github.nest.arcteryx.meta.beans.constraints.NumberFormatConstraint"
 								p:minIntegerDigits="1" p:maxIntegerDigits="3"
 								p:maxFractionDigits="0" />
-							<bean class="com.github.nest.arcteryx.meta.beans.constraints.TheNumberConstraint"
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.constraints.TheNumberConstraint"
 								p:min="25" p:max="200"
-								p:profile="com.github.nest.arcteryx.meta.beans.validation.FatherGroup" />
+								p:profile="com.github.nest.arcteryx.meta.beans.validation.FatherGroup"
+								p:messageTemplate="TheNumber.violated.custom" />
 						</list>
 					</property>
 				</bean>
@@ -111,7 +120,8 @@
 					p:name="children" p:description="Children of person">
 					<property name="constraints">
 						<list>
-							<bean class="com.github.nest.arcteryx.meta.beans.constraints.SizeConstraint"
+							<bean
+								class="com.github.nest.arcteryx.meta.beans.constraints.SizeConstraint"
 								p:min="1" />
 							<bean
 								class="com.github.nest.arcteryx.meta.beans.constraints.AssertValidConstraint" />

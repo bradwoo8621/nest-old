@@ -29,8 +29,6 @@ import net.sf.oval.localization.message.ResourceBundleMessageResolver;
 public class OvalResourceBundleMessageResolver implements MessageResolver {
 	private static final Log LOG = Log.getLog(ResourceBundleMessageResolver.class);
 
-	public static final ResourceBundleMessageResolver INSTANCE = new ResourceBundleMessageResolver();
-
 	private final Map<ResourceBundle, List<String>> messageBundleKeys = getCollectionFactory().createMap(8);
 	private final Map<Locale, List<ResourceBundle>> messageBundlesByLocale = getCollectionFactory().createMap(8);
 	private Set<String> bundleLocations = new HashSet<String>();

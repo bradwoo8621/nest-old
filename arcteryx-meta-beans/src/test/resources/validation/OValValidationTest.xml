@@ -25,11 +25,7 @@
 							static-field="com.github.nest.arcteryx.meta.beans.IBeanValidator.CODE" />
 					</key>
 					<bean
-						class="com.github.nest.arcteryx.meta.beans.internal.providers.OValBeanValidatorProvider">
-						<property name="loggerFactory">
-							<bean class="net.sf.oval.logging.LoggerFactorySLF4JImpl" />
-						</property>
-					</bean>
+						class="com.github.nest.arcteryx.meta.beans.internal.providers.OValBeanValidatorProvider" />
 				</entry>
 			</map>
 		</property>
@@ -45,6 +41,9 @@
 						<bean
 							class="com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.NotNullConvertor" />
 					</list>
+				</property>
+				<property name="loggerFactory">
+					<bean class="net.sf.oval.logging.LoggerFactorySLF4JImpl" />
 				</property>
 			</bean>
 		</property>

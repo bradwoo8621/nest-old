@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.MessageInterpolator;
 import javax.validation.Validation;
 import javax.validation.ValidationProviderResolver;
 import javax.validation.spi.ValidationProvider;
@@ -23,6 +24,9 @@ import org.hibernate.validator.cfg.ConstraintDef;
 import org.hibernate.validator.cfg.ConstraintMapping;
 import org.hibernate.validator.cfg.context.PropertyConstraintMappingContext;
 import org.hibernate.validator.cfg.context.TypeConstraintMappingContext;
+import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
+import org.hibernate.validator.resourceloading.AggregateResourceBundleLocator;
+import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,6 +71,8 @@ import com.github.nest.arcteryx.meta.beans.utils.ReflectionUtils;
  * @author brad.wu
  */
 public class HibernateValidationConfigurationInitializer implements IValidationConfigurationInitializer {
+	public static final String MESSAGES = "com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.Messages";
+
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	/**
@@ -160,6 +166,7 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 	 * @return
 	 */
 	protected HibernateValidatorConfiguration createConfiguration() {
+		HibernateValidatorConfiguration configuration = null;
 		if (this.isIgnoreClassHierarchy()) {
 			ValidationProviderResolver resolver = new ValidationProviderResolver() {
 				/**
@@ -174,10 +181,13 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 					return providers;
 				}
 			};
-			return Validation.byProvider(HibernateValidator513.class).providerResolver(resolver).configure();
+			configuration = Validation.byProvider(HibernateValidator513.class).providerResolver(resolver).configure();
 		} else {
-			return Validation.byProvider(HibernateValidator.class).configure();
+			configuration = Validation.byProvider(HibernateValidator.class).configure();
 		}
+		configuration.messageInterpolator(new ResourceBundleMessageInterpolator(new PlatformResourceBundleLocator(
+				MESSAGES)));
+		return configuration;
 	}
 
 	/**
@@ -387,5 +397,37 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 	 */
 	public void setIgnoreClassHierarchy(boolean ignoreClassHierarchy) {
 		this.ignoreClassHierarchy = ignoreClassHierarchy;
+	}
+
+	/**
+	 * set additional message bundles. name is class name or property file name.
+	 * will replace the customized message interpolator which set by
+	 * {@linkplain #setMessageInterpolator(MessageInterpolator)}.
+	 * 
+	 * @param bundles
+	 */
+	public void setMessageBundles(String... bundles) {
+		assert bundles != null && bundles.length > 0 : "At least one bundle is set";
+
+		List<String> list = new ArrayList<String>(bundles.length + 1);
+		list.add(MESSAGES);
+		for (String bundle : bundles) {
+			if (bundle.indexOf('/') != -1) {
+				list.add(bundle.replace('/', '.'));
+			} else {
+				list.add(bundle);
+			}
+		}
+		this.getConfiguration().messageInterpolator(
+				new ResourceBundleMessageInterpolator(new AggregateResourceBundleLocator(list)));
+	}
+
+	/**
+	 * set message interpolator, replace default.
+	 * 
+	 * @param interpolator
+	 */
+	public void setMessageInterpolator(MessageInterpolator interpolator) {
+		this.getConfiguration().messageInterpolator(interpolator);
 	}
 }

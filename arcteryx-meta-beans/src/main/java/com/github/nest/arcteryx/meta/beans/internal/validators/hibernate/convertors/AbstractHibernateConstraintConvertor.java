@@ -60,7 +60,7 @@ public abstract class AbstractHibernateConstraintConvertor<C extends IConstraint
 		def.payload(convertSeverity(constraint));
 		def.groups(convertGroups(constraint));
 		if (!StringUtils.isBlank(constraint.getMessageTemplate())) {
-			def.message(constraint.getMessageTemplate());
+			def.message("{" + constraint.getMessageTemplate() + "}");
 		}
 
 		if (StringUtils.isNotEmpty(constraint.getWhen())) {

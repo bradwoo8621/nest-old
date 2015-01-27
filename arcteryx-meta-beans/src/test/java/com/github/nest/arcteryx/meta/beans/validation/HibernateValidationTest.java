@@ -125,7 +125,7 @@ public class HibernateValidationTest {
 		// children[1] assert
 		assertEquals(9, results.size());
 		for (IConstraintViolation violation : results) {
-			System.out.println(violation.getPath() + " " + violation.getErrorCode());
+			System.out.println(violation.getPath() + " " + violation.getErrorCode() + " " + violation.getMessage());
 		}
 	}
 

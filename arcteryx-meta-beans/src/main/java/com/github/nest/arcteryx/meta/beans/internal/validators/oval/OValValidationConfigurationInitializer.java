@@ -13,11 +13,17 @@ import java.util.List;
 import java.util.Map;
 
 import net.sf.oval.Check;
+import net.sf.oval.Validator;
 import net.sf.oval.configuration.pojo.elements.ClassConfiguration;
 import net.sf.oval.configuration.pojo.elements.FieldConfiguration;
 import net.sf.oval.configuration.pojo.elements.MethodConfiguration;
 import net.sf.oval.configuration.pojo.elements.MethodReturnValueConfiguration;
 import net.sf.oval.configuration.pojo.elements.ObjectConfiguration;
+import net.sf.oval.localization.locale.LocaleProvider;
+import net.sf.oval.localization.message.MessageResolver;
+import net.sf.oval.localization.value.MessageValueFormatter;
+import net.sf.oval.logging.LoggerFactory;
+import net.sf.oval.logging.LoggerFactorySLF4JImpl;
 
 import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanConstraintReorganizer;
@@ -48,6 +54,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.S
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TextFormatConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TheNumberConvertor;
 import com.github.nest.arcteryx.meta.beans.utils.ReflectionUtils;
+import com.github.nest.arcteryx.validation.oval.localization.message.OvalResourceBundleMessageResolver;
 
 /**
  * OVal configurer initializer
@@ -55,6 +62,7 @@ import com.github.nest.arcteryx.meta.beans.utils.ReflectionUtils;
  * @author brad.wu
  */
 public class OValValidationConfigurationInitializer implements IValidationConfigurationInitializer {
+	public static final String MESSAGES = "com/github/nest/arcteryx/meta/beans/internal/validators/oval/constraints/Messages";
 	/**
 	 * when initialize the configuration, use getter method first or not
 	 */
@@ -69,8 +77,21 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 	private IBeanPropertyConstraintReorganizer propertyConstraintReorganizer = null;
 
 	public OValValidationConfigurationInitializer() {
+		setDefaultMessageResolver();
+		// default connect to slf4j
+		Validator.setLoggerFactory(new LoggerFactorySLF4JImpl());
+
 		this.configurer = createConfigurer();
 		this.setConvertors(createDefaultConvertors());
+	}
+
+	/**
+	 * set default message resolver
+	 */
+	private void setDefaultMessageResolver() {
+		OvalResourceBundleMessageResolver messageResolver = new OvalResourceBundleMessageResolver();
+		messageResolver.addMessageBundle(MESSAGES);
+		Validator.setMessageResolver(messageResolver);
 	}
 
 	/**
@@ -392,5 +413,62 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 			checkList.add(check);
 		}
 		return checkList;
+	}
+
+	/**
+	 * set additional message bundles. name is class name or property file
+	 * name.will replace the customized message resolver which set by
+	 * {@linkplain #setMessageResolver(MessageResolver)}.
+	 * 
+	 * @param bundles
+	 */
+	public void setMessageBundles(String... bundles) {
+		assert bundles != null && bundles.length > 0 : "At least one bundle is set";
+
+		this.setDefaultMessageResolver();
+		OvalResourceBundleMessageResolver resolver = (OvalResourceBundleMessageResolver) Validator.getMessageResolver();
+		for (String bundle : bundles) {
+			if (bundle.indexOf('.') != -1) {
+				resolver.addMessageBundle("/" + bundle.replace('.', '/'));
+			} else {
+				resolver.addMessageBundle(bundle);
+			}
+		}
+	}
+
+	/**
+	 * set message resolver
+	 * 
+	 * @param resolver
+	 */
+	public void setMessageResolver(MessageResolver resolver) {
+		Validator.setMessageResolver(resolver);
+	}
+
+	/**
+	 * set message value formatter, not publish to public now.
+	 * 
+	 * @param formatter
+	 */
+	protected void setMessageValueFormatter(MessageValueFormatter formatter) {
+		Validator.setMessageValueFormatter(formatter);
+	}
+
+	/**
+	 * set logger factory
+	 * 
+	 * @param loggerFactory
+	 */
+	public void setLoggerFactory(LoggerFactory loggerFactory) {
+		Validator.setLoggerFactory(loggerFactory);
+	}
+
+	/**
+	 * set locale provider, not publish to public now.
+	 * 
+	 * @param localeProvider
+	 */
+	protected void setLocaleProvider(LocaleProvider localeProvider) {
+		Validator.setLocaleProvider(localeProvider);
 	}
 }

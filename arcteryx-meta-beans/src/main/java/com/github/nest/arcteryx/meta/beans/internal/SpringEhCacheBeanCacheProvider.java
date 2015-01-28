@@ -29,7 +29,6 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 
 	private String springContextId = null;
 	private String springCacheManagerId = null;
-	private IBeanIdentityExtracter identityExtracter = null;
 
 	private Collection<?> beans = null;
 
@@ -125,15 +124,7 @@ public class SpringEhCacheBeanCacheProvider extends AbstractStaticCodeBeanOperat
 	 */
 	@Override
 	public IBeanIdentityExtracter getIdentityExtracter() {
-		return this.identityExtracter;
-	}
-
-	/**
-	 * @param identityExtracter
-	 *            the identityExtracter to set
-	 */
-	public void setIdentityExtracter(IBeanIdentityExtracter identityExtracter) {
-		this.identityExtracter = identityExtracter;
+		return this.getBeanDescriptor().getOperator(IBeanIdentityExtracter.CODE);
 	}
 
 	/**

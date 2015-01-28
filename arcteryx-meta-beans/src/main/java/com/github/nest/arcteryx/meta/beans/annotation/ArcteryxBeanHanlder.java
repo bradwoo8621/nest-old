@@ -136,8 +136,31 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 			return descriptor;
 		}
 
-		Class<? extends IBeanDescriptor> descriptorClass = bean.descriptorClass();
+		return createBean(beanClass, bean);
+	}
+
+	/**
+	 * create bean
+	 * 
+	 * @param beanClass
+	 * @param bean
+	 * @return
+	 * @throws Exception
+	 */
+	protected IBeanDescriptor createBean(Class<?> beanClass, ArcteryxBean bean) throws Exception {
+		Class<? extends IBeanDescriptor> descriptorClass = getBeanDescriptorClass(beanClass, bean);
 		return getBeanDescriptorGenerator(descriptorClass).createDescriptor(beanClass);
+	}
+
+	/**
+	 * get bean descriptor class
+	 * 
+	 * @param beanClass
+	 * @param bean
+	 * @return
+	 */
+	protected Class<? extends IBeanDescriptor> getBeanDescriptorClass(Class<?> beanClass, ArcteryxBean bean) {
+		return bean.descriptorClass();
 	}
 
 	/**

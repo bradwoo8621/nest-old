@@ -8,7 +8,9 @@ package com.github.nest.arcteryx.meta.beans;
  * 
  * @author brad.wu
  */
-public interface IBeanIdentityExtracter {
+public interface IBeanIdentityExtracter extends IBeanOperator {
+	String CODE = "meta.beans.identityExtracter";
+
 	/**
 	 * extract bean identity
 	 * 

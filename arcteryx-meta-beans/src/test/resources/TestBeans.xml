@@ -41,11 +41,7 @@
 							static-field="com.github.nest.arcteryx.meta.beans.IBeanValidator.CODE" />
 					</key>
 					<bean
-						class="com.github.nest.arcteryx.meta.beans.internal.providers.OValBeanValidatorProvider">
-						<property name="loggerFactory">
-							<bean class="net.sf.oval.logging.LoggerFactorySLF4JImpl" />
-						</property>
-					</bean>
+						class="com.github.nest.arcteryx.meta.beans.internal.providers.OValBeanValidatorProvider" />
 				</entry>
 			</map>
 		</property>
@@ -78,11 +74,9 @@
 				<bean
 					class="com.github.nest.arcteryx.meta.beans.internal.SpringEhCacheBeanCacheProvider"
 					p:springContextId="Cache" p:springCacheManagerId="CacheManager">
-					<property name="identityExtracter">
-						<bean
-							class="com.github.nest.arcteryx.meta.beans.PreloadedBeanIdentityExtracter" />
-					</property>
 				</bean>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.PreloadedBeanIdentityExtracter" />
 				<bean class="com.github.nest.arcteryx.meta.beans.internal.BeanSorter"
 					p:cached="true" p:code="sorter">
 					<property name="comparator">

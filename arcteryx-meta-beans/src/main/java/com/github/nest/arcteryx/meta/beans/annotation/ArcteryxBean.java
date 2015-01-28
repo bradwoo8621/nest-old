@@ -11,9 +11,6 @@ import java.lang.annotation.Target;
 
 import org.springframework.context.annotation.Scope;
 
-import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
-import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
-
 /**
  * arcteryx bean
  * 
@@ -37,11 +34,4 @@ public @interface ArcteryxBean {
 	 * @return
 	 */
 	String description() default "";
-
-	/**
-	 * descriptor class, default is {@linkplain BeanDescriptor}
-	 * 
-	 * @return
-	 */
-	Class<? extends IBeanDescriptor> descriptorClass() default BeanDescriptor.class;
 }

@@ -21,7 +21,21 @@ import com.github.nest.arcteryx.meta.beans.internal.CachedBeanDescriptor;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface CachedBeanParameters {
+public @interface ArcteryxCachedBean {
+	/**
+	 * bean name in bean context. keep unique.
+	 * 
+	 * @return
+	 */
+	String name();
+
+	/**
+	 * description of bean, optional
+	 * 
+	 * @return
+	 */
+	String description() default "";
+
 	/**
 	 * cache name
 	 * 

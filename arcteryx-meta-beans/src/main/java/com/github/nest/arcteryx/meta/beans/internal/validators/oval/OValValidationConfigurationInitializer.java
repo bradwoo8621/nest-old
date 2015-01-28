@@ -429,7 +429,7 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 		OvalResourceBundleMessageResolver resolver = (OvalResourceBundleMessageResolver) Validator.getMessageResolver();
 		for (String bundle : bundles) {
 			if (bundle.indexOf('.') != -1) {
-				resolver.addMessageBundle("/" + bundle.replace('.', '/'));
+				resolver.addMessageBundle(bundle.replace('.', '/'));
 			} else {
 				resolver.addMessageBundle(bundle);
 			}

@@ -17,28 +17,6 @@ import com.github.nest.arcteryx.meta.internal.ResourceDescriptorContext;
  * @author brad.wu
  */
 public class BeanDescriptorContext extends ResourceDescriptorContext implements IBeanDescriptorContext {
-	private IValidationConfigurationInitializer validationConfigurationInitializer = null;
-	private IValidationConfiguration validationConfiguration = null;
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext#afterBeanContextInitialized()
-	 */
-	@Override
-	public void afterBeanContextInitialized() {
-		this.validationConfiguration = initializeValidationConfiguration();
-	}
-
-	/**
-	 * initialize validation configuration
-	 * 
-	 * @return
-	 */
-	protected IValidationConfiguration initializeValidationConfiguration() {
-		return getValidationConfigurationInitializer().initialize(this);
-	}
-
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -46,17 +24,7 @@ public class BeanDescriptorContext extends ResourceDescriptorContext implements 
 	 */
 	@Override
 	public IValidationConfiguration getValidationConfiguration() {
-		return this.validationConfiguration;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext#getValidationConfigurationInitializer()
-	 */
-	@Override
-	public IValidationConfigurationInitializer getValidationConfigurationInitializer() {
-		return this.validationConfigurationInitializer;
+		return this.getInitializedData(IValidationConfigurationInitializer.KEY);
 	}
 
 	/**
@@ -65,7 +33,7 @@ public class BeanDescriptorContext extends ResourceDescriptorContext implements 
 	 */
 	public void setValidationConfigurationInitializer(
 			IValidationConfigurationInitializer validationConfigurationInitializer) {
-		this.validationConfigurationInitializer = validationConfigurationInitializer;
+		this.addConfigurationInitializer(validationConfigurationInitializer);
 	}
 
 	/**

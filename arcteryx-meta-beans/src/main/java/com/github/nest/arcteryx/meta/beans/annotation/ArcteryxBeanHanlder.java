@@ -67,9 +67,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 	 * @return
 	 */
 	protected List<IBeanPropertyDescriptorGenerator> initializePropertyDescriptorGenerators() {
-		List<IBeanPropertyDescriptorGenerator> generators = new LinkedList<IBeanPropertyDescriptorGenerator>();
-		// generators.add(new BeanPropertyDescriptorGenerator());
-		return generators;
+		return new LinkedList<IBeanPropertyDescriptorGenerator>();
 	}
 
 	/**
@@ -128,7 +126,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 			}
 		}
 
-		context.afterBeanContextInitialized();
+		context.afterContextInitialized();
 	}
 
 	/**
@@ -599,6 +597,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 				}
 				if (generator != null || field.getAnnotation(ArcteryxBeanProperty.class) != null) {
 					generator = new BeanPropertyDescriptorGenerator(generator);
+					generator.setHandler(this.getHandler());
 					IBeanPropertyDescriptor property = generator.createDescriptor(field);
 					properties.add(property);
 					generatorMap.put(property.getName(), generator);
@@ -623,6 +622,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 				if (generator != null || method.getAnnotation(ArcteryxBeanProperty.class) != null) {
 					generator = new BeanPropertyDescriptorGenerator(generator);
 					IBeanPropertyDescriptor property = generator.createDescriptor(method);
+					generator.setHandler(this.getHandler());
 					if (generatorMap.containsKey(property.getName())) {
 						throw new AnnotationDefineException("Property [" + property.getName() + "@"
 								+ beanClass.getName() + "] already defined in other field/method, only one is allowed.");

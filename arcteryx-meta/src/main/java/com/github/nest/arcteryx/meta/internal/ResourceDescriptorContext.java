@@ -5,11 +5,13 @@ package com.github.nest.arcteryx.meta.internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.github.nest.arcteryx.meta.IConfigurationInitializer;
 import com.github.nest.arcteryx.meta.IOperatorProvider;
 import com.github.nest.arcteryx.meta.IOperatorProviderRegistry;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
@@ -24,6 +26,69 @@ import com.github.nest.arcteryx.meta.util.ClassUtils;
 public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	private Map<Class<?>, IResourceDescriptor> map = new HashMap<Class<?>, IResourceDescriptor>();
 	private IOperatorProviderRegistry OperatorProviderRegistry = null;
+	@SuppressWarnings("rawtypes")
+	private List<IConfigurationInitializer> initializers = null;
+	private Map<String, Object> initializerResult = new HashMap<String, Object>();
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#afterContextInitialized()
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void afterContextInitialized() {
+		for (IConfigurationInitializer initializer : this.getConfigurationInitializers()) {
+			this.initializerResult.put(initializer.getReturnValueKey(), initializer.initialize(this));
+		}
+	}
+
+	/**
+	 * get initialized data
+	 * 
+	 * @param key
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public <T> T getInitializedData(String key) {
+		return (T) this.initializerResult.get(key);
+	}
+
+	/**
+	 * @return the initializers
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<IConfigurationInitializer> getConfigurationInitializers() {
+		return (List<IConfigurationInitializer>) (initializers == null ? Collections.emptyList() : this.initializers);
+	}
+
+	/**
+	 * set initializers
+	 * 
+	 * @param initializers
+	 *            the initializers to set
+	 */
+	@SuppressWarnings("rawtypes")
+	public void setConfigurationInitializers(List<IConfigurationInitializer> initializers) {
+		this.initializers = initializers;
+	}
+
+	/**
+	 * add initializer
+	 * 
+	 * @param initializer
+	 */
+	@SuppressWarnings("rawtypes")
+	public void addConfigurationInitializer(IConfigurationInitializer initializer) {
+		if (this.initializers == null) {
+			synchronized(this) {
+				if (this.initializers == null) {
+					this.initializers = new LinkedList<IConfigurationInitializer>();
+				}
+			}
+		}
+		this.initializers.add(initializer);
+	}
 
 	/**
 	 * (non-Javadoc)

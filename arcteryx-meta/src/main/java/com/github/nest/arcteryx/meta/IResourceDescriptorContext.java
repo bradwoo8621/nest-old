@@ -13,6 +13,12 @@ import java.util.List;
  */
 public interface IResourceDescriptorContext {
 	/**
+	 * do when after context initialized, this method must be called manually or
+	 * declared with <code>init-method</code> in spring context
+	 */
+	void afterContextInitialized();
+
+	/**
 	 * get descriptor by given resource instance
 	 * 
 	 * @param resource

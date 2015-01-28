@@ -3,6 +3,7 @@
  */
 package com.github.nest.arcteryx.meta.beans;
 
+import com.github.nest.arcteryx.meta.IConfigurationInitializer;
 import com.github.nest.arcteryx.meta.beans.internal.IValidationConfiguration;
 
 /**
@@ -10,12 +11,7 @@ import com.github.nest.arcteryx.meta.beans.internal.IValidationConfiguration;
  * 
  * @author brad.wu
  */
-public interface IValidationConfigurationInitializer {
-	/**
-	 * initialize validation configuration for given context
-	 * 
-	 * @param context
-	 * @return 
-	 */
-	IValidationConfiguration initialize(IBeanDescriptorContext context);
+public interface IValidationConfigurationInitializer extends
+		IConfigurationInitializer<IValidationConfiguration, IBeanDescriptorContext> {
+	String KEY = "configuration.validation";
 }

@@ -176,7 +176,17 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IValidationConfigurationInitializer#initialize(com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext)
+	 * @see com.github.nest.arcteryx.meta.IConfigurationInitializer#getReturnValueKey()
+	 */
+	@Override
+	public String getReturnValueKey() {
+		return KEY;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IConfigurationInitializer#initialize(com.github.nest.arcteryx.meta.IResourceDescriptorContext)
 	 */
 	@Override
 	public IValidationConfiguration initialize(IBeanDescriptorContext context) {

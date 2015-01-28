@@ -25,7 +25,7 @@
 
 	<bean id="beans.context"
 		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext"
-		scope="singleton" init-method="afterBeanContextInitialized">
+		scope="singleton">
 		<!-- operator providers -->
 		<property name="operatorProviders">
 			<map>

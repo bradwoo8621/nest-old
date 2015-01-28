@@ -13,19 +13,6 @@ import com.github.nest.arcteryx.meta.beans.internal.IValidationConfiguration;
  */
 public interface IBeanDescriptorContext extends IResourceDescriptorContext {
 	/**
-	 * do when after context initialized, this method must be called manually or
-	 * declared with <code>init-method</code> in spring context
-	 */
-	void afterBeanContextInitialized();
-
-	/**
-	 * get validation configuration initialzier
-	 * 
-	 * @return
-	 */
-	IValidationConfigurationInitializer getValidationConfigurationInitializer();
-
-	/**
 	 * get validation configuration
 	 * 
 	 * @return

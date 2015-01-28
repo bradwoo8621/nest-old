@@ -10,7 +10,7 @@
 
 	<bean id="beans.context"
 		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext"
-		scope="singleton" init-method="afterBeanContextInitialized">
+		scope="singleton" init-method="afterContextInitialized">
 		<property name="descriptors">
 			<list>
 				<ref bean="Person" />

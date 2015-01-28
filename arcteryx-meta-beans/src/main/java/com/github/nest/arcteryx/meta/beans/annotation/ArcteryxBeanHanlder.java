@@ -51,7 +51,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 
 	@SuppressWarnings("rawtypes")
 	private Map<Class<? extends Annotation>, IBeanDescriptorGenerator> beanDescriptorGenerators = new HashMap<Class<? extends Annotation>, IBeanDescriptorGenerator>();
-	private Map<Class<? extends IBeanPropertyDescriptor>, IBeanPropertyDescriptorGenerator> propertyDescriptorGenerators = new HashMap<Class<? extends IBeanPropertyDescriptor>, IBeanPropertyDescriptorGenerator>();
+	private Map<Class<? extends Annotation>, IBeanPropertyDescriptorGenerator> propertyDescriptorGenerators = new HashMap<Class<? extends Annotation>, IBeanPropertyDescriptorGenerator>();
 	@SuppressWarnings("rawtypes")
 	private Map<Class<? extends IConstraintReorganizer>, IConstraintReorganizerGenerator> reorganizerGenerators = new HashMap<Class<? extends IConstraintReorganizer>, IConstraintReorganizerGenerator>();
 
@@ -68,7 +68,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 	 */
 	protected List<IBeanPropertyDescriptorGenerator> initializePropertyDescriptorGenerators() {
 		List<IBeanPropertyDescriptorGenerator> generators = new LinkedList<IBeanPropertyDescriptorGenerator>();
-		generators.add(new BeanPropertyDescriptorGenerator());
+		// generators.add(new BeanPropertyDescriptorGenerator());
 		return generators;
 	}
 
@@ -143,14 +143,29 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 	}
 
 	/**
+	 * @return the beanDescriptorGenerators
+	 */
+	@SuppressWarnings("rawtypes")
+	protected Map<Class<? extends Annotation>, IBeanDescriptorGenerator> getBeanDescriptorGenerators() {
+		return beanDescriptorGenerators;
+	}
+
+	/**
 	 * get property descriptor generator
 	 * 
-	 * @param descriptorClass
+	 * @param annotationClass
 	 * @return
 	 */
 	protected IBeanPropertyDescriptorGenerator getPropertyDescriptorGenerator(
-			Class<? extends IBeanPropertyDescriptor> descriptorClass) {
-		return propertyDescriptorGenerators.get(descriptorClass);
+			Class<? extends Annotation> annotationClass) {
+		return propertyDescriptorGenerators.get(annotationClass);
+	}
+
+	/**
+	 * @return the propertyDescriptorGenerators
+	 */
+	protected Map<Class<? extends Annotation>, IBeanPropertyDescriptorGenerator> getPropertyDescriptorGenerators() {
+		return propertyDescriptorGenerators;
 	}
 
 	/**
@@ -404,7 +419,7 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		 * 
 		 * @return
 		 */
-		Class<? extends IBeanPropertyDescriptor> getSupportedClass();
+		Class<? extends Annotation> getSupportedClass();
 
 		/**
 		 * create descriptor
@@ -565,54 +580,66 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		 * @throws Exception
 		 */
 		protected void readProperties(Class<?> beanClass, BeanDescriptor descriptor) throws Exception {
-			prereadProperties(beanClass, descriptor);
-			// loop the created properties and find their field/getter/setter,
-			// read the constraints, reorganizer and default value
-			Collection<IBeanPropertyDescriptor> properties = descriptor.getDeclaredBeanProperties();
-			for (IBeanPropertyDescriptor property : properties) {
-				getHandler().getPropertyDescriptorGenerator(property.getClass()).readAdvanced(property);
-			}
-		}
-
-		/**
-		 * pre-read properties, only name and description is read-in.
-		 * 
-		 * @param beanClass
-		 * @param descriptor
-		 * @throws Exception
-		 */
-		protected void prereadProperties(Class<?> beanClass, BeanDescriptor descriptor) throws Exception {
-			List<IPropertyDescriptor> properties = new LinkedList<IPropertyDescriptor>();
-			Map<String, Object> map = new HashMap<String, Object>();
+			List<IBeanPropertyDescriptor> properties = new LinkedList<IBeanPropertyDescriptor>();
+			Map<String, IBeanPropertyDescriptorGenerator> generatorMap = new HashMap<String, IBeanPropertyDescriptorGenerator>();
 			Field[] fields = beanClass.getDeclaredFields();
 			for (Field field : fields) {
-				ArcteryxBeanProperty annotation = field.getAnnotation(ArcteryxBeanProperty.class);
-				if (annotation == null) {
-					continue;
+				IBeanPropertyDescriptorGenerator generator = null;
+				// search secondary annotation
+				for (Class<? extends Annotation> annotationClass : this.getHandler().getPropertyDescriptorGenerators()
+						.keySet()) {
+					Annotation annotation = field.getAnnotation(annotationClass);
+					if (annotation != null) {
+						if (generator != null) {
+							throw new AnnotationDefineException("Property [" + field.getName() + "@"
+									+ beanClass.getName() + "] already defined more than one property annotation.");
+						}
+						generator = this.getHandler().getPropertyDescriptorGenerator(annotationClass);
+					}
 				}
-				Class<? extends IBeanPropertyDescriptor> descriptorClass = annotation.descriptorClass();
-				IBeanPropertyDescriptor property = this.getHandler().getPropertyDescriptorGenerator(descriptorClass)
-						.createDescriptor(field);
-				properties.add(property);
-				map.put(property.getName(), null);
+				if (generator != null || field.getAnnotation(ArcteryxBeanProperty.class) != null) {
+					generator = new BeanPropertyDescriptorGenerator(generator);
+					IBeanPropertyDescriptor property = generator.createDescriptor(field);
+					properties.add(property);
+					generatorMap.put(property.getName(), generator);
+				}
 			}
 			Method[] methods = beanClass.getDeclaredMethods();
 			for (Method method : methods) {
-				ArcteryxBeanProperty annotation = method.getAnnotation(ArcteryxBeanProperty.class);
-				if (annotation == null) {
-					continue;
+				IBeanPropertyDescriptorGenerator generator = null;
+				// search secondary annotation
+				for (Class<? extends Annotation> annotationClass : this.getHandler().getPropertyDescriptorGenerators()
+						.keySet()) {
+					Annotation annotation = method.getAnnotation(annotationClass);
+					if (annotation != null) {
+						if (generator != null) {
+							throw new AnnotationDefineException("Property [" + ReflectionUtils.getPropertyName(method)
+									+ "@" + beanClass.getName()
+									+ "] already defined more than one property annotation.");
+						}
+						generator = this.getHandler().getPropertyDescriptorGenerator(annotationClass);
+					}
 				}
-				Class<? extends IBeanPropertyDescriptor> descriptorClass = annotation.descriptorClass();
-				IBeanPropertyDescriptor property = this.getHandler().getPropertyDescriptorGenerator(descriptorClass)
-						.createDescriptor(method);
-				if (map.containsKey(property.getName())) {
-					throw new AnnotationDefineException("Property [" + property.getName() + "@" + beanClass.getName()
-							+ "] already defined in other field/method, only one is allowed.");
+				if (generator != null || method.getAnnotation(ArcteryxBeanProperty.class) != null) {
+					generator = new BeanPropertyDescriptorGenerator(generator);
+					IBeanPropertyDescriptor property = generator.createDescriptor(method);
+					if (generatorMap.containsKey(property.getName())) {
+						throw new AnnotationDefineException("Property [" + property.getName() + "@"
+								+ beanClass.getName() + "] already defined in other field/method, only one is allowed.");
+					}
+					properties.add(property);
+					generatorMap.put(property.getName(), generator);
 				}
-				properties.add(property);
-				map.put(property.getName(), null);
 			}
-			descriptor.setProperties(properties);
+			List<IPropertyDescriptor> list = new ArrayList<IPropertyDescriptor>(properties.size());
+			list.addAll(properties);
+			descriptor.setProperties(list);
+
+			// loop the created properties and find their field/getter/setter,
+			// read the constraints, reorganizer and default value
+			for (IBeanPropertyDescriptor property : properties) {
+				generatorMap.get(property.getName()).readAdvanced(property);
+			}
 		}
 
 		/**
@@ -734,6 +761,11 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 
 	public static class BeanPropertyDescriptorGenerator implements IBeanPropertyDescriptorGenerator {
 		private ArcteryxBeanHanlder handler = null;
+		private IBeanPropertyDescriptorGenerator generator = null;
+
+		public BeanPropertyDescriptorGenerator(IBeanPropertyDescriptorGenerator generator) {
+			this.generator = generator;
+		}
 
 		/**
 		 * (non-Javadoc)
@@ -756,13 +788,20 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		}
 
 		/**
+		 * @return the generator
+		 */
+		public IBeanPropertyDescriptorGenerator getGenerator() {
+			return generator;
+		}
+
+		/**
 		 * (non-Javadoc)
 		 * 
 		 * @see com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder.IBeanPropertyDescriptorGenerator#getSupportedClass()
 		 */
 		@Override
-		public Class<? extends IBeanPropertyDescriptor> getSupportedClass() {
-			return BeanPropertyDescriptor.class;
+		public Class<? extends Annotation> getSupportedClass() {
+			return ArcteryxBeanProperty.class;
 		}
 
 		/**
@@ -772,10 +811,13 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		 */
 		@Override
 		public IBeanPropertyDescriptor createDescriptor(Field field) throws Exception {
-			BeanPropertyDescriptor descriptor = new BeanPropertyDescriptor();
+			BeanPropertyDescriptor descriptor = (BeanPropertyDescriptor) (this.getGenerator() != null ? this
+					.getGenerator().createDescriptor(field) : new BeanPropertyDescriptor());
 			descriptor.setName(field.getName());
 			ArcteryxBeanProperty annotation = field.getAnnotation(ArcteryxBeanProperty.class);
-			descriptor.setDescription(annotation.description());
+			if (annotation != null) {
+				descriptor.setDescription(annotation.description());
+			}
 			return descriptor;
 		}
 
@@ -786,10 +828,13 @@ public class ArcteryxBeanHanlder implements ApplicationContextAware, Initializin
 		 */
 		@Override
 		public IBeanPropertyDescriptor createDescriptor(Method method) throws Exception {
-			BeanPropertyDescriptor descriptor = new BeanPropertyDescriptor();
+			BeanPropertyDescriptor descriptor = (BeanPropertyDescriptor) (this.getGenerator() != null ? this
+					.getGenerator().createDescriptor(method) : new BeanPropertyDescriptor());
 			descriptor.setName(ReflectionUtils.getPropertyName(method));
 			ArcteryxBeanProperty annotation = method.getAnnotation(ArcteryxBeanProperty.class);
-			descriptor.setDescription(annotation.description());
+			if (annotation != null) {
+				descriptor.setDescription(annotation.description());
+			}
 			return descriptor;
 		}
 

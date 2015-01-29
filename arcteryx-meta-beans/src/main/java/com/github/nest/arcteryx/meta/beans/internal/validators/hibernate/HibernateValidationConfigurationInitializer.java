@@ -59,7 +59,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convert
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.SizeConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.TextFormatConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.convertors.TheNumberConvertor;
-import com.github.nest.arcteryx.meta.beans.utils.ReflectionUtils;
+import com.github.nest.arcteryx.meta.util.ReflectionUtils;
 
 /**
  * hibernate validation configuration initializer.<br>

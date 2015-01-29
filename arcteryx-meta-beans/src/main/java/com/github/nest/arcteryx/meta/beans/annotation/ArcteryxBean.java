@@ -11,6 +11,9 @@ import java.lang.annotation.Target;
 
 import org.springframework.context.annotation.Scope;
 
+import com.github.nest.arcteryx.meta.annotation.ArcteryxResource;
+import com.github.nest.arcteryx.meta.beans.annotation.scan.BeanDescriptorGenerator;
+
 /**
  * arcteryx bean
  * 
@@ -20,6 +23,7 @@ import org.springframework.context.annotation.Scope;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Scope("prototype")
+@ArcteryxResource(generator = BeanDescriptorGenerator.class)
 public @interface ArcteryxBean {
 	/**
 	 * bean name in bean context. keep unique.

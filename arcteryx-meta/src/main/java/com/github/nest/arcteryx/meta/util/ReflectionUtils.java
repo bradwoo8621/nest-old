@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.meta.beans.utils;
+package com.github.nest.arcteryx.meta.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -102,9 +102,12 @@ public class ReflectionUtils {
 	 * get property name by method
 	 * 
 	 * @param getter
+	 * @param silence
+	 *            if true, skip the exception, return null when the method is
+	 *            not neither getter nor setter
 	 * @return
 	 */
-	public static String getPropertyName(Method getterOrSetter) {
+	public static String getPropertyName(Method getterOrSetter, boolean silence) {
 		String name = getterOrSetter.getName();
 		int length = name.length();
 		if (StringUtils.startsWith(name, "set") && length > 3) {
@@ -114,10 +117,24 @@ public class ReflectionUtils {
 		} else if (StringUtils.startsWith(name, "get") && length > 3) {
 			name = WordUtils.uncapitalize(StringUtils.substring(name, 3));
 		} else {
+			if (silence) {
+				return null;
+			}
 			throw new ResourceException("Method [" + getterOrSetter.getClass().getName() + "#" + name
 					+ "] is not a getter/setter method.");
 		}
 		return name;
+	}
+
+	/**
+	 * get property name by method, will throw exception if the method is not
+	 * neither getter nor setter.
+	 * 
+	 * @param getterOrSetter
+	 * @return
+	 */
+	public static String getPropertyName(Method getterOrSetter) {
+		return getPropertyName(getterOrSetter, false);
 	}
 
 	/**

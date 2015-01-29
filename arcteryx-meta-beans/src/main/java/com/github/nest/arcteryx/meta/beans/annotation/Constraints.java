@@ -10,7 +10,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * constraints
+ * constraints. to annotated a constraint annotation which used in
+ * type/field/method level and the annotation is a set of constraint.
  * 
  * @author brad.wu
  */

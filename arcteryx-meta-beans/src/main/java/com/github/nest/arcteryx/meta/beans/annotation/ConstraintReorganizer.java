@@ -9,10 +9,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.github.nest.arcteryx.meta.beans.IConstraintReorganizer;
+import com.github.nest.arcteryx.meta.beans.annotation.scan.IConstraintReorganizerGenerator;
 
 /**
- * constraint reorganizer
+ * constraint reorganizer. to annotate an annotation is annotating a constraint
+ * reorgranizer.
  * 
  * @author brad.wu
  */
@@ -21,10 +22,9 @@ import com.github.nest.arcteryx.meta.beans.IConstraintReorganizer;
 @Target({ ElementType.ANNOTATION_TYPE })
 public @interface ConstraintReorganizer {
 	/**
-	 * reorganizer class
+	 * generator class
 	 * 
 	 * @return
 	 */
-	@SuppressWarnings("rawtypes")
-	Class<? extends IConstraintReorganizer> reorganizerClass();
+	Class<? extends IConstraintReorganizerGenerator> generator();
 }

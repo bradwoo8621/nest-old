@@ -14,14 +14,14 @@
 		as prefix) to simple class name (decapitalize first character) -->
 	<context:component-scan
 		base-package="com.github.nest.arcteryx.meta.beans.scanextend"
-		name-generator="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanNameGenerator">
+		name-generator="com.github.nest.arcteryx.meta.annotation.ResourceNameGenerator">
 		<context:include-filter type="annotation"
 			expression="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBean" />
 	</context:component-scan>
 
 	<bean id="ArcteryxBeanHandler"
-		class="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder"
-		p:beanContext-ref="beans.context" />
+		class="com.github.nest.arcteryx.meta.beans.annotation.scan.ArcteryxBeanAware"
+		p:resourceContext-ref="beans.context" />
 
 	<bean id="beans.context"
 		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext"

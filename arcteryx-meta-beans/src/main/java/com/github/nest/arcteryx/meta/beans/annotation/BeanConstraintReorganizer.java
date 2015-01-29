@@ -9,6 +9,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.github.nest.arcteryx.meta.beans.annotation.scan.BeanConstraintReorganizerGenerator;
+
 /**
  * constraint reorganizer
  * 
@@ -17,7 +19,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.TYPE })
-@ConstraintReorganizer(reorganizerClass = com.github.nest.arcteryx.meta.beans.internal.validators.BeanConstraintReorganizer.class)
+@ConstraintReorganizer(generator = BeanConstraintReorganizerGenerator.class)
 public @interface BeanConstraintReorganizer {
 	/**
 	 * names to filter

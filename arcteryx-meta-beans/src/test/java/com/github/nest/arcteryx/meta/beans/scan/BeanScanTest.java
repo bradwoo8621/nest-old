@@ -11,16 +11,18 @@ import java.util.Collection;
 import java.util.List;
 
 import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.context.ApplicationContext;
 
 import com.github.nest.arcteryx.context.Context;
+import com.github.nest.arcteryx.meta.annotation.ResourceNameGenerator;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanValidator;
 import com.github.nest.arcteryx.meta.beans.IConstraintViolation;
-import com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanNameGenerator;
 import com.github.nest.arcteryx.meta.beans.constraints.PropertyConstraints;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext;
@@ -28,6 +30,7 @@ import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext;
 /**
  * @author brad.wu
  */
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class BeanScanTest {
 	@BeforeClass
 	public static void initialize() {
@@ -38,10 +41,10 @@ public class BeanScanTest {
 	public void test() {
 		ApplicationContext context = Context.getContext(BeanScanTest.class.getName());
 
-		Person person = context.getBean(ArcteryxBeanNameGenerator.PREFIX + Person.class.getName(), Person.class);
+		Person person = context.getBean(ResourceNameGenerator.PREFIX + Person.class.getName(), Person.class);
 		person.setName("abc");
-//		Person person1 = context.getBean("person", Person.class);
-//		assertNotEquals(person, person1);
+		// Person person1 = context.getBean("person", Person.class);
+		// assertNotEquals(person, person1);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })

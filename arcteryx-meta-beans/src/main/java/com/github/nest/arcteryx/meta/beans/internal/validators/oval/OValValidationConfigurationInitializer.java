@@ -53,7 +53,7 @@ import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.P
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.SizeConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TextFormatConvertor;
 import com.github.nest.arcteryx.meta.beans.internal.validators.oval.convertors.TheNumberConvertor;
-import com.github.nest.arcteryx.meta.beans.utils.ReflectionUtils;
+import com.github.nest.arcteryx.meta.util.ReflectionUtils;
 import com.github.nest.arcteryx.validation.oval.localization.message.OvalResourceBundleMessageResolver;
 
 /**

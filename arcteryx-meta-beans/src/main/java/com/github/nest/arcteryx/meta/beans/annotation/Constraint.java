@@ -12,7 +12,8 @@ import java.lang.annotation.Target;
 import com.github.nest.arcteryx.meta.beans.IConstraint;
 
 /**
- * constraint
+ * constraint. to annotated a constraint annotation which used in
+ * type/field/method level.
  * 
  * @author brad.wu
  */

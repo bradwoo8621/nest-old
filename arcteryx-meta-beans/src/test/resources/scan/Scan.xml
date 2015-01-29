@@ -13,9 +13,13 @@
 	<!-- recommended, use bean name generator (will add ArcteryxBeanNameGenerator.PREFIX 
 		as prefix) to simple class name (decapitalize first character) -->
 	<context:component-scan base-package="com.github.nest.arcteryx.meta.beans.scan"
-		name-generator="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanNameGenerator">
+		name-generator="com.github.nest.arcteryx.meta.annotation.ResourceNameGenerator">
 		<context:include-filter type="annotation"
 			expression="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBean" />
+		<context:include-filter type="annotation"
+			expression="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxCachedBean" />
+		<context:include-filter type="annotation"
+			expression="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxSpringCachedBean" />
 	</context:component-scan>
 
 	<!-- normal, only add special annotation -->
@@ -25,8 +29,8 @@
 	</context:component-scan> -->
 
 	<bean id="ArcteryxBeanHandler"
-		class="com.github.nest.arcteryx.meta.beans.annotation.ArcteryxBeanHanlder"
-		p:beanContext-ref="beans.context" />
+		class="com.github.nest.arcteryx.meta.beans.annotation.scan.ArcteryxBeanAware"
+		p:resourceContext-ref="beans.context" />
 
 	<bean id="beans.context"
 		class="com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext"

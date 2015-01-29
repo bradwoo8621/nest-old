@@ -9,6 +9,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import com.github.nest.arcteryx.meta.annotation.ArcteryxResource;
+import com.github.nest.arcteryx.meta.beans.annotation.scan.CachedBeanDescriptorGenerator;
 import com.github.nest.arcteryx.meta.beans.internal.CachedBeanDescriptor;
 
 /**
@@ -21,6 +23,7 @@ import com.github.nest.arcteryx.meta.beans.internal.CachedBeanDescriptor;
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+@ArcteryxResource(generator = CachedBeanDescriptorGenerator.class)
 public @interface ArcteryxCachedBean {
 	/**
 	 * bean name in bean context. keep unique.

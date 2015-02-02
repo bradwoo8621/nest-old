@@ -25,6 +25,11 @@
 			<artifactId>hibernate-core</artifactId>
 			<version>4.3.8.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.nest</groupId>
+			<artifactId>arcteryx-meta-beans</artifactId>
+			<version>0.0.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

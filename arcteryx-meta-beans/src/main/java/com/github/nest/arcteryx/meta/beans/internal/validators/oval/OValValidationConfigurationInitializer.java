@@ -25,10 +25,10 @@ import net.sf.oval.localization.value.MessageValueFormatter;
 import net.sf.oval.logging.LoggerFactory;
 import net.sf.oval.logging.LoggerFactorySLF4JImpl;
 
+import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
-import com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraint;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
@@ -189,7 +189,7 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 	 * @see com.github.nest.arcteryx.meta.IConfigurationInitializer#initialize(com.github.nest.arcteryx.meta.IResourceDescriptorContext)
 	 */
 	@Override
-	public IValidationConfiguration initialize(IBeanDescriptorContext context) {
+	public IValidationConfiguration initialize(IResourceDescriptorContext context) {
 		for (IBeanDescriptor descriptor : context.getDescriptors(IBeanDescriptor.class)) {
 			initialize(descriptor);
 		}

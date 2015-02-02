@@ -8,14 +8,14 @@ package com.github.nest.arcteryx.meta;
  * 
  * @author brad.wu
  */
-public interface IConfigurationInitializer<T, C extends IResourceDescriptorContext> {
+public interface IConfigurationInitializer<T> {
 	/**
 	 * initialize
 	 * 
 	 * @param context
 	 * @return
 	 */
-	T initialize(C context);
+	T initialize(IResourceDescriptorContext context);
 
 	/**
 	 * get return value key

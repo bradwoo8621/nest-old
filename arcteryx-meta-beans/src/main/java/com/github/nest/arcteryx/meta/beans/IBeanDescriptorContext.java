@@ -7,7 +7,7 @@ import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 import com.github.nest.arcteryx.meta.beans.internal.IValidationConfiguration;
 
 /**
- * bean descriptor context
+ * bean descriptor context. 
  * 
  * @author brad.wu
  */

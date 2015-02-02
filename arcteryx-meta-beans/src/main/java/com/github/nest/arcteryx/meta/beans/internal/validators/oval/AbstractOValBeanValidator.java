@@ -12,7 +12,9 @@ import net.sf.oval.Validator;
 import net.sf.oval.configuration.Configurer;
 
 import com.github.nest.arcteryx.meta.beans.IConstraintViolation;
+import com.github.nest.arcteryx.meta.beans.IValidationConfigurationInitializer;
 import com.github.nest.arcteryx.meta.beans.internal.AbstractBeanValidator;
+import com.github.nest.arcteryx.meta.beans.internal.IValidationConfiguration;
 
 /**
  * OVal bean validator, base one OVal.
@@ -54,7 +56,9 @@ public abstract class AbstractOValBeanValidator extends AbstractBeanValidator {
 	 * @return
 	 */
 	protected Configurer getConfiguration() {
-		return this.getBeanDescriptor().getBeanDescriptorContext().getValidationConfiguration().getRealConfiguration();
+		IValidationConfiguration configuration = this.getBeanDescriptor().getContext()
+				.getInitializedData(IValidationConfigurationInitializer.KEY);
+		return configuration.getRealConfiguration();
 	}
 
 	/**

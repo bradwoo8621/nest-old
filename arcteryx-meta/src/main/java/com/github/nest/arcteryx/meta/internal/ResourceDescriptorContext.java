@@ -35,7 +35,7 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#afterContextInitialized()
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void afterContextInitialized() {
 		for (IConfigurationInitializer initializer : this.getConfigurationInitializers()) {
@@ -44,11 +44,11 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	}
 
 	/**
-	 * get initialized data
+	 * (non-Javadoc)
 	 * 
-	 * @param key
-	 * @return
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getInitializedData(java.lang.String)
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public <T> T getInitializedData(String key) {
 		return (T) this.initializerResult.get(key);
@@ -81,7 +81,7 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	@SuppressWarnings("rawtypes")
 	public void addConfigurationInitializer(IConfigurationInitializer initializer) {
 		if (this.initializers == null) {
-			synchronized(this) {
+			synchronized (this) {
 				if (this.initializers == null) {
 					this.initializers = new LinkedList<IConfigurationInitializer>();
 				}

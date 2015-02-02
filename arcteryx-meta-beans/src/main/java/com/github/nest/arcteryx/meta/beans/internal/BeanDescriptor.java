@@ -9,14 +9,13 @@ import java.util.List;
 
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanConstraint;
+import com.github.nest.arcteryx.meta.beans.IBeanConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.IBeanCreator;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
-import com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext;
 import com.github.nest.arcteryx.meta.beans.IBeanDestroyer;
 import com.github.nest.arcteryx.meta.beans.IBeanFinder;
 import com.github.nest.arcteryx.meta.beans.IBeanPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanValidator;
-import com.github.nest.arcteryx.meta.beans.IBeanConstraintReorganizer;
 import com.github.nest.arcteryx.meta.beans.constraints.BeanConstraints;
 import com.github.nest.arcteryx.meta.internal.ResourceDescriptor;
 
@@ -33,16 +32,6 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	private IBeanConstraintReorganizer constraintReorganizer = null;
 	private Collection<IBeanPropertyDescriptor> beanDescriptors = null;
 	private Collection<IBeanPropertyDescriptor> allBeanDescriptors = null;
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.meta.beans.IBeanDescriptor#getBeanDescriptorContext()
-	 */
-	@Override
-	public IBeanDescriptorContext getBeanDescriptorContext() {
-		return this.getContext();
-	}
 
 	/**
 	 * (non-Javadoc)

@@ -35,7 +35,7 @@ public class BeanPropertyConstraintReorganizer extends
 		List<IBeanPropertyConstraint> list = new LinkedList<IBeanPropertyConstraint>();
 
 		// get all constraints
-		List<IBeanDescriptor> descriptors = descriptor.getBeanDescriptor().getBeanDescriptorContext()
+		List<IBeanDescriptor> descriptors = descriptor.getBeanDescriptor().getContext()
 				.getRecursive(descriptor.getBeanDescriptor().getBeanClass());
 		String propertyName = descriptor.getName();
 		for (IBeanDescriptor bean : descriptors) {

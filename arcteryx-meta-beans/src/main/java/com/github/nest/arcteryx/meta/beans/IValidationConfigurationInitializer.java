@@ -11,7 +11,6 @@ import com.github.nest.arcteryx.meta.beans.internal.IValidationConfiguration;
  * 
  * @author brad.wu
  */
-public interface IValidationConfigurationInitializer extends
-		IConfigurationInitializer<IValidationConfiguration, IBeanDescriptorContext> {
+public interface IValidationConfigurationInitializer extends IConfigurationInitializer<IValidationConfiguration> {
 	String KEY = "configuration.validation";
 }

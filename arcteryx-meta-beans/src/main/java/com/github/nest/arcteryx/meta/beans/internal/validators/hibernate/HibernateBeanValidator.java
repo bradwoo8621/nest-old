@@ -14,7 +14,9 @@ import javax.validation.Validator;
 import org.hibernate.validator.HibernateValidatorConfiguration;
 
 import com.github.nest.arcteryx.meta.beans.IConstraintViolation;
+import com.github.nest.arcteryx.meta.beans.IValidationConfigurationInitializer;
 import com.github.nest.arcteryx.meta.beans.internal.AbstractBeanValidator;
+import com.github.nest.arcteryx.meta.beans.internal.IValidationConfiguration;
 import com.github.nest.arcteryx.meta.beans.internal.validators.BeanValidationException;
 
 /**
@@ -81,7 +83,9 @@ public class HibernateBeanValidator extends AbstractBeanValidator {
 	 * @return
 	 */
 	protected HibernateValidatorConfiguration getConfiguration() {
-		return this.getBeanDescriptor().getBeanDescriptorContext().getValidationConfiguration().getRealConfiguration();
+		IValidationConfiguration configuration = this.getBeanDescriptor().getContext()
+				.getInitializedData(IValidationConfigurationInitializer.KEY);
+		return configuration.getRealConfiguration();
 	}
 
 	/**

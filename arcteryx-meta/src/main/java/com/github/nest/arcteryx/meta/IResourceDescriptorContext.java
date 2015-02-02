@@ -107,4 +107,12 @@ public interface IResourceDescriptorContext {
 	 * @param code
 	 */
 	void registerOperatorProvider(IOperatorProvider provider, String code);
+
+	/**
+	 * get initialized data
+	 * 
+	 * @param key
+	 * @return
+	 */
+	<T> T getInitializedData(String key);
 }

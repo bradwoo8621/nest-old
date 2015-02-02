@@ -32,7 +32,7 @@ public class BeanConstraintReorganizer extends AbstractConstraintReorganizer<IBe
 	protected List<IBeanConstraint> getAllConstraints(IBeanDescriptor descriptor) {
 		List<IBeanConstraint> list = new LinkedList<IBeanConstraint>();
 		// get all constraints
-		List<IBeanDescriptor> descriptors = descriptor.getBeanDescriptorContext().getRecursive(
+		List<IBeanDescriptor> descriptors = descriptor.getContext().getRecursive(
 				descriptor.getBeanClass());
 		for (IBeanDescriptor bean : descriptors) {
 			if (bean.getConstraint() != null) {

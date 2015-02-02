@@ -25,6 +25,8 @@ import com.github.nest.arcteryx.meta.beans.IConstraint;
 public class BeanPropertyConstraintReorganizer extends
 		AbstractConstraintReorganizer<IBeanPropertyDescriptor, IBeanPropertyConstraint> implements
 		IBeanPropertyConstraintReorganizer {
+	private static final long serialVersionUID = -2254874754356518935L;
+
 	/**
 	 * (non-Javadoc)
 	 * 

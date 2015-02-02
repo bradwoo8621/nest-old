@@ -23,6 +23,8 @@ import com.github.nest.arcteryx.meta.beans.IConstraint;
 @SuppressWarnings("rawtypes")
 public class BeanConstraintReorganizer extends AbstractConstraintReorganizer<IBeanDescriptor, IBeanConstraint>
 		implements IBeanConstraintReorganizer {
+	private static final long serialVersionUID = -7902346936505270707L;
+
 	/**
 	 * (non-Javadoc)
 	 * 

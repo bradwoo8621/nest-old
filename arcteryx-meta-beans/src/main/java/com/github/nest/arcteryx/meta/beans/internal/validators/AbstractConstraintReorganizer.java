@@ -19,6 +19,7 @@ import com.github.nest.arcteryx.meta.beans.IConstraintReorganizer;
 @SuppressWarnings("rawtypes")
 public abstract class AbstractConstraintReorganizer<CC extends IConstraintContainer, C extends IConstraint> implements
 		IConstraintReorganizer<CC, C> {
+	private static final long serialVersionUID = -9007456508356074065L;
 	private Map<String, Object> names = null;
 	private Map<Class<? extends C>, Object> types = null;
 	private boolean overwrite = false;

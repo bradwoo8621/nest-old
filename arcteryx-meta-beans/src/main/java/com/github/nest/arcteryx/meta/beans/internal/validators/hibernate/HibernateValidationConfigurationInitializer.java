@@ -71,6 +71,8 @@ import com.github.nest.arcteryx.meta.util.ReflectionUtils;
  * @author brad.wu
  */
 public class HibernateValidationConfigurationInitializer implements IValidationConfigurationInitializer {
+	private static final long serialVersionUID = 3842622404805819914L;
+
 	public static final String MESSAGES = "com.github.nest.arcteryx.meta.beans.internal.validators.hibernate.constraints.Messages";
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -307,6 +309,8 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 	 */
 	protected IBeanConstraintReorganizer createDefaultBeanConstraintReorganizer() {
 		return new BeanConstraintReorganizer() {
+			private static final long serialVersionUID = -5146740484628467201L;
+
 			/**
 			 * (non-Javadoc)
 			 * 
@@ -343,6 +347,8 @@ public class HibernateValidationConfigurationInitializer implements IValidationC
 	 */
 	protected IBeanPropertyConstraintReorganizer createDefaultPropertyConstraintReorganizer() {
 		return new BeanPropertyConstraintReorganizer() {
+			private static final long serialVersionUID = 4979119498134007283L;
+
 			/**
 			 * (non-Javadoc)
 			 * 

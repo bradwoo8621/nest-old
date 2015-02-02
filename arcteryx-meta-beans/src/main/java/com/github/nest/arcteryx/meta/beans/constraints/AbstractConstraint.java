@@ -22,6 +22,8 @@ import com.github.nest.arcteryx.meta.beans.IConstraint;
  */
 public abstract class AbstractConstraint<ConstraintAnnotatoin extends Annotation> implements
 		IConstraint<ConstraintAnnotatoin> {
+	private static final long serialVersionUID = -1960757715473769239L;
+
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
 	private String name = null;

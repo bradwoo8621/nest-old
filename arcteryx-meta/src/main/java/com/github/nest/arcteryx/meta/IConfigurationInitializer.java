@@ -3,12 +3,14 @@
  */
 package com.github.nest.arcteryx.meta;
 
+import java.io.Serializable;
+
 /**
  * configuration initializer
  * 
  * @author brad.wu
  */
-public interface IConfigurationInitializer<T> {
+public interface IConfigurationInitializer<T> extends Serializable {
 	/**
 	 * initialize
 	 * 

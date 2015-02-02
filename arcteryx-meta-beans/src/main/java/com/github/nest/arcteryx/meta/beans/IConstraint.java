@@ -3,6 +3,7 @@
  */
 package com.github.nest.arcteryx.meta.beans;
 
+import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * 
  * @author brad.wu
  */
-public interface IConstraint<ConstraintAnnotation extends Annotation> {
+public interface IConstraint<ConstraintAnnotation extends Annotation> extends Serializable {
 	/**
 	 * get name of constraint. name can be null, if don't want to be removed by
 	 * name in sub classes.

@@ -62,6 +62,7 @@ import com.github.nest.arcteryx.validation.oval.localization.message.OvalResourc
  * @author brad.wu
  */
 public class OValValidationConfigurationInitializer implements IValidationConfigurationInitializer {
+	private static final long serialVersionUID = -2221049148470519548L;
 	public static final String MESSAGES = "com/github/nest/arcteryx/meta/beans/internal/validators/oval/constraints/Messages";
 	/**
 	 * when initialize the configuration, use getter method first or not
@@ -278,6 +279,8 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 	 */
 	protected IBeanConstraintReorganizer createDefaultBeanConstraintReorganizer() {
 		return new BeanConstraintReorganizer() {
+			private static final long serialVersionUID = -8928033238330327986L;
+
 			/**
 			 * (non-Javadoc)
 			 * 
@@ -389,6 +392,8 @@ public class OValValidationConfigurationInitializer implements IValidationConfig
 	 */
 	protected IBeanPropertyConstraintReorganizer createDefaultPropertyConstraintReorganizer() {
 		return new BeanPropertyConstraintReorganizer() {
+			private static final long serialVersionUID = 6288191233653612290L;
+
 			/**
 			 * (non-Javadoc)
 			 * 

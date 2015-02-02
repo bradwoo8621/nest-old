@@ -3,6 +3,7 @@
  */
 package com.github.nest.arcteryx.meta.beans;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  * @author brad.wu
  */
 @SuppressWarnings("rawtypes")
-public interface IConstraintReorganizer<CC extends IConstraintContainer, C extends IConstraint> {
+public interface IConstraintReorganizer<CC extends IConstraintContainer, C extends IConstraint> extends Serializable {
 	/**
 	 * get effective constraints
 	 * 

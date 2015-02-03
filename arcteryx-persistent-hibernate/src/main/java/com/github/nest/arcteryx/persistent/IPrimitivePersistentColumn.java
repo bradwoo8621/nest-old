@@ -31,6 +31,13 @@ public interface IPrimitivePersistentColumn extends IPersistentColumn {
 	boolean isPrimaryKey();
 
 	/**
+	 * primary key generator
+	 * 
+	 * @return
+	 */
+	IPrimaryKeyGenerator getPrimaryKeyGenerator();
+
+	/**
 	 * is version column or not
 	 * 
 	 * @return

@@ -3,13 +3,18 @@
  */
 package com.github.nest.arcteryx.persistent;
 
-import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
+import com.github.nest.arcteryx.meta.beans.IBeanDescriptorContext;
 
 /**
  * persistent bean descriptor context
  * 
  * @author brad.wu
  */
-public interface IPersistentBeanDescriptorContext extends IBeanDescriptor {
-
+public interface IPersistentBeanDescriptorContext extends IBeanDescriptorContext {
+	/**
+	 * get persistent configuration
+	 * 
+	 * @return
+	 */
+	IPersistentConfiguration getPersistentConfiguration();
 }

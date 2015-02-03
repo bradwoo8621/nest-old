@@ -30,8 +30,8 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	@SuppressWarnings("rawtypes")
 	private IBeanConstraint constraint = null;
 	private IBeanConstraintReorganizer constraintReorganizer = null;
-	private Collection<IBeanPropertyDescriptor> beanDescriptors = null;
-	private Collection<IBeanPropertyDescriptor> allBeanDescriptors = null;
+	private Collection<IBeanPropertyDescriptor> propertyDescriptors = null;
+	private Collection<IBeanPropertyDescriptor> allPropertyDescriptors = null;
 
 	/**
 	 * (non-Javadoc)
@@ -151,9 +151,9 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 */
 	@Override
 	public Collection<IBeanPropertyDescriptor> getBeanProperties() {
-		if (this.allBeanDescriptors == null) {
+		if (this.allPropertyDescriptors == null) {
 			synchronized (this) {
-				if (this.allBeanDescriptors == null) {
+				if (this.allPropertyDescriptors == null) {
 					List<IBeanPropertyDescriptor> beanDescriptors = new ArrayList<IBeanPropertyDescriptor>();
 
 					Collection<IPropertyDescriptor> descriptors = this.getProperties();
@@ -162,11 +162,11 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 							beanDescriptors.add((IBeanPropertyDescriptor) descriptor);
 						}
 					}
-					this.allBeanDescriptors = beanDescriptors;
+					this.allPropertyDescriptors = beanDescriptors;
 				}
 			}
 		}
-		return this.allBeanDescriptors;
+		return this.allPropertyDescriptors;
 	}
 
 	/**
@@ -176,9 +176,9 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 	 */
 	@Override
 	public Collection<IBeanPropertyDescriptor> getDeclaredBeanProperties() {
-		if (this.beanDescriptors == null) {
+		if (this.propertyDescriptors == null) {
 			synchronized (this) {
-				if (this.beanDescriptors == null) {
+				if (this.propertyDescriptors == null) {
 					List<IBeanPropertyDescriptor> beanDescriptors = new ArrayList<IBeanPropertyDescriptor>();
 
 					Collection<IPropertyDescriptor> descriptors = this.getDeclaredProperties();
@@ -187,10 +187,10 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 							beanDescriptors.add((IBeanPropertyDescriptor) descriptor);
 						}
 					}
-					this.beanDescriptors = beanDescriptors;
+					this.propertyDescriptors = beanDescriptors;
 				}
 			}
 		}
-		return this.beanDescriptors;
+		return this.propertyDescriptors;
 	}
 }

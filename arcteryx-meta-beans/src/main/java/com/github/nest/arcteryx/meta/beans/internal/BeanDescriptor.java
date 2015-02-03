@@ -154,15 +154,15 @@ public class BeanDescriptor extends ResourceDescriptor implements IBeanDescripto
 		if (this.allPropertyDescriptors == null) {
 			synchronized (this) {
 				if (this.allPropertyDescriptors == null) {
-					List<IBeanPropertyDescriptor> beanDescriptors = new ArrayList<IBeanPropertyDescriptor>();
+					List<IBeanPropertyDescriptor> list = new ArrayList<IBeanPropertyDescriptor>();
 
 					Collection<IPropertyDescriptor> descriptors = this.getProperties();
 					for (IPropertyDescriptor descriptor : descriptors) {
 						if (descriptor instanceof IBeanPropertyDescriptor) {
-							beanDescriptors.add((IBeanPropertyDescriptor) descriptor);
+							list.add((IBeanPropertyDescriptor) descriptor);
 						}
 					}
-					this.allPropertyDescriptors = beanDescriptors;
+					this.allPropertyDescriptors = list;
 				}
 			}
 		}

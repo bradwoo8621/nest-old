@@ -35,7 +35,7 @@ public interface IPrimitivePersistentColumn extends IPersistentColumn {
 	 * 
 	 * @return
 	 */
-	IPrimaryKeyGenerator getPrimaryKeyGenerator();
+	IPrimaryKey getPrimaryKeyGenerator();
 
 	/**
 	 * is version column or not

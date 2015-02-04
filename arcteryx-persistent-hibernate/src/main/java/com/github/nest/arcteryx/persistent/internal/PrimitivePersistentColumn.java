@@ -3,7 +3,7 @@
  */
 package com.github.nest.arcteryx.persistent.internal;
 
-import com.github.nest.arcteryx.persistent.IPrimaryKeyGenerator;
+import com.github.nest.arcteryx.persistent.IPrimaryKey;
 import com.github.nest.arcteryx.persistent.IPrimitivePersistentColumn;
 import com.github.nest.arcteryx.persistent.PrimitiveColumnType;
 
@@ -18,7 +18,7 @@ public class PrimitivePersistentColumn implements IPrimitivePersistentColumn {
 	private String name = null;
 	private PrimitiveColumnType type = null;
 	private boolean primaryKey = false;
-	private IPrimaryKeyGenerator primaryKeyGenerator = null;
+	private IPrimaryKey primaryKeyGenerator = null;
 	private boolean version = false;
 
 	/**
@@ -81,7 +81,7 @@ public class PrimitivePersistentColumn implements IPrimitivePersistentColumn {
 	 * @see com.github.nest.arcteryx.persistent.IPrimitivePersistentColumn#getPrimaryKeyGenerator()
 	 */
 	@Override
-	public IPrimaryKeyGenerator getPrimaryKeyGenerator() {
+	public IPrimaryKey getPrimaryKeyGenerator() {
 		return this.primaryKeyGenerator;
 	}
 
@@ -89,7 +89,7 @@ public class PrimitivePersistentColumn implements IPrimitivePersistentColumn {
 	 * @param primaryKeyGenerator
 	 *            the primaryKeyGenerator to set
 	 */
-	public void setPrimaryKeyGenerator(IPrimaryKeyGenerator primaryKeyGenerator) {
+	public void setPrimaryKeyGenerator(IPrimaryKey primaryKeyGenerator) {
 		this.primaryKeyGenerator = primaryKeyGenerator;
 	}
 

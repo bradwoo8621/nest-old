@@ -29,12 +29,12 @@ import com.github.nest.arcteryx.persistent.IPersistentBeanPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentColumn;
 import com.github.nest.arcteryx.persistent.IPersistentConfiguration;
 import com.github.nest.arcteryx.persistent.IPersistentConfigurationInitializer;
-import com.github.nest.arcteryx.persistent.IPrimaryKeyGenerator;
+import com.github.nest.arcteryx.persistent.IPrimaryKey;
 import com.github.nest.arcteryx.persistent.IPrimitivePersistentColumn;
 import com.github.nest.arcteryx.persistent.PrimitiveColumnType;
 import com.github.nest.arcteryx.persistent.internal.PersistentConfiguration;
-import com.github.nest.arcteryx.persistent.internal.hibernate.IPrimaryKeyGeneratorGenerator.GeneratorParameter;
-import com.github.nest.arcteryx.persistent.internal.hibernate.IPrimaryKeyGeneratorGenerator.PrimaryKeyGeneratorUtils;
+import com.github.nest.arcteryx.persistent.internal.hibernate.IPrimaryKeyGenerator.GeneratorParameter;
+import com.github.nest.arcteryx.persistent.internal.hibernate.IPrimaryKeyGenerator.PrimaryKeyGeneratorUtils;
 import com.github.nest.arcteryx.persistent.internal.hibernate.IPrimitiveColumnTypeGenerator.PrimitiveColumnTypeGeneratorUtils;
 
 /**
@@ -49,7 +49,7 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	private Properties properties = null;
 	private Map<PrimitiveColumnType, IPrimitiveColumnTypeGenerator> primitiveColumnTypeGenerators = new HashMap<PrimitiveColumnType, IPrimitiveColumnTypeGenerator>();
 	@SuppressWarnings("rawtypes")
-	private Map<Class<? extends IPrimaryKeyGenerator>, IPrimaryKeyGeneratorGenerator> primaryKeyGenerators = new HashMap<Class<? extends IPrimaryKeyGenerator>, IPrimaryKeyGeneratorGenerator>();
+	private Map<Class<? extends IPrimaryKey>, IPrimaryKeyGenerator> primaryKeyGenerators = new HashMap<Class<? extends IPrimaryKey>, IPrimaryKeyGenerator>();
 
 	public HibernatePersistentConfigurationInitializer() {
 		initializePrimitiveColumnTypeGenerators();
@@ -61,8 +61,8 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 */
 	@SuppressWarnings("rawtypes")
 	protected void initializePrimaryKeyGenerators() {
-		Set<IPrimaryKeyGeneratorGenerator> generators = PrimaryKeyGeneratorUtils.predefinedGenerators();
-		for (IPrimaryKeyGeneratorGenerator generator : generators) {
+		Set<IPrimaryKeyGenerator> generators = PrimaryKeyGeneratorUtils.predefinedGenerators();
+		for (IPrimaryKeyGenerator generator : generators) {
 			this.addPrimaryKeyGenerator(generator);
 		}
 	}
@@ -74,7 +74,7 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	protected IPrimaryKeyGeneratorGenerator getPrimaryKeyGenerator(IPrimaryKeyGenerator type) {
+	protected IPrimaryKeyGenerator getPrimaryKeyGenerator(IPrimaryKey type) {
 		return primaryKeyGenerators.get(type.getClass());
 	}
 
@@ -83,7 +83,7 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 */
 	@SuppressWarnings("rawtypes")
 	public void setPrimaryKeyGenerators(
-			Map<Class<? extends IPrimaryKeyGenerator>, IPrimaryKeyGeneratorGenerator> primaryKeyGenerators) {
+			Map<Class<? extends IPrimaryKey>, IPrimaryKeyGenerator> primaryKeyGenerators) {
 		this.primaryKeyGenerators = primaryKeyGenerators;
 	}
 
@@ -93,7 +93,7 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * @param generator
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public void addPrimaryKeyGenerator(IPrimaryKeyGeneratorGenerator generator) {
+	public void addPrimaryKeyGenerator(IPrimaryKeyGenerator generator) {
 		this.primaryKeyGenerators.put(generator.getSupportedType(), generator);
 	}
 
@@ -261,8 +261,8 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected Element createPrimaryKeyGeneratorElement(IPrimitivePersistentColumn primitiveColumn) {
-		IPrimaryKeyGenerator generator = primitiveColumn.getPrimaryKeyGenerator();
-		IPrimaryKeyGeneratorGenerator pkGenerator = this.getPrimaryKeyGenerator(generator);
+		IPrimaryKey generator = primitiveColumn.getPrimaryKeyGenerator();
+		IPrimaryKeyGenerator pkGenerator = this.getPrimaryKeyGenerator(generator);
 		Element generatorElement = DocumentHelper.createElement("generator");
 		generatorElement.addAttribute("class", pkGenerator.getGeneratorClass(generator));
 		Set<GeneratorParameter> params = pkGenerator.getParameters(generator);

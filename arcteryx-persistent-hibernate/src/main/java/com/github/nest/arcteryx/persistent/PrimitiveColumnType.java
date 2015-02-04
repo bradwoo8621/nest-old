@@ -9,7 +9,7 @@ package com.github.nest.arcteryx.persistent;
  * @author brad.wu
  */
 public enum PrimitiveColumnType {
-	INT, SHORT, LONG, FLOAT, DOUBLE, BIGINTEGER, BIGDECIMAL,
+	INT, SHORT, LONG, FLOAT, DOUBLE, BIGDECIMAL,
 
 	DATE, TIME, TIMESTAMP,
 

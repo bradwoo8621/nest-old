@@ -41,4 +41,11 @@ public interface IPersistentBeanDescriptor extends IBeanDescriptor {
 	 * @return
 	 */
 	Set<String> getAbandonedProperties();
+
+	/**
+	 * get persistent bean saver
+	 * 
+	 * @return
+	 */
+	IPersistentBeanSaver getSaver();
 }

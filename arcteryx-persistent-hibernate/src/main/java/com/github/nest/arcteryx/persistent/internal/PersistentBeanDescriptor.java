@@ -12,6 +12,7 @@ import com.github.nest.arcteryx.meta.IPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanPropertyDescriptor;
+import com.github.nest.arcteryx.persistent.IPersistentBeanSaver;
 
 /**
  * persistent bean descriptor.<br>
@@ -126,5 +127,15 @@ public class PersistentBeanDescriptor extends BeanDescriptor implements IPersist
 	 */
 	public boolean isAbandoned(String propertyName) {
 		return this.getAbandonedProperties() == null ? false : this.getAbandonedProperties().contains(propertyName);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor#getSaver()
+	 */
+	@Override
+	public IPersistentBeanSaver getSaver() {
+		return this.getOperator(IPersistentBeanSaver.CODE);
 	}
 }

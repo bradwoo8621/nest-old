@@ -14,4 +14,8 @@ import com.github.nest.arcteryx.persistent.IPrimaryKey;
  */
 public class IdentityKey implements IPrimaryKey {
 	private static final long serialVersionUID = 4591776098993385972L;
+	public static final IPrimaryKey IDENTITY = new IdentityKey();
+
+	private IdentityKey() {
+	}
 }

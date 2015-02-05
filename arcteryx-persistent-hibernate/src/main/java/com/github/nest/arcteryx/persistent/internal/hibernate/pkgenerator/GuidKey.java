@@ -13,4 +13,8 @@ import com.github.nest.arcteryx.persistent.IPrimaryKey;
  */
 public class GuidKey implements IPrimaryKey {
 	private static final long serialVersionUID = -3522466889900540507L;
+	public static final IPrimaryKey GUID = new GuidKey();
+
+	private GuidKey() {
+	}
 }

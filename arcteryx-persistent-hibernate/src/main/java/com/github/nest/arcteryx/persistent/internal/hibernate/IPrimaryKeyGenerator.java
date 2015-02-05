@@ -7,11 +7,16 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.github.nest.arcteryx.persistent.IPrimaryKey;
+import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.AssignedKey;
+import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.ForeignKey;
 import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.GuidKey;
 import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.HiloKey;
 import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.IdentityKey;
 import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.IncrementKey;
+import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.NativeKey;
 import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.SequenceHiloKey;
 import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.SequenceKey;
 import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.UuidKey;
@@ -183,6 +188,59 @@ public interface IPrimaryKeyGenerator<T extends IPrimaryKey> {
 		}
 	}
 
+	/**
+	 * @see NativeKey
+	 * @author brad.wu
+	 */
+	public static class NativeGenerator extends GenericPrimaryKeyGenerator<NativeKey> {
+		public NativeGenerator() {
+			super(NativeKey.class, "native");
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.persistent.internal.hibernate.IPrimaryKeyGenerator#getParameters(com.github.nest.arcteryx.persistent.IPrimaryKey)
+		 */
+		@Override
+		public Set<GeneratorParameter> getParameters(NativeKey generator) {
+			Set<GeneratorParameter> params = new HashSet<GeneratorParameter>();
+			if (StringUtils.isNotBlank(generator.getSequenceName())) {
+				params.add(new GeneratorParameter("sequence", generator.getSequenceName()));
+			}
+			if (StringUtils.isNotBlank(generator.getTableName())) {
+				params.add(new GeneratorParameter("table", generator.getTableName()));
+			}
+			if (StringUtils.isNotBlank(generator.getColumnName())) {
+				params.add(new GeneratorParameter("column", generator.getColumnName()));
+			}
+			params.add(new GeneratorParameter("max_lo", String.valueOf(generator.getMaxLowValue())));
+			return params;
+		}
+	}
+
+	/**
+	 * @see ForeignKey
+	 * @author brad.wu
+	 */
+	public static class ForeignGenerator extends GenericPrimaryKeyGenerator<ForeignKey> {
+		public ForeignGenerator() {
+			super(ForeignKey.class, "foreign");
+		}
+
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see com.github.nest.arcteryx.persistent.internal.hibernate.IPrimaryKeyGenerator#getParameters(com.github.nest.arcteryx.persistent.IPrimaryKey)
+		 */
+		@Override
+		public Set<GeneratorParameter> getParameters(ForeignKey generator) {
+			Set<GeneratorParameter> params = new HashSet<GeneratorParameter>();
+			params.add(new GeneratorParameter("property", generator.getProperty()));
+			return params;
+		}
+	}
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static class PrimaryKeyGeneratorUtils {
 		private final static Set<IPrimaryKeyGenerator> generators = new HashSet<IPrimaryKeyGenerator>();
@@ -195,6 +253,9 @@ public interface IPrimaryKeyGenerator<T extends IPrimaryKey> {
 			generators.add(new GenericPrimaryKeyGenerator(IdentityKey.class, "identity"));
 			generators.add(new GenericPrimaryKeyGenerator(UuidKey.class, "uuid"));
 			generators.add(new GenericPrimaryKeyGenerator(GuidKey.class, "guid"));
+			generators.add(new NativeGenerator());
+			generators.add(new GenericPrimaryKeyGenerator(AssignedKey.class, "assigned"));
+			generators.add(new ForeignGenerator());
 		}
 
 		public static Set<IPrimaryKeyGenerator> predefinedGenerators() {

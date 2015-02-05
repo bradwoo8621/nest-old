@@ -5,8 +5,12 @@ package com.github.nest.arcteryx.persistent.internal.hibernate;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -82,8 +86,7 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * @param primaryKeyGenerators
 	 */
 	@SuppressWarnings("rawtypes")
-	public void setPrimaryKeyGenerators(
-			Map<Class<? extends IPrimaryKey>, IPrimaryKeyGenerator> primaryKeyGenerators) {
+	public void setPrimaryKeyGenerators(Map<Class<? extends IPrimaryKey>, IPrimaryKeyGenerator> primaryKeyGenerators) {
 		this.primaryKeyGenerators = primaryKeyGenerators;
 	}
 
@@ -218,7 +221,39 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 		classElement.addAttribute("table", descriptor.getTableName());
 
 		Collection<IPersistentBeanPropertyDescriptor> properties = descriptor.getPersistentProperties();
-		for (IPersistentBeanPropertyDescriptor property : properties) {
+		List<IPersistentBeanPropertyDescriptor> list = new ArrayList<IPersistentBeanPropertyDescriptor>(
+				properties.size());
+		list.addAll(properties);
+		// id first, version second.
+		Collections.sort(list, new Comparator<IPersistentBeanPropertyDescriptor>() {
+			/**
+			 * (non-Javadoc)
+			 * 
+			 * @see java.util.Comparator#compare(java.lang.Object,
+			 *      java.lang.Object)
+			 */
+			@Override
+			public int compare(IPersistentBeanPropertyDescriptor o1, IPersistentBeanPropertyDescriptor o2) {
+				return getValueOfProperty(o1) - getValueOfProperty(o2);
+			}
+
+			private int getValueOfProperty(IPersistentBeanPropertyDescriptor descriptor) {
+				IPersistentColumn column = descriptor.getPersistentColumn();
+				if (column instanceof IPrimitivePersistentColumn) {
+					IPrimitivePersistentColumn ippc = (IPrimitivePersistentColumn) column;
+					if (ippc.isPrimaryKey()) {
+						return 1;
+					} else if (ippc.isVersion()) {
+						return 2;
+					} else {
+						return 3;
+					}
+				} else {
+					return 999;
+				}
+			}
+		});
+		for (IPersistentBeanPropertyDescriptor property : list) {
 			classElement.add(createPropertyElement(property));
 		}
 		return classElement;
@@ -239,18 +274,39 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 			if (primitiveColumn.isPrimaryKey()) {
 				propertyElement = DocumentHelper.createElement("id");
 				propertyElement.add(createPrimaryKeyGeneratorElement(primitiveColumn));
+				// column type
+				propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
+			} else if (primitiveColumn.isVersion()) {
+				PrimitiveColumnType type = primitiveColumn.getType();
+				if (type == PrimitiveColumnType.TIMESTAMP) {
+					propertyElement = DocumentHelper.createElement("timestamp");
+				} else {
+					propertyElement = DocumentHelper.createElement("version");
+					// column type
+					propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
+				}
 			} else {
 				propertyElement = DocumentHelper.createElement("property");
+				// column type
+				propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
 			}
 			// column name
 			propertyElement.addAttribute("column", primitiveColumn.getName());
-			// column type
-			propertyElement.addAttribute("type", this.getPrimitiveColumnTypeGenerator(primitiveColumn.getType())
-					.generate(primitiveColumn.getType()));
 		}
 		// property name
 		propertyElement.addAttribute("name", property.getName());
 		return propertyElement;
+	}
+
+	/**
+	 * generate type string
+	 * 
+	 * @param primitiveColumn
+	 * @return
+	 */
+	protected String generateTypeString(IPrimitivePersistentColumn primitiveColumn) {
+		PrimitiveColumnType type = primitiveColumn.getType();
+		return this.getPrimitiveColumnTypeGenerator(type).generate(type);
 	}
 
 	/**

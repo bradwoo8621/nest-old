@@ -18,6 +18,4 @@ public enum PrimitiveColumnType {
 	BOOLEAN,
 
 	BYTES,
-
-	VERSION, VERSION_TIMESTAMP
 }

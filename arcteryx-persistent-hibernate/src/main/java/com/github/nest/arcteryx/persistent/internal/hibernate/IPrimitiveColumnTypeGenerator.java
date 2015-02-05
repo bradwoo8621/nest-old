@@ -78,9 +78,6 @@ public interface IPrimitiveColumnTypeGenerator {
 			generators.add(new GenericGenerator("boolean", PrimitiveColumnType.BOOLEAN));
 
 			generators.add(new GenericGenerator("blob", PrimitiveColumnType.BYTES));
-
-			generators.add(new GenericGenerator("version", PrimitiveColumnType.LONG));
-			generators.add(new GenericGenerator("timestamp", PrimitiveColumnType.VERSION_TIMESTAMP));
 		}
 
 		public static Set<IPrimitiveColumnTypeGenerator> predefinedGenerators() {

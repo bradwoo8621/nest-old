@@ -12,7 +12,7 @@ import com.github.nest.arcteryx.persistent.PrimitiveColumnType;
  * 
  * @author brad.wu
  */
-public class PrimitivePersistentColumn implements IPrimitivePersistentColumn {
+public class PrimitivePersistentColumn extends AbstractPersistentColumn implements IPrimitivePersistentColumn {
 	private static final long serialVersionUID = -1871799444733115212L;
 
 	private String name = null;

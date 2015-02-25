@@ -22,7 +22,7 @@ import com.github.nest.arcteryx.persistent.IPersistentBeanSaver;
 import com.github.nest.arcteryx.persistent.IPersistentConfiguration;
 import com.github.nest.arcteryx.persistent.IPersistentConfigurationInitializer;
 import com.github.nest.arcteryx.persistent.PrimitiveColumnType;
-import com.github.nest.arcteryx.persistent.internal.PersistentBeanDescriptor;
+import com.github.nest.arcteryx.persistent.internal.AbstractPersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.internal.PersistentBeanDescriptorContext;
 import com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn;
@@ -64,7 +64,7 @@ public class TestSequenceHilo {
 		context.getOperatorProviderRegistry().register(IPersistentBeanSaver.CODE,
 				new HibernatePersistentSaverProvider());
 
-		PersistentBeanDescriptor descriptor = new PersistentBeanDescriptor();
+		AbstractPersistentBeanDescriptor descriptor = new AbstractPersistentBeanDescriptor();
 		descriptor.setBeanClass(Person.class);
 
 		List<IPropertyDescriptor> properties = new ArrayList<IPropertyDescriptor>();

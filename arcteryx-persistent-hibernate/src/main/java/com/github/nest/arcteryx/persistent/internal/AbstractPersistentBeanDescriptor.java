@@ -22,31 +22,12 @@ import com.github.nest.arcteryx.persistent.IPersistentBeanSaver;
  * @author brad.wu
  */
 @SuppressWarnings("unchecked")
-public class PersistentBeanDescriptor extends BeanDescriptor implements IPersistentBeanDescriptor {
+public class AbstractPersistentBeanDescriptor extends BeanDescriptor implements IPersistentBeanDescriptor {
 	private static final long serialVersionUID = 4950944340850539340L;
 
-	private String tableName = null;
 	private Collection<IPersistentBeanPropertyDescriptor> propertyDescriptors = null;
 	private Collection<IPersistentBeanPropertyDescriptor> allPropertyDescriptors = null;
 	private Set<String> abandonedProperties = null;
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor#getTableName()
-	 */
-	@Override
-	public String getTableName() {
-		return this.tableName;
-	}
-
-	/**
-	 * @param tableName
-	 *            the tableName to set
-	 */
-	public void setTableName(String tableName) {
-		this.tableName = tableName;
-	}
 
 	/**
 	 * (non-Javadoc)

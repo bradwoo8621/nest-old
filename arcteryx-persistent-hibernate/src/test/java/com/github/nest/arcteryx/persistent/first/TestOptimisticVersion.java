@@ -25,7 +25,7 @@ import com.github.nest.arcteryx.persistent.IPersistentBeanSaver;
 import com.github.nest.arcteryx.persistent.IPersistentConfiguration;
 import com.github.nest.arcteryx.persistent.IPersistentConfigurationInitializer;
 import com.github.nest.arcteryx.persistent.PrimitiveColumnType;
-import com.github.nest.arcteryx.persistent.internal.PersistentBeanDescriptor;
+import com.github.nest.arcteryx.persistent.internal.AbstractPersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.internal.PersistentBeanDescriptorContext;
 import com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn;
@@ -40,7 +40,7 @@ import com.github.nest.arcteryx.persistent.internal.providers.HibernatePersisten
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestOptimisticVersion {
 	private static PersistentBeanDescriptorContext context = null;
-	private static PersistentBeanDescriptor descriptor = null;
+	private static AbstractPersistentBeanDescriptor descriptor = null;
 
 	@BeforeClass
 	public static void init() throws ClassNotFoundException, SQLException {
@@ -71,7 +71,7 @@ public class TestOptimisticVersion {
 		context.getOperatorProviderRegistry().register(IPersistentBeanSaver.CODE,
 				new HibernatePersistentSaverProvider());
 
-		descriptor = new PersistentBeanDescriptor();
+		descriptor = new AbstractPersistentBeanDescriptor();
 		descriptor.setBeanClass(Person.class);
 
 		List<IPropertyDescriptor> properties = new ArrayList<IPropertyDescriptor>();

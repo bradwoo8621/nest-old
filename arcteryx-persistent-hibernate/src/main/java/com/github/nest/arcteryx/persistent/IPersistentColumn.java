@@ -11,4 +11,10 @@ import java.io.Serializable;
  * @author brad.wu
  */
 public interface IPersistentColumn extends Serializable {
+	/**
+	 * get property descriptor
+	 * 
+	 * @return
+	 */
+	IPersistentBeanPropertyDescriptor getPropertyDescriptor();
 }

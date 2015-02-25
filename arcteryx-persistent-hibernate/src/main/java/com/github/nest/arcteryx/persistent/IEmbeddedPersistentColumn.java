@@ -3,11 +3,8 @@
  */
 package com.github.nest.arcteryx.persistent;
 
-import java.util.Map;
-
 /**
- * embedded persistent column. one-to-one relationship or embedded columns.<br>
- * TODO how to overwrite the embedded properties?
+ * embedded persistent column. <br>
  * 
  * @author brad.wu
  */
@@ -17,22 +14,13 @@ public interface IEmbeddedPersistentColumn extends IPersistentColumn {
 	 * 
 	 * @return
 	 */
-	IPersistentBeanDescriptor getEmbeddedBean();
+	IEmbeddablePersistentBeanDescriptor getEmbeddedBean();
 
 	/**
-	 * is physical embedded or not
+	 * get overridden column name by original column name
 	 * 
+	 * @param propertyName
 	 * @return
 	 */
-	boolean isPhysicalEmbedded();
-
-	/**
-	 * get relation properties. only active when
-	 * {@linkplain #isPhysicalEmbedded()} returns false.<br>
-	 * Key: property of persistent bean itself,<br>
-	 * Value: property of embedded bean.
-	 * 
-	 * @return
-	 */
-	Map<String, String> getRelationProperties();
+	String getOverriddenColumnName(String propertyName);
 }

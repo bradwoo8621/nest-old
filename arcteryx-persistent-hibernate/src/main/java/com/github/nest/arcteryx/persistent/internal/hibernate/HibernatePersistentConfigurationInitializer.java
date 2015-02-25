@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -28,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 import com.github.nest.arcteryx.meta.ResourceException;
+import com.github.nest.arcteryx.persistent.IEmbeddedPersistentColumn;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentColumn;
@@ -35,6 +37,7 @@ import com.github.nest.arcteryx.persistent.IPersistentConfiguration;
 import com.github.nest.arcteryx.persistent.IPersistentConfigurationInitializer;
 import com.github.nest.arcteryx.persistent.IPrimaryKey;
 import com.github.nest.arcteryx.persistent.IPrimitivePersistentColumn;
+import com.github.nest.arcteryx.persistent.IStandalonePersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.PrimitiveColumnType;
 import com.github.nest.arcteryx.persistent.internal.PersistentConfiguration;
 import com.github.nest.arcteryx.persistent.internal.hibernate.IPrimaryKeyGenerator.GeneratorParameter;
@@ -47,6 +50,38 @@ import com.github.nest.arcteryx.persistent.internal.hibernate.IPrimitiveColumnTy
  * @author brad.wu
  */
 public class HibernatePersistentConfigurationInitializer implements IPersistentConfigurationInitializer {
+	private final class PropertyComparator implements Comparator<IPersistentBeanPropertyDescriptor> {
+		/**
+		 * (non-Javadoc)
+		 * 
+		 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+		 */
+		@Override
+		public int compare(IPersistentBeanPropertyDescriptor o1, IPersistentBeanPropertyDescriptor o2) {
+			return getValueOfProperty(o1) - getValueOfProperty(o2);
+		}
+
+		private int getValueOfProperty(IPersistentBeanPropertyDescriptor descriptor) {
+			IPersistentColumn column = descriptor.getPersistentColumn();
+			if (column instanceof IPrimitivePersistentColumn) {
+				IPrimitivePersistentColumn ippc = (IPrimitivePersistentColumn) column;
+				if (ippc.isPrimaryKey()) {
+					return 1;
+				} else if (ippc.isVersion()) {
+					return 2;
+				} else {
+					return 3;
+				}
+			} else {
+				return 999;
+			}
+		}
+	}
+
+	private static final String HIBERNATE_XML_SYSTEM_ID = "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd";
+	private static final String HIBERNATE_XML_NAME = "hibernate-mapping";
+	private static final String HIBERNATE_XML_PUBLIC_ID = "-//Hibernate/Hibernate Mapping DTD 3.0//EN";
+
 	private static final long serialVersionUID = -5380074460354685470L;
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
@@ -149,7 +184,9 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 		Collection<IPersistentBeanDescriptor> descriptors = context.getDescriptors(IPersistentBeanDescriptor.class);
 		if (descriptors != null) {
 			for (IPersistentBeanDescriptor descriptor : descriptors) {
-				configuration.addXML(convertToXML(descriptor));
+				if (descriptor instanceof IStandalonePersistentBeanDescriptor) {
+					configuration.addXML(convertToXML((IStandalonePersistentBeanDescriptor) descriptor));
+				}
 			}
 		}
 		Properties properties = this.getProperties();
@@ -168,7 +205,7 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * @return
 	 * @throws IOException
 	 */
-	protected String convertToXML(IPersistentBeanDescriptor descriptor) {
+	protected String convertToXML(IStandalonePersistentBeanDescriptor descriptor) {
 		Document doc = createDocument(descriptor);
 
 		StringWriter sw = new StringWriter();
@@ -183,8 +220,8 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 		}
 		if (getLogger().isDebugEnabled()) {
 			getLogger().debug(
-					"Class [" + descriptor.getBeanClass().getName() + "] has been configured into hibernate. XML as ["
-							+ sw.toString() + "].");
+					"Class [" + descriptor.getResourceClass().getName()
+							+ "] has been configured into hibernate. XML as [" + sw.toString() + "].");
 		}
 		return sw.toString();
 	}
@@ -195,10 +232,9 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * @param descriptor
 	 * @return
 	 */
-	protected Document createDocument(IPersistentBeanDescriptor descriptor) {
+	protected Document createDocument(IStandalonePersistentBeanDescriptor descriptor) {
 		Document doc = DocumentHelper.createDocument();
-		doc.addDocType("hibernate-mapping", "-//Hibernate/Hibernate Mapping DTD 3.0//EN",
-				"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd");
+		doc.addDocType(HIBERNATE_XML_NAME, HIBERNATE_XML_PUBLIC_ID, HIBERNATE_XML_SYSTEM_ID);
 
 		Element root = createRootElement(descriptor, doc);
 		doc.setRootElement(root);
@@ -215,48 +251,36 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * @param descriptor
 	 * @return
 	 */
-	protected Element createClassElement(IPersistentBeanDescriptor descriptor) {
+	protected Element createClassElement(IStandalonePersistentBeanDescriptor descriptor) {
 		Element classElement = DocumentHelper.createElement("class");
 		classElement.addAttribute("name", descriptor.getBeanClass().getSimpleName());
 		classElement.addAttribute("table", descriptor.getTableName());
 
+		List<Element> propertyElements = createPropertyElements(descriptor);
+		for (Element propertyElement : propertyElements) {
+			classElement.add(propertyElement);
+		}
+		return classElement;
+	}
+
+	/**
+	 * create property elements
+	 * 
+	 * @param descriptor
+	 * @return
+	 */
+	protected List<Element> createPropertyElements(IPersistentBeanDescriptor descriptor) {
 		Collection<IPersistentBeanPropertyDescriptor> properties = descriptor.getPersistentProperties();
 		List<IPersistentBeanPropertyDescriptor> list = new ArrayList<IPersistentBeanPropertyDescriptor>(
 				properties.size());
 		list.addAll(properties);
 		// id first, version second.
-		Collections.sort(list, new Comparator<IPersistentBeanPropertyDescriptor>() {
-			/**
-			 * (non-Javadoc)
-			 * 
-			 * @see java.util.Comparator#compare(java.lang.Object,
-			 *      java.lang.Object)
-			 */
-			@Override
-			public int compare(IPersistentBeanPropertyDescriptor o1, IPersistentBeanPropertyDescriptor o2) {
-				return getValueOfProperty(o1) - getValueOfProperty(o2);
-			}
-
-			private int getValueOfProperty(IPersistentBeanPropertyDescriptor descriptor) {
-				IPersistentColumn column = descriptor.getPersistentColumn();
-				if (column instanceof IPrimitivePersistentColumn) {
-					IPrimitivePersistentColumn ippc = (IPrimitivePersistentColumn) column;
-					if (ippc.isPrimaryKey()) {
-						return 1;
-					} else if (ippc.isVersion()) {
-						return 2;
-					} else {
-						return 3;
-					}
-				} else {
-					return 999;
-				}
-			}
-		});
+		Collections.sort(list, new PropertyComparator());
+		List<Element> propertyElements = new LinkedList<Element>();
 		for (IPersistentBeanPropertyDescriptor property : list) {
-			classElement.add(createPropertyElement(property));
+			propertyElements.add(createPropertyElement(property));
 		}
-		return classElement;
+		return propertyElements;
 	}
 
 	/**
@@ -268,31 +292,76 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	protected Element createPropertyElement(IPersistentBeanPropertyDescriptor property) {
 		IPersistentColumn column = property.getPersistentColumn();
 
-		Element propertyElement = null;
 		if (column instanceof IPrimitivePersistentColumn) {
-			IPrimitivePersistentColumn primitiveColumn = (IPrimitivePersistentColumn) column;
-			if (primitiveColumn.isPrimaryKey()) {
-				propertyElement = DocumentHelper.createElement("id");
-				propertyElement.add(createPrimaryKeyGeneratorElement(primitiveColumn));
-				// column type
-				propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
-			} else if (primitiveColumn.isVersion()) {
-				PrimitiveColumnType type = primitiveColumn.getType();
-				if (type == PrimitiveColumnType.TIMESTAMP) {
-					propertyElement = DocumentHelper.createElement("timestamp");
-				} else {
-					propertyElement = DocumentHelper.createElement("version");
-					// column type
-					propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
-				}
+			return createPrimitiveColumnElement(property, (IPrimitivePersistentColumn) column);
+		} else if (column instanceof IEmbeddedPersistentColumn) {
+			return createEmbeddedColumnElement(property, (IEmbeddedPersistentColumn) column);
+		} else {
+			throw new ResourceException("Property [" + property.getResourceDescriptor().getResourceClass().getName()
+					+ "#" + property.getName() + "] cannot be convert to hibernate xml.");
+		}
+	}
+
+	/**
+	 * create embedded property element
+	 * 
+	 * @param property
+	 * @param embeddedColumn
+	 * @return
+	 */
+	protected Element createEmbeddedColumnElement(IPersistentBeanPropertyDescriptor property,
+			IEmbeddedPersistentColumn embeddedColumn) {
+		Element componentElement = DocumentHelper.createElement("component");
+		// property name
+		componentElement.addAttribute("name", property.getName());
+
+		IPersistentBeanDescriptor embeddedBean = embeddedColumn.getEmbeddedBean();
+		componentElement.addAttribute("class", embeddedBean.getBeanClass().getName());
+		// TODO how to override the column names?
+		List<Element> propertyElements = createPropertyElements(embeddedBean);
+		for (Element propertyElement : propertyElements) {
+			componentElement.add(propertyElement);
+		}
+		return componentElement;
+	}
+
+	/**
+	 * create primitive property element
+	 * 
+	 * @param property
+	 * @param column
+	 * @return
+	 */
+	protected Element createPrimitiveColumnElement(IPersistentBeanPropertyDescriptor property,
+			IPrimitivePersistentColumn primitiveColumn) {
+		// primitive column
+		Element propertyElement = null;
+		if (primitiveColumn.isPrimaryKey()) {
+			// primary key column
+			propertyElement = DocumentHelper.createElement("id");
+			propertyElement.add(createPrimaryKeyGeneratorElement(primitiveColumn));
+			// column type
+			propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
+		} else if (primitiveColumn.isVersion()) {
+			// optimistic lock column
+			PrimitiveColumnType type = primitiveColumn.getType();
+			if (type == PrimitiveColumnType.TIMESTAMP) {
+				// timestamp optimistic lock
+				propertyElement = DocumentHelper.createElement("timestamp");
 			} else {
-				propertyElement = DocumentHelper.createElement("property");
+				// version optimistic lock
+				propertyElement = DocumentHelper.createElement("version");
 				// column type
 				propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
 			}
-			// column name
-			propertyElement.addAttribute("column", primitiveColumn.getName());
+		} else {
+			// normal primitive column
+			propertyElement = DocumentHelper.createElement("property");
+			// column type
+			propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
 		}
+		// column name
+		propertyElement.addAttribute("column", primitiveColumn.getName());
 		// property name
 		propertyElement.addAttribute("name", property.getName());
 		return propertyElement;
@@ -344,7 +413,7 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * @return
 	 */
 	protected Element createRootElement(IPersistentBeanDescriptor descriptor, Document doc) {
-		Element root = DocumentHelper.createElement("hibernate-mapping");
+		Element root = DocumentHelper.createElement(HIBERNATE_XML_NAME);
 		root.addAttribute("package", descriptor.getBeanClass().getPackage().getName());
 		return root;
 	}

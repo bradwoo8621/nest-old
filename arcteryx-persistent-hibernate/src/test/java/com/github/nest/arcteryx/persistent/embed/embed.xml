@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.github.nest.arcteryx.persistent.embed">
+	<class name="Person">
+		<id type="long" column="PERSON_ID" name="id">
+			<generator class="hilo">
+				<param name="table">HIBERNATE_UNIQUE_KEY</param>
+				<param name="column">NEXT_HI</param>
+				<param name="max_lo">100</param>
+			</generator>
+		</id>
+		<property type="string" column="PERSON_NAME" name="name" />
+		<component name="operateAuditInfo"
+			class="com.github.nest.arcteryx.persistent.embed.OperateAuditInfo">
+			<property type="timestamp" column="CREATE_TIME" name="createTime" />
+			<property type="long" column="CREATE_USER_ID" name="createUserId" />
+		</component>
+	</class>
+</hibernate-mapping>
+
+<!-- 
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.github.nest.arcteryx.persistent.embed">
+	<class name="OperateAuditInfo">
+		<property type="timestamp" column="CREATE_TIME" name="createTime" />
+		<property type="long" column="CREATE_USER_ID" name="createUserId" />
+	</class>
+</hibernate-mapping>
+ -->

@@ -15,13 +15,6 @@ import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
  */
 public interface IPersistentBeanDescriptor extends IBeanDescriptor {
 	/**
-	 * get table name of bean
-	 * 
-	 * @return
-	 */
-	String getTableName();
-
-	/**
 	 * get persistent properties, including ancestor's.
 	 * 
 	 * @return

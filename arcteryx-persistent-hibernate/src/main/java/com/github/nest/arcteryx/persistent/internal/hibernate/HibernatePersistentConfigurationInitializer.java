@@ -29,7 +29,9 @@ import org.slf4j.LoggerFactory;
 
 import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 import com.github.nest.arcteryx.meta.ResourceException;
+import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.persistent.IEmbeddedPersistentColumn;
+import com.github.nest.arcteryx.persistent.IManyToOnePersistentColumn;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentColumn;
@@ -354,10 +356,40 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 			return createPrimitiveColumnElement(property, (IPrimitivePersistentColumn) column, embeddedStack);
 		} else if (column instanceof IEmbeddedPersistentColumn) {
 			return createEmbeddedColumnElement(property, (IEmbeddedPersistentColumn) column, embeddedStack);
+		} else if (column instanceof IManyToOnePersistentColumn) {
+			return createManyToOneColumnElement(property, (IManyToOnePersistentColumn) column);
 		} else {
 			throw new ResourceException("Property [" + property.getResourceDescriptor().getResourceClass().getName()
 					+ "#" + property.getName() + "] cannot be convert to hibernate xml.");
 		}
+	}
+
+	/**
+	 * create many to one property element
+	 * 
+	 * @param property
+	 * @param column
+	 * @return
+	 */
+	protected Element createManyToOneColumnElement(IPersistentBeanPropertyDescriptor property,
+			IManyToOnePersistentColumn column) {
+		Element manyToOneElement = null;
+		IBeanDescriptor referredBean = column.getReferencedBean();
+		if (referredBean instanceof IPersistentBeanDescriptor) {
+			// referenced bean also need to be persistent
+			manyToOneElement = DocumentHelper.createElement("many-to-one");
+			manyToOneElement.addAttribute("column", column.getForeignKeyColumnName());
+		} else {
+			// other type beans, treated as embedded bean
+			manyToOneElement = DocumentHelper.createElement("component");
+			Element propertyElement = DocumentHelper.createElement("property");
+			propertyElement.addAttribute("name", column.getForeignKeyPropertyName());
+			propertyElement.addAttribute("column", column.getForeignKeyColumnName());
+			manyToOneElement.add(propertyElement);
+		}
+		manyToOneElement.addAttribute("name", property.getName());
+		manyToOneElement.addAttribute("class", referredBean.getBeanClass().getName());
+		return manyToOneElement;
 	}
 
 	/**

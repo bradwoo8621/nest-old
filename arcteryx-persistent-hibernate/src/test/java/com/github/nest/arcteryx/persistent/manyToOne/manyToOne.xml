@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.github.nest.arcteryx.persistent.manyToOne">
+	<class name="Student" table="T_STUDENT">
+		<id type="long" column="STUDENT_ID" name="id">
+			<generator class="hilo">
+				<param name="table">HIBERNATE_UNIQUE_KEY</param>
+				<param name="column">NEXT_HI</param>
+				<param name="max_lo">100</param>
+			</generator>
+		</id>
+		<property type="string" column="STUDENT_NAME" name="name" />
+		<many-to-one column="MY_TEACHER_ID" name="teacher"
+			class="com.github.nest.arcteryx.persistent.manyToOne.Teacher" />
+	</class>
+</hibernate-mapping>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.github.nest.arcteryx.persistent.manyToOne">
+	<class name="Teacher" table="T_TEACHER">
+		<property type="long" column="TEACHER_ID" name="id" />
+		<property type="string" column="TEACHER_NAME" name="name" />
+	</class>
+</hibernate-mapping>

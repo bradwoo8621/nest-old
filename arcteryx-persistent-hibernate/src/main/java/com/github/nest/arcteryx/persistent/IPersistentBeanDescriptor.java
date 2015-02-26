@@ -41,4 +41,11 @@ public interface IPersistentBeanDescriptor extends IBeanDescriptor {
 	 * @return
 	 */
 	IPersistentBeanSaver getSaver();
+
+	/**
+	 * get persistent bean loader
+	 * 
+	 * @return
+	 */
+	IPersistentBeanLoader getLoader();
 }

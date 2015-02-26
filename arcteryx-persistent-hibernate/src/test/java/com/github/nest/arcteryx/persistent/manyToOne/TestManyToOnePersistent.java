@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
+import com.github.nest.arcteryx.persistent.IPersistentBeanLoader;
 import com.github.nest.arcteryx.persistent.IPersistentBeanSaver;
 import com.github.nest.arcteryx.persistent.IPersistentConfiguration;
 import com.github.nest.arcteryx.persistent.IPersistentConfigurationInitializer;
@@ -32,6 +33,7 @@ import com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn;
 import com.github.nest.arcteryx.persistent.internal.StandalonePersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.internal.hibernate.HibernatePersistentConfigurationInitializer;
 import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.HiloKey;
+import com.github.nest.arcteryx.persistent.internal.providers.HibernatePersistentLoaderProvider;
 import com.github.nest.arcteryx.persistent.internal.providers.HibernatePersistentSaverProvider;
 
 /**
@@ -72,6 +74,8 @@ public class TestManyToOnePersistent {
 		context.addConfigurationInitializer(initializer);
 		context.getOperatorProviderRegistry().register(IPersistentBeanSaver.CODE,
 				new HibernatePersistentSaverProvider());
+		context.getOperatorProviderRegistry().register(IPersistentBeanLoader.CODE,
+				new HibernatePersistentLoaderProvider());
 
 		IPersistentBeanDescriptor studentDescriptor = createStudentDescriptor(context);
 		IPersistentBeanDescriptor teacherDescriptor = createTeacherDescriptor(context);
@@ -109,6 +113,14 @@ public class TestManyToOnePersistent {
 			System.out.println("create TABLE:person OK");
 			conn.close();
 		}
+		
+		sessionFactory.getCurrentSession().beginTransaction();
+		student = studentDescriptor.getLoader().load(202l);
+		assertEquals(202, student.getId().longValue());
+		assertEquals("Student", student.getName());
+		assertEquals(101, student.getTeacher().getId().longValue());
+		assertEquals("Teacher", student.getTeacher().getName());
+		sessionFactory.getCurrentSession().getTransaction().commit();
 	}
 
 	private IPersistentBeanDescriptor createStudentDescriptor(PersistentBeanDescriptorContext context) {

@@ -11,6 +11,7 @@ import java.util.Set;
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
+import com.github.nest.arcteryx.persistent.IPersistentBeanLoader;
 import com.github.nest.arcteryx.persistent.IPersistentBeanPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanSaver;
 
@@ -118,5 +119,15 @@ public abstract class AbstractPersistentBeanDescriptor extends BeanDescriptor im
 	@Override
 	public IPersistentBeanSaver getSaver() {
 		return this.getOperator(IPersistentBeanSaver.CODE);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor#getLoader()
+	 */
+	@Override
+	public IPersistentBeanLoader getLoader() {
+		return this.getOperator(IPersistentBeanLoader.CODE);
 	}
 }

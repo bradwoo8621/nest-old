@@ -18,13 +18,25 @@
 	</class>
 </hibernate-mapping>
 
-<!-- 
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<hibernate-mapping package="com.github.nest.arcteryx.persistent.embed">
-	<class name="OperateAuditInfo">
-		<property type="timestamp" column="CREATE_TIME" name="createTime" />
-		<property type="long" column="CREATE_USER_ID" name="createUserId" />
-	</class>
-</hibernate-mapping>
- -->
+<!-- <?xml version="1.0" encoding="UTF-8"?> <!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+	<hibernate-mapping package="com.github.nest.arcteryx.persistent.embed"> <class 
+	name="OperateAuditInfo"> <property type="timestamp" column="CREATE_TIME" 
+	name="createTime" /> <property type="long" column="CREATE_USER_ID" name="createUserId" 
+	/> </class> </hibernate-mapping> -->
+
+<!-- <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 
+	3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> <hibernate-mapping 
+	package="com.github.nest.arcteryx.persistent.embed"> <class name="Person" 
+	table="T_PERSON"> <id type="long" column="PERSON_ID" name="id"> <generator 
+	class="hilo"> <param name="table">HIBERNATE_UNIQUE_KEY</param> <param name="max_lo">100</param> 
+	<param name="column">NEXT_HI</param> </generator> </id> <property type="string" 
+	column="PERSON_NAME" name="name" /> <component name="bornIn" class="com.github.nest.arcteryx.persistent.embed.Country"> 
+	<property type="string" column="BORN_COUNTRY_NAME" name="name" /> <property 
+	type="string" column="BORN_COUNTRY_ABBR" name="abbr" /> </component> <component 
+	name="address" class="com.github.nest.arcteryx.persistent.embed.Address"> 
+	<property type="string" column="ADDRESS_LINE" name="addressLine" /> <component 
+	name="country" class="com.github.nest.arcteryx.persistent.embed.Country"> 
+	<property type="string" column="ADDRESS_COUNTRY_NAME" name="name" /> <property 
+	type="string" column="ADDRESS_COUNTRY_ABBR" name="abbr" /> </component> </component> 
+	</class> </hibernate-mapping> -->

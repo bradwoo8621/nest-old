@@ -50,6 +50,18 @@ import com.github.nest.arcteryx.persistent.internal.hibernate.IPrimitiveColumnTy
  * @author brad.wu
  */
 public class HibernatePersistentConfigurationInitializer implements IPersistentConfigurationInitializer {
+	/**
+	 * property comparator. in hibernate, primary key column must be the first
+	 * element of class. the comparator will sort the persistent property by
+	 * following order:
+	 * <ol>
+	 * <li>primary key property</li>
+	 * <li>version property</li>
+	 * <li>other properties</li>
+	 * </ol>
+	 * 
+	 * @author brad.wu
+	 */
 	private final class PropertyComparator implements Comparator<IPersistentBeanPropertyDescriptor> {
 		/**
 		 * (non-Javadoc)
@@ -75,6 +87,50 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 			} else {
 				return 999;
 			}
+		}
+	}
+
+	private final class EmbeddedStack {
+		private List<String> propertyNameList = new LinkedList<String>();
+		private List<IEmbeddedPersistentColumn> embeddedColumnList = new LinkedList<IEmbeddedPersistentColumn>();
+
+		/**
+		 * add embedded column info.
+		 * 
+		 * @param propertyName
+		 * @param embedded
+		 */
+		public void add(String propertyName, IEmbeddedPersistentColumn embedded) {
+			propertyNameList.add(0, propertyName);
+			embeddedColumnList.add(0, embedded);
+		}
+
+		/**
+		 * get column name.<br>
+		 * column name might be overridden by bean which it is embedded. and
+		 * might be overridden multiple times. use the property name to find it
+		 * is overridden, or return original column name if not overridden.
+		 * 
+		 * @param propertyName
+		 * @param columnName
+		 * @return
+		 */
+		public String getColumnName(String propertyName, String columnName) {
+			String key = propertyName;
+			String overriddenColumnName = columnName;
+			String temp = null;
+			for (int index = 0, count = propertyNameList.size(); index < count; index++) {
+				String parentPropertyName = propertyNameList.get(index);
+				IEmbeddedPersistentColumn parentEmbeddedColumn = embeddedColumnList.get(index);
+				temp = parentEmbeddedColumn.getOverriddenColumnName(key);
+				if (!StringUtils.isBlank(temp)) {
+					// column name is overridden
+					overriddenColumnName = temp;
+				}
+				// trace to higher level
+				key = parentPropertyName + "." + key;
+			}
+			return overriddenColumnName;
 		}
 	}
 
@@ -256,7 +312,7 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 		classElement.addAttribute("name", descriptor.getBeanClass().getSimpleName());
 		classElement.addAttribute("table", descriptor.getTableName());
 
-		List<Element> propertyElements = createPropertyElements(descriptor);
+		List<Element> propertyElements = createPropertyElements(descriptor, null);
 		for (Element propertyElement : propertyElements) {
 			classElement.add(propertyElement);
 		}
@@ -267,9 +323,10 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * create property elements
 	 * 
 	 * @param descriptor
+	 * @param embeddedStack
 	 * @return
 	 */
-	protected List<Element> createPropertyElements(IPersistentBeanDescriptor descriptor) {
+	protected List<Element> createPropertyElements(IPersistentBeanDescriptor descriptor, EmbeddedStack embeddedStack) {
 		Collection<IPersistentBeanPropertyDescriptor> properties = descriptor.getPersistentProperties();
 		List<IPersistentBeanPropertyDescriptor> list = new ArrayList<IPersistentBeanPropertyDescriptor>(
 				properties.size());
@@ -278,7 +335,7 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 		Collections.sort(list, new PropertyComparator());
 		List<Element> propertyElements = new LinkedList<Element>();
 		for (IPersistentBeanPropertyDescriptor property : list) {
-			propertyElements.add(createPropertyElement(property));
+			propertyElements.add(createPropertyElement(property, embeddedStack));
 		}
 		return propertyElements;
 	}
@@ -287,15 +344,16 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * create property element
 	 * 
 	 * @param property
+	 * @param embeddedStack
 	 * @return
 	 */
-	protected Element createPropertyElement(IPersistentBeanPropertyDescriptor property) {
+	protected Element createPropertyElement(IPersistentBeanPropertyDescriptor property, EmbeddedStack embeddedStack) {
 		IPersistentColumn column = property.getPersistentColumn();
 
 		if (column instanceof IPrimitivePersistentColumn) {
-			return createPrimitiveColumnElement(property, (IPrimitivePersistentColumn) column);
+			return createPrimitiveColumnElement(property, (IPrimitivePersistentColumn) column, embeddedStack);
 		} else if (column instanceof IEmbeddedPersistentColumn) {
-			return createEmbeddedColumnElement(property, (IEmbeddedPersistentColumn) column);
+			return createEmbeddedColumnElement(property, (IEmbeddedPersistentColumn) column, embeddedStack);
 		} else {
 			throw new ResourceException("Property [" + property.getResourceDescriptor().getResourceClass().getName()
 					+ "#" + property.getName() + "] cannot be convert to hibernate xml.");
@@ -307,18 +365,23 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * 
 	 * @param property
 	 * @param embeddedColumn
+	 * @param embeddedStack
 	 * @return
 	 */
 	protected Element createEmbeddedColumnElement(IPersistentBeanPropertyDescriptor property,
-			IEmbeddedPersistentColumn embeddedColumn) {
+			IEmbeddedPersistentColumn embeddedColumn, EmbeddedStack embeddedStack) {
 		Element componentElement = DocumentHelper.createElement("component");
 		// property name
 		componentElement.addAttribute("name", property.getName());
 
 		IPersistentBeanDescriptor embeddedBean = embeddedColumn.getEmbeddedBean();
 		componentElement.addAttribute("class", embeddedBean.getBeanClass().getName());
-		// TODO how to override the column names?
-		List<Element> propertyElements = createPropertyElements(embeddedBean);
+		// construct embedded stack
+		if (embeddedStack == null) {
+			embeddedStack = new EmbeddedStack();
+		}
+		embeddedStack.add(property.getName(), embeddedColumn);
+		List<Element> propertyElements = createPropertyElements(embeddedBean, embeddedStack);
 		for (Element propertyElement : propertyElements) {
 			componentElement.add(propertyElement);
 		}
@@ -330,10 +393,11 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * 
 	 * @param property
 	 * @param column
+	 * @param embeddedStack
 	 * @return
 	 */
 	protected Element createPrimitiveColumnElement(IPersistentBeanPropertyDescriptor property,
-			IPrimitivePersistentColumn primitiveColumn) {
+			IPrimitivePersistentColumn primitiveColumn, EmbeddedStack embeddedStack) {
 		// primitive column
 		Element propertyElement = null;
 		if (primitiveColumn.isPrimaryKey()) {
@@ -361,7 +425,10 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 			propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
 		}
 		// column name
-		propertyElement.addAttribute("column", primitiveColumn.getName());
+		propertyElement.addAttribute(
+				"column",
+				embeddedStack == null ? primitiveColumn.getName() : embeddedStack.getColumnName(property.getName(),
+						primitiveColumn.getName()));
 		// property name
 		propertyElement.addAttribute("name", property.getName());
 		return propertyElement;

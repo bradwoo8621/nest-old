@@ -22,7 +22,7 @@ import com.github.nest.arcteryx.persistent.IPersistentBeanSaver;
  * @author brad.wu
  */
 @SuppressWarnings("unchecked")
-public class AbstractPersistentBeanDescriptor extends BeanDescriptor implements IPersistentBeanDescriptor {
+public abstract class AbstractPersistentBeanDescriptor extends BeanDescriptor implements IPersistentBeanDescriptor {
 	private static final long serialVersionUID = 4950944340850539340L;
 
 	private Collection<IPersistentBeanPropertyDescriptor> propertyDescriptors = null;

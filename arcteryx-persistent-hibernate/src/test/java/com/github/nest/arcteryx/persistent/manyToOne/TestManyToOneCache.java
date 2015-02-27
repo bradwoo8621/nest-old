@@ -4,6 +4,7 @@
 package com.github.nest.arcteryx.persistent.manyToOne;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,6 +18,11 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
+import org.hibernate.event.service.spi.EventListenerRegistry;
+import org.hibernate.event.spi.EventType;
+import org.hibernate.event.spi.PostLoadEvent;
+import org.hibernate.event.spi.PostLoadEventListener;
+import org.hibernate.internal.SessionFactoryImpl;
 import org.junit.Test;
 
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
@@ -24,6 +30,7 @@ import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
+import com.github.nest.arcteryx.persistent.IPersistentBeanLoader;
 import com.github.nest.arcteryx.persistent.IPersistentBeanSaver;
 import com.github.nest.arcteryx.persistent.IPersistentConfiguration;
 import com.github.nest.arcteryx.persistent.IPersistentConfigurationInitializer;
@@ -35,6 +42,7 @@ import com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn;
 import com.github.nest.arcteryx.persistent.internal.StandalonePersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.internal.hibernate.HibernatePersistentConfigurationInitializer;
 import com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.HiloKey;
+import com.github.nest.arcteryx.persistent.internal.providers.HibernatePersistentLoaderProvider;
 import com.github.nest.arcteryx.persistent.internal.providers.HibernatePersistentSaverProvider;
 
 /**
@@ -75,6 +83,8 @@ public class TestManyToOneCache {
 		context.addConfigurationInitializer(initializer);
 		context.getOperatorProviderRegistry().register(IPersistentBeanSaver.CODE,
 				new HibernatePersistentSaverProvider());
+		context.getOperatorProviderRegistry().register(IPersistentBeanLoader.CODE,
+				new HibernatePersistentLoaderProvider());
 
 		IPersistentBeanDescriptor studentDescriptor = createStudentDescriptor(context);
 		createTeacherDescriptor(context);
@@ -109,6 +119,29 @@ public class TestManyToOneCache {
 			System.out.println("create TABLE:person OK");
 			conn.close();
 		}
+
+		sessionFactory.getCurrentSession().beginTransaction();
+		EventListenerRegistry registry = ((SessionFactoryImpl) sessionFactory).getServiceRegistry().getService(
+				EventListenerRegistry.class);
+		registry.appendListeners(EventType.POST_LOAD, new PostLoadEventListener() {
+			private static final long serialVersionUID = 6207309678460782918L;
+
+			/**
+			 * (non-Javadoc)
+			 * 
+			 * @see org.hibernate.event.spi.PostLoadEventListener#onPostLoad(org.hibernate.event.spi.PostLoadEvent)
+			 */
+			@Override
+			public void onPostLoad(PostLoadEvent event) {
+				System.out.println(event.getEntity());
+			}
+		});
+		student = studentDescriptor.getLoader().load(101l);
+		assertEquals(101, student.getId().longValue());
+		assertEquals("Student", student.getName());
+		assertEquals(1001, student.getTeacher().getId().longValue());
+		assertNull(student.getTeacher().getName());
+		sessionFactory.getCurrentSession().getTransaction().commit();
 	}
 
 	private IPersistentBeanDescriptor createStudentDescriptor(PersistentBeanDescriptorContext context) {

@@ -16,6 +16,7 @@ import com.github.nest.arcteryx.meta.IOperatorProvider;
 import com.github.nest.arcteryx.meta.IOperatorProviderRegistry;
 import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
+import com.github.nest.arcteryx.meta.ResourceDescriptorContextRepository;
 import com.github.nest.arcteryx.meta.util.ClassUtils;
 
 /**
@@ -24,11 +25,33 @@ import com.github.nest.arcteryx.meta.util.ClassUtils;
  * @author brad.wu
  */
 public class ResourceDescriptorContext implements IResourceDescriptorContext {
+	private String name = null;
 	private Map<Class<?>, IResourceDescriptor> map = new HashMap<Class<?>, IResourceDescriptor>();
 	private IOperatorProviderRegistry OperatorProviderRegistry = null;
 	@SuppressWarnings("rawtypes")
 	private List<IConfigurationInitializer> initializers = null;
 	private Map<String, Object> initializerResult = new HashMap<String, Object>();
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getName()
+	 */
+	@Override
+	public String getName() {
+		return this.name;
+	}
+
+	/**
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		String oldName = this.name;
+		ResourceDescriptorContextRepository.unregister(oldName);
+		this.name = name;
+		ResourceDescriptorContextRepository.register(this);
+	}
 
 	/**
 	 * (non-Javadoc)

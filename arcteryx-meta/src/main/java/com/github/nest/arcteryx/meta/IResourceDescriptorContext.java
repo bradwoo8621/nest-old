@@ -13,6 +13,13 @@ import java.util.List;
  */
 public interface IResourceDescriptorContext {
 	/**
+	 * get name of context. if only one context in environment, null is allowed.
+	 * 
+	 * @return
+	 */
+	String getName();
+
+	/**
 	 * do when after context initialized, this method must be called manually or
 	 * declared with <code>init-method</code> in spring context
 	 */

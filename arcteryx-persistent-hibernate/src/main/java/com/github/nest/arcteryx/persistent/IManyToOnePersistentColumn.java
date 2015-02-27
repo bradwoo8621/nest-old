@@ -20,6 +20,14 @@ public interface IManyToOnePersistentColumn extends IPersistentColumn {
 	IBeanDescriptor getReferencedBean();
 
 	/**
+	 * get referenced bean context name. bean can be referenced from another
+	 * context.
+	 * 
+	 * @return
+	 */
+	String getReferencedBeanContextName();
+
+	/**
 	 * get foreign key column name
 	 * 
 	 * @return

@@ -28,6 +28,7 @@ import org.junit.Test;
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
+import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext;
 import com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanLoader;
@@ -69,7 +70,13 @@ public class TestManyToOneCache {
 			conn.close();
 		}
 
+		BeanDescriptorContext teacherContext = new BeanDescriptorContext();
+		teacherContext.setName("teacher");
+		createTeacherDescriptor(teacherContext);
+		teacherContext.afterContextInitialized();
+
 		PersistentBeanDescriptorContext context = new PersistentBeanDescriptorContext();
+		context.setName("student");
 		HibernatePersistentConfigurationInitializer initializer = new HibernatePersistentConfigurationInitializer();
 		initializer.addProperty("hibernate.connection.driver_class", "org.hsqldb.jdbc.JDBCDriver");
 		initializer.addProperty("hibernate.connection.url", "jdbc:hsqldb:mem:memdb");
@@ -87,7 +94,6 @@ public class TestManyToOneCache {
 				new HibernatePersistentLoaderProvider());
 
 		IPersistentBeanDescriptor studentDescriptor = createStudentDescriptor(context);
-		createTeacherDescriptor(context);
 		context.afterContextInitialized();
 
 		Teacher teacher = new Teacher();
@@ -139,6 +145,8 @@ public class TestManyToOneCache {
 		student = studentDescriptor.getLoader().load(101l);
 		assertEquals(101, student.getId().longValue());
 		assertEquals("Student", student.getName());
+		// TODO teacher only contains id value since it is from another domain.
+		// must get teacher object manually.
 		assertEquals(1001, student.getTeacher().getId().longValue());
 		assertNull(student.getTeacher().getName());
 		sessionFactory.getCurrentSession().getTransaction().commit();
@@ -178,6 +186,7 @@ public class TestManyToOneCache {
 			property.setName("teacher");
 			ManyToOnePersistentColumn column = new ManyToOnePersistentColumn();
 			column.setReferencedBeanClass(Teacher.class);
+			column.setReferencedBeanContextName("teacher");
 			column.setForeignKeyColumnName("MY_TEACHER_ID");
 			column.setForeignKeyPropertyName("id");
 			column.setPropertyDescriptor(property);
@@ -190,7 +199,7 @@ public class TestManyToOneCache {
 		return descriptor;
 	}
 
-	private IBeanDescriptor createTeacherDescriptor(PersistentBeanDescriptorContext context) {
+	private IBeanDescriptor createTeacherDescriptor(BeanDescriptorContext context) {
 		BeanDescriptor descriptor = new BeanDescriptor();
 		descriptor.setBeanClass(Teacher.class);
 

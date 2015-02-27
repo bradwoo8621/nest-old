@@ -8,6 +8,7 @@ import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
 
 import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
+import com.github.nest.arcteryx.meta.ResourceDescriptorContextRepository;
 import com.github.nest.arcteryx.meta.ResourceException;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.persistent.IManyToOnePersistentColumn;
@@ -25,6 +26,7 @@ public class ManyToOnePersistentColumn extends AbstractPersistentColumn implemen
 	private static final long serialVersionUID = 7893122935676364181L;
 
 	private Class<?> beanClass = null;
+	private String referencedBeanContextName = null;
 	private String foreignKeyColumnName = null;
 	private String foreignKeyPropertyName = null;
 
@@ -35,8 +37,14 @@ public class ManyToOnePersistentColumn extends AbstractPersistentColumn implemen
 	 */
 	@Override
 	public IBeanDescriptor getReferencedBean() {
-		IResourceDescriptorContext context = this.getPropertyDescriptor().getBeanDescriptor().getContext();
-		return context.get(beanClass);
+		if (StringUtils.isBlank(getReferencedBeanContextName())) {
+			IResourceDescriptorContext context = this.getPropertyDescriptor().getBeanDescriptor().getContext();
+			return context.get(beanClass);
+		} else {
+			IResourceDescriptorContext context = ResourceDescriptorContextRepository.getContext(this
+					.getReferencedBeanContextName());
+			return context.get(beanClass);
+		}
 	}
 
 	/**
@@ -46,6 +54,24 @@ public class ManyToOnePersistentColumn extends AbstractPersistentColumn implemen
 	 */
 	public void setReferencedBeanClass(Class<?> beanClass) {
 		this.beanClass = beanClass;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IManyToOnePersistentColumn#getReferencedBeanContextName()
+	 */
+	@Override
+	public String getReferencedBeanContextName() {
+		return this.referencedBeanContextName;
+	}
+
+	/**
+	 * @param referencedBeanContextName
+	 *            the referencedBeanContextName to set
+	 */
+	public void setReferencedBeanContextName(String referencedBeanContextName) {
+		this.referencedBeanContextName = referencedBeanContextName;
 	}
 
 	/**

@@ -375,8 +375,9 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 			IManyToOnePersistentColumn column) {
 		Element manyToOneElement = null;
 		IBeanDescriptor referredBean = column.getReferencedBean();
-		if (referredBean instanceof IPersistentBeanDescriptor) {
-			// referenced bean also need to be persistent
+		if (column.isInSameContext() && (referredBean instanceof IPersistentBeanDescriptor)) {
+			// only when the referenced bean is persistent and in same context,
+			// treated as many-to-one relationship
 			manyToOneElement = DocumentHelper.createElement("many-to-one");
 			manyToOneElement.addAttribute("column", column.getForeignKeyColumnName());
 		} else {

@@ -107,22 +107,38 @@ public class ManyToOnePersistentColumn extends AbstractPersistentColumn implemen
 				// if it is a persistent bean, many to one foreign key must be
 				// referred to its primary key.
 				IPersistentBeanDescriptor persistentBean = (IPersistentBeanDescriptor) bean;
-				Collection<IPersistentBeanPropertyDescriptor> properties = persistentBean.getPersistentProperties();
-				for (IPersistentBeanPropertyDescriptor property : properties) {
-					IPersistentColumn column = property.getPersistentColumn();
-					if (column instanceof IPrimitivePersistentColumn) {
-						if (((IPrimitivePersistentColumn) column).isPrimaryKey()) {
-							return property.getName();
-						}
-					}
+				IPersistentBeanPropertyDescriptor primaryKey = findPrimaryKeyProperty(persistentBean);
+				if (primaryKey == null) {
+					throw new ResourceException("Primary key not found in persistent bean [" + bean.getBeanClass()
+							+ "].");
+				} else {
+					return primaryKey.getName();
 				}
-				throw new ResourceException("Primary key not found in persistent bean [" + bean.getBeanClass() + "].");
 			} else {
 				throw new ResourceException("Foreign key property name not set on ["
 						+ this.getPropertyDescriptor().getBeanDescriptor().getBeanClass() + "#"
 						+ this.getPropertyDescriptor().getName() + "].");
 			}
 		}
+	}
+
+	/**
+	 * find primary key property of given bean
+	 * 
+	 * @param bean
+	 * @return
+	 */
+	protected IPersistentBeanPropertyDescriptor findPrimaryKeyProperty(IPersistentBeanDescriptor bean) {
+		Collection<IPersistentBeanPropertyDescriptor> properties = bean.getPersistentProperties();
+		for (IPersistentBeanPropertyDescriptor property : properties) {
+			IPersistentColumn column = property.getPersistentColumn();
+			if (column instanceof IPrimitivePersistentColumn) {
+				if (((IPrimitivePersistentColumn) column).isPrimaryKey()) {
+					return property;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -133,5 +149,16 @@ public class ManyToOnePersistentColumn extends AbstractPersistentColumn implemen
 	 */
 	public void setForeignKeyPropertyName(String foreignKeyPropertyName) {
 		this.foreignKeyPropertyName = foreignKeyPropertyName;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IManyToOnePersistentColumn#isInSameContext()
+	 */
+	@Override
+	public boolean isInSameContext() {
+		return StringUtils.equals(this.getReferencedBeanContextName(), this.getPropertyDescriptor().getBeanDescriptor()
+				.getName());
 	}
 }

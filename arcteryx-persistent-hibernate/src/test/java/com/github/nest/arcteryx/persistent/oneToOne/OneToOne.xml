@@ -1,0 +1,41 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.github.nest.arcteryx.persistent.oneToOne">
+	<class name="Address" table="T_ADDRESS">
+		<id type="long" column="PERSON_ID" name="personId">
+			<generator class="foreign">
+				<param name="property">person</param>
+			</generator>
+		</id>
+		<property type="string" column="ADDRESS_LINE" name="addressLine" />
+	</class>
+</hibernate-mapping>
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.github.nest.arcteryx.persistent.oneToOne">
+	<class name="Address" table="T_ADDRESS">
+		<id type="long" column="PERSON_ID" name="personId">
+			<generator class="foreign">
+				<param name="property">person</param>
+			</generator>
+		</id>
+		<property type="string" column="ADDRESS_LINE" name="addressLine" />
+		<one-to-one name="person"
+			class="com.github.nest.arcteryx.persistent.oneToOne.Person" />
+	</class>
+</hibernate-mapping>
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.github.nest.arcteryx.persistent.oneToOne">
+	<class name="Person" table="T_PERSON">
+		<id type="long" column="PERSON_ID" name="id">
+			<generator class="hilo">
+				<param name="max_lo">100</param>
+				<param name="column">NEXT_HI</param>
+				<param name="table">HIBERNATE_UNIQUE_KEY</param>
+			</generator>
+		</id>
+		<property type="string" column="PERSON_NAME" name="name" />
+		<one-to-one name="address"
+			class="com.github.nest.arcteryx.persistent.oneToOne.Address" cascade="save-update,delete" />
+	</class>
+</hibernate-mapping>

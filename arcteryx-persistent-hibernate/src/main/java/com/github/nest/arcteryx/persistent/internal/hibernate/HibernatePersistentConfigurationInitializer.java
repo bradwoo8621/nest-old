@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -30,8 +31,11 @@ import org.slf4j.LoggerFactory;
 import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 import com.github.nest.arcteryx.meta.ResourceException;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
+import com.github.nest.arcteryx.persistent.CascadeType;
 import com.github.nest.arcteryx.persistent.IEmbeddedPersistentColumn;
 import com.github.nest.arcteryx.persistent.IManyToOnePersistentColumn;
+import com.github.nest.arcteryx.persistent.IOneToOnePersistentColumn;
+import com.github.nest.arcteryx.persistent.IOneToOneReversePersistentColumn;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentColumn;
@@ -358,10 +362,66 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 			return createEmbeddedColumnElement(property, (IEmbeddedPersistentColumn) column, embeddedStack);
 		} else if (column instanceof IManyToOnePersistentColumn) {
 			return createManyToOneColumnElement(property, (IManyToOnePersistentColumn) column);
+		} else if (column instanceof IOneToOnePersistentColumn) {
+			return createOneToOneColumnElement(property, (IOneToOnePersistentColumn) column);
+		} else if (column instanceof IOneToOneReversePersistentColumn) {
+			return createOneToOneColumnElement(property, (IOneToOneReversePersistentColumn) column);
 		} else {
 			throw new ResourceException("Property [" + property.getResourceDescriptor().getResourceClass().getName()
 					+ "#" + property.getName() + "] cannot be convert to hibernate xml.");
 		}
+	}
+
+	/**
+	 * create one-to-one property element, for reverse parent property
+	 * 
+	 * @param property
+	 * @param column
+	 * @return
+	 */
+	protected Element createOneToOneColumnElement(IPersistentBeanPropertyDescriptor property,
+			IOneToOneReversePersistentColumn column) {
+		Element oneToOneElement = DocumentHelper.createElement("one-to-one");
+		oneToOneElement.addAttribute("name", property.getName());
+		oneToOneElement.addAttribute("class", column.getParentBean().getBeanClass().getName());
+		return oneToOneElement;
+	}
+
+	/**
+	 * create one to one property element
+	 * 
+	 * @param property
+	 * @param column
+	 * @return
+	 */
+	protected Element createOneToOneColumnElement(IPersistentBeanPropertyDescriptor property,
+			IOneToOnePersistentColumn column) {
+		Element oneToOneElement = DocumentHelper.createElement("one-to-one");
+		oneToOneElement.addAttribute("name", property.getName());
+		oneToOneElement.addAttribute("class", column.getSubordinateBean().getBeanClass().getName());
+		CascadeType[] cascadeTypes = column.getCascadeTypes();
+		oneToOneElement.addAttribute("cascade", generateCascadeAttributeValue(cascadeTypes));
+		return oneToOneElement;
+	}
+
+	/**
+	 * generate cascade attribute value
+	 * 
+	 * @param cascadeTypes
+	 * @return
+	 */
+	protected String generateCascadeAttributeValue(CascadeType[] cascadeTypes) {
+		if (ArrayUtils.isEmpty(cascadeTypes)) {
+			cascadeTypes = IOneToOnePersistentColumn.DEFAULT_CASCADE_TYPES;
+		}
+		StringBuilder cascadeValues = new StringBuilder();
+		for (CascadeType cascadeType : cascadeTypes) {
+			if (cascadeValues.length() != 0) {
+				cascadeValues.append(',');
+			}
+			cascadeValues.append(cascadeType.getName());
+		}
+		return cascadeValues.toString();
 	}
 
 	/**

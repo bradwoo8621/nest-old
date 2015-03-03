@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.github.nest.arcteryx.persistent.oneToMany">
+	<class name="Address" table="T_ADDRESS">
+		<id type="long" column="ADDRESS_ID" name="addressId">
+			<generator class="hilo">
+				<param name="column">NEXT_HI</param>
+				<param name="table">HIBERNATE_UNIQUE_KEY</param>
+				<param name="max_lo">100</param>
+			</generator>
+		</id>
+		<property type="string" column="ADDRESS_LINE" name="addressLine" />
+		<many-to-one name="person" fetch="select">
+			<column name="PERSON_ID" not-null="true" />
+		</many-to-one>
+	</class>
+</hibernate-mapping>
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.github.nest.arcteryx.persistent.oneToMany">
+	<class name="Person" table="T_PERSON">
+		<id type="long" column="PERSON_ID" name="id">
+			<generator class="hilo">
+				<param name="max_lo">100</param>
+				<param name="column">NEXT_HI</param>
+				<param name="table">HIBERNATE_UNIQUE_KEY</param>
+			</generator>
+		</id>
+		<property type="string" column="PERSON_NAME" name="name" />
+		<bag fetch="select" inverse="true" name="addresses" cascade="save-update,delete">
+			<key column="PERSON_ID" not-null="true" />
+			<one-to-many class="com.github.nest.arcteryx.persistent.oneToMany.Address" />
+		</bag>
+	</class>
+</hibernate-mapping>

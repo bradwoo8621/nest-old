@@ -33,4 +33,11 @@ public interface IPersistentBeanSaver extends IBeanOperator {
 	 * @param resource
 	 */
 	void save(Object resource);
+
+	/**
+	 * remove.
+	 * 
+	 * @param resource
+	 */
+	void remove(Object resource);
 }

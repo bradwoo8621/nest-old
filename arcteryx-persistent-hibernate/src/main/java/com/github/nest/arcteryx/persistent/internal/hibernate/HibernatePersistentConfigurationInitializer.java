@@ -32,8 +32,12 @@ import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 import com.github.nest.arcteryx.meta.ResourceException;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
 import com.github.nest.arcteryx.persistent.CascadeType;
+import com.github.nest.arcteryx.persistent.CollectionType;
+import com.github.nest.arcteryx.persistent.ICollectionParameter;
 import com.github.nest.arcteryx.persistent.IEmbeddedPersistentColumn;
 import com.github.nest.arcteryx.persistent.IManyToOnePersistentColumn;
+import com.github.nest.arcteryx.persistent.IOneToManyPersistentColumn;
+import com.github.nest.arcteryx.persistent.IOneToManyReversePersistentColumn;
 import com.github.nest.arcteryx.persistent.IOneToOnePersistentColumn;
 import com.github.nest.arcteryx.persistent.IOneToOneReversePersistentColumn;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
@@ -45,6 +49,7 @@ import com.github.nest.arcteryx.persistent.IPrimaryKey;
 import com.github.nest.arcteryx.persistent.IPrimitivePersistentColumn;
 import com.github.nest.arcteryx.persistent.IStandalonePersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.PrimitiveColumnType;
+import com.github.nest.arcteryx.persistent.internal.ListCollectionParameter;
 import com.github.nest.arcteryx.persistent.internal.PersistentConfiguration;
 import com.github.nest.arcteryx.persistent.internal.hibernate.IPrimaryKeyGenerator.GeneratorParameter;
 import com.github.nest.arcteryx.persistent.internal.hibernate.IPrimaryKeyGenerator.PrimaryKeyGeneratorUtils;
@@ -366,10 +371,114 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 			return createOneToOneColumnElement(property, (IOneToOnePersistentColumn) column);
 		} else if (column instanceof IOneToOneReversePersistentColumn) {
 			return createOneToOneColumnElement(property, (IOneToOneReversePersistentColumn) column);
+		} else if (column instanceof IOneToManyPersistentColumn) {
+			return createOneToManyColumnElement(property, (IOneToManyPersistentColumn) column);
+		} else if (column instanceof IOneToManyReversePersistentColumn) {
+			return createOneToManyColumnElement(property, (IOneToManyReversePersistentColumn) column);
 		} else {
 			throw new ResourceException("Property [" + property.getResourceDescriptor().getResourceClass().getName()
 					+ "#" + property.getName() + "] cannot be convert to hibernate xml.");
 		}
+	}
+
+	/**
+	 * create one-to-many property element, for reverse parent property
+	 * 
+	 * @param property
+	 * @param column
+	 * @return
+	 */
+	protected Element createOneToManyColumnElement(IPersistentBeanPropertyDescriptor property,
+			IOneToManyReversePersistentColumn column) {
+		Element oneToManyElement = DocumentHelper.createElement("many-to-one");
+		oneToManyElement.addAttribute("name", property.getName());
+		// add fetch attributes automatically
+		oneToManyElement.addAttribute("fetch", "select");
+
+		Element columnElement = DocumentHelper.createElement("column");
+		IPersistentBeanDescriptor parentBeanDescriptor = column.getParentBean();
+		Collection<IPersistentBeanPropertyDescriptor> parentProperties = parentBeanDescriptor.getPersistentProperties();
+		for (IPersistentBeanPropertyDescriptor parentProperty : parentProperties) {
+			IPersistentColumn parentColumn = parentProperty.getPersistentColumn();
+			if (parentColumn instanceof IPrimitivePersistentColumn) {
+				if (((IPrimitivePersistentColumn) parentColumn).isPrimaryKey()) {
+					columnElement.addAttribute("name", ((IPrimitivePersistentColumn) parentColumn).getName());
+					break;
+				}
+			}
+		}
+		columnElement.addAttribute("not-null", "true");
+		oneToManyElement.add(columnElement);
+
+		return oneToManyElement;
+	}
+
+	/**
+	 * create one-to-many property element
+	 * 
+	 * @param property
+	 * @param column
+	 * @return
+	 */
+	protected Element createOneToManyColumnElement(IPersistentBeanPropertyDescriptor property,
+			IOneToManyPersistentColumn column) {
+		Element oneToManyElement = null;
+		ICollectionParameter parameter = column.getCollectionParameter();
+		if (CollectionType.BAG == parameter.getType()) {
+			oneToManyElement = DocumentHelper.createElement("bag");
+		} else if (CollectionType.SET == parameter.getType()) {
+			oneToManyElement = DocumentHelper.createElement("set");
+			// order-by attr
+		} else if (CollectionType.LIST == parameter.getType()) {
+			oneToManyElement = DocumentHelper.createElement("list");
+			// list-index
+		} else if (CollectionType.IDBAG == parameter.getType()) {
+			throw new ResourceException("Idbag cannot be defined in one-to-many relationship at ["
+					+ property.getBeanDescriptor().getBeanClass() + "#" + property.getName() + "].");
+			// oneToManyElement = DocumentHelper.createElement("idbag");
+			// // collection-id
+			// // order-by attr
+			// Element collectionIdElement =
+			// DocumentHelper.createElement("collection-id");
+			// collectionIdElement.addAttribute("column",
+			// (String)
+			// parameter.getParameter(IdBagCollectionParameter.COLLECTION_ID_COLUMN_NAME));
+			// collectionIdElement.add(createPrimaryKeyGeneratorElement((IPrimaryKey)
+			// parameter
+			// .getParameter(IdBagCollectionParameter.COLLECTION_ID_GENERATOR)));
+			// // column type
+			// collectionIdElement.addAttribute("type",
+			// generateTypeString((PrimitiveColumnType) parameter
+			// .getParameter(IdBagCollectionParameter.COLLECTION_ID_COLUMN_TYPE)));
+			// oneToManyElement.add(collectionIdElement);
+		}
+
+		// add fetch attributes automatically
+		oneToManyElement.addAttribute("fetch", "select");
+		oneToManyElement.addAttribute("inverse", parameter.isInverse() ? "true" : "false");
+
+		oneToManyElement.addAttribute("name", property.getName());
+		CascadeType[] cascadeTypes = column.getCascadeTypes();
+		oneToManyElement.addAttribute("cascade", generateCascadeAttributeValue(cascadeTypes));
+
+		Element keyElement = DocumentHelper.createElement("key");
+		keyElement.addAttribute("column", column.getForeignKeyColumnName());
+		// add not-null attribute automatically
+		keyElement.addAttribute("not-null", "true");
+		oneToManyElement.add(keyElement);
+
+		if (CollectionType.LIST == parameter.getType()) {
+			Element listIndexElement = DocumentHelper.createElement("list-index");
+			listIndexElement.addAttribute("column",
+					(String) parameter.getParameter(ListCollectionParameter.LIST_INDEX_COLUMN_NAME));
+			oneToManyElement.add(listIndexElement);
+		}
+
+		Element linkElement = DocumentHelper.createElement("one-to-many");
+		linkElement.addAttribute("class", column.getSubordinateBean().getBeanClass().getName());
+		oneToManyElement.add(linkElement);
+
+		return oneToManyElement;
 	}
 
 	/**
@@ -496,9 +605,9 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 		if (primitiveColumn.isPrimaryKey()) {
 			// primary key column
 			propertyElement = DocumentHelper.createElement("id");
-			propertyElement.add(createPrimaryKeyGeneratorElement(primitiveColumn));
+			propertyElement.add(createPrimaryKeyGeneratorElement(primitiveColumn.getPrimaryKeyGenerator()));
 			// column type
-			propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
+			propertyElement.addAttribute("type", generateTypeString(primitiveColumn.getType()));
 		} else if (primitiveColumn.isVersion()) {
 			// optimistic lock column
 			PrimitiveColumnType type = primitiveColumn.getType();
@@ -509,13 +618,13 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 				// version optimistic lock
 				propertyElement = DocumentHelper.createElement("version");
 				// column type
-				propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
+				propertyElement.addAttribute("type", generateTypeString(primitiveColumn.getType()));
 			}
 		} else {
 			// normal primitive column
 			propertyElement = DocumentHelper.createElement("property");
 			// column type
-			propertyElement.addAttribute("type", generateTypeString(primitiveColumn));
+			propertyElement.addAttribute("type", generateTypeString(primitiveColumn.getType()));
 		}
 		// column name
 		propertyElement.addAttribute(
@@ -530,23 +639,21 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	/**
 	 * generate type string
 	 * 
-	 * @param primitiveColumn
+	 * @param columnType
 	 * @return
 	 */
-	protected String generateTypeString(IPrimitivePersistentColumn primitiveColumn) {
-		PrimitiveColumnType type = primitiveColumn.getType();
-		return this.getPrimitiveColumnTypeGenerator(type).generate(type);
+	protected String generateTypeString(PrimitiveColumnType columnType) {
+		return this.getPrimitiveColumnTypeGenerator(columnType).generate(columnType);
 	}
 
 	/**
 	 * create primary key generator element
 	 * 
-	 * @param primitiveColumn
+	 * @param generator
 	 * @return
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	protected Element createPrimaryKeyGeneratorElement(IPrimitivePersistentColumn primitiveColumn) {
-		IPrimaryKey generator = primitiveColumn.getPrimaryKeyGenerator();
+	protected Element createPrimaryKeyGeneratorElement(IPrimaryKey generator) {
 		IPrimaryKeyGenerator pkGenerator = this.getPrimaryKeyGenerator(generator);
 		Element generatorElement = DocumentHelper.createElement("generator");
 		generatorElement.addAttribute("class", pkGenerator.getGeneratorClass(generator));

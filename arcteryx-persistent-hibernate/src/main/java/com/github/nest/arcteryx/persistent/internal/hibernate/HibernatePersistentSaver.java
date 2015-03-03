@@ -48,6 +48,16 @@ public class HibernatePersistentSaver extends AbstractStaticCodeBeanOperator imp
 	}
 
 	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IPersistentBeanSaver#remove(java.lang.Object)
+	 */
+	@Override
+	public void remove(Object resource) {
+		this.getCurrentSession().delete(resource);
+	}
+
+	/**
 	 * get current hibernate session
 	 * 
 	 * @return

@@ -4,14 +4,20 @@
 package com.github.nest.arcteryx.persistent;
 
 /**
+ * cascade type
+ * 
  * @author brad.wu
- *
  */
 public enum CascadeType {
 	/**
 	 * Includes all types listed here.
 	 */
 	ALL("all"),
+	/**
+	 * Cascades save, delete, update, evict, lock, replicate, merge, persist +
+	 * delete orphans
+	 */
+	ALL_DELETE_ORPHAN("all-delete-orphan"),
 	/**
 	 * Corresponds to {@link javax.persistence.CascadeType#REFRESH}.
 	 */

@@ -4,11 +4,11 @@
 package com.github.nest.arcteryx.persistent;
 
 /**
- * one-to-one reverse parent column
+ * one-to-many reverse persistent column
  * 
  * @author brad.wu
  */
-public interface IOneToOneReversePersistentColumn extends IPersistentColumn {
+public interface IOneToManyReversePersistentColumn extends IPersistentColumn {
 	/**
 	 * get parent bean. <br>
 	 * 

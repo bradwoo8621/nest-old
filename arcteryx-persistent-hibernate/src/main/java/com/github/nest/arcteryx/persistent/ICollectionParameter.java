@@ -19,6 +19,13 @@ public interface ICollectionParameter extends Serializable {
 	CollectionType getType();
 
 	/**
+	 * get cascade types
+	 * 
+	 * @return
+	 */
+	CascadeType[] getCascadeTypes();
+
+	/**
 	 * is inverse or not.<br>
 	 * true is used in bidirectional associations. default is false.
 	 * 

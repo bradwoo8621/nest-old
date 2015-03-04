@@ -206,9 +206,9 @@ public class TestOneToManyListUnidirectional {
 			column.setForeignKeyColumnName("PERSON_ID");
 			// set as ALL_DELETE_ORPHAN, or delete the object from persistent
 			// layer manually
-			column.setCascadeTypes(new CascadeType[] { CascadeType.ALL_DELETE_ORPHAN });
 			ListCollectionParameter list = new ListCollectionParameter();
 			list.setListIndexColumnName("LIST_INDEX");
+			list.setCascadeTypes(new CascadeType[] { CascadeType.ALL_DELETE_ORPHAN });
 			column.setCollectionParameter(list);
 			column.setPropertyDescriptor(property);
 			property.setPersistentColumn(column);

@@ -3,10 +3,8 @@
  */
 package com.github.nest.arcteryx.persistent.internal;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import com.github.nest.arcteryx.persistent.CascadeType;
 import com.github.nest.arcteryx.persistent.ICollectionParameter;
 import com.github.nest.arcteryx.persistent.IOneToManyPersistentColumn;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
@@ -24,7 +22,6 @@ public class OneToManyPersistentColumn extends AbstractPersistentColumn implemen
 	private Class<?> beanClass = null;
 	private String foreignKeyPropertyName = null;
 	private String foreignKeyColumnName = null;
-	private CascadeType[] cascadeTypes = DEFAULT_CASCADE_TYPES;
 	private ICollectionParameter collectionParameter = null;
 
 	/**
@@ -89,26 +86,6 @@ public class OneToManyPersistentColumn extends AbstractPersistentColumn implemen
 	 */
 	public void setForeignKeyColumnName(String foreignKeyColumnName) {
 		this.foreignKeyColumnName = foreignKeyColumnName;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.arcteryx.persistent.IOneToManyPersistentColumn#getCascadeTypes()
-	 */
-	@Override
-	public CascadeType[] getCascadeTypes() {
-		return ArrayUtils.isEmpty(this.cascadeTypes) ? DEFAULT_CASCADE_TYPES : this.cascadeTypes;
-	}
-
-	/**
-	 * set as null means reset to default.
-	 * 
-	 * @param cascadeTypes
-	 *            the cascadeTypes to set
-	 */
-	public void setCascadeTypes(CascadeType[] cascadeTypes) {
-		this.cascadeTypes = cascadeTypes;
 	}
 
 	/**

@@ -10,8 +10,6 @@ package com.github.nest.arcteryx.persistent;
  * @author brad.wu
  */
 public interface IOneToManyPersistentColumn extends IPersistentColumn {
-	public static final CascadeType[] DEFAULT_CASCADE_TYPES = { CascadeType.SAVE_UPDATE, CascadeType.DELETE };
-
 	/**
 	 * get subordinate bean. <br>
 	 * 
@@ -34,13 +32,6 @@ public interface IOneToManyPersistentColumn extends IPersistentColumn {
 	 * @return
 	 */
 	String getForeignKeyColumnName();
-
-	/**
-	 * get cascade types
-	 * 
-	 * @return
-	 */
-	CascadeType[] getCascadeTypes();
 
 	/**
 	 * get collection parameter

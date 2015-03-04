@@ -4,6 +4,7 @@
 package com.github.nest.arcteryx.persistent.oneToMany;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -115,15 +116,18 @@ public class TestOneToManySetBidirectional {
 			}
 			rst.close();
 			rst = stat.executeQuery("select * from T_ADDRESS ORDER BY ADDRESS_ID");
-			while (rst.next()) {
-				if (rst.getLong("ADDRESS_ID") == 202) {
-					assertEquals("AddressLine1", rst.getString("ADDRESS_LINE"));
-				} else if (rst.getLong("ADDRESS_ID") == 203) {
-					assertEquals("AddressLine2", rst.getString("ADDRESS_LINE"));
-				} else {
-					throw new RuntimeException("exception raised.");
-				}
-				assertEquals(101, rst.getLong("PERSON_ID"));
+			rst.next();
+			assertEquals(202, rst.getLong("ADDRESS_ID"));
+			assertTrue(rst.getString("ADDRESS_LINE").equals("AddressLine1")
+					|| rst.getString("ADDRESS_LINE").equals("AddressLine2"));
+			assertEquals(101, rst.getLong("PERSON_ID"));
+			rst.next();
+			assertEquals(203, rst.getLong("ADDRESS_ID"));
+			assertTrue(rst.getString("ADDRESS_LINE").equals("AddressLine1")
+					|| rst.getString("ADDRESS_LINE").equals("AddressLine2"));
+			assertEquals(101, rst.getLong("PERSON_ID"));
+			if (rst.next()) {
+				throw new RuntimeException("exception raised");
 			}
 			rst.close();
 			conn.close();
@@ -136,13 +140,8 @@ public class TestOneToManySetBidirectional {
 		addresses = person.getAddressSet();
 		assertEquals(2, addresses.size());
 		for (Address add : addresses) {
-			if (add.getAddressId() == 202) {
-				assertEquals("AddressLine1", add.getAddressLine());
-			} else if (add.getAddressId() == 203) {
-				assertEquals("AddressLine2", add.getAddressLine());
-			} else {
-				throw new RuntimeException("exception raised.");
-			}
+			assertTrue(add.getAddressId() == 202 || add.getAddressId() == 203);
+			assertTrue(add.getAddressLine().equals("AddressLine1") || add.getAddressLine().equals("AddressLine2"));
 			assertEquals(add.getPerson(), person);
 		}
 		sessionFactory.getCurrentSession().getTransaction().commit();

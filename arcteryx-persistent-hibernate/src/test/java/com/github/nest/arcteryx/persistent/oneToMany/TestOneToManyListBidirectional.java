@@ -217,12 +217,12 @@ public class TestOneToManyListBidirectional {
 			OneToManyPersistentColumn column = new OneToManyPersistentColumn();
 			column.setSubordinateBeanClass(Address.class);
 			column.setForeignKeyColumnName("PERSON_ID");
-			column.setCascadeTypes(new CascadeType[] { CascadeType.ALL_DELETE_ORPHAN });
 			ListCollectionParameter list = new ListCollectionParameter();
 			list.setListIndexColumnName("LIST_INDEX");
 			// it's very important to set inverse=true, or hibernate will throw
 			// exception when parse the configuration
 			list.setInverse(true);
+			list.setCascadeTypes(new CascadeType[] { CascadeType.ALL_DELETE_ORPHAN });
 			column.setCollectionParameter(list);
 			column.setPropertyDescriptor(property);
 			property.setPersistentColumn(column);

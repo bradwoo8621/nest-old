@@ -35,6 +35,7 @@ import com.github.nest.arcteryx.persistent.CascadeType;
 import com.github.nest.arcteryx.persistent.CollectionType;
 import com.github.nest.arcteryx.persistent.ICollectionParameter;
 import com.github.nest.arcteryx.persistent.IEmbeddedPersistentColumn;
+import com.github.nest.arcteryx.persistent.IManyToManyPersistentColumn;
 import com.github.nest.arcteryx.persistent.IManyToOnePersistentColumn;
 import com.github.nest.arcteryx.persistent.IOneToManyPersistentColumn;
 import com.github.nest.arcteryx.persistent.IOneToManyReversePersistentColumn;
@@ -49,6 +50,7 @@ import com.github.nest.arcteryx.persistent.IPrimaryKey;
 import com.github.nest.arcteryx.persistent.IPrimitivePersistentColumn;
 import com.github.nest.arcteryx.persistent.IStandalonePersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.PrimitiveColumnType;
+import com.github.nest.arcteryx.persistent.internal.IdBagCollectionParameter;
 import com.github.nest.arcteryx.persistent.internal.ListCollectionParameter;
 import com.github.nest.arcteryx.persistent.internal.PersistentConfiguration;
 import com.github.nest.arcteryx.persistent.internal.hibernate.IPrimaryKeyGenerator.GeneratorParameter;
@@ -375,10 +377,122 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 			return createOneToManyColumnElement(property, (IOneToManyPersistentColumn) column);
 		} else if (column instanceof IOneToManyReversePersistentColumn) {
 			return createOneToManyColumnElement(property, (IOneToManyReversePersistentColumn) column);
+		} else if (column instanceof IManyToManyPersistentColumn) {
+			return createManyToManyColumnElement(property, (IManyToManyPersistentColumn) column);
 		} else {
 			throw new ResourceException("Property [" + property.getResourceDescriptor().getResourceClass().getName()
 					+ "#" + property.getName() + "] cannot be convert to hibernate xml.");
 		}
+	}
+
+	/**
+	 * create many-to-many property element
+	 * 
+	 * @param property
+	 * @param column
+	 * @return
+	 */
+	protected Element createManyToManyColumnElement(IPersistentBeanPropertyDescriptor property,
+			IManyToManyPersistentColumn column) {
+		IBeanDescriptor referredBean = column.getReferencedBean();
+		if (column.isInSameContext() && (referredBean instanceof IPersistentBeanDescriptor)) {
+			return createManyToManyColumnElementAllPersistent(property, column);
+		} else {
+			return createManyToManyColumnElementNotPersistent(property, column);
+		}
+	}
+
+	/**
+	 * create many-to-many property element, if the referenced bean is not in
+	 * same context with current bean or the referenced bean is not persistent.
+	 * 
+	 * @param property
+	 * @param column
+	 * @return
+	 */
+	protected Element createManyToManyColumnElementNotPersistent(IPersistentBeanPropertyDescriptor property,
+			IManyToManyPersistentColumn column) {
+		Element manyToManyElement = internalCreateManyToManyColumnElement(property, column);
+
+		Element elementElement = DocumentHelper.createElement("composite-element");
+		elementElement.addAttribute("class", column.getReferencedBean().getBeanClass().getName());
+		Element propertyElement = DocumentHelper.createElement("property");
+		propertyElement.addAttribute("column", column.getForeignKeyColumnNameToRefer());
+		propertyElement.addAttribute("name", column.getForeignKeyPropertyNameToRefer());
+		elementElement.add(propertyElement);
+		manyToManyElement.add(elementElement);
+		
+		return manyToManyElement;
+	}
+
+	/**
+	 * create many-to-many property element, if the beans in both sides are
+	 * persistent in same context.
+	 * 
+	 * @param property
+	 * @param column
+	 * @return
+	 */
+	protected Element createManyToManyColumnElementAllPersistent(IPersistentBeanPropertyDescriptor property,
+			IManyToManyPersistentColumn column) {
+		Element manyToManyElement = internalCreateManyToManyColumnElement(property, column);
+
+		Element linkElement = DocumentHelper.createElement("many-to-many");
+		linkElement.addAttribute("class", column.getReferencedBean().getBeanClass().getName());
+		linkElement.addAttribute("column", column.getForeignKeyColumnNameToRefer());
+		manyToManyElement.add(linkElement);
+
+		return manyToManyElement;
+	}
+
+	/**
+	 * create many-to-many property element.
+	 * 
+	 * @param property
+	 * @param column
+	 * @return
+	 */
+	protected Element internalCreateManyToManyColumnElement(IPersistentBeanPropertyDescriptor property,
+			IManyToManyPersistentColumn column) {
+		Element element = null;
+		ICollectionParameter parameter = column.getCollectionParameter();
+		if (CollectionType.BAG == parameter.getType()) {
+			element = DocumentHelper.createElement("bag");
+		} else if (CollectionType.SET == parameter.getType()) {
+			element = DocumentHelper.createElement("set");
+		} else if (CollectionType.LIST == parameter.getType()) {
+			element = DocumentHelper.createElement("list");
+		} else if (CollectionType.IDBAG == parameter.getType()) {
+			element = DocumentHelper.createElement("idbag");
+			// collection-id
+			Element collectionIdElement = DocumentHelper.createElement("collection-id");
+			collectionIdElement.addAttribute("column",
+					(String) parameter.getParameter(IdBagCollectionParameter.COLLECTION_ID_COLUMN_NAME));
+			collectionIdElement.add(createPrimaryKeyGeneratorElement((IPrimaryKey) parameter
+					.getParameter(IdBagCollectionParameter.COLLECTION_ID_GENERATOR)));
+			// column type
+			collectionIdElement.addAttribute("type", generateTypeString((PrimitiveColumnType) parameter
+					.getParameter(IdBagCollectionParameter.COLLECTION_ID_COLUMN_TYPE)));
+			element.add(collectionIdElement);
+		}
+
+		element.addAttribute("name", property.getName());
+		CascadeType[] cascadeTypes = parameter.getCascadeTypes();
+		element.addAttribute("cascade", generateCascadeAttributeValue(cascadeTypes));
+
+		Element keyElement = DocumentHelper.createElement("key");
+		keyElement.addAttribute("column", column.getForeignKeyColumnNameToMe());
+		element.add(keyElement);
+
+		if (CollectionType.LIST == parameter.getType()) {
+			Element listIndexElement = DocumentHelper.createElement("list-index");
+			listIndexElement.addAttribute("column",
+					(String) parameter.getParameter(ListCollectionParameter.LIST_INDEX_COLUMN_NAME));
+			element.add(listIndexElement);
+		}
+
+		element.addAttribute("table", column.getIntermediateTableName());
+		return element;
 	}
 
 	/**
@@ -435,30 +549,10 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 		} else if (CollectionType.IDBAG == parameter.getType()) {
 			throw new ResourceException("Idbag cannot be defined in one-to-many relationship at ["
 					+ property.getBeanDescriptor().getBeanClass() + "#" + property.getName() + "].");
-			// oneToManyElement = DocumentHelper.createElement("idbag");
-			// // collection-id
-			// // order-by attr
-			// Element collectionIdElement =
-			// DocumentHelper.createElement("collection-id");
-			// collectionIdElement.addAttribute("column",
-			// (String)
-			// parameter.getParameter(IdBagCollectionParameter.COLLECTION_ID_COLUMN_NAME));
-			// collectionIdElement.add(createPrimaryKeyGeneratorElement((IPrimaryKey)
-			// parameter
-			// .getParameter(IdBagCollectionParameter.COLLECTION_ID_GENERATOR)));
-			// // column type
-			// collectionIdElement.addAttribute("type",
-			// generateTypeString((PrimitiveColumnType) parameter
-			// .getParameter(IdBagCollectionParameter.COLLECTION_ID_COLUMN_TYPE)));
-			// oneToManyElement.add(collectionIdElement);
 		}
 
-		// add fetch attributes automatically
-		oneToManyElement.addAttribute("fetch", "select");
-		oneToManyElement.addAttribute("inverse", parameter.isInverse() ? "true" : "false");
-
 		oneToManyElement.addAttribute("name", property.getName());
-		CascadeType[] cascadeTypes = column.getCascadeTypes();
+		CascadeType[] cascadeTypes = parameter.getCascadeTypes();
 		oneToManyElement.addAttribute("cascade", generateCascadeAttributeValue(cascadeTypes));
 
 		Element keyElement = DocumentHelper.createElement("key");
@@ -473,6 +567,10 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 					(String) parameter.getParameter(ListCollectionParameter.LIST_INDEX_COLUMN_NAME));
 			oneToManyElement.add(listIndexElement);
 		}
+
+		// add fetch attributes automatically
+		oneToManyElement.addAttribute("fetch", "select");
+		oneToManyElement.addAttribute("inverse", parameter.isInverse() ? "true" : "false");
 
 		Element linkElement = DocumentHelper.createElement("one-to-many");
 		linkElement.addAttribute("class", column.getSubordinateBean().getBeanClass().getName());

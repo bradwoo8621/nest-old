@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.arcteryx.persistent.oneToMany;
+package com.github.nest.arcteryx.persistent.manyToMany;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,14 +23,16 @@ import org.hibernate.SessionFactory;
 import org.junit.Test;
 
 import com.github.nest.arcteryx.meta.IPropertyDescriptor;
-import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptorContext;
+import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
+import com.github.nest.arcteryx.meta.beans.internal.BeanDescriptor;
+import com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanLoader;
 import com.github.nest.arcteryx.persistent.IPersistentBeanSaver;
 import com.github.nest.arcteryx.persistent.IPersistentConfiguration;
 import com.github.nest.arcteryx.persistent.IPersistentConfigurationInitializer;
 import com.github.nest.arcteryx.persistent.PrimitiveColumnType;
-import com.github.nest.arcteryx.persistent.internal.OneToManyPersistentColumn;
+import com.github.nest.arcteryx.persistent.internal.ManyToManyPersistentColumn;
 import com.github.nest.arcteryx.persistent.internal.PersistentBeanDescriptorContext;
 import com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor;
 import com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn;
@@ -43,8 +45,9 @@ import com.github.nest.arcteryx.persistent.internal.providers.HibernatePersisten
 
 /**
  * @author brad.wu
+ *
  */
-public class TestOneToManySetUnidirectional {
+public class TestManyToManyCacheSet {
 	@Test
 	public void test() throws ClassNotFoundException, SQLException {
 		BasicConfigurator.configure();
@@ -55,8 +58,8 @@ public class TestOneToManySetUnidirectional {
 			Class.forName("org.hsqldb.jdbc.JDBCDriver");
 			Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:memdb", "username", "password");
 			Statement stat = conn.createStatement();
-			stat.execute("create table T_PERSON(PERSON_ID BIGINT, PERSON_NAME VARCHAR(20))");
-			stat.execute("create table T_ADDRESS(ADDRESS_ID BIGINT, ADDRESS_LINE VARCHAR(20), PERSON_ID BIGINT)");
+			stat.execute("create table T_STUDENT(STUDENT_ID BIGINT, STUDENT_NAME VARCHAR(20))");
+			stat.execute("create table T_INTERMEDIATE(MID_STUDENT_ID BIGINT, MID_TEACHER_ID BIGINT)");
 			stat.execute("create table HIBERNATE_UNIQUE_KEY(NEXT_HI INT)");
 			stat.execute("INSERT INTO HIBERNATE_UNIQUE_KEY(NEXT_HI) VALUES (1)");
 			conn.commit();
@@ -65,7 +68,6 @@ public class TestOneToManySetUnidirectional {
 		}
 
 		PersistentBeanDescriptorContext context = new PersistentBeanDescriptorContext();
-		context.setName("student");
 		HibernatePersistentConfigurationInitializer initializer = new HibernatePersistentConfigurationInitializer();
 		initializer.addProperty("hibernate.connection.driver_class", "org.hsqldb.jdbc.JDBCDriver");
 		initializer.addProperty("hibernate.connection.url", "jdbc:hsqldb:mem:memdb");
@@ -82,80 +84,79 @@ public class TestOneToManySetUnidirectional {
 		context.getOperatorProviderRegistry().register(IPersistentBeanLoader.CODE,
 				new HibernatePersistentLoaderProvider());
 
-		IPersistentBeanDescriptor personDescriptor = createPersonDescriptor(context);
-		createAddressDescriptor(context);
+		IPersistentBeanDescriptor studentDescriptor = createStudentDescriptor(context);
+		createTeacherDescriptor(context);
 		context.afterContextInitialized();
 
-		Person person = new Person();
-		person.setName("Person");
-		Set<Address> addresses = new HashSet<Address>();
-		Address address = new Address();
-		address.setAddressLine("AddressLine1");
-		address.setPerson(person);
-		addresses.add(address);
-		address = new Address();
-		address.setAddressLine("AddressLine2");
-		address.setPerson(person);
-		addresses.add(address);
-		person.setAddressSet(addresses);
+		Set<Teacher> teacheres = new HashSet<Teacher>();
+		Teacher teacher = new Teacher();
+		teacher.setId(1001l);
+		teacher.setName("Teacher1");
+		teacheres.add(teacher);
+		teacher = new Teacher();
+		teacher.setId(1002l);
+		teacher.setName("Teacher2");
+		teacheres.add(teacher);
+		Student student = new Student();
+		student.setName("Student");
+		student.setTeacherSet(teacheres);
 
 		IPersistentConfiguration configuration = context.getInitializedData(IPersistentConfigurationInitializer.KEY);
 		SessionFactory sessionFactory = configuration.getRealConfiguration();
 		sessionFactory.getCurrentSession().beginTransaction();
-		personDescriptor.getSaver().save(person);
+		studentDescriptor.getSaver().save(student);
 		sessionFactory.getCurrentSession().getTransaction().commit();
 
 		{
 			Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:memdb", "username", "password");
 			Statement stat = conn.createStatement();
-			ResultSet rst = stat.executeQuery("select * from T_PERSON");
-			if (rst.next()) {
-				assertEquals(101, rst.getLong("PERSON_ID"));
-				assertEquals("Person", rst.getString("PERSON_NAME"));
-			}
+			ResultSet rst = stat.executeQuery("select * from T_STUDENT");
+			rst.next();
+			assertEquals(101, rst.getLong("STUDENT_ID"));
+			assertEquals("Student", rst.getString("STUDENT_NAME"));
 			rst.close();
-			rst = stat.executeQuery("select * from T_ADDRESS ORDER BY ADDRESS_ID");
+			rst = stat.executeQuery("select * from T_INTERMEDIATE ORDER BY MID_TEACHER_ID");
 			rst.next();
-			assertEquals(202, rst.getLong("ADDRESS_ID"));
-			assertTrue(rst.getString("ADDRESS_LINE").equals("AddressLine1")
-					|| rst.getString("ADDRESS_LINE").equals("AddressLine2"));
-			assertEquals(101, rst.getLong("PERSON_ID"));
+			assertEquals(1001, rst.getLong("MID_TEACHER_ID"));
+			assertEquals(101, rst.getLong("MID_STUDENT_ID"));
 			rst.next();
-			assertEquals(203, rst.getLong("ADDRESS_ID"));
-			assertTrue(rst.getString("ADDRESS_LINE").equals("AddressLine1")
-					|| rst.getString("ADDRESS_LINE").equals("AddressLine2"));
-			assertEquals(101, rst.getLong("PERSON_ID"));
+			assertEquals(1002, rst.getLong("MID_TEACHER_ID"));
+			assertEquals(101, rst.getLong("MID_STUDENT_ID"));
 			if (rst.next()) {
-				throw new RuntimeException("exception raised");
+				throw new RuntimeException("Exception raised.");
 			}
 			rst.close();
 			conn.close();
 		}
 
 		sessionFactory.getCurrentSession().beginTransaction();
-		person = personDescriptor.getLoader().load(101l);
-		assertEquals(101, person.getId().longValue());
-		assertEquals("Person", person.getName());
-		addresses = person.getAddressSet();
-		assertEquals(2, addresses.size());
-		for (Address add : addresses) {
-			assertTrue(add.getAddressId() == 202 || add.getAddressId() == 203);
-			assertTrue(add.getAddressLine().equals("AddressLine1") || add.getAddressLine().equals("AddressLine2"));
+		student = studentDescriptor.getLoader().load(101l);
+		assertEquals(101, student.getId().longValue());
+		assertEquals("Student", student.getName());
+		Set<Teacher> teachers = student.getTeacherSet();
+		assertEquals(2, teachers.size());
+		for (Teacher t : teacheres) {
+			assertTrue(t.getId() == 1001l || t.getId() == 1002l);
 		}
+		sessionFactory.getCurrentSession().getTransaction().commit();
+
+		sessionFactory.getCurrentSession().beginTransaction();
+		student.getTeacherSet().remove(student.getTeacherSet().iterator().next());
+		studentDescriptor.getSaver().save(student);
 		sessionFactory.getCurrentSession().getTransaction().commit();
 	}
 
-	private IPersistentBeanDescriptor createPersonDescriptor(PersistentBeanDescriptorContext context) {
+	private IPersistentBeanDescriptor createStudentDescriptor(PersistentBeanDescriptorContext context) {
 		StandalonePersistentBeanDescriptor descriptor = new StandalonePersistentBeanDescriptor();
-		descriptor.setBeanClass(Person.class);
-		descriptor.setTableName("T_PERSON");
+		descriptor.setBeanClass(Student.class);
+		descriptor.setTableName("T_STUDENT");
 
 		List<IPropertyDescriptor> properties = new ArrayList<IPropertyDescriptor>();
 		{
 			PersistentBeanPropertyDescriptor property = new PersistentBeanPropertyDescriptor();
 			property.setName("id");
 			PrimitivePersistentColumn column = new PrimitivePersistentColumn();
-			column.setName("PERSON_ID");
+			column.setName("STUDENT_ID");
 			column.setType(PrimitiveColumnType.LONG);
 			column.setPrimaryKey(true);
 			HiloKey key = new HiloKey();
@@ -168,7 +169,7 @@ public class TestOneToManySetUnidirectional {
 			PersistentBeanPropertyDescriptor property = new PersistentBeanPropertyDescriptor();
 			property.setName("name");
 			PrimitivePersistentColumn column = new PrimitivePersistentColumn();
-			column.setName("PERSON_NAME");
+			column.setName("STUDENT_NAME");
 			column.setType(PrimitiveColumnType.STRING);
 			property.setPersistentColumn(column);
 			properties.add(property);
@@ -176,12 +177,14 @@ public class TestOneToManySetUnidirectional {
 
 		{
 			PersistentBeanPropertyDescriptor property = new PersistentBeanPropertyDescriptor();
-			property.setName("addressSet");
-			OneToManyPersistentColumn column = new OneToManyPersistentColumn();
-			column.setSubordinateBeanClass(Address.class);
-			column.setForeignKeyColumnName("PERSON_ID");
-			SetCollectionParameter bag = new SetCollectionParameter();
-			column.setCollectionParameter(bag);
+			property.setName("teacherSet");
+			ManyToManyPersistentColumn column = new ManyToManyPersistentColumn();
+			column.setReferencedBeanClass(Teacher.class);
+			column.setIntermediateTableName("T_INTERMEDIATE");
+			column.setForeignKeyColumnNameToMe("MID_STUDENT_ID");
+			column.setForeignKeyColumnNameToRefer("MID_TEACHER_ID");
+			column.setForeignKeyPropertyNameToRefer("id");
+			column.setCollectionParameter(new SetCollectionParameter());
 			column.setPropertyDescriptor(property);
 			property.setPersistentColumn(column);
 			properties.add(property);
@@ -192,51 +195,25 @@ public class TestOneToManySetUnidirectional {
 		return descriptor;
 	}
 
-	private IPersistentBeanDescriptor createAddressDescriptor(BeanDescriptorContext context) {
-		StandalonePersistentBeanDescriptor descriptor = new StandalonePersistentBeanDescriptor();
-		descriptor.setBeanClass(Address.class);
-		descriptor.setTableName("T_ADDRESS");
+	private IBeanDescriptor createTeacherDescriptor(PersistentBeanDescriptorContext context) {
+		BeanDescriptor descriptor = new BeanDescriptor();
+		descriptor.setBeanClass(Teacher.class);
 
 		List<IPropertyDescriptor> properties = new ArrayList<IPropertyDescriptor>();
 		{
-			PersistentBeanPropertyDescriptor property = new PersistentBeanPropertyDescriptor();
-			property.setName("addressId");
-			PrimitivePersistentColumn column = new PrimitivePersistentColumn();
-			column.setName("ADDRESS_ID");
-			column.setType(PrimitiveColumnType.LONG);
-			column.setPrimaryKey(true);
-			HiloKey key = new HiloKey();
-			column.setPrimaryKeyGenerator(key);
-			property.setPersistentColumn(column);
+			BeanPropertyDescriptor property = new BeanPropertyDescriptor();
+			property.setName("id");
 			properties.add(property);
 		}
 
 		{
-			PersistentBeanPropertyDescriptor property = new PersistentBeanPropertyDescriptor();
-			property.setName("addressLine");
-			PrimitivePersistentColumn column = new PrimitivePersistentColumn();
-			column.setName("ADDRESS_LINE");
-			column.setType(PrimitiveColumnType.STRING);
-			property.setPersistentColumn(column);
+			BeanPropertyDescriptor property = new BeanPropertyDescriptor();
+			property.setName("name");
 			properties.add(property);
-		}
-
-		{
-			// PersistentBeanPropertyDescriptor property = new
-			// PersistentBeanPropertyDescriptor();
-			// property.setName("personId");
-			// PrimitivePersistentColumn column = new
-			// PrimitivePersistentColumn();
-			// column.setName("PERSON_ID");
-			// column.setType(PrimitiveColumnType.LONG);
-			// column.setPropertyDescriptor(property);
-			// property.setPersistentColumn(column);
-			// properties.add(property);
 		}
 
 		descriptor.setProperties(properties);
 		context.register(descriptor);
 		return descriptor;
 	}
-
 }

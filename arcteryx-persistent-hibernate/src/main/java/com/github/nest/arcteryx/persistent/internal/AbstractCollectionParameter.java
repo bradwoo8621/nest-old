@@ -6,6 +6,9 @@ package com.github.nest.arcteryx.persistent.internal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.ArrayUtils;
+
+import com.github.nest.arcteryx.persistent.CascadeType;
 import com.github.nest.arcteryx.persistent.CollectionType;
 import com.github.nest.arcteryx.persistent.ICollectionParameter;
 
@@ -16,8 +19,10 @@ import com.github.nest.arcteryx.persistent.ICollectionParameter;
  */
 public abstract class AbstractCollectionParameter implements ICollectionParameter {
 	private static final long serialVersionUID = 3954678804953985870L;
+	public static final CascadeType[] DEFAULT_CASCADE_TYPES = { CascadeType.SAVE_UPDATE, CascadeType.DELETE };
 
 	private CollectionType type = null;
+	private CascadeType[] cascadeTypes = DEFAULT_CASCADE_TYPES;
 	private boolean inverse = false;
 	private Map<String, Object> parameters = null;
 
@@ -33,6 +38,26 @@ public abstract class AbstractCollectionParameter implements ICollectionParamete
 	@Override
 	public CollectionType getType() {
 		return this.type;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.ICollectionParameter#getCascadeTypes()
+	 */
+	@Override
+	public CascadeType[] getCascadeTypes() {
+		return ArrayUtils.isEmpty(this.cascadeTypes) ? DEFAULT_CASCADE_TYPES : this.cascadeTypes;
+	}
+
+	/**
+	 * set as null means reset to default.
+	 * 
+	 * @param cascadeTypes
+	 *            the cascadeTypes to set
+	 */
+	public void setCascadeTypes(CascadeType[] cascadeTypes) {
+		this.cascadeTypes = cascadeTypes;
 	}
 
 	/**

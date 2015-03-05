@@ -1,0 +1,18 @@
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.github.nest.arcteryx.persistent.join">
+	<class name="Person" table="T_PERSON">
+		<id type="long" column="PERSON_ID" name="id">
+			<generator class="hilo">
+				<param name="table">HIBERNATE_UNIQUE_KEY</param>
+				<param name="column">NEXT_HI</param>
+				<param name="max_lo">100</param>
+			</generator>
+		</id>
+		<one-to-one name="address"
+			class="com.github.nest.arcteryx.persistent.join.Address" cascade="save-update,delete" />
+		<join table="T_PERSON_NAME">
+			<key column="NAME_ID" />
+			<property type="string" column="PERSON_NAME" name="name" />
+		</join>
+	</class>
+</hibernate-mapping>

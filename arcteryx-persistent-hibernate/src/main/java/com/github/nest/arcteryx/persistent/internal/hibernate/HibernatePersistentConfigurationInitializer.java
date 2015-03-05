@@ -76,6 +76,19 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * @author brad.wu
 	 */
 	private final class PropertyComparator implements Comparator<IPersistentBeanPropertyDescriptor> {
+		private IPersistentBeanDescriptor descriptor = null;
+
+		public PropertyComparator(IPersistentBeanDescriptor descriptor) {
+			this.descriptor = descriptor;
+		}
+
+		/**
+		 * @return the descriptor
+		 */
+		public IPersistentBeanDescriptor getBeanDescriptor() {
+			return descriptor;
+		}
+
 		/**
 		 * (non-Javadoc)
 		 * 
@@ -83,7 +96,28 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 		 */
 		@Override
 		public int compare(IPersistentBeanPropertyDescriptor o1, IPersistentBeanPropertyDescriptor o2) {
-			return getValueOfProperty(o1) - getValueOfProperty(o2);
+			int metrics1 = getValueOfProperty(o1);
+			int metrics2 = getValueOfProperty(o2);
+			if (metrics1 != metrics2) {
+				return metrics1 - metrics2;
+			} else {
+				IPersistentBeanDescriptor beanDescriptor = this.getBeanDescriptor();
+				if (beanDescriptor instanceof IStandalonePersistentBeanDescriptor) {
+					IStandalonePersistentBeanDescriptor bean = (IStandalonePersistentBeanDescriptor) beanDescriptor;
+					String joinedTable1 = bean.getJoinedTableName(o1.getName());
+					String joinedTable2 = bean.getJoinedTableName(o2.getName());
+					if (StringUtils.isBlank(joinedTable1)) {
+						return StringUtils.isBlank(joinedTable2) ? 0 : -1;
+					} else if (StringUtils.isBlank(joinedTable2)) {
+						return 1;
+					} else {
+						return joinedTable1.compareTo(joinedTable2);
+					}
+				} else {
+					// embedded has no sort
+					return 0;
+				}
+			}
 		}
 
 		private int getValueOfProperty(IPersistentBeanPropertyDescriptor descriptor) {
@@ -92,14 +126,9 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 				IPrimitivePersistentColumn ippc = (IPrimitivePersistentColumn) column;
 				if (ippc.isPrimaryKey()) {
 					return 1;
-				} else if (ippc.isVersion()) {
-					return 2;
-				} else {
-					return 3;
 				}
-			} else {
-				return 999;
 			}
+			return 2;
 		}
 	}
 
@@ -345,10 +374,38 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 				properties.size());
 		list.addAll(properties);
 		// id first, version second.
-		Collections.sort(list, new PropertyComparator());
+		Collections.sort(list, new PropertyComparator(descriptor));
+
 		List<Element> propertyElements = new LinkedList<Element>();
+
+		// for stand-alone beans, more than one tables might be existed.
+		String currentJoinedTableName = null;
+		IStandalonePersistentBeanDescriptor persistentDescriptor = null;
+		if (descriptor instanceof IStandalonePersistentBeanDescriptor) {
+			persistentDescriptor = (IStandalonePersistentBeanDescriptor) descriptor;
+		}
+		Element joinedTableElement = null;
 		for (IPersistentBeanPropertyDescriptor property : list) {
-			propertyElements.add(createPropertyElement(property, embeddedStack));
+			if (persistentDescriptor != null && persistentDescriptor.isJoined(property.getName())) {
+				String joinedTableName = persistentDescriptor.getJoinedTableName(property.getName());
+				if (!joinedTableName.equals(currentJoinedTableName)) {
+					joinedTableElement = DocumentHelper.createElement("join");
+					joinedTableElement.addAttribute("table", joinedTableName);
+					Element keyElement = DocumentHelper.createElement("key");
+					keyElement.addAttribute("column",
+							persistentDescriptor.getJoinedTablePrimaryKeyColumnName(joinedTableName));
+					joinedTableElement.add(keyElement);
+					currentJoinedTableName = joinedTableName;
+				}
+			}
+			if (joinedTableElement != null) {
+				if (!propertyElements.contains(joinedTableElement)) {
+					propertyElements.add(joinedTableElement);
+				}
+				joinedTableElement.add(createPropertyElement(property, embeddedStack));
+			} else {
+				propertyElements.add(createPropertyElement(property, embeddedStack));
+			}
 		}
 		return propertyElements;
 	}
@@ -421,7 +478,7 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 		propertyElement.addAttribute("name", column.getForeignKeyPropertyNameToRefer());
 		elementElement.add(propertyElement);
 		manyToManyElement.add(elementElement);
-		
+
 		return manyToManyElement;
 	}
 

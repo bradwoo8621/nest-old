@@ -26,6 +26,15 @@ public class StandalonePersistentBeanDescriptor extends AbstractPersistentBeanDe
 	// key: joined table name; value: primary key column name
 	private Map<String, String> joinedTablePrimaryKeyColumnNames = null;
 
+	// the following fields are used to describe a bean which is a sub-class
+	// extends from another bean.
+	private Class<?> extendsFromBeanClass = null;
+	private String foreignKeyColumnName = null;
+	private String discriminatorValue = null;
+	// to describe the bean which will be extended by other classes, the
+	// discriminator column is used to identify the sub-class
+	private String discriminatorColumnName = null;
+
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -110,5 +119,78 @@ public class StandalonePersistentBeanDescriptor extends AbstractPersistentBeanDe
 	 */
 	public void setJoinedTablePrimaryKeyColumnNames(Map<String, String> joinedTablePrimaryKeyColumnNames) {
 		this.joinedTablePrimaryKeyColumnNames = joinedTablePrimaryKeyColumnNames;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IStandalonePersistentBeanDescriptor#getExtendsFrom()
+	 */
+	@Override
+	public IStandalonePersistentBeanDescriptor getExtendsFrom() {
+		return (IStandalonePersistentBeanDescriptor) (this.extendsFromBeanClass == null ? null : this.getContext().get(
+				this.extendsFromBeanClass));
+	}
+
+	/**
+	 * @param extendsFromBeanClass
+	 *            the extendsFromBeanClass to set
+	 */
+	public void setExtendsFromBeanClass(Class<?> extendsFromBeanClass) {
+		this.extendsFromBeanClass = extendsFromBeanClass;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IStandalonePersistentBeanDescriptor#getDiscriminatorValue()
+	 */
+	@Override
+	public String getDiscriminatorValue() {
+		return this.discriminatorValue;
+	}
+
+	/**
+	 * @param discriminatorValue
+	 *            the discriminatorValue to set
+	 */
+	public void setDiscriminatorValue(String discriminatorValue) {
+		this.discriminatorValue = discriminatorValue;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IStandalonePersistentBeanDescriptor#getForeignKeyColumnName()
+	 */
+	@Override
+	public String getForeignKeyColumnName() {
+		return this.foreignKeyColumnName;
+	}
+
+	/**
+	 * @param foreignKeyColumnName
+	 *            the foreignKeyColumnName to set
+	 */
+	public void setForeignKeyColumnName(String foreignKeyColumnName) {
+		this.foreignKeyColumnName = foreignKeyColumnName;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IStandalonePersistentBeanDescriptor#getDiscriminatorColumnName()
+	 */
+	@Override
+	public String getDiscriminatorColumnName() {
+		return this.discriminatorColumnName;
+	}
+
+	/**
+	 * @param discriminatorColumnName
+	 *            the discriminatorColumnName to set
+	 */
+	public void setDiscriminatorColumnName(String discriminatorColumnName) {
+		this.discriminatorColumnName = discriminatorColumnName;
 	}
 }

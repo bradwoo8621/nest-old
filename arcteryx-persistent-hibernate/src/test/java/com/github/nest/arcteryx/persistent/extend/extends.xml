@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.github.nest.arcteryx.persistent.extend">
+	<class name="Party" table="T_PARTY">
+		<id name="id" type="long" column="PARTY_ID">
+			<generator class="hilo">
+				<param name="max_lo">100</param>
+				<param name="column">NEXT_HI</param>
+				<param name="table">HIBERNATE_UNIQUE_KEY</param>
+			</generator>
+		</id>
+		<discriminator column="PARTY_TYPE" />
+		<property name="name" column="PARTY_NAME" type="string" />
+	</class>
+
+	<subclass name="Individual"
+		extends="com.github.nest.arcteryx.persistent.extend.Party"
+		discriminator-value="I">
+		<join table="T_INDIVIDUAL" fetch="select">
+			<key column="INDIVIDUAL_ID" />
+			<property name="firstName" column="FIRST_NAME" type="string" />
+			<property name="middleName" column="MIDDLE_NAME" type="string" />
+			<property name="lastName" column="LAST_NAME" type="string" />
+		</join>
+	</subclass>
+
+	<subclass name="Organization"
+		extends="com.github.nest.arcteryx.persistent.extend.Party"
+		discriminator-value="O">
+		<join table="T_ORGANIZATION">
+			<key column="ORGANIZATION_ID" />
+			<property name="abbr" column="ABBR" type="string" />
+		</join>
+	</subclass>
+</hibernate-mapping>

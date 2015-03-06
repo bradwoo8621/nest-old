@@ -350,13 +350,54 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 * @return
 	 */
 	protected Element createClassElement(IStandalonePersistentBeanDescriptor descriptor) {
-		Element classElement = DocumentHelper.createElement("class");
+		Element classElement = null;
+
+		IStandalonePersistentBeanDescriptor extendsFromBean = descriptor.getExtendsFrom();
+
+		if (extendsFromBean != null) {
+			classElement = createSubClassElement(descriptor, extendsFromBean);
+		} else {
+			classElement = DocumentHelper.createElement("class");
+			classElement.addAttribute("name", descriptor.getBeanClass().getSimpleName());
+			classElement.addAttribute("table", descriptor.getTableName());
+
+			Element discriminatorElement = null;
+			if (StringUtils.isNoneBlank(descriptor.getDiscriminatorColumnName())) {
+				discriminatorElement = DocumentHelper.createElement("discriminator");
+				discriminatorElement.addAttribute("column", descriptor.getDiscriminatorColumnName());
+			}
+
+			List<Element> propertyElements = createPropertyElements(descriptor, null);
+			for (Element propertyElement : propertyElements) {
+				classElement.add(propertyElement);
+				// discriminator element must be after id and before others
+				if (discriminatorElement != null && propertyElement.getName().equals("id")) {
+					classElement.add(discriminatorElement);
+				}
+			}
+		}
+		return classElement;
+	}
+
+	protected Element createSubClassElement(IStandalonePersistentBeanDescriptor descriptor,
+			IStandalonePersistentBeanDescriptor extendsFromBean) {
+		Element classElement;
+		classElement = DocumentHelper.createElement("subclass");
 		classElement.addAttribute("name", descriptor.getBeanClass().getSimpleName());
-		classElement.addAttribute("table", descriptor.getTableName());
+		classElement.addAttribute("extends", extendsFromBean.getBeanClass().getName());
+		classElement.addAttribute("discriminator-value", descriptor.getDiscriminatorValue());
+
+		Element joinElement = DocumentHelper.createElement("join");
+		joinElement.addAttribute("table", descriptor.getTableName());
+		classElement.add(joinElement);
+
+		Element keyElement = DocumentHelper.createElement("key");
+		keyElement.addAttribute("column", descriptor.getForeignKeyColumnName());
+		joinElement.add(keyElement);
 
 		List<Element> propertyElements = createPropertyElements(descriptor, null);
 		for (Element propertyElement : propertyElements) {
-			classElement.add(propertyElement);
+			joinElement.add(propertyElement);
 		}
 		return classElement;
 	}
@@ -373,7 +414,24 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 		List<IPersistentBeanPropertyDescriptor> list = new ArrayList<IPersistentBeanPropertyDescriptor>(
 				properties.size());
 		list.addAll(properties);
-		// id first, version second.
+		// filter properties if bean is subclass
+		if (descriptor instanceof IStandalonePersistentBeanDescriptor) {
+			IStandalonePersistentBeanDescriptor bean = (IStandalonePersistentBeanDescriptor) descriptor;
+			IStandalonePersistentBeanDescriptor extendsFromBean = bean.getExtendsFrom();
+			if (extendsFromBean != null) {
+				// current is subclass
+				Class<?> extendsFromBeanClass = extendsFromBean.getBeanClass();
+				// remove properties from extends from bean and its ancestors
+				for (int index = list.size() - 1; index >= 0; index--) {
+					IPersistentBeanPropertyDescriptor property = list.get(index);
+					Class<?> beanClass = property.getBeanDescriptor().getBeanClass();
+					if (beanClass.isAssignableFrom(extendsFromBeanClass)) {
+						list.remove(index);
+					}
+				}
+			}
+		}
+		// id first
 		Collections.sort(list, new PropertyComparator(descriptor));
 
 		List<Element> propertyElements = new LinkedList<Element>();

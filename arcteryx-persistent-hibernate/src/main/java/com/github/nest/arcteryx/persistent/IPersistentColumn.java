@@ -17,4 +17,11 @@ public interface IPersistentColumn extends Serializable {
 	 * @return
 	 */
 	IPersistentBeanPropertyDescriptor getPropertyDescriptor();
+
+	/**
+	 * set property descriptor
+	 * 
+	 * @param propertyDescriptor
+	 */
+	void setPropertyDescriptor(IPersistentBeanPropertyDescriptor propertyDescriptor);
 }

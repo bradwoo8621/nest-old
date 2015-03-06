@@ -34,6 +34,14 @@ public class PersistentBeanPropertyDescriptor extends BeanPropertyDescriptor imp
 	 *            the persistentColumn to set
 	 */
 	public void setPersistentColumn(IPersistentColumn persistentColumn) {
+		// remove property descriptor from old column
+		if (this.persistentColumn != null) {
+			this.persistentColumn.setPropertyDescriptor(null);
+		}
 		this.persistentColumn = persistentColumn;
+		// set this into new column
+		if (persistentColumn != null) {
+			persistentColumn.setPropertyDescriptor(this);
+		}
 	}
 }

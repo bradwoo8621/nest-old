@@ -27,9 +27,11 @@ public abstract class AbstractPersistentColumn implements IPersistentColumn {
 	}
 
 	/**
-	 * @param propertyDescriptor
-	 *            the propertyDescriptor to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IPersistentColumn#setPropertyDescriptor(com.github.nest.arcteryx.persistent.IPersistentBeanPropertyDescriptor)
 	 */
+	@Override
 	public void setPropertyDescriptor(IPersistentBeanPropertyDescriptor propertyDescriptor) {
 		this.propertyDescriptor = propertyDescriptor;
 	}

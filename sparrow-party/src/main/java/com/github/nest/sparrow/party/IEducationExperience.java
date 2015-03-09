@@ -3,6 +3,7 @@
  */
 package com.github.nest.sparrow.party;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.github.nest.sparrow.party.generalization.IEducationalOrganization;
@@ -12,7 +13,7 @@ import com.github.nest.sparrow.party.generalization.IEducationalOrganization;
  * 
  * @author brad.wu
  */
-public interface IEducationExperience {
+public interface IEducationExperience extends Serializable {
 	/**
 	 * get employer
 	 * 
@@ -26,9 +27,10 @@ public interface IEducationExperience {
 	 * @return
 	 */
 	IAcademicMajor getAcademicMajor();
-	
+
 	/**
 	 * get degree
+	 * 
 	 * @return
 	 */
 	IEducationDegree getDegree();

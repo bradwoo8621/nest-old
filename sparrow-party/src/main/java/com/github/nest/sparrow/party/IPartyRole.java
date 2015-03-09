@@ -17,6 +17,13 @@ public interface IPartyRole extends IParty {
 	IPartyRoleType getRoleType();
 
 	/**
+	 * party role code. unique in role type.
+	 * 
+	 * @return
+	 */
+	String getPartyRoleCode();
+
+	/**
 	 * is enabled or not?
 	 * 
 	 * @return

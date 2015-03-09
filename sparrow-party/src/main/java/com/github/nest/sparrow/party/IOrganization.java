@@ -28,11 +28,18 @@ public interface IOrganization extends IParty {
 	Date getRegisterDate();
 
 	/**
+	 * get close down date
+	 * 
+	 * @return
+	 */
+	Date getCloseDownDate();
+
+	/**
 	 * get register in country
 	 * 
 	 * @return
 	 */
-	ICountry getRegiesterIn();
+	ICountry getRegisterIn();
 
 	/**
 	 * get industry

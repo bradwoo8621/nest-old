@@ -58,11 +58,26 @@ public interface IIndividual extends IParty {
 	Integer getAge();
 
 	/**
+	 * get age by given date
+	 * 
+	 * @param date
+	 * @return
+	 */
+	Integer getAge(Date date);
+
+	/**
 	 * get birthday
 	 * 
 	 * @return
 	 */
-	Date getBirthday();
+	Date getDateOfBirth();
+
+	/**
+	 * get date of death
+	 * 
+	 * @return
+	 */
+	Date getDateOfDeath();
 
 	/**
 	 * get born in country

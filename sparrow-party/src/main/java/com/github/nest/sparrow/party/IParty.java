@@ -3,6 +3,7 @@
  */
 package com.github.nest.sparrow.party;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * 
  * @author brad.wu
  */
-public interface IParty {
+public interface IParty extends Serializable {
 	/**
 	 * get identity of party. Usually, identity is unique.
 	 * 

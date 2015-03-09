@@ -3,6 +3,7 @@
  */
 package com.github.nest.sparrow.party;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Date;
  * 
  * @author brad.wu
  */
-public interface IWorkExperience {
+public interface IWorkExperience extends Serializable {
 	/**
 	 * get employer
 	 * 

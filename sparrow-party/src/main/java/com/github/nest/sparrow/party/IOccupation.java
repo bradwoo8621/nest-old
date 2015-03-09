@@ -3,12 +3,14 @@
  */
 package com.github.nest.sparrow.party;
 
+import java.io.Serializable;
+
 /**
  * occupation
  * 
  * @author brad.wu
  */
-public interface IOccupation {
+public interface IOccupation extends Serializable {
 	/**
 	 * get code
 	 * 

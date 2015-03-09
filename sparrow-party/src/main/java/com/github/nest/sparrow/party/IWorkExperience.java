@@ -5,8 +5,6 @@ package com.github.nest.sparrow.party;
 
 import java.util.Date;
 
-import com.github.nest.sparrow.enums.define.IOccupation;
-
 /**
  * work experience interface
  * 
@@ -18,7 +16,7 @@ public interface IWorkExperience {
 	 * 
 	 * @return
 	 */
-	IOrganizationParty getEmployer();
+	IOrganization getEmployer();
 
 	/**
 	 * get start from
@@ -35,16 +33,16 @@ public interface IWorkExperience {
 	Date getEnd();
 
 	/**
-	 * get title
-	 * 
-	 * @return
-	 */
-	String getTitle();
-
-	/**
 	 * get occupation
 	 * 
 	 * @return
 	 */
 	IOccupation getOccupation();
+
+	/**
+	 * get job title
+	 * 
+	 * @return
+	 */
+	String getJobTitle();
 }

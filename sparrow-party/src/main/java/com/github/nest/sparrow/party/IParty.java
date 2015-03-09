@@ -16,7 +16,7 @@ public interface IParty {
 	 * 
 	 * @return
 	 */
-	String getIdentity();
+	Long getId();
 
 	/**
 	 * get name of party
@@ -33,60 +33,9 @@ public interface IParty {
 	String getCode();
 
 	/**
-	 * get roles of party. at least one party role should be defined in system.
-	 * 
-	 * @return
-	 */
-	List<IPartyRole> getRoles();
-
-	/**
 	 * get addresses of party
 	 * 
 	 * @return
 	 */
 	List<IAddress> getAddresses();
-
-	/**
-	 * get addresses by given party role
-	 * 
-	 * @param role
-	 * @return
-	 */
-	List<IAddress> getAddressesByRole(IPartyRole role);
-
-	/**
-	 * get default address
-	 * 
-	 * @return
-	 */
-	IAddress getDefaultAddress();
-
-	/**
-	 * get default address by given party role
-	 * 
-	 * @param role
-	 * @return
-	 */
-	IAddress getDefaultAddressByRole(IPartyRole role);
-
-	/**
-	 * get accounts of party
-	 * 
-	 * @return
-	 */
-	List<IAccount> getAccounts();
-
-	/**
-	 * get default account
-	 * 
-	 * @return
-	 */
-	IAccount getDefaultAccount();
-
-	/**
-	 * get related parties
-	 * 
-	 * @return
-	 */
-	List<IRelatedParty> getRelatedParties();
 }

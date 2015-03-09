@@ -6,14 +6,22 @@ package com.github.nest.sparrow.party;
 import java.util.Date;
 import java.util.List;
 
-import com.github.nest.sparrow.enums.define.IGender;
+import com.github.nest.goose.human.IGender;
+import com.github.nest.goose.location.ICountry;
 
 /**
  * individual party interface
  * 
  * @author brad.wu
  */
-public interface IIndividualParty extends IParty {
+public interface IIndividual extends IParty {
+	/**
+	 * get id number
+	 * 
+	 * @return
+	 */
+	String getIdNumber();
+
 	/**
 	 * get gender
 	 * 
@@ -29,18 +37,18 @@ public interface IIndividualParty extends IParty {
 	String getFirstName();
 
 	/**
-	 * get last name
-	 * 
-	 * @return
-	 */
-	String getLastName();
-
-	/**
 	 * get middle name
 	 * 
 	 * @return
 	 */
 	String getMiddleName();
+
+	/**
+	 * get last name
+	 * 
+	 * @return
+	 */
+	String getLastName();
 
 	/**
 	 * get age
@@ -57,6 +65,20 @@ public interface IIndividualParty extends IParty {
 	Date getBirthday();
 
 	/**
+	 * get born in country
+	 * 
+	 * @return
+	 */
+	ICountry getBornIn();
+
+	/**
+	 * get nationality
+	 * 
+	 * @return
+	 */
+	ICountry getNationality();
+
+	/**
 	 * get work experiences
 	 * 
 	 * @return
@@ -64,9 +86,9 @@ public interface IIndividualParty extends IParty {
 	List<IWorkExperience> getWorkExperiences();
 
 	/**
-	 * get current work experience
+	 * get educations experiences
 	 * 
 	 * @return
 	 */
-	IWorkExperience getCurrentWorkExperience();
+	List<IEducationExperience> getEducationExperiences();
 }

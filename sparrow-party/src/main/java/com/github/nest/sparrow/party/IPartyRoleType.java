@@ -4,22 +4,22 @@
 package com.github.nest.sparrow.party;
 
 /**
- * related party interface
+ * party role type
  * 
  * @author brad.wu
  */
-public interface IRelatedParty {
+public interface IPartyRoleType {
 	/**
-	 * get relationship
+	 * get code
 	 * 
 	 * @return
 	 */
-	IRelationship getRelationship();
+	String getCode();
 
 	/**
-	 * get party
+	 * get name
 	 * 
 	 * @return
 	 */
-	IParty getParty();
+	String getName();
 }

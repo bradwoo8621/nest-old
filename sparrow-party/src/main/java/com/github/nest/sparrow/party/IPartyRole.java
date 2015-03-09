@@ -3,18 +3,23 @@
  */
 package com.github.nest.sparrow.party;
 
-import com.github.nest.sparrow.enums.ICodedEnumItem;
-
 /**
  * party role interface
  * 
  * @author brad.wu
  */
-public interface IPartyRole extends ICodedEnumItem {
+public interface IPartyRole extends IParty {
 	/**
-	 * get code of party role. code must be unique key of whole system.
+	 * get role type
 	 * 
 	 * @return
 	 */
-	String getCode();
+	IPartyRoleType getRoleType();
+
+	/**
+	 * is enabled or not?
+	 * 
+	 * @return
+	 */
+	boolean isEnabled();
 }

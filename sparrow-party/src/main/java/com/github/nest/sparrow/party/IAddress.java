@@ -3,10 +3,10 @@
  */
 package com.github.nest.sparrow.party;
 
-import com.github.nest.sparrow.enums.define.ICity;
-import com.github.nest.sparrow.enums.define.ICountry;
-import com.github.nest.sparrow.enums.define.IDistrict;
-import com.github.nest.sparrow.enums.define.IProvince;
+import com.github.nest.goose.location.ICity;
+import com.github.nest.goose.location.ICountry;
+import com.github.nest.goose.location.IDistrict;
+import com.github.nest.goose.location.IProvince;
 
 /**
  * party address interface

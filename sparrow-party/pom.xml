@@ -25,7 +25,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.nest</groupId>
-			<artifactId>sparrow-enum</artifactId>
+			<artifactId>goose</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 	</dependencies>

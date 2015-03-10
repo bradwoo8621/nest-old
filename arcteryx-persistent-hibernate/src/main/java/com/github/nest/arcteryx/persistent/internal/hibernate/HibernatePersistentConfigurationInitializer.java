@@ -387,17 +387,26 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 		classElement.addAttribute("extends", extendsFromBean.getBeanClass().getName());
 		classElement.addAttribute("discriminator-value", descriptor.getDiscriminatorValue());
 
-		Element joinElement = DocumentHelper.createElement("join");
-		joinElement.addAttribute("table", descriptor.getTableName());
-		classElement.add(joinElement);
+		Element parentElement = null;
+		if (StringUtils.isNoneBlank(descriptor.getTableName())) {
+			// the extend class in persistent in another table
+			Element joinElement = DocumentHelper.createElement("join");
+			joinElement.addAttribute("table", descriptor.getTableName());
+			classElement.add(joinElement);
 
-		Element keyElement = DocumentHelper.createElement("key");
-		keyElement.addAttribute("column", descriptor.getForeignKeyColumnName());
-		joinElement.add(keyElement);
+			Element keyElement = DocumentHelper.createElement("key");
+			keyElement.addAttribute("column", descriptor.getForeignKeyColumnName());
+			joinElement.add(keyElement);
+
+			parentElement = joinElement;
+		} else {
+			// share the table with super class
+			parentElement = classElement;
+		}
 
 		List<Element> propertyElements = createPropertyElements(descriptor, null);
 		for (Element propertyElement : propertyElements) {
-			joinElement.add(propertyElement);
+			parentElement.add(propertyElement);
 		}
 		return classElement;
 	}

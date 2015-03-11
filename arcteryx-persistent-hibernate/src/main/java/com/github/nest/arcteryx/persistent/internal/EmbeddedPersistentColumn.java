@@ -6,7 +6,10 @@ package com.github.nest.arcteryx.persistent.internal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
+import com.github.nest.arcteryx.meta.ResourceDescriptorContextRepository;
 import com.github.nest.arcteryx.persistent.IEmbeddablePersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.IEmbeddedPersistentColumn;
 
@@ -19,6 +22,7 @@ public class EmbeddedPersistentColumn extends AbstractPersistentColumn implement
 	private static final long serialVersionUID = 967309236880750381L;
 
 	private Class<?> beanClass = null;
+	private String referencedBeanContextName = null;
 	// key: property name, can be concatenated by point;
 	// value: new column name
 	private Map<String, String> overriddenNames = null;
@@ -30,8 +34,14 @@ public class EmbeddedPersistentColumn extends AbstractPersistentColumn implement
 	 */
 	@Override
 	public IEmbeddablePersistentBeanDescriptor getEmbeddedBean() {
-		IResourceDescriptorContext context = this.getPropertyDescriptor().getBeanDescriptor().getContext();
-		return context.get(beanClass);
+		if (StringUtils.isBlank(getReferencedBeanContextName())) {
+			IResourceDescriptorContext context = this.getPropertyDescriptor().getBeanDescriptor().getContext();
+			return context.get(beanClass);
+		} else {
+			IResourceDescriptorContext context = ResourceDescriptorContextRepository.getContext(this
+					.getReferencedBeanContextName());
+			return context.get(beanClass);
+		}
 	}
 
 	/**
@@ -41,6 +51,24 @@ public class EmbeddedPersistentColumn extends AbstractPersistentColumn implement
 	 */
 	public void setEmbeddedBeanClass(Class<?> beanClass) {
 		this.beanClass = beanClass;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IEmbeddedPersistentColumn#getReferencedBeanContextName()
+	 */
+	@Override
+	public String getReferencedBeanContextName() {
+		return this.referencedBeanContextName;
+	}
+
+	/**
+	 * @param referencedBeanContextName
+	 *            the referencedBeanContextName to set
+	 */
+	public void setReferencedBeanContextName(String referencedBeanContextName) {
+		this.referencedBeanContextName = referencedBeanContextName;
 	}
 
 	/**

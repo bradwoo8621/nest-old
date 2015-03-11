@@ -13,6 +13,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.StaleObjectStateException;
 import org.junit.BeforeClass;
@@ -44,6 +47,9 @@ public class TestOptimisticVersion {
 
 	@BeforeClass
 	public static void init() throws ClassNotFoundException, SQLException {
+		BasicConfigurator.configure();
+		Logger.getRootLogger().setLevel(Level.FATAL);
+		Logger.getLogger(HibernatePersistentConfigurationInitializer.class).setLevel(Level.DEBUG);
 		{
 			Class.forName("org.hsqldb.jdbc.JDBCDriver");
 			Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:memdb", "username", "password");

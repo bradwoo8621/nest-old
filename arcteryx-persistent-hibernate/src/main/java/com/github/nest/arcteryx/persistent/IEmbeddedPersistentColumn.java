@@ -17,6 +17,14 @@ public interface IEmbeddedPersistentColumn extends IPersistentColumn {
 	IEmbeddablePersistentBeanDescriptor getEmbeddedBean();
 
 	/**
+	 * get referenced bean context name. bean can be referenced from another
+	 * context.
+	 * 
+	 * @return
+	 */
+	String getReferencedBeanContextName();
+
+	/**
 	 * get overridden column name by original column name
 	 * 
 	 * @param propertyName

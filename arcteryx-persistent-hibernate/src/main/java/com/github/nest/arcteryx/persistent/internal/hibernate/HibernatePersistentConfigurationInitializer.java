@@ -126,9 +126,11 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 				IPrimitivePersistentColumn ippc = (IPrimitivePersistentColumn) column;
 				if (ippc.isPrimaryKey()) {
 					return 1;
+				} else if (ippc.isVersion()) {
+					return 2;
 				}
 			}
-			return 2;
+			return 3;
 		}
 	}
 
@@ -937,6 +939,30 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	 */
 	public void setProperties(Properties properties) {
 		this.properties = properties;
+	}
+
+	/**
+	 * set properties
+	 * 
+	 * @param properties
+	 */
+	public void setProperties(Map<String, String> properties) {
+		if (properties == null || properties.size() == 0) {
+			if (this.properties != null) {
+				this.properties.clear();
+			}
+		} else {
+			if (this.properties == null) {
+				synchronized (this) {
+					if (this.properties == null) {
+						this.properties = new Properties();
+					}
+				}
+			}
+			for (Map.Entry<String, String> entry : properties.entrySet()) {
+				this.properties.put(entry.getKey(), entry.getValue());
+			}
+		}
 	}
 
 	/**

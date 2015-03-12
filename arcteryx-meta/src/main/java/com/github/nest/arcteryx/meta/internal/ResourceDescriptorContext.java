@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.github.nest.arcteryx.meta.IConfigurationInitializer;
 import com.github.nest.arcteryx.meta.IOperatorProvider;
@@ -27,6 +30,7 @@ import com.github.nest.arcteryx.meta.util.ClassUtils;
 public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	private String name = null;
 	private Map<Class<?>, IResourceDescriptor> map = new HashMap<Class<?>, IResourceDescriptor>();
+	private Map<String, IResourceDescriptor> identifiedMap = new HashMap<String, IResourceDescriptor>();
 	private IOperatorProviderRegistry OperatorProviderRegistry = null;
 	@SuppressWarnings("rawtypes")
 	private List<IConfigurationInitializer> initializers = null;
@@ -255,6 +259,50 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#get(java.lang.String)
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T extends IResourceDescriptor> T get(String descriptorIdentity) {
+		assert StringUtils.isNotBlank(descriptorIdentity) : "Identity of descriptor cannot be null or empty string.";
+
+		return (T) this.identifiedMap.get(descriptorIdentity);
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#register(com.github.nest.arcteryx.meta.IResourceDescriptor,
+	 *      java.lang.String)
+	 */
+	@Override
+	public IResourceDescriptor register(IResourceDescriptor descriptor, String identity) {
+		assert StringUtils.isNotBlank(identity) : "Identity of descriptor cannot be null or empty string.";
+		assert descriptor != null : "Resource descriptor cannot be null.";
+
+		synchronized (this.identifiedMap) {
+			IResourceDescriptor old = identifiedMap.put(identity, descriptor);
+			if (old != null) {
+				old.setContext(null);
+			}
+			descriptor.setContext(this);
+			return old;
+		}
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getIdentitiesOfDescriptor()
+	 */
+	@Override
+	public Set<String> getIdentitiesOfDescriptor() {
+		return this.identifiedMap.keySet();
 	}
 
 	/**

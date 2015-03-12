@@ -5,9 +5,22 @@ package com.github.nest.arcteryx.meta;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
- * resource descriptor repository interface
+ * resource descriptor repository interface.<br>
+ * there are 2 ways to register a descriptor into context, see
+ * {@linkplain #register(IResourceDescriptor)} and
+ * {@linkplain #register(IResourceDescriptor, String)}. difference between the 2
+ * ways is, if register via {@linkplain #register(IResourceDescriptor)}, the
+ * descriptor will be treaded as default descriptor of a class, which means when
+ * call any method to get descriptor of a class or an object, the returned
+ * descriptor is registered by {@linkplain #register(IResourceDescriptor)}. the
+ * only way to find the descriptor with identity is {@linkplain #get(String)}.
+ * and when a descriptor is registered via
+ * {@linkplain #register(IResourceDescriptor)}, no identity will be set. so the
+ * descriptor will not be found via {@linkplain #get(String)} unless register it
+ * manually via {@linkplain #register(IResourceDescriptor, String)}.
  * 
  * @author brad.wu
  */
@@ -99,6 +112,30 @@ public interface IResourceDescriptorContext {
 	 * @return
 	 */
 	<T> Collection<T> getDescriptors(Class<T> descriptorClass);
+
+	/**
+	 * get descriptor by given identity
+	 * 
+	 * @param descriptorIdentity
+	 * @return
+	 */
+	<T extends IResourceDescriptor> T get(String descriptorIdentity);
+
+	/**
+	 * register descriptor by give identity
+	 * 
+	 * @param descriptor
+	 * @param identity
+	 * @return
+	 */
+	IResourceDescriptor register(IResourceDescriptor descriptor, String identity);
+
+	/**
+	 * get all identities of registered descriptors
+	 * 
+	 * @return
+	 */
+	Set<String> getIdentitiesOfDescriptor();
 
 	/**
 	 * get operator provider registry, context level

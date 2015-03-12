@@ -35,6 +35,8 @@ public class StandalonePersistentBeanDescriptor extends AbstractPersistentBeanDe
 	// discriminator column is used to identify the sub-class
 	private String discriminatorColumnName = null;
 
+	private String entityName = null;
+
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -192,5 +194,23 @@ public class StandalonePersistentBeanDescriptor extends AbstractPersistentBeanDe
 	 */
 	public void setDiscriminatorColumnName(String discriminatorColumnName) {
 		this.discriminatorColumnName = discriminatorColumnName;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.persistent.IStandalonePersistentBeanDescriptor#getEntityName()
+	 */
+	@Override
+	public String getEntityName() {
+		return entityName;
+	}
+
+	/**
+	 * @param entityName
+	 *            the entityName to set
+	 */
+	public void setEntityName(String entityName) {
+		this.entityName = entityName;
 	}
 }

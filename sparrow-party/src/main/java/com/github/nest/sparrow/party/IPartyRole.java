@@ -21,7 +21,7 @@ public interface IPartyRole extends IParty {
 	 * 
 	 * @return
 	 */
-	String getPartyRoleCode();
+	String getRoleCode();
 
 	/**
 	 * is enabled or not?

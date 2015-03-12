@@ -5,6 +5,7 @@ package com.github.nest.sparrow.party.internal;
 
 import java.util.List;
 
+import com.github.nest.goose.operate.OperateLog;
 import com.github.nest.sparrow.party.IAddress;
 import com.github.nest.sparrow.party.IParty;
 
@@ -20,6 +21,8 @@ public abstract class Party implements IParty {
 	private String name = null;
 	private String code = null;
 	private List<IAddress> addresses = null;
+	private OperateLog operateLog = null;
+	private Long optimisticLock = null;
 
 	/**
 	 * (non-Javadoc)
@@ -91,5 +94,41 @@ public abstract class Party implements IParty {
 	 */
 	public void setAddresses(List<IAddress> addresses) {
 		this.addresses = addresses;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#getOperateLog()
+	 */
+	@Override
+	public OperateLog getOperateLog() {
+		return this.operateLog;
+	}
+
+	/**
+	 * @param operateLog
+	 *            the operateLog to set
+	 */
+	public void setOperateLog(OperateLog operateLog) {
+		this.operateLog = operateLog;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#getOptimisticLock()
+	 */
+	@Override
+	public Long getOptimisticLock() {
+		return this.optimisticLock;
+	}
+
+	/**
+	 * @param optimisticLock
+	 *            the optimisticLock to set
+	 */
+	public void setOptimisticLock(Long optimisticLock) {
+		this.optimisticLock = optimisticLock;
 	}
 }

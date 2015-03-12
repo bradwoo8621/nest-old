@@ -296,6 +296,22 @@ public class ResourceDescriptorContext implements IResourceDescriptorContext {
 	}
 
 	/**
+	 * set identified descriptors
+	 * 
+	 * @param descriptors
+	 */
+	public void setIdentifiedDescriptors(Map<String, IResourceDescriptor> descriptors) {
+		assert descriptors != null : "Resource descriptor map cannot be null.";
+
+		synchronized (this.identifiedMap) {
+			this.identifiedMap.clear();
+			for (Map.Entry<String, IResourceDescriptor> entry : descriptors.entrySet()) {
+				this.register(entry.getValue(), entry.getKey());
+			}
+		}
+	}
+
+	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.github.nest.arcteryx.meta.IResourceDescriptorContext#getIdentitiesOfDescriptor()

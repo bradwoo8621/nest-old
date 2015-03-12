@@ -125,7 +125,7 @@
 			<list>
 				<bean
 					class="com.github.nest.goose.internal.location.CountryCacheProvider"
-					init-method="readCountryListFromClassPath"
+					init-method="readFromClassPath"
 					p:fileClassPath="/countries.list" />
 			</list>
 		</property>

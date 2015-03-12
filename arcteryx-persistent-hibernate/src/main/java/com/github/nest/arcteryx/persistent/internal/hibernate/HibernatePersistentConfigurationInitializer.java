@@ -28,6 +28,7 @@ import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.nest.arcteryx.meta.IResourceDescriptor;
 import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 import com.github.nest.arcteryx.meta.ResourceException;
 import com.github.nest.arcteryx.meta.beans.IBeanDescriptor;
@@ -289,6 +290,16 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 				}
 			}
 		}
+		Set<String> identities = context.getIdentitiesOfDescriptor();
+		if (identities != null) {
+			for (String id : identities) {
+				IResourceDescriptor descriptor = context.get(id);
+				if (descriptor instanceof IStandalonePersistentBeanDescriptor) {
+					configuration.addXML(convertToXML((IStandalonePersistentBeanDescriptor) descriptor));
+				}
+			}
+		}
+
 		Properties properties = this.getProperties();
 		if (properties != null) {
 			configuration.addProperties(properties);
@@ -377,6 +388,10 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 					classElement.add(discriminatorElement);
 				}
 			}
+		}
+
+		if (StringUtils.isNotBlank(descriptor.getEntityName())) {
+			classElement.addAttribute("entity-name", descriptor.getEntityName());
 		}
 		return classElement;
 	}

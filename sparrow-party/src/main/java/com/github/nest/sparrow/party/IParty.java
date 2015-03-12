@@ -6,6 +6,8 @@ package com.github.nest.sparrow.party;
 import java.io.Serializable;
 import java.util.List;
 
+import com.github.nest.goose.operate.OperateLog;
+
 /**
  * party interface
  * 
@@ -39,4 +41,18 @@ public interface IParty extends Serializable {
 	 * @return
 	 */
 	List<IAddress> getAddresses();
+
+	/**
+	 * get operate log
+	 * 
+	 * @return
+	 */
+	OperateLog getOperateLog();
+
+	/**
+	 * get optimistic lock
+	 * 
+	 * @return
+	 */
+	Long getOptimisticLock();
 }

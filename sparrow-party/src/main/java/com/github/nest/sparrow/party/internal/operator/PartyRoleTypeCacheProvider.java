@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.goose.internal.location;
+package com.github.nest.sparrow.party.internal.operator;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,14 +14,15 @@ import java.util.List;
 
 import com.github.nest.arcteryx.meta.ResourceException;
 import com.github.nest.goose.internal.AbstractCodeBaseBeanCacheProvider;
+import com.github.nest.sparrow.party.internal.PartyRoleType;
 
 /**
  * country cache provider
  * 
  * @author brad.wu
  */
-public class CountryCacheProvider extends AbstractCodeBaseBeanCacheProvider {
-	private List<Country> countryList = null;
+public class PartyRoleTypeCacheProvider extends AbstractCodeBaseBeanCacheProvider {
+	private List<PartyRoleType> partyRoleTypeList = null;
 	private String fileClassPath = null;
 
 	/**
@@ -32,7 +33,7 @@ public class CountryCacheProvider extends AbstractCodeBaseBeanCacheProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Collection<T> getBeans() {
-		return (Collection<T>) this.countryList;
+		return (Collection<T>) this.partyRoleTypeList;
 	}
 
 	/**
@@ -51,32 +52,31 @@ public class CountryCacheProvider extends AbstractCodeBaseBeanCacheProvider {
 	}
 
 	/**
-	 * set country list class path location
+	 * set party role type list class path location
 	 * 
 	 * @param classpath
 	 * @throws IOException
 	 */
 	public void readFromClassPath() {
 		try {
-			List<Country> list = new LinkedList<Country>();
+			List<PartyRoleType> list = new LinkedList<PartyRoleType>();
 			InputStream is = getClass().getResourceAsStream(this.getFileClassPath());
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				String[] ss = line.split("[|]");
-				Country country = new Country();
-				country.setAbbr2(ss[0]);
-				country.setAbbr3(ss[1]);
-				country.setInternationalDialingCode(ss[2]);
-				country.setName(ss[3]);
-				list.add(country);
+				PartyRoleType roleType = new PartyRoleType();
+				roleType.setCode(ss[0]);
+				roleType.setName(ss[1]);
+				list.add(roleType);
 			}
 			reader.close();
 
-			this.countryList = new ArrayList<Country>(list.size());
-			this.countryList.addAll(list);
+			this.partyRoleTypeList = new ArrayList<PartyRoleType>(list.size());
+			this.partyRoleTypeList.addAll(list);
 		} catch (IOException e) {
-			throw new ResourceException("Failed to read country list by given class path [" + this.getFileClassPath() + "].", e);
+			throw new ResourceException("Failed to read party role type list by given class path ["
+					+ this.getFileClassPath() + "].", e);
 		}
 	}
 }

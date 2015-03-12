@@ -12,5 +12,17 @@ import com.github.nest.sparrow.party.IPartyRole;
  * @author brad.wu
  */
 public interface IEmpolyee extends IPartyRole, IIndividual {
+	/**
+	 * get department
+	 * 
+	 * @return
+	 */
+	IDepartment getDepartment();
 
+	/**
+	 * get branch
+	 * 
+	 * @return
+	 */
+	IBranch getBranch();
 }

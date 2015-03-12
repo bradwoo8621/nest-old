@@ -97,4 +97,12 @@ public interface IStandalonePersistentBeanDescriptor extends IPersistentBeanDesc
 	 * @return
 	 */
 	String getDiscriminatorColumnName();
+
+	/**
+	 * get entity name. for same class, there could be more than one
+	 * descriptors.
+	 * 
+	 * @return
+	 */
+	String getEntityName();
 }

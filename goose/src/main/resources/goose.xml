@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util 
+    	http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<bean
+		id="goose-context"
+		class="com.github.nest.arcteryx.persistent.internal.PersistentBeanDescriptorContext"
+		scope="singleton"
+		p:name="goose-context"
+		init-method="afterContextInitialized">
+		<property name="descriptors">
+			<list>
+				<ref bean="OperateLog" />
+				<ref bean="Country" />
+				<ref bean="Gender" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- com.github.nest.goose.operate.OperateLog -->
+	<bean
+		id="OperateLog"
+		class="com.github.nest.arcteryx.persistent.internal.EmbeddablePersistentBeanDescriptor"
+		p:resourceClass="com.github.nest.goose.operate.OperateLog"
+		p:name="OperateLog"
+		p:description="operation log, including create/last modify user and time"
+		scope="singleton">
+		<property name="properties">
+			<list>
+				<!-- Create User ID -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="createUserId"
+					p:description="create user id">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="CREATE_USER_ID"
+							p:type="LONG" />
+					</property>
+				</bean>
+				<!-- Create User Time -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="createTime"
+					p:description="create time">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="CREATE_TIME"
+							p:type="TIMESTAMP" />
+					</property>
+				</bean>
+				<!-- last Modify User ID -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="lastModifyUserId"
+					p:description="last modify user id">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="LAST_MODIFY_USER_ID"
+							p:type="LONG" />
+					</property>
+				</bean>
+				<!-- Last Modify Time -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="lastModifyTime"
+					p:description="last modify time">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="LAST_MODIFY_TIME"
+							p:type="TIMESTAMP" />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!-- com.github.nest.goose.internal.location.Country -->
+	<bean
+		id="Country"
+		class="com.github.nest.arcteryx.meta.beans.internal.CachedBeanDescriptor"
+		p:resourceClass="com.github.nest.goose.internal.location.Country"
+		p:name="Country"
+		p:description="Country"
+		scope="singleton">
+		<property name="properties">
+			<list>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="name"
+					p:description="Name of country" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="code"
+					p:description="Code of country" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="abbr2"
+					p:description="2-letter abbreviation of country" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="abbr3"
+					p:description="3-letter abbreviation of country" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="internationalDialingCode"
+					p:description="International dialing code of country" />
+			</list>
+		</property>
+		<property name="operators">
+			<list>
+				<bean
+					class="com.github.nest.goose.internal.location.CountryCacheProvider"
+					init-method="readCountryListFromClassPath"
+					p:fileClassPath="/countries.list" />
+			</list>
+		</property>
+	</bean>
+	<!-- com.github.nest.goose.internal.human.Gender -->
+	<bean
+		id="Gender"
+		class="com.github.nest.arcteryx.meta.beans.internal.CachedBeanDescriptor"
+		p:resourceClass="com.github.nest.goose.internal.human.Gender"
+		p:name="Gender"
+		p:description="Gender"
+		scope="singleton">
+		<property name="properties">
+			<list>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="name"
+					p:description="Name of gender" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="code"
+					p:description="Code of gender" />
+			</list>
+		</property>
+		<property name="operators">
+			<list>
+				<bean class="com.github.nest.goose.internal.human.GenderCacheProvider" />
+			</list>
+		</property>
+	</bean>
+</beans>

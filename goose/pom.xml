@@ -3,10 +3,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.github.nest</groupId>
-	<artifactId>goose</artifactId>
+	<artifactId>com.github.nest.goose</artifactId>
 	<version>0.0.1</version>
 
-	<name>goose</name>
+	<name>com.github.nest.goose</name>
 	<url>https://github.com/bradwoo8621/nest</url>
 
 	<properties>
@@ -22,6 +22,11 @@
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.github.nest</groupId>
+			<artifactId>arcteryx-persistent-hibernate</artifactId>
+			<version>0.0.1</version>
 		</dependency>
 	</dependencies>
 	<build>

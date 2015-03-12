@@ -17,5 +17,5 @@ public interface IBeanIdentityExtracter extends IBeanOperator {
 	 * @param bean
 	 * @return
 	 */
-	IBeanIdentity extract(Object bean);
+	<T extends IBeanIdentity> T extract(Object bean);
 }

@@ -3,14 +3,14 @@
  */
 package com.github.nest.goose.human;
 
-import java.io.Serializable;
+import com.github.nest.goose.ICodeBaseBean;
 
 /**
  * gender
  * 
  * @author brad.wu
  */
-public interface IGender extends Serializable {
+public interface IGender extends ICodeBaseBean {
 	/**
 	 * get code
 	 * 

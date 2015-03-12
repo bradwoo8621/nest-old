@@ -15,13 +15,14 @@ public class PreloadedBeanIdentityExtracter extends AbstractStaticCodeBeanOperat
 	 * 
 	 * @see com.github.nest.arcteryx.meta.beans.IBeanIdentityExtracter#extract(java.lang.Object)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public IBeanIdentity extract(Object bean) {
+	public <T extends IBeanIdentity> T extract(Object bean) {
 		assert bean instanceof PreloadedBean;
 
 		BeanID id = new BeanID();
 		id.setId(((PreloadedBean) bean).getId());
-		return id;
+		return (T) id;
 	}
 
 	/**

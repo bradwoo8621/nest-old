@@ -330,9 +330,9 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 			throw new ResourceException("Failed to cast xml document to string.", e);
 		}
 		if (getLogger().isDebugEnabled()) {
-			getLogger().debug(
-					"Class [" + descriptor.getResourceClass().getName()
-							+ "] has been configured into hibernate. XML as [" + sw.toString() + "].");
+			getLogger()
+					.debug("Class [" + descriptor.getResourceClass().getName()
+							+ "] has been configured into hibernate. XML as [" + sw.toString().replace("\n", "") + "].");
 		}
 		return sw.toString();
 	}

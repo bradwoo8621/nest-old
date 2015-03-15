@@ -1,31 +1,31 @@
 /**
  * 
  */
-package com.github.nest.goose.internal.human;
+package com.github.nest.sparrow.party.internal.codes;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.github.nest.goose.human.IGender;
 import com.github.nest.goose.internal.AbstractCodeBaseBean;
+import com.github.nest.sparrow.party.IPartyType;
 
 /**
- * gender
+ * party type
  * 
  * @author brad.wu
  */
-public class Gender extends AbstractCodeBaseBean implements IGender {
-	private static final long serialVersionUID = 8457821832961288245L;
+public final class PartyType extends AbstractCodeBaseBean implements IPartyType {
+	private static final long serialVersionUID = -5672491354635407657L;
 
-	public static final IGender MALE = new Gender("M", "Male");
-	public static final IGender FEMALE = new Gender("F", "Female");
+	public static final IPartyType INDIVIDUAL = new PartyType(IPartyType.INDIVIDUAL, "Individual");
+	public static final IPartyType ORGANIZATION = new PartyType(IPartyType.ORGANIZATION, "Organization");
 
 	private String code = null;
 	private String name = null;
 
-	public Gender() {
+	public PartyType() {
 	}
 
-	public Gender(String code, String name) {
+	public PartyType(String code, String name) {
 		this.setCode(code);
 		this.setName(name);
 	}
@@ -33,7 +33,7 @@ public class Gender extends AbstractCodeBaseBean implements IGender {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.goose.human.IGender#getCode()
+	 * @see com.github.nest.sparrow.party.IPartyType#getCode()
 	 */
 	@Override
 	public String getCode() {
@@ -52,7 +52,7 @@ public class Gender extends AbstractCodeBaseBean implements IGender {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.goose.human.IGender#getName()
+	 * @see com.github.nest.sparrow.party.IPartyType#getName()
 	 */
 	@Override
 	public String getName() {

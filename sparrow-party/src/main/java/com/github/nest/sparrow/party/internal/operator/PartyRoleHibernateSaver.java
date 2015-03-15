@@ -47,9 +47,12 @@ public class PartyRoleHibernateSaver extends HibernatePersistentSaver implements
 	@Override
 	public void insert(Object resource) {
 		String entityName = getAsPartyPrefix() + "." + resource.getClass().getSimpleName();
-		// TODO SAVE AS PARTY
+		// TODO CHECK PARTY UNIQUE FIRST
+		// SAVE AS PARTY
 		this.getCurrentSession().save(entityName, resource);
-		// TODO SAVE AS PARTY ROLE
+		this.getCurrentSession().evict(resource);
+		// SAVE AS PARTY ROLE
+		this.getCurrentSession().save(resource);
 	}
 
 	/**
@@ -71,9 +74,11 @@ public class PartyRoleHibernateSaver extends HibernatePersistentSaver implements
 	public void save(Object resource) {
 		String entityName = getAsPartyPrefix() + "." + resource.getClass().getSimpleName();
 		// TODO CHECK PARTY UNIQUE FIRST
-		// TODO SAVE AS PARTY
+		// SAVE AS PARTY
 		this.getCurrentSession().save(entityName, resource);
-		// TODO SAVE AS PARTY ROLE
+		this.getCurrentSession().evict(resource);
+		// SAVE AS PARTY ROLE
+		this.getCurrentSession().save(resource);
 	}
 
 	/**

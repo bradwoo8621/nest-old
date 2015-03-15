@@ -3,8 +3,11 @@
  */
 package com.github.nest.sparrow.party;
 
+import static org.junit.Assert.assertEquals;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
 
@@ -55,6 +58,7 @@ public class TestSparrowPartyXML {
 			Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:memdb", "username", "password");
 			Statement stat = conn.createStatement();
 			stat.execute("create table T_PARTY(PARTY_ID BIGINT, "//
+					+ "PARTY_TYPE VARCHAR(1), "//
 					+ "PARTY_NAME VARCHAR(100), "//
 					+ "PARTY_CODE VARCHAR(10), "//
 					+ "CREATE_TIME TIMESTAMP, "//
@@ -71,9 +75,17 @@ public class TestSparrowPartyXML {
 					+ "DATE_OF_DEATH DATE, "//
 					+ "BORN_IN_COUNTRY_CODE VARCHAR(3), "//
 					+ "NATIONALITY_CODE VARCHAR(3))");
-			stat.execute("create sequence S_PARTY AS BIGINT");
+			stat.execute("create sequence S_PARTY AS BIGINT start with 1");
+
+			stat.execute("create table T_PARTY_ROLE(PARTY_ROLE_ID BIGINT, "//
+					+ "PARTY_ROLE_CODE VARCHAR(10), "//
+					+ "IS_ENABLED INT, " //
+					+ "PARTY_ROLE_TYPE VARCHAR(3))");
+			stat.execute("create sequence S_PARTY_ROLE AS BIGINT start with 1");
+
+			stat.execute("create table T_EMPLOYEE(EMPLOYEE_ID BIGINT)");
+
 			conn.commit();
-			System.out.println("create TABLE:person OK");
 			conn.close();
 		}
 	}
@@ -104,6 +116,7 @@ public class TestSparrowPartyXML {
 			employee.setFirstName("First");
 			employee.setMiddleName("Middle");
 			employee.setLastName("Last");
+			System.out.println(employee.getName());
 
 			employee.setBornIn((ICountry) countryDescriptor.getFromCache(new Code("CHN")));
 			employee.setNationality((ICountry) countryDescriptor.getFromCache(new Code("USA")));
@@ -120,8 +133,34 @@ public class TestSparrowPartyXML {
 			log.setLastModifyUserId(log.getCreateUserId());
 			employee.setOperateLog(log);
 
+			employee.setRoleCode("RoleCode");
+			employee.setEnabled(true);
+
 			employeeDescriptor.getSaver().save(employee);
 			sessionFactory.getCurrentSession().getTransaction().commit();
+		}
+
+		{
+			Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:memdb", "username", "password");
+			Statement stat = conn.createStatement();
+			ResultSet rst = stat.executeQuery("select * from T_PARTY");
+			rst.next();
+			assertEquals(1, rst.getLong("PARTY_ID"));
+			assertEquals("PartyCode", rst.getString("PARTY_CODE"));
+			assertEquals("I", rst.getString("PARTY_TYPE"));
+			rst.close();
+			rst = stat.executeQuery("SELECT * FROM T_PARTY_ROLE");
+			rst.next();
+			assertEquals(1, rst.getLong("PARTY_ROLE_ID"));
+			assertEquals("RoleCode", rst.getString("PARTY_ROLE_CODE"));
+			assertEquals("EMP", rst.getString("PARTY_ROLE_TYPE"));
+			rst.close();
+			rst = stat.executeQuery("SELECT * FROM T_EMPLOYEE");
+			rst.next();
+			assertEquals(1, rst.getLong("EMPLOYEE_ID"));
+			rst.close();
+			stat.close();
+			conn.close();
 		}
 	}
 }

@@ -5,6 +5,7 @@ package com.github.nest.goose.internal.location;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.github.nest.goose.internal.AbstractCodeBaseBean;
 import com.github.nest.goose.location.ICountry;
 
 /**
@@ -12,7 +13,7 @@ import com.github.nest.goose.location.ICountry;
  * 
  * @author brad.wu
  */
-public class Country implements ICountry {
+public class Country extends AbstractCodeBaseBean implements ICountry {
 	private static final long serialVersionUID = 8072862832627880776L;
 
 	private String name = null;

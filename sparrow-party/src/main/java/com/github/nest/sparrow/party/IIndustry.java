@@ -3,14 +3,14 @@
  */
 package com.github.nest.sparrow.party;
 
-import java.io.Serializable;
+import com.github.nest.goose.ICodeBaseBean;
 
 /**
  * industry
  * 
  * @author brad.wu
  */
-public interface IIndustry extends Serializable {
+public interface IIndustry extends ICodeBaseBean {
 	/**
 	 * get code
 	 * 

@@ -14,15 +14,15 @@ import java.util.List;
 
 import com.github.nest.arcteryx.meta.ResourceException;
 import com.github.nest.goose.internal.AbstractCodeBaseBeanCacheProvider;
-import com.github.nest.sparrow.party.internal.codes.PartyRoleType;
+import com.github.nest.sparrow.party.internal.codes.Industry;
 
 /**
  * country cache provider
  * 
  * @author brad.wu
  */
-public class PartyRoleTypeCacheProvider extends AbstractCodeBaseBeanCacheProvider {
-	private List<PartyRoleType> partyRoleTypeList = null;
+public class IndustryCacheProvider extends AbstractCodeBaseBeanCacheProvider {
+	private List<Industry> industryList = null;
 	private String fileClassPath = null;
 
 	/**
@@ -33,7 +33,7 @@ public class PartyRoleTypeCacheProvider extends AbstractCodeBaseBeanCacheProvide
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> Collection<T> getBeans() {
-		return (Collection<T>) this.partyRoleTypeList;
+		return (Collection<T>) this.industryList;
 	}
 
 	/**
@@ -52,31 +52,31 @@ public class PartyRoleTypeCacheProvider extends AbstractCodeBaseBeanCacheProvide
 	}
 
 	/**
-	 * set party role type list class path location
+	 * set industry list class path location
 	 * 
 	 * @param classpath
 	 * @throws IOException
 	 */
 	public void readFromClassPath() {
 		try {
-			List<PartyRoleType> list = new LinkedList<PartyRoleType>();
+			List<Industry> list = new LinkedList<Industry>();
 			InputStream is = getClass().getResourceAsStream(this.getFileClassPath());
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 			String line = null;
 			while ((line = reader.readLine()) != null) {
 				String[] ss = line.split("[|]");
-				PartyRoleType roleType = new PartyRoleType();
-				roleType.setCode(ss[0]);
-				roleType.setName(ss[1]);
-				list.add(roleType);
+				Industry industry = new Industry();
+				industry.setCode(ss[0]);
+				industry.setName(ss[1]);
+				list.add(industry);
 			}
 			reader.close();
 
-			this.partyRoleTypeList = new ArrayList<PartyRoleType>(list.size());
-			this.partyRoleTypeList.addAll(list);
+			this.industryList = new ArrayList<Industry>(list.size());
+			this.industryList.addAll(list);
 		} catch (IOException e) {
-			throw new ResourceException("Failed to read party role type list by given class path ["
-					+ this.getFileClassPath() + "].", e);
+			throw new ResourceException("Failed to read industry list by given class path [" + this.getFileClassPath()
+					+ "].", e);
 		}
 	}
 }

@@ -4,7 +4,6 @@
 package com.github.nest.sparrow.party.internal;
 
 import com.github.nest.sparrow.party.IPartyRole;
-import com.github.nest.sparrow.party.IPartyRoleType;
 
 /**
  * individual party and role interface.<br>
@@ -16,34 +15,27 @@ import com.github.nest.sparrow.party.IPartyRoleType;
 public abstract class IndividualAndRole extends Individual implements IPartyRole {
 	private static final long serialVersionUID = 7099087522087708091L;
 
-	private IPartyRoleType roleType = null;
+	private Long roleId = null;
 	private String roleCode = null;
 	private boolean enabled = true;
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IPartyRole#getRoleType()
+	 * @see com.github.nest.sparrow.party.IPartyRole#getRoleId()
 	 */
 	@Override
-	public IPartyRoleType getRoleType() {
-		return this.roleType;
+	public Long getRoleId() {
+		return this.roleId;
 	}
 
 	/**
-	 * @param roleType
-	 *            the roleType to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IPartyRole#setRoleId(java.lang.Long)
 	 */
-	public void setRoleType(IPartyRoleType roleType) {
-		this.roleType = roleType;
-	}
-
-	/**
-	 * @param roleCode
-	 *            the roleCode to set
-	 */
-	public void setRoleCode(String roleCode) {
-		this.roleCode = roleCode;
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
 	}
 
 	/**
@@ -59,6 +51,15 @@ public abstract class IndividualAndRole extends Individual implements IPartyRole
 	/**
 	 * (non-Javadoc)
 	 * 
+	 * @see com.github.nest.sparrow.party.IPartyRole#setRoleCode(java.lang.String)
+	 */
+	public void setRoleCode(String roleCode) {
+		this.roleCode = roleCode;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.nest.sparrow.party.IPartyRole#isEnabled()
 	 */
 	@Override
@@ -67,8 +68,9 @@ public abstract class IndividualAndRole extends Individual implements IPartyRole
 	}
 
 	/**
-	 * @param enabled
-	 *            the enabled to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IPartyRole#setEnabled(boolean)
 	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;

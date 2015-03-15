@@ -4,7 +4,6 @@
 package com.github.nest.sparrow.party.internal;
 
 import com.github.nest.sparrow.party.IPartyRole;
-import com.github.nest.sparrow.party.IPartyRoleType;
 
 /**
  * organization party and role interface.<br>
@@ -13,37 +12,30 @@ import com.github.nest.sparrow.party.IPartyRoleType;
  * 
  * @author brad.wu
  */
-public class OrganizationAndRole extends Organization implements IPartyRole {
+public abstract class OrganizationAndRole extends Organization implements IPartyRole {
 	private static final long serialVersionUID = 5127074376660325058L;
 
-	private IPartyRoleType roleType = null;
+	private Long roleId = null;
 	private String roleCode = null;
 	private boolean enabled = true;
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IPartyRole#getRoleType()
+	 * @see com.github.nest.sparrow.party.IPartyRole#getRoleId()
 	 */
 	@Override
-	public IPartyRoleType getRoleType() {
-		return this.roleType;
+	public Long getRoleId() {
+		return this.roleId;
 	}
 
 	/**
-	 * @param roleType
-	 *            the roleType to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IPartyRole#setRoleId(java.lang.Long)
 	 */
-	public void setRoleType(IPartyRoleType roleType) {
-		this.roleType = roleType;
-	}
-
-	/**
-	 * @param roleCode
-	 *            the roleCode to set
-	 */
-	public void setRoleCode(String roleCode) {
-		this.roleCode = roleCode;
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
 	}
 
 	/**
@@ -59,6 +51,15 @@ public class OrganizationAndRole extends Organization implements IPartyRole {
 	/**
 	 * (non-Javadoc)
 	 * 
+	 * @see com.github.nest.sparrow.party.IPartyRole#setRoleCode(java.lang.String)
+	 */
+	public void setRoleCode(String roleCode) {
+		this.roleCode = roleCode;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
 	 * @see com.github.nest.sparrow.party.IPartyRole#isEnabled()
 	 */
 	@Override
@@ -67,8 +68,9 @@ public class OrganizationAndRole extends Organization implements IPartyRole {
 	}
 
 	/**
-	 * @param enabled
-	 *            the enabled to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IPartyRole#setEnabled(boolean)
 	 */
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;

@@ -921,6 +921,13 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 	protected Element createRootElement(IPersistentBeanDescriptor descriptor, Document doc) {
 		Element root = DocumentHelper.createElement(HIBERNATE_XML_NAME);
 		root.addAttribute("package", descriptor.getBeanClass().getPackage().getName());
+
+		// if the resource is declared with entity name, disable auto-import in
+		// hibernate mapping
+		if (descriptor instanceof IStandalonePersistentBeanDescriptor
+				&& StringUtils.isNotBlank(((IStandalonePersistentBeanDescriptor) descriptor).getEntityName())) {
+			root.addAttribute("auto-import", "false");
+		}
 		return root;
 	}
 

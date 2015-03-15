@@ -54,11 +54,4 @@ public interface IOrganization extends IParty {
 	 * @return
 	 */
 	IIndividual getArtificialPerson();
-
-	/**
-	 * get parent organization
-	 * 
-	 * @return
-	 */
-	IOrganization getParent();
 }

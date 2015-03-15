@@ -9,6 +9,8 @@ import com.github.nest.goose.location.ICountry;
 import com.github.nest.sparrow.party.IIndividual;
 import com.github.nest.sparrow.party.IIndustry;
 import com.github.nest.sparrow.party.IOrganization;
+import com.github.nest.sparrow.party.IPartyType;
+import com.github.nest.sparrow.party.internal.codes.PartyType;
 
 /**
  * organization party implementation
@@ -23,7 +25,25 @@ public abstract class Organization extends Party implements IOrganization {
 	private ICountry registerIn = null;
 	private IIndustry industry = null;
 	private IIndividual artificialPerson = null;
-	private IOrganization parent = null;
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#getType()
+	 */
+	@Override
+	public IPartyType getType() {
+		return PartyType.ORGANIZATION;
+	}
+
+	/**
+	 * do nothing
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#setType(com.github.nest.sparrow.party.IPartyType)
+	 */
+	@Override
+	public void setType(IPartyType type) {
+	}
 
 	/**
 	 * (non-Javadoc)
@@ -131,23 +151,5 @@ public abstract class Organization extends Party implements IOrganization {
 	 */
 	public void setArtificialPerson(IIndividual artificialPerson) {
 		this.artificialPerson = artificialPerson;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.sparrow.party.IOrganization#getParent()
-	 */
-	@Override
-	public IOrganization getParent() {
-		return this.parent;
-	}
-
-	/**
-	 * @param parent
-	 *            the parent to set
-	 */
-	public void setParent(IOrganization parent) {
-		this.parent = parent;
 	}
 }

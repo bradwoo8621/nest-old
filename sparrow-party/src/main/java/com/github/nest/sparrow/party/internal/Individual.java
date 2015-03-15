@@ -13,7 +13,9 @@ import com.github.nest.goose.human.IGender;
 import com.github.nest.goose.location.ICountry;
 import com.github.nest.sparrow.party.IEducationExperience;
 import com.github.nest.sparrow.party.IIndividual;
+import com.github.nest.sparrow.party.IPartyType;
 import com.github.nest.sparrow.party.IWorkExperience;
+import com.github.nest.sparrow.party.internal.codes.PartyType;
 
 /**
  * individual party implementation
@@ -34,6 +36,25 @@ public abstract class Individual extends Party implements IIndividual {
 	private ICountry nationality = null;
 	private List<IWorkExperience> workExperiences = null;
 	private List<IEducationExperience> educationExperiences = null;
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#getType()
+	 */
+	@Override
+	public IPartyType getType() {
+		return PartyType.INDIVIDUAL;
+	}
+
+	/**
+	 * do nothing
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#setType(com.github.nest.sparrow.party.IPartyType)
+	 */
+	@Override
+	public void setType(IPartyType type) {
+	}
 
 	/**
 	 * (non-Javadoc)
@@ -69,6 +90,16 @@ public abstract class Individual extends Party implements IIndividual {
 	 */
 	public void setGender(IGender gender) {
 		this.gender = gender;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.internal.Party#getName()
+	 */
+	@Override
+	public String getName() {
+		return IndividualNameConcatenator.concat(this.getFirstName(), this.getMiddleName(), this.getLastName());
 	}
 
 	/**

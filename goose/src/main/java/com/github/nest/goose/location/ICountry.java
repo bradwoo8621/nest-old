@@ -12,13 +12,6 @@ import com.github.nest.goose.ICodeBaseBean;
  */
 public interface ICountry extends ICodeBaseBean {
 	/**
-	 * get code
-	 * 
-	 * @return
-	 */
-	String getCode();
-
-	/**
 	 * get name
 	 * 
 	 * @return

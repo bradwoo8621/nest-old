@@ -12,9 +12,9 @@ import com.github.nest.sparrow.party.IOrganization;
  */
 public interface IDepartment extends IOrganization {
 	/**
-	 * business supervisor department
+	 * get parent department
 	 * 
 	 * @return
 	 */
-	IDepartment getBusinessSupervisor();
+	IDepartment getParentDepartment();
 }

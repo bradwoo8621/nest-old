@@ -1,31 +1,28 @@
 /**
  * 
  */
-package com.github.nest.goose.internal.human;
+package com.github.nest.sparrow.party.internal.codes;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.github.nest.goose.human.IGender;
 import com.github.nest.goose.internal.AbstractCodeBaseBean;
+import com.github.nest.sparrow.party.IIndustry;
 
 /**
- * gender
+ * industry
  * 
  * @author brad.wu
  */
-public class Gender extends AbstractCodeBaseBean implements IGender {
-	private static final long serialVersionUID = 8457821832961288245L;
-
-	public static final IGender MALE = new Gender("M", "Male");
-	public static final IGender FEMALE = new Gender("F", "Female");
+public class Industry extends AbstractCodeBaseBean implements IIndustry {
+	private static final long serialVersionUID = -6822902539780831746L;
 
 	private String code = null;
 	private String name = null;
 
-	public Gender() {
+	public Industry() {
 	}
 
-	public Gender(String code, String name) {
+	public Industry(String code, String name) {
 		this.setCode(code);
 		this.setName(name);
 	}
@@ -33,7 +30,7 @@ public class Gender extends AbstractCodeBaseBean implements IGender {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.goose.human.IGender#getCode()
+	 * @see com.github.nest.sparrow.party.IIndustry#getCode()
 	 */
 	@Override
 	public String getCode() {
@@ -52,7 +49,7 @@ public class Gender extends AbstractCodeBaseBean implements IGender {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.goose.human.IGender#getName()
+	 * @see com.github.nest.sparrow.party.IIndustry#getName()
 	 */
 	@Override
 	public String getName() {

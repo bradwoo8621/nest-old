@@ -198,6 +198,9 @@ public class ResourceDescriptor implements IResourceDescriptor {
 		Map<String, IPropertyDescriptor> map = new HashMap<String, IPropertyDescriptor>();
 		List<IResourceDescriptor> descriptors = this.getContext().getRecursive(this.getResourceClass());
 		for (IResourceDescriptor descriptor : descriptors) {
+			if (descriptor.getResourceClass() == this.getResourceClass() && descriptor != this) {
+				descriptor = this;
+			}
 			Collection<IPropertyDescriptor> properties = descriptor.getDeclaredProperties();
 			if (properties != null) {
 				for (IPropertyDescriptor property : properties) {

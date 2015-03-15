@@ -22,7 +22,7 @@ public abstract class Party implements IParty {
 	private String code = null;
 	private List<IAddress> addresses = null;
 	private OperateLog operateLog = null;
-	private Long optimisticLock = null;
+	private Long partyOptimisticLock = null;
 
 	/**
 	 * (non-Javadoc)
@@ -35,9 +35,11 @@ public abstract class Party implements IParty {
 	}
 
 	/**
-	 * @param id
-	 *            the id to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#setId(java.lang.Long)
 	 */
+	@Override
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -53,9 +55,11 @@ public abstract class Party implements IParty {
 	}
 
 	/**
-	 * @param name
-	 *            the name to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#setName(java.lang.String)
 	 */
+	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -71,9 +75,11 @@ public abstract class Party implements IParty {
 	}
 
 	/**
-	 * @param code
-	 *            the code to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#setCode(java.lang.String)
 	 */
+	@Override
 	public void setCode(String code) {
 		this.code = code;
 	}
@@ -89,9 +95,11 @@ public abstract class Party implements IParty {
 	}
 
 	/**
-	 * @param addresses
-	 *            the addresses to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#setAddresses(java.util.List)
 	 */
+	@Override
 	public void setAddresses(List<IAddress> addresses) {
 		this.addresses = addresses;
 	}
@@ -107,9 +115,11 @@ public abstract class Party implements IParty {
 	}
 
 	/**
-	 * @param operateLog
-	 *            the operateLog to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#setOperateLog(com.github.nest.goose.operate.OperateLog)
 	 */
+	@Override
 	public void setOperateLog(OperateLog operateLog) {
 		this.operateLog = operateLog;
 	}
@@ -117,18 +127,20 @@ public abstract class Party implements IParty {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#getOptimisticLock()
+	 * @see com.github.nest.sparrow.party.IParty#getPartyOptimisticLock()
 	 */
 	@Override
-	public Long getOptimisticLock() {
-		return this.optimisticLock;
+	public Long getPartyOptimisticLock() {
+		return this.partyOptimisticLock;
 	}
 
 	/**
-	 * @param optimisticLock
-	 *            the optimisticLock to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#setPartyOptimisticLock(java.lang.Long)
 	 */
-	public void setOptimisticLock(Long optimisticLock) {
-		this.optimisticLock = optimisticLock;
+	@Override
+	public void setPartyOptimisticLock(Long optimisticLock) {
+		this.partyOptimisticLock = optimisticLock;
 	}
 }

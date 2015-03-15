@@ -11,5 +11,17 @@ import com.github.nest.sparrow.party.IOrganization;
  * @author brad.wu
  */
 public interface IBranch extends IOrganization {
+	/**
+	 * get parent branch
+	 * 
+	 * @return
+	 */
+	IBranch getParentBranch();
 
+	/**
+	 * is head office or not. if true, no parent branch.
+	 * 
+	 * @return
+	 */
+	boolean isHeadOffice();
 }

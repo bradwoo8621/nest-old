@@ -1,10 +1,11 @@
 /**
  * 
  */
-package com.github.nest.sparrow.party.internal;
+package com.github.nest.sparrow.party.internal.codes;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.github.nest.goose.internal.AbstractCodeBaseBean;
 import com.github.nest.sparrow.party.IPartyRoleType;
 
 /**
@@ -12,7 +13,7 @@ import com.github.nest.sparrow.party.IPartyRoleType;
  * 
  * @author brad.wu
  */
-public class PartyRoleType implements IPartyRoleType {
+public class PartyRoleType extends AbstractCodeBaseBean implements IPartyRoleType {
 	private static final long serialVersionUID = 5753415948935637519L;
 
 	private String code = null;

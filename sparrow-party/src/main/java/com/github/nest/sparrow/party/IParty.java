@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.github.nest.goose.operate.OperateLog;
+import com.github.nest.sparrow.party.codes.IPartyType;
 
 /**
  * party interface

@@ -6,7 +6,7 @@ package com.github.nest.sparrow.party.internal.codes;
 import org.apache.commons.lang3.StringUtils;
 
 import com.github.nest.goose.internal.AbstractCodeBaseBean;
-import com.github.nest.sparrow.party.IPartyRoleType;
+import com.github.nest.sparrow.party.codes.IPartyRoleType;
 
 /**
  * party role type
@@ -31,7 +31,7 @@ public class PartyRoleType extends AbstractCodeBaseBean implements IPartyRoleTyp
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IPartyRoleType#getCode()
+	 * @see com.github.nest.sparrow.party.codes.IPartyRoleType#getCode()
 	 */
 	@Override
 	public String getCode() {
@@ -50,7 +50,7 @@ public class PartyRoleType extends AbstractCodeBaseBean implements IPartyRoleTyp
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IPartyRoleType#getName()
+	 * @see com.github.nest.sparrow.party.codes.IPartyRoleType#getName()
 	 */
 	@Override
 	public String getName() {

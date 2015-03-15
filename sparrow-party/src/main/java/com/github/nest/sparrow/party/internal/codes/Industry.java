@@ -6,7 +6,7 @@ package com.github.nest.sparrow.party.internal.codes;
 import org.apache.commons.lang3.StringUtils;
 
 import com.github.nest.goose.internal.AbstractCodeBaseBean;
-import com.github.nest.sparrow.party.IIndustry;
+import com.github.nest.sparrow.party.codes.IIndustry;
 
 /**
  * industry
@@ -30,7 +30,7 @@ public class Industry extends AbstractCodeBaseBean implements IIndustry {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IIndustry#getCode()
+	 * @see com.github.nest.sparrow.party.codes.IIndustry#getCode()
 	 */
 	@Override
 	public String getCode() {
@@ -49,7 +49,7 @@ public class Industry extends AbstractCodeBaseBean implements IIndustry {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IIndustry#getName()
+	 * @see com.github.nest.sparrow.party.codes.IIndustry#getName()
 	 */
 	@Override
 	public String getName() {

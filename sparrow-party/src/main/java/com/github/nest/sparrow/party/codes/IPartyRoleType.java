@@ -1,16 +1,16 @@
 /**
  * 
  */
-package com.github.nest.sparrow.party;
+package com.github.nest.sparrow.party.codes;
 
-import java.io.Serializable;
+import com.github.nest.goose.ICodeBaseBean;
 
 /**
- * education degree
+ * party role type
  * 
  * @author brad.wu
  */
-public interface IEducationDegree extends Serializable {
+public interface IPartyRoleType extends ICodeBaseBean {
 	/**
 	 * get code
 	 * 

@@ -13,8 +13,8 @@ import com.github.nest.goose.human.IGender;
 import com.github.nest.goose.location.ICountry;
 import com.github.nest.sparrow.party.IEducationExperience;
 import com.github.nest.sparrow.party.IIndividual;
-import com.github.nest.sparrow.party.IPartyType;
 import com.github.nest.sparrow.party.IWorkExperience;
+import com.github.nest.sparrow.party.codes.IPartyType;
 import com.github.nest.sparrow.party.internal.codes.PartyType;
 
 /**
@@ -50,7 +50,7 @@ public abstract class Individual extends Party implements IIndividual {
 	/**
 	 * do nothing
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#setType(com.github.nest.sparrow.party.IPartyType)
+	 * @see com.github.nest.sparrow.party.IParty#setType(com.github.nest.sparrow.party.codes.IPartyType)
 	 */
 	@Override
 	public void setType(IPartyType type) {

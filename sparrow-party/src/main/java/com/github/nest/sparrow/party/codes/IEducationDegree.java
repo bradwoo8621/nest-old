@@ -1,16 +1,16 @@
 /**
  * 
  */
-package com.github.nest.sparrow.party;
+package com.github.nest.sparrow.party.codes;
 
 import java.io.Serializable;
 
 /**
- * occupation
+ * education degree
  * 
  * @author brad.wu
  */
-public interface IOccupation extends Serializable {
+public interface IEducationDegree extends Serializable {
 	/**
 	 * get code
 	 * 

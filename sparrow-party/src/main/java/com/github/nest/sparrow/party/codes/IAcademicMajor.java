@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.sparrow.party;
+package com.github.nest.sparrow.party.codes;
 
 import java.io.Serializable;
 

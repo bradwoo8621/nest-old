@@ -6,7 +6,7 @@ package com.github.nest.sparrow.party.internal.codes;
 import org.apache.commons.lang3.StringUtils;
 
 import com.github.nest.goose.internal.AbstractCodeBaseBean;
-import com.github.nest.sparrow.party.IPartyType;
+import com.github.nest.sparrow.party.codes.IPartyType;
 
 /**
  * party type
@@ -33,7 +33,7 @@ public final class PartyType extends AbstractCodeBaseBean implements IPartyType 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IPartyType#getCode()
+	 * @see com.github.nest.sparrow.party.codes.IPartyType#getCode()
 	 */
 	@Override
 	public String getCode() {
@@ -52,7 +52,7 @@ public final class PartyType extends AbstractCodeBaseBean implements IPartyType 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IPartyType#getName()
+	 * @see com.github.nest.sparrow.party.codes.IPartyType#getName()
 	 */
 	@Override
 	public String getName() {

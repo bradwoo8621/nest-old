@@ -6,6 +6,8 @@ package com.github.nest.sparrow.party;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.github.nest.sparrow.party.codes.IOccupation;
+
 /**
  * work experience interface
  * 

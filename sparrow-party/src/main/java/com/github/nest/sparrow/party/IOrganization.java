@@ -6,6 +6,7 @@ package com.github.nest.sparrow.party;
 import java.util.Date;
 
 import com.github.nest.goose.location.ICountry;
+import com.github.nest.sparrow.party.codes.IIndustry;
 
 /**
  * organization party interface

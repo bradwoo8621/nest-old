@@ -45,16 +45,9 @@
 				<ref bean="Individual" />
 				<ref bean="Organization" />
 
-				<ref bean="IPartyRole" />
+				<ref bean="PartyRole" />
 				<ref bean="Employee" />
 			</list>
-		</property>
-		<property name="identifiedDescriptors">
-			<map>
-				<entry key="AsParty.Employee">
-					<ref bean="AsParty.Employee" />
-				</entry>
-			</map>
 		</property>
 		<property name="operatorProviders">
 			<map>
@@ -65,6 +58,14 @@
 					</key>
 					<bean
 						class="com.github.nest.sparrow.party.internal.operator.PartyHibernatePersistentSaverProvider" />
+				</entry>
+				<entry>
+					<key>
+						<util:constant
+							static-field="com.github.nest.arcteryx.persistent.IPersistentBeanLoader.CODE" />
+					</key>
+					<bean
+						class="com.github.nest.sparrow.party.internal.operator.PartyHibernatePersistentLoaderProvider" />
 				</entry>
 			</map>
 		</property>
@@ -112,40 +113,44 @@
 	<util:set
 		id="PartyRoleProperties"
 		value-type="java.lang.String">
-		<value>roleId</value>
+		<value>party</value>
 		<value>roleCode</value>
-		<value>roleType</value>
-		<value>enabled</value>
+		<value>roleId</value>
+		<value>roleOperateLog</value>
+		<value>roleOptimisticLock</value>
+		<value>roleEnabled</value>
 	</util:set>
 
 	<util:set
 		id="PartyProperties"
 		value-type="java.lang.String">
 		<!-- from Party -->
-		<value>id</value>
-		<value>code</value>
-		<value>name</value>
-		<value>operateLog</value>
+		<value>partyAddresses</value>
+		<value>partyCode</value>
+		<value>partyId</value>
+		<value>partyName</value>
+		<value>partyOperateLog</value>
 		<value>partyOptimisticLock</value>
+		<value>partyEnabled</value>
 		<!-- from Individual -->
-		<value>firstName</value>
-		<value>middleName</value>
-		<value>lastName</value>
+		<value>bornIn</value>
 		<value>dateOfBirth</value>
 		<value>dateOfDeath</value>
-		<value>bornIn</value>
+		<value>educationExperiences</value>
+		<value>firstName</value>
 		<value>gender</value>
 		<value>idNumber</value>
+		<value>lastName</value>
+		<value>middleName</value>
 		<value>nationality</value>
-		<value>educationExperiences</value>
 		<value>workExperiences</value>
 		<!-- from Organization -->
-		<value>registerNumber</value>
-		<value>registerDate</value>
-		<value>registerIn</value>
+		<value>artificialPerson</value>
 		<value>closeDownDate</value>
 		<value>industry</value>
-		<value>artificialPerson</value>
+		<value>registerDate</value>
+		<value>registerIn</value>
+		<value>registerNumber</value>
 	</util:set>
 
 	<!-- code tables start here -->
@@ -251,7 +256,7 @@
 				<!-- ID of party -->
 				<bean
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
-					p:name="id"
+					p:name="partyId"
 					p:description="ID of party">
 					<property name="persistentColumn">
 						<bean
@@ -270,7 +275,7 @@
 				<!-- Name of party -->
 				<bean
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
-					p:name="name"
+					p:name="partyName"
 					p:description="Name of party">
 					<property name="persistentColumn">
 						<bean
@@ -282,7 +287,7 @@
 				<!-- Code of party -->
 				<bean
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
-					p:name="code"
+					p:name="partyCode"
 					p:description="Code of party">
 					<property name="persistentColumn">
 						<bean
@@ -291,11 +296,23 @@
 							p:type="STRING" />
 					</property>
 				</bean>
+				<!-- Enabled of party -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="partyEnabled"
+					p:description="Enabled of party">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="PARTY_ENABLED"
+							p:type="BOOLEAN" />
+					</property>
+				</bean>
 				<!-- TODO addresses -->
 				<!-- operate log -->
 				<bean
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
-					p:name="operateLog"
+					p:name="partyOperateLog"
 					p:description="Operate log of party">
 					<property name="persistentColumn">
 						<bean
@@ -533,48 +550,12 @@
 		</property>
 	</bean>
 
-	<!-- concrete parties start here -->
-	<!-- com.github.nest.sparrow.party.internal.Employee -->
-	<!-- for save party, no additional property. extends from Individual -->
-	<bean
-		id="AsParty.Employee"
-		class="com.github.nest.arcteryx.persistent.internal.StandalonePersistentBeanDescriptor"
-		p:resourceClass="com.github.nest.sparrow.party.internal.Employee"
-		p:name="Employee"
-		p:description="Individual employee, which will be treated as a party."
-		scope="singleton"
-		p:entityName="AsParty.Employee"
-		p:tableName="T_PARTY">
-		<!-- extends Party directly -->
-		<!-- use property of Individual -->
-		<!-- abandon the properties from party role -->
-		<property
-			name="abandonedProperties"
-			ref="PartyRoleProperties" />
-		<property name="properties">
-			<list>
-				<bean
-					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
-					p:name="type"
-					p:description="Type of party">
-					<property name="persistentColumn">
-						<bean
-							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
-							p:referencedBeanClass="com.github.nest.sparrow.party.internal.codes.PartyType"
-							p:foreignKeyColumnName="PARTY_TYPE"
-							p:foreignKeyPropertyName="code" />
-					</property>
-				</bean>
-			</list>
-		</property>
-	</bean>
-
 	<!-- party role starts here -->
 	<!-- com.github.nest.sparrow.party.IPartyRole -->
 	<bean
-		id="IPartyRole"
+		id="PartyRole"
 		class="com.github.nest.arcteryx.persistent.internal.StandalonePersistentBeanDescriptor"
-		p:resourceClass="com.github.nest.sparrow.party.IPartyRole"
+		p:resourceClass="com.github.nest.sparrow.party.internal.PartyRole"
 		p:name="IPartyRole"
 		p:description="Party role interface"
 		scope="singleton"
@@ -617,23 +598,54 @@
 							p:type="STRING" />
 					</property>
 				</bean>
-				<!-- Type of party role -->
-				<!-- <bean class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor" 
-					p:name="roleType" p:description="Type of party role"> <property name="persistentColumn"> 
-					<bean class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn" 
-					p:referencedBeanClass="com.github.nest.sparrow.party.internal.codes.PartyRoleType" 
-					p:foreignKeyColumnName="PARTY_ROLE_TYPE" p:foreignKeyPropertyName="code" 
-					/> </property> </bean> -->
 				<!-- enabled of party role -->
 				<bean
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
-					p:name="enabled"
+					p:name="roleEnabled"
 					p:description="Enabled of party role">
 					<property name="persistentColumn">
 						<bean
 							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
-							p:name="IS_ENABLED"
+							p:name="PARTY_ROLE_ENABLED"
 							p:type="BOOLEAN" />
+					</property>
+				</bean>
+				<!-- party -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="party"
+					p:description="Party of party role">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
+							p:referencedBeanClass="com.github.nest.sparrow.party.internal.Party"
+							p:foreignKeyColumnName="PARTY_ID"
+							p:foreignKeyPropertyName="partyId" />
+					</property>
+				</bean>
+				<!-- operate log -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="roleOperateLog"
+					p:description="Operate log of party role">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.EmbeddedPersistentColumn"
+							p:embeddedBeanClass="com.github.nest.goose.operate.OperateLog"
+							p:referencedBeanContextName="goose-context" />
+					</property>
+				</bean>
+				<!-- optimistic lock -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="roleOptimisticLock"
+					p:description="Optimistic lock of party role">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="OPTIMISTIC_LOCK"
+							p:type="LONG"
+							p:version="true" />
 					</property>
 				</bean>
 			</list>
@@ -648,7 +660,7 @@
 		p:description="Individual employee, which will be treated as a party role."
 		scope="singleton"
 		p:tableName="T_EMPLOYEE"
-		p:extendsFromBeanClass="com.github.nest.sparrow.party.IPartyRole"
+		p:extendsFromBeanClass="com.github.nest.sparrow.party.internal.PartyRole"
 		p:discriminatorValue="EMP"
 		p:foreignKeyColumnName="EMPLOYEE_ID">
 		<!-- extends Party directly -->

@@ -9,41 +9,21 @@ import com.github.nest.goose.location.ICountry;
 import com.github.nest.sparrow.party.IIndividual;
 import com.github.nest.sparrow.party.IOrganization;
 import com.github.nest.sparrow.party.codes.IIndustry;
-import com.github.nest.sparrow.party.codes.IPartyType;
-import com.github.nest.sparrow.party.internal.codes.PartyType;
 
 /**
  * organization party implementation
  * 
  * @author brad.wu
  */
-public abstract class Organization extends Party implements IOrganization {
+public class Organization extends Party implements IOrganization {
 	private static final long serialVersionUID = -3147164186617820585L;
+
 	private String registerNumber = null;
 	private Date registerDate = null;
 	private Date closeDownDate = null;
 	private ICountry registerIn = null;
 	private IIndustry industry = null;
 	private IIndividual artificialPerson = null;
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.sparrow.party.IParty#getType()
-	 */
-	@Override
-	public IPartyType getType() {
-		return PartyType.ORGANIZATION;
-	}
-
-	/**
-	 * do nothing
-	 * 
-	 * @see com.github.nest.sparrow.party.IParty#setType(com.github.nest.sparrow.party.codes.IPartyType)
-	 */
-	@Override
-	public void setType(IPartyType type) {
-	}
 
 	/**
 	 * (non-Javadoc)
@@ -56,8 +36,9 @@ public abstract class Organization extends Party implements IOrganization {
 	}
 
 	/**
-	 * @param registerNumber
-	 *            the registerNumber to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IOrganization#setRegisterNumber(java.lang.String)
 	 */
 	public void setRegisterNumber(String registerNumber) {
 		this.registerNumber = registerNumber;
@@ -74,8 +55,9 @@ public abstract class Organization extends Party implements IOrganization {
 	}
 
 	/**
-	 * @param registerDate
-	 *            the registerDate to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IOrganization#setRegisterDate(java.util.Date)
 	 */
 	public void setRegisterDate(Date registerDate) {
 		this.registerDate = registerDate;
@@ -92,8 +74,9 @@ public abstract class Organization extends Party implements IOrganization {
 	}
 
 	/**
-	 * @param closeDownDate
-	 *            the closeDownDate to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IOrganization#setCloseDownDate(java.util.Date)
 	 */
 	public void setCloseDownDate(Date closeDownDate) {
 		this.closeDownDate = closeDownDate;
@@ -110,8 +93,9 @@ public abstract class Organization extends Party implements IOrganization {
 	}
 
 	/**
-	 * @param registerIn
-	 *            the registerIn to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IOrganization#setRegisterIn(com.github.nest.goose.location.ICountry)
 	 */
 	public void setRegisterIn(ICountry registerIn) {
 		this.registerIn = registerIn;
@@ -128,8 +112,9 @@ public abstract class Organization extends Party implements IOrganization {
 	}
 
 	/**
-	 * @param industry
-	 *            the industry to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IOrganization#setIndustry(com.github.nest.sparrow.party.codes.IIndustry)
 	 */
 	public void setIndustry(IIndustry industry) {
 		this.industry = industry;
@@ -146,8 +131,9 @@ public abstract class Organization extends Party implements IOrganization {
 	}
 
 	/**
-	 * @param artificialPerson
-	 *            the artificialPerson to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IOrganization#setArtificialPerson(com.github.nest.sparrow.party.IIndividual)
 	 */
 	public void setArtificialPerson(IIndividual artificialPerson) {
 		this.artificialPerson = artificialPerson;

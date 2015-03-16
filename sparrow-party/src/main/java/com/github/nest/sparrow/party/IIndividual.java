@@ -23,11 +23,23 @@ public interface IIndividual extends IParty {
 	String getIdNumber();
 
 	/**
+	 * 
+	 * @param idNumber
+	 */
+	void setIdNumber(String idNumber);
+
+	/**
 	 * get gender
 	 * 
 	 * @return
 	 */
 	IGender getGender();
+
+	/**
+	 * 
+	 * @param gender
+	 */
+	void setGender(IGender gender);
 
 	/**
 	 * get first name
@@ -37,6 +49,12 @@ public interface IIndividual extends IParty {
 	String getFirstName();
 
 	/**
+	 * 
+	 * @param firstName
+	 */
+	void setFirstName(String firstName);
+
+	/**
 	 * get middle name
 	 * 
 	 * @return
@@ -44,11 +62,23 @@ public interface IIndividual extends IParty {
 	String getMiddleName();
 
 	/**
+	 * 
+	 * @param middleName
+	 */
+	void setMiddleName(String middleName);
+
+	/**
 	 * get last name
 	 * 
 	 * @return
 	 */
 	String getLastName();
+
+	/**
+	 * 
+	 * @param lastName
+	 */
+	void setLastName(String lastName);
 
 	/**
 	 * get age
@@ -73,11 +103,23 @@ public interface IIndividual extends IParty {
 	Date getDateOfBirth();
 
 	/**
+	 * 
+	 * @param dateOfBirth
+	 */
+	void setDateOfBirth(Date dateOfBirth);
+
+	/**
 	 * get date of death
 	 * 
 	 * @return
 	 */
 	Date getDateOfDeath();
+
+	/**
+	 * 
+	 * @param dateOfDeath
+	 */
+	void setDateOfDeath(Date dateOfDeath);
 
 	/**
 	 * get born in country
@@ -87,11 +129,23 @@ public interface IIndividual extends IParty {
 	ICountry getBornIn();
 
 	/**
+	 * 
+	 * @param bornIn
+	 */
+	void setBornIn(ICountry bornIn);
+
+	/**
 	 * get nationality
 	 * 
 	 * @return
 	 */
 	ICountry getNationality();
+
+	/**
+	 * 
+	 * @param nationality
+	 */
+	void setNationality(ICountry nationality);
 
 	/**
 	 * get work experiences
@@ -101,9 +155,21 @@ public interface IIndividual extends IParty {
 	List<IWorkExperience> getWorkExperiences();
 
 	/**
+	 * 
+	 * @param workExperiences
+	 */
+	void setWorkExperiences(List<IWorkExperience> workExperiences);
+
+	/**
 	 * get educations experiences
 	 * 
 	 * @return
 	 */
 	List<IEducationExperience> getEducationExperiences();
+
+	/**
+	 * 
+	 * @param educationExperiences
+	 */
+	void setEducationExperiences(List<IEducationExperience> educationExperiences);
 }

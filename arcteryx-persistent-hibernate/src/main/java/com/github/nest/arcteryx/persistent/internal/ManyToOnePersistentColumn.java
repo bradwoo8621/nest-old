@@ -158,7 +158,8 @@ public class ManyToOnePersistentColumn extends AbstractPersistentColumn implemen
 	 */
 	@Override
 	public boolean isInSameContext() {
-		return StringUtils.equals(this.getReferencedBeanContextName(), this.getPropertyDescriptor().getBeanDescriptor()
-				.getName());
+		return StringUtils.isBlank(this.getReferencedBeanContextName())
+				|| StringUtils.equals(this.getReferencedBeanContextName(), this.getPropertyDescriptor()
+						.getBeanDescriptor().getContext().getName());
 	}
 }

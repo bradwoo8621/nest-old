@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.BasicConfigurator;
@@ -34,6 +35,7 @@ import com.github.nest.goose.internal.location.Country;
 import com.github.nest.goose.location.ICountry;
 import com.github.nest.goose.operate.OperateLog;
 import com.github.nest.sparrow.party.internal.Employee;
+import com.github.nest.sparrow.party.internal.Individual;
 
 /**
  * @author brad.wu
@@ -61,6 +63,7 @@ public class TestSparrowPartyXML {
 					+ "PARTY_TYPE VARCHAR(1), "//
 					+ "PARTY_NAME VARCHAR(100), "//
 					+ "PARTY_CODE VARCHAR(10), "//
+					+ "PARTY_ENABLED INT, "//
 					+ "CREATE_TIME TIMESTAMP, "//
 					+ "CREATE_USER_ID BIGINT, "//
 					+ "LAST_MODIFY_USER_ID BIGINT, "//
@@ -71,6 +74,7 @@ public class TestSparrowPartyXML {
 					+ "MIDDLE_NAME VARCHAR(20), "//
 					+ "LAST_NAME VARCHAR(20), "//
 					+ "GENDER_CODE VARCHAR(1), "//
+					+ "INDUSTRY_CODE VARCHAR(3), "//
 					+ "DATE_OF_BIRTH DATE, "//
 					+ "DATE_OF_DEATH DATE, "//
 					+ "BORN_IN_COUNTRY_CODE VARCHAR(3), "//
@@ -79,8 +83,14 @@ public class TestSparrowPartyXML {
 
 			stat.execute("create table T_PARTY_ROLE(PARTY_ROLE_ID BIGINT, "//
 					+ "PARTY_ROLE_CODE VARCHAR(10), "//
-					+ "IS_ENABLED INT, " //
-					+ "PARTY_ROLE_TYPE VARCHAR(3))");
+					+ "PARTY_ROLE_ENABLED INT, " //
+					+ "PARTY_ROLE_TYPE VARCHAR(3), "//
+					+ "PARTY_ID BIGINT, "//
+					+ "CREATE_TIME TIMESTAMP, "//
+					+ "CREATE_USER_ID BIGINT, "//
+					+ "LAST_MODIFY_USER_ID BIGINT, "//
+					+ "LAST_MODIFY_TIME TIMESTAMP, "//
+					+ "OPTIMISTIC_LOCK BIGINT)");
 			stat.execute("create sequence S_PARTY_ROLE AS BIGINT start with 1");
 
 			stat.execute("create table T_EMPLOYEE(EMPLOYEE_ID BIGINT)");
@@ -98,8 +108,7 @@ public class TestSparrowPartyXML {
 
 		IResourceDescriptorContext sparrowParty = ResourceDescriptorContextRepository
 				.getContext(SPARROW_PARTY_CONTEXT_ID);
-		IPersistentBeanDescriptor employeeDescriptor = sparrowParty.get(IPartyConstants.DEFAULT_AS_PARTY_PREFIX
-				+ ".Employee");
+		IPersistentBeanDescriptor employeeDescriptor = sparrowParty.get(Employee.class);
 
 		IPersistentConfiguration configuration = sparrowParty
 				.getInitializedData(IPersistentConfigurationInitializer.KEY);
@@ -110,13 +119,14 @@ public class TestSparrowPartyXML {
 		{
 			sessionFactory.getCurrentSession().beginTransaction();
 			Employee employee = new Employee();
-			employee.setCode("PartyCode");
+			employee.setParty(new Individual());
+			employee.setPartyCode("PartyCode");
 
 			employee.setIdNumber("ID123456");
 			employee.setFirstName("First");
 			employee.setMiddleName("Middle");
 			employee.setLastName("Last");
-			System.out.println(employee.getName());
+			System.out.println(employee.getPartyName());
 
 			employee.setBornIn((ICountry) countryDescriptor.getFromCache(new Code("CHN")));
 			employee.setNationality((ICountry) countryDescriptor.getFromCache(new Code("USA")));
@@ -131,10 +141,10 @@ public class TestSparrowPartyXML {
 			log.setCreateUserId(100001l);
 			log.setLastModifyTime(log.getCreateTime());
 			log.setLastModifyUserId(log.getCreateUserId());
-			employee.setOperateLog(log);
+			employee.setPartyOperateLog(log);
 
 			employee.setRoleCode("RoleCode");
-			employee.setEnabled(true);
+			employee.setRoleEnabled(true);
 
 			employeeDescriptor.getSaver().save(employee);
 			sessionFactory.getCurrentSession().getTransaction().commit();
@@ -148,12 +158,24 @@ public class TestSparrowPartyXML {
 			assertEquals(1, rst.getLong("PARTY_ID"));
 			assertEquals("PartyCode", rst.getString("PARTY_CODE"));
 			assertEquals("I", rst.getString("PARTY_TYPE"));
+			assertEquals("ID123456", rst.getString("ID_NUMBER"));
+			assertEquals("First", rst.getString("FIRST_NAME"));
+			assertEquals("Middle", rst.getString("MIDDLE_NAME"));
+			assertEquals("Last", rst.getString("LAST_NAME"));
+			assertEquals("First Middle Last", rst.getString("PARTY_NAME"));
+			assertEquals("CHN", rst.getString("BORN_IN_COUNTRY_CODE"));
+			assertEquals("USA", rst.getString("NATIONALITY_CODE"));
+			assertEquals("F", rst.getString("GENDER_CODE"));
+			assertEquals("19800201", new SimpleDateFormat("yyyyMMdd").format(rst.getDate("DATE_OF_BIRTH")));
+			assertEquals("20501231", new SimpleDateFormat("yyyyMMdd").format(rst.getDate("DATE_OF_DEATH")));
 			rst.close();
 			rst = stat.executeQuery("SELECT * FROM T_PARTY_ROLE");
 			rst.next();
 			assertEquals(1, rst.getLong("PARTY_ROLE_ID"));
 			assertEquals("RoleCode", rst.getString("PARTY_ROLE_CODE"));
 			assertEquals("EMP", rst.getString("PARTY_ROLE_TYPE"));
+			assertEquals(true, rst.getBoolean("PARTY_ROLE_ENABLED"));
+			assertEquals(1, rst.getLong("PARTY_ID"));
 			rst.close();
 			rst = stat.executeQuery("SELECT * FROM T_EMPLOYEE");
 			rst.next();
@@ -161,6 +183,31 @@ public class TestSparrowPartyXML {
 			rst.close();
 			stat.close();
 			conn.close();
+		}
+
+		{
+			sessionFactory.getCurrentSession().beginTransaction();
+			Employee employee = employeeDescriptor.getLoader().load(1l);
+			employee.getParty();
+
+			assertEquals(Long.valueOf(1), employee.getPartyId());
+			assertEquals("PartyCode", employee.getPartyCode());
+			assertEquals("ID123456", employee.getIdNumber());
+			assertEquals("First", employee.getFirstName());
+			assertEquals("Middle", employee.getMiddleName());
+			assertEquals("Last", employee.getLastName());
+			assertEquals("First Middle Last", employee.getPartyName());
+			assertEquals("CHN", employee.getBornIn().getCode());
+			assertEquals("USA", employee.getNationality().getCode());
+			assertEquals("F", employee.getGender().getCode());
+			assertEquals("19800201", new SimpleDateFormat("yyyyMMdd").format(employee.getDateOfBirth()));
+			assertEquals("20501231", new SimpleDateFormat("yyyyMMdd").format(employee.getDateOfDeath()));
+
+			assertEquals(Long.valueOf(1), employee.getRoleId());
+			assertEquals("RoleCode", employee.getRoleCode());
+			assertEquals(true, employee.isRoleEnabled());
+			assertEquals(Long.valueOf(1), employee.getPartyId());
+			sessionFactory.getCurrentSession().getTransaction().commit();
 		}
 	}
 }

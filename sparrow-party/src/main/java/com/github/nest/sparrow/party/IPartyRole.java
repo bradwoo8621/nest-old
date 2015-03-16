@@ -3,6 +3,8 @@
  */
 package com.github.nest.sparrow.party;
 
+import com.github.nest.goose.operate.OperateLog;
+
 /**
  * party role interface. <br>
  * TODO no property <code>roleType</code> defined because the class of
@@ -40,16 +42,58 @@ public interface IPartyRole extends IParty {
 	void setRoleCode(String roleCode);
 
 	/**
-	 * is enabled or not?
+	 * is role enabled or not?
 	 * 
 	 * @return
 	 */
-	boolean isEnabled();
+	Boolean isRoleEnabled();
 
 	/**
-	 * set enabled
+	 * set role enabled
 	 * 
 	 * @param enabled
 	 */
-	void setEnabled(boolean enabled);
+	void setRoleEnabled(Boolean enabled);
+
+	/**
+	 * get operate log
+	 * 
+	 * @return
+	 */
+	OperateLog getRoleOperateLog();
+
+	/**
+	 * set operate log
+	 * 
+	 * @param operateLog
+	 */
+	void setRoleOperateLog(OperateLog operateLog);
+
+	/**
+	 * get optimistic lock
+	 * 
+	 * @return
+	 */
+	Long getRoleOptimisticLock();
+
+	/**
+	 * set optimistic lock
+	 * 
+	 * @param optimisticLock
+	 */
+	void setRoleOptimisticLock(Long optimisticLock);
+
+	/**
+	 * get party
+	 * 
+	 * @return
+	 */
+	IParty getParty();
+
+	/**
+	 * set party
+	 * 
+	 * @param party
+	 */
+	void setParty(IParty party);
 }

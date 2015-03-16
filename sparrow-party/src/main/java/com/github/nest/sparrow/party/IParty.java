@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.github.nest.goose.operate.OperateLog;
-import com.github.nest.sparrow.party.codes.IPartyType;
 
 /**
  * party interface
@@ -20,84 +19,84 @@ public interface IParty extends Serializable {
 	 * 
 	 * @return
 	 */
-	Long getId();
+	Long getPartyId();
 
 	/**
 	 * set id
 	 * 
 	 * @param id
 	 */
-	void setId(Long id);
-
-	/**
-	 * get party type
-	 * 
-	 * @return
-	 */
-	IPartyType getType();
-
-	/**
-	 * set party type
-	 * 
-	 * @param type
-	 */
-	void setType(IPartyType type);
+	void setPartyId(Long id);
 
 	/**
 	 * get name of party
 	 * 
 	 * @return
 	 */
-	String getName();
+	String getPartyName();
 
 	/**
 	 * set name
 	 * 
 	 * @param name
 	 */
-	void setName(String name);
+	void setPartyName(String name);
 
 	/**
 	 * get code of party. code is unique in whole system.
 	 * 
 	 * @return
 	 */
-	String getCode();
+	String getPartyCode();
 
 	/**
 	 * set code
 	 * 
 	 * @param code
 	 */
-	void setCode(String code);
+	void setPartyCode(String code);
 
 	/**
 	 * get addresses of party
 	 * 
 	 * @return
 	 */
-	List<IAddress> getAddresses();
+	List<IAddress> getPartyAddresses();
 
 	/**
 	 * set address
 	 * 
 	 * @param addresses
 	 */
-	void setAddresses(List<IAddress> addresses);
+	void setPartyAddresses(List<IAddress> addresses);
+
+	/**
+	 * is party enabled
+	 * 
+	 * @return
+	 */
+	Boolean isPartyEnabled();
+
+	/**
+	 * set party enabled
+	 * 
+	 * @param enabled
+	 */
+	void setPartyEnabled(Boolean enabled);
 
 	/**
 	 * get operate log
 	 * 
 	 * @return
 	 */
-	OperateLog getOperateLog();
+	OperateLog getPartyOperateLog();
 
 	/**
 	 * set operate log
 	 * 
 	 * @param operateLog
 	 */
-	void setOperateLog(OperateLog operateLog);
+	void setPartyOperateLog(OperateLog operateLog);
 
 	/**
 	 * get optimistic lock

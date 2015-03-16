@@ -788,6 +788,12 @@ public class HibernatePersistentConfigurationInitializer implements IPersistentC
 			// treated as many-to-one relationship
 			manyToOneElement = DocumentHelper.createElement("many-to-one");
 			manyToOneElement.addAttribute("column", column.getForeignKeyColumnName());
+			if (StringUtils.isNotBlank(((IStandalonePersistentBeanDescriptor) referredBean)
+					.getDiscriminatorColumnName())) {
+				// the referred bean is polymorphic, it pays at the expense of
+				// performance.
+				manyToOneElement.addAttribute("lazy", "false");
+			}
 		} else {
 			// other type beans, treated as embedded bean
 			manyToOneElement = DocumentHelper.createElement("component");

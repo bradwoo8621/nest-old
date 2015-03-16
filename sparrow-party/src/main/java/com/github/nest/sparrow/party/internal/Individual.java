@@ -14,15 +14,13 @@ import com.github.nest.goose.location.ICountry;
 import com.github.nest.sparrow.party.IEducationExperience;
 import com.github.nest.sparrow.party.IIndividual;
 import com.github.nest.sparrow.party.IWorkExperience;
-import com.github.nest.sparrow.party.codes.IPartyType;
-import com.github.nest.sparrow.party.internal.codes.PartyType;
 
 /**
  * individual party implementation
  * 
  * @author brad.wu
  */
-public abstract class Individual extends Party implements IIndividual {
+public class Individual extends Party implements IIndividual {
 	private static final long serialVersionUID = -8038640541833998256L;
 
 	private String idNumber = null;
@@ -40,25 +38,6 @@ public abstract class Individual extends Party implements IIndividual {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#getType()
-	 */
-	@Override
-	public IPartyType getType() {
-		return PartyType.INDIVIDUAL;
-	}
-
-	/**
-	 * do nothing
-	 * 
-	 * @see com.github.nest.sparrow.party.IParty#setType(com.github.nest.sparrow.party.codes.IPartyType)
-	 */
-	@Override
-	public void setType(IPartyType type) {
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
 	 * @see com.github.nest.sparrow.party.IIndividual#getIdNumber()
 	 */
 	@Override
@@ -67,8 +46,9 @@ public abstract class Individual extends Party implements IIndividual {
 	}
 
 	/**
-	 * @param idNumber
-	 *            the idNumber to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IIndividual#setIdNumber(java.lang.String)
 	 */
 	public void setIdNumber(String idNumber) {
 		this.idNumber = idNumber;
@@ -85,8 +65,9 @@ public abstract class Individual extends Party implements IIndividual {
 	}
 
 	/**
-	 * @param gender
-	 *            the gender to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IIndividual#setGender(com.github.nest.goose.human.IGender)
 	 */
 	public void setGender(IGender gender) {
 		this.gender = gender;
@@ -95,11 +76,20 @@ public abstract class Individual extends Party implements IIndividual {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.internal.Party#getName()
+	 * @see com.github.nest.sparrow.party.internal.Party#getPartyName()
 	 */
 	@Override
-	public String getName() {
+	public String getPartyName() {
 		return IndividualNameConcatenator.concat(this.getFirstName(), this.getMiddleName(), this.getLastName());
+	}
+
+	/**
+	 * do nothing
+	 * 
+	 * @see com.github.nest.sparrow.party.internal.Party#setPartyName(java.lang.String)
+	 */
+	@Override
+	public void setPartyName(String name) {
 	}
 
 	/**
@@ -113,8 +103,9 @@ public abstract class Individual extends Party implements IIndividual {
 	}
 
 	/**
-	 * @param firstName
-	 *            the firstName to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IIndividual#setFirstName(java.lang.String)
 	 */
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
@@ -131,8 +122,9 @@ public abstract class Individual extends Party implements IIndividual {
 	}
 
 	/**
-	 * @param middleName
-	 *            the middleName to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IIndividual#setMiddleName(java.lang.String)
 	 */
 	public void setMiddleName(String middleName) {
 		this.middleName = middleName;
@@ -149,8 +141,9 @@ public abstract class Individual extends Party implements IIndividual {
 	}
 
 	/**
-	 * @param lastName
-	 *            the lastName to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IIndividual#setLastName(java.lang.String)
 	 */
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
@@ -194,8 +187,9 @@ public abstract class Individual extends Party implements IIndividual {
 	}
 
 	/**
-	 * @param dateOfBirth
-	 *            the dateOfBirth to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IIndividual#setDateOfBirth(java.util.Date)
 	 */
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
@@ -212,8 +206,9 @@ public abstract class Individual extends Party implements IIndividual {
 	}
 
 	/**
-	 * @param dateOfDeath
-	 *            the dateOfDeath to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IIndividual#setDateOfDeath(java.util.Date)
 	 */
 	public void setDateOfDeath(Date dateOfDeath) {
 		this.dateOfDeath = dateOfDeath;
@@ -230,8 +225,9 @@ public abstract class Individual extends Party implements IIndividual {
 	}
 
 	/**
-	 * @param bornIn
-	 *            the bornIn to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IIndividual#setBornIn(com.github.nest.goose.location.ICountry)
 	 */
 	public void setBornIn(ICountry bornIn) {
 		this.bornIn = bornIn;
@@ -248,8 +244,9 @@ public abstract class Individual extends Party implements IIndividual {
 	}
 
 	/**
-	 * @param nationality
-	 *            the nationality to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IIndividual#setNationality(com.github.nest.goose.location.ICountry)
 	 */
 	public void setNationality(ICountry nationality) {
 		this.nationality = nationality;
@@ -266,8 +263,9 @@ public abstract class Individual extends Party implements IIndividual {
 	}
 
 	/**
-	 * @param workExperiences
-	 *            the workExperiences to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IIndividual#setWorkExperiences(java.util.List)
 	 */
 	public void setWorkExperiences(List<IWorkExperience> workExperiences) {
 		this.workExperiences = workExperiences;
@@ -284,8 +282,9 @@ public abstract class Individual extends Party implements IIndividual {
 	}
 
 	/**
-	 * @param educationExperiences
-	 *            the educationExperiences to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IIndividual#setEducationExperiences(java.util.List)
 	 */
 	public void setEducationExperiences(List<IEducationExperience> educationExperiences) {
 		this.educationExperiences = educationExperiences;

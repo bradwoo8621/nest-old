@@ -14,7 +14,7 @@ import com.github.nest.sparrow.party.IParty;
  * 
  * @author brad.wu
  */
-public abstract class Party implements IParty {
+public class Party implements IParty {
 	private static final long serialVersionUID = 7917826523152991021L;
 
 	private Long id = null;
@@ -23,104 +23,105 @@ public abstract class Party implements IParty {
 	private List<IAddress> addresses = null;
 	private OperateLog operateLog = null;
 	private Long partyOptimisticLock = null;
+	private Boolean partyEnabled = Boolean.TRUE;
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#getId()
+	 * @see com.github.nest.sparrow.party.IParty#getPartyId()
 	 */
 	@Override
-	public Long getId() {
+	public Long getPartyId() {
 		return this.id;
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#setId(java.lang.Long)
+	 * @see com.github.nest.sparrow.party.IParty#setPartyId(java.lang.Long)
 	 */
 	@Override
-	public void setId(Long id) {
+	public void setPartyId(Long id) {
 		this.id = id;
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#getName()
+	 * @see com.github.nest.sparrow.party.IParty#getPartyName()
 	 */
 	@Override
-	public String getName() {
+	public String getPartyName() {
 		return this.name;
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#setName(java.lang.String)
+	 * @see com.github.nest.sparrow.party.IParty#setPartyName(java.lang.String)
 	 */
 	@Override
-	public void setName(String name) {
+	public void setPartyName(String name) {
 		this.name = name;
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#getCode()
+	 * @see com.github.nest.sparrow.party.IParty#getPartyCode()
 	 */
 	@Override
-	public String getCode() {
+	public String getPartyCode() {
 		return this.code;
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#setCode(java.lang.String)
+	 * @see com.github.nest.sparrow.party.IParty#setPartyCode(java.lang.String)
 	 */
 	@Override
-	public void setCode(String code) {
+	public void setPartyCode(String code) {
 		this.code = code;
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#getAddresses()
+	 * @see com.github.nest.sparrow.party.IParty#getPartyAddresses()
 	 */
 	@Override
-	public List<IAddress> getAddresses() {
+	public List<IAddress> getPartyAddresses() {
 		return this.addresses;
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#setAddresses(java.util.List)
+	 * @see com.github.nest.sparrow.party.IParty#setPartyAddresses(java.util.List)
 	 */
 	@Override
-	public void setAddresses(List<IAddress> addresses) {
+	public void setPartyAddresses(List<IAddress> addresses) {
 		this.addresses = addresses;
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#getOperateLog()
+	 * @see com.github.nest.sparrow.party.IParty#getPartyOperateLog()
 	 */
 	@Override
-	public OperateLog getOperateLog() {
+	public OperateLog getPartyOperateLog() {
 		return this.operateLog;
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IParty#setOperateLog(com.github.nest.goose.operate.OperateLog)
+	 * @see com.github.nest.sparrow.party.IParty#setPartyOperateLog(com.github.nest.goose.operate.OperateLog)
 	 */
 	@Override
-	public void setOperateLog(OperateLog operateLog) {
+	public void setPartyOperateLog(OperateLog operateLog) {
 		this.operateLog = operateLog;
 	}
 
@@ -142,5 +143,25 @@ public abstract class Party implements IParty {
 	@Override
 	public void setPartyOptimisticLock(Long optimisticLock) {
 		this.partyOptimisticLock = optimisticLock;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#isPartyEnabled()
+	 */
+	@Override
+	public Boolean isPartyEnabled() {
+		return this.partyEnabled;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.IParty#setPartyEnabled(java.lang.Boolean)
+	 */
+	@Override
+	public void setPartyEnabled(Boolean enabled) {
+		this.partyEnabled = enabled;
 	}
 }

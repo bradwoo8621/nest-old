@@ -45,7 +45,7 @@ public abstract class AbstractPersistentBeanDescriptor extends BeanDescriptor im
 					Collection<IPropertyDescriptor> descriptors = this.getProperties();
 					for (IPropertyDescriptor descriptor : descriptors) {
 						if (descriptor instanceof IPersistentBeanPropertyDescriptor) {
-							if (!this.isAbandoned(descriptor.getName())) {
+							if (descriptor.getResourceDescriptor() == this || !this.isAbandoned(descriptor.getName())) {
 								// skip the abandoned property
 								list.add((IPersistentBeanPropertyDescriptor) descriptor);
 							}

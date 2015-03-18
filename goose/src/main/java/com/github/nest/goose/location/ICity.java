@@ -24,4 +24,18 @@ public interface ICity extends Serializable {
 	 * @return
 	 */
 	String getName();
+
+	/**
+	 * get province code
+	 * 
+	 * @return
+	 */
+	String getProvinceCode();
+
+	/**
+	 * get country code
+	 * 
+	 * @return
+	 */
+	String getCountryCode();
 }

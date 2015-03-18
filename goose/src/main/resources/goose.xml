@@ -22,8 +22,13 @@
 		<property name="descriptors">
 			<list>
 				<ref bean="OperateLog" />
-				<ref bean="Country" />
+
 				<ref bean="Gender" />
+
+				<ref bean="Country" />
+				<ref bean="Province" />
+				<ref bean="City" />
+				<ref bean="District" />
 			</list>
 		</property>
 	</bean>
@@ -127,6 +132,117 @@
 					class="com.github.nest.goose.internal.location.CountryCacheProvider"
 					init-method="readFromClassPath"
 					p:fileClassPath="/countries.list" />
+			</list>
+		</property>
+	</bean>
+	<!-- com.github.nest.goose.internal.location.Province -->
+	<bean
+		id="Province"
+		class="com.github.nest.arcteryx.meta.beans.internal.CachedBeanDescriptor"
+		p:resourceClass="com.github.nest.goose.internal.location.Province"
+		p:name="Province"
+		p:description="Province"
+		scope="singleton">
+		<property name="properties">
+			<list>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="name"
+					p:description="Name of province" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="code"
+					p:description="Code of province" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="countryCode"
+					p:description="Country code of province" />
+			</list>
+		</property>
+		<property name="operators">
+			<list>
+				<bean
+					class="com.github.nest.goose.internal.location.ProvinceCacheProvider"
+					init-method="readFromClassPath"
+					p:fileClassPath="/provinces.list" />
+			</list>
+		</property>
+	</bean>
+	<!-- com.github.nest.goose.internal.location.City -->
+	<bean
+		id="City"
+		class="com.github.nest.arcteryx.meta.beans.internal.CachedBeanDescriptor"
+		p:resourceClass="com.github.nest.goose.internal.location.City"
+		p:name="City"
+		p:description="City"
+		scope="singleton">
+		<property name="properties">
+			<list>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="name"
+					p:description="Name of city" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="code"
+					p:description="Code of city" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="provinceCode"
+					p:description="Province code of city" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="countryCode"
+					p:description="Country code of city" />
+			</list>
+		</property>
+		<property name="operators">
+			<list>
+				<bean
+					class="com.github.nest.goose.internal.location.CityCacheProvider"
+					init-method="readFromClassPath"
+					p:fileClassPath="/cities.list" />
+			</list>
+		</property>
+	</bean>
+	<!-- com.github.nest.goose.internal.location.District -->
+	<bean
+		id="District"
+		class="com.github.nest.arcteryx.meta.beans.internal.CachedBeanDescriptor"
+		p:resourceClass="com.github.nest.goose.internal.location.District"
+		p:name="District"
+		p:description="District"
+		scope="singleton">
+		<property name="properties">
+			<list>
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="name"
+					p:description="Name of district" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="code"
+					p:description="Code of district" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="cityCode"
+					p:description="City code of district" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="provinceCode"
+					p:description="Province code of district" />
+				<bean
+					class="com.github.nest.arcteryx.meta.beans.internal.BeanPropertyDescriptor"
+					p:name="countryCode"
+					p:description="Country code of district" />
+			</list>
+		</property>
+		<property name="operators">
+			<list>
+				<bean
+					class="com.github.nest.goose.internal.location.DistrictCacheProvider"
+					init-method="readFromClassPath"
+					p:fileClassPath="/districts.list" />
 			</list>
 		</property>
 	</bean>

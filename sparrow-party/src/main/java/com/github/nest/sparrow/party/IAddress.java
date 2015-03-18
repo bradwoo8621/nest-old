@@ -3,6 +3,8 @@
  */
 package com.github.nest.sparrow.party;
 
+import java.io.Serializable;
+
 import com.github.nest.goose.location.ICity;
 import com.github.nest.goose.location.ICountry;
 import com.github.nest.goose.location.IDistrict;
@@ -13,13 +15,32 @@ import com.github.nest.goose.location.IProvince;
  * 
  * @author brad.wu
  */
-public interface IAddress {
+public interface IAddress extends Serializable {
+	/**
+	 * get address id
+	 * 
+	 * @return
+	 */
+	Long getAddressId();
+
+	/**
+	 * set address id
+	 */
+	void setAddressId(Long addressId);
+
 	/**
 	 * get postcode
 	 * 
 	 * @return
 	 */
 	String getPostcode();
+
+	/**
+	 * set postcode
+	 * 
+	 * @param postcode
+	 */
+	void setPostcode(String postcode);
 
 	/**
 	 * get district
@@ -29,11 +50,25 @@ public interface IAddress {
 	IDistrict getDistrict();
 
 	/**
+	 * set district
+	 * 
+	 * @param district
+	 */
+	void setDistrict(IDistrict district);
+
+	/**
 	 * get city
 	 * 
 	 * @return
 	 */
 	ICity getCity();
+
+	/**
+	 * set city
+	 * 
+	 * @param city
+	 */
+	void setCity(ICity city);
 
 	/**
 	 * get province
@@ -43,11 +78,25 @@ public interface IAddress {
 	IProvince getProvince();
 
 	/**
+	 * set province
+	 * 
+	 * @param province
+	 */
+	void setProvince(IProvince province);
+
+	/**
 	 * get country
 	 * 
 	 * @return
 	 */
 	ICountry getCountry();
+
+	/**
+	 * set country
+	 * 
+	 * @param country
+	 */
+	void setCountry(ICountry country);
 
 	/**
 	 * get address line 1
@@ -57,11 +106,25 @@ public interface IAddress {
 	String getAddressLine1();
 
 	/**
+	 * set addressline1
+	 * 
+	 * @param addressLine1
+	 */
+	void setAddressLine1(String addressLine1);
+
+	/**
 	 * get address line 2
 	 * 
 	 * @return
 	 */
 	String getAddressLine2();
+
+	/**
+	 * set addressline2
+	 * 
+	 * @param addressLine2
+	 */
+	void setAddressLine2(String addressLine2);
 
 	/**
 	 * get address line 3
@@ -71,11 +134,25 @@ public interface IAddress {
 	String getAddressLine3();
 
 	/**
+	 * set addressline3
+	 * 
+	 * @param addressLine3
+	 */
+	void setAddressLine3(String addressLine3);
+
+	/**
 	 * get address line 4
 	 * 
 	 * @return
 	 */
 	String getAddressLine4();
+
+	/**
+	 * set addressline4
+	 * 
+	 * @param addressLine4
+	 */
+	void setAddressLine4(String addressLine4);
 
 	/**
 	 * get address line 5
@@ -85,37 +162,51 @@ public interface IAddress {
 	String getAddressLine5();
 
 	/**
-	 * get telephone number
+	 * set addressline5
+	 * 
+	 * @param addressLine5
+	 */
+	void setAddressLine5(String addressLine5);
+
+	/**
+	 * get telephone
 	 * 
 	 * @return
 	 */
 	String getTelephone();
 
 	/**
-	 * get cell phone number
+	 * set telephone
 	 * 
-	 * @return
+	 * @param telephone
 	 */
-	String getCellphone();
+	void setTelephone(String telephone);
 
 	/**
-	 * get fax number
+	 * get fax
 	 * 
 	 * @return
 	 */
 	String getFax();
 
 	/**
-	 * get email
+	 * set fax
 	 * 
-	 * @return
+	 * @param fax
 	 */
-	String getEmail();
+	void setFax(String fax);
 
 	/**
-	 * get post office box number
+	 * is enabled or not
 	 * 
 	 * @return
 	 */
-	String getPOBox();
+	Boolean isEnabled();
+
+	/**
+	 * set enabled
+	 * 
+	 * @param enabled
+	 */
+	void setEnabled(Boolean enabled);
 }

@@ -4,6 +4,7 @@
 package com.github.nest.sparrow.party;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.BasicConfigurator;
@@ -31,9 +34,16 @@ import com.github.nest.arcteryx.persistent.internal.hibernate.HibernatePersisten
 import com.github.nest.goose.human.IGender;
 import com.github.nest.goose.internal.Code;
 import com.github.nest.goose.internal.human.Gender;
+import com.github.nest.goose.internal.location.City;
 import com.github.nest.goose.internal.location.Country;
+import com.github.nest.goose.internal.location.District;
+import com.github.nest.goose.internal.location.Province;
+import com.github.nest.goose.location.ICity;
 import com.github.nest.goose.location.ICountry;
+import com.github.nest.goose.location.IDistrict;
+import com.github.nest.goose.location.IProvince;
 import com.github.nest.goose.operate.OperateLog;
+import com.github.nest.sparrow.party.internal.Address;
 import com.github.nest.sparrow.party.internal.Employee;
 import com.github.nest.sparrow.party.internal.Individual;
 
@@ -80,6 +90,23 @@ public class TestSparrowPartyXML {
 					+ "BORN_IN_COUNTRY_CODE VARCHAR(3), "//
 					+ "NATIONALITY_CODE VARCHAR(3))");
 			stat.execute("create sequence S_PARTY AS BIGINT start with 1");
+
+			stat.execute("create table T_PARTY_ADDRESS(ADDRESS_ID BIGINT, "//
+					+ "PARTY_ID BIGINT, "//
+					+ "POSTCODE VARCHAR(10), "//
+					+ "DISTRICT_CODE VARCHAR(5), "//
+					+ "CITY_CODE VARCHAR(5), "//
+					+ "PROVINCE_CODE VARCHAR(5), "//
+					+ "COUNTRY_CODE VARCHAR(3), "//
+					+ "ADDRESS_LINE1 VARCHAR(30), "//
+					+ "ADDRESS_LINE2 VARCHAR(30), "//
+					+ "ADDRESS_LINE3 VARCHAR(30), "//
+					+ "ADDRESS_LINE4 VARCHAR(30), "//
+					+ "ADDRESS_LINE5 VARCHAR(30), "//
+					+ "TELEPHONE VARCHAR(20), " //
+					+ "FAX VARCHAR(20), " //
+					+ "IS_ENABLED INT)");
+			stat.execute("create sequence S_PARTY_ADDRESS AS BIGINT start with 1");
 
 			stat.execute("create table T_PARTY_ROLE(PARTY_ROLE_ID BIGINT, "//
 					+ "PARTY_ROLE_CODE VARCHAR(10), "//
@@ -136,6 +163,26 @@ public class TestSparrowPartyXML {
 			employee.setDateOfBirth(DateUtils.parseDate("19800201", "yyyyMMdd"));
 			employee.setDateOfDeath(DateUtils.parseDate("20501231", "yyyyMMdd"));
 
+			List<IAddress> addresses = new ArrayList<IAddress>();
+			Address address = new Address();
+			address.setPostcode("100001");
+			address.setCountry((ICountry) countryDescriptor.getFromCache(new Code("CHN")));
+			address.setProvince((IProvince) ((ICachedBeanDescriptor) goose.get(Province.class)).getFromCache(new Code(
+					"SH")));
+			address.setCity((ICity) ((ICachedBeanDescriptor) goose.get(City.class)).getFromCache(new Code("SH")));
+			address.setDistrict((IDistrict) ((ICachedBeanDescriptor) goose.get(District.class)).getFromCache(new Code(
+					"HP")));
+			address.setAddressLine1("line1");
+			address.setAddressLine2("line2");
+			address.setAddressLine3("line3");
+			address.setAddressLine4("line4");
+			address.setAddressLine5("line5");
+			address.setTelephone("123456789");
+			address.setFax("987654321");
+			address.setEnabled(Boolean.TRUE);
+			addresses.add(address);
+			employee.setPartyAddresses(addresses);
+
 			OperateLog log = new OperateLog();
 			log.setCreateTime(new Timestamp(now));
 			log.setCreateUserId(100001l);
@@ -168,6 +215,24 @@ public class TestSparrowPartyXML {
 			assertEquals("F", rst.getString("GENDER_CODE"));
 			assertEquals("19800201", new SimpleDateFormat("yyyyMMdd").format(rst.getDate("DATE_OF_BIRTH")));
 			assertEquals("20501231", new SimpleDateFormat("yyyyMMdd").format(rst.getDate("DATE_OF_DEATH")));
+			rst.close();
+			rst = stat.executeQuery("select * from T_PARTY_ADDRESS ORDER BY ADDRESS_ID");
+			rst.next();
+			assertEquals(1, rst.getLong("ADDRESS_ID"));
+			assertEquals(1, rst.getLong("PARTY_ID"));
+			assertEquals("100001", rst.getString("POSTCODE"));
+			assertEquals("CHN", rst.getString("COUNTRY_CODE"));
+			assertEquals("SH", rst.getString("PROVINCE_CODE"));
+			assertEquals("SH", rst.getString("CITY_CODE"));
+			assertEquals("HP", rst.getString("DISTRICT_CODE"));
+			assertEquals("line1", rst.getString("ADDRESS_LINE1"));
+			assertEquals("line2", rst.getString("ADDRESS_LINE2"));
+			assertEquals("line3", rst.getString("ADDRESS_LINE3"));
+			assertEquals("line4", rst.getString("ADDRESS_LINE4"));
+			assertEquals("line5", rst.getString("ADDRESS_LINE5"));
+			assertEquals("123456789", rst.getString("TELEPHONE"));
+			assertEquals("987654321", rst.getString("FAX"));
+			assertEquals(true, rst.getBoolean("IS_ENABLED"));
 			rst.close();
 			rst = stat.executeQuery("SELECT * FROM T_PARTY_ROLE");
 			rst.next();
@@ -203,10 +268,29 @@ public class TestSparrowPartyXML {
 			assertEquals("19800201", new SimpleDateFormat("yyyyMMdd").format(employee.getDateOfBirth()));
 			assertEquals("20501231", new SimpleDateFormat("yyyyMMdd").format(employee.getDateOfDeath()));
 
+			assertNotNull(employee.getPartyAddresses());
+			assertEquals(1, employee.getPartyAddresses().size());
+			IAddress address = employee.getPartyAddresses().get(0);
+			assertEquals(Long.valueOf(1), address.getAddressId());
+			assertEquals("100001", address.getPostcode());
+			assertEquals("CHN", address.getCountry().getCode());
+			assertEquals("SH", address.getProvince().getCode());
+			assertEquals("SH", address.getCity().getCode());
+			assertEquals("HP", address.getDistrict().getCode());
+			assertEquals("line1", address.getAddressLine1());
+			assertEquals("line2", address.getAddressLine2());
+			assertEquals("line3", address.getAddressLine3());
+			assertEquals("line4", address.getAddressLine4());
+			assertEquals("line5", address.getAddressLine5());
+			assertEquals("123456789", address.getTelephone());
+			assertEquals("987654321", address.getFax());
+			assertEquals(true, address.isEnabled());
+
 			assertEquals(Long.valueOf(1), employee.getRoleId());
 			assertEquals("RoleCode", employee.getRoleCode());
 			assertEquals(true, employee.isRoleEnabled());
 			assertEquals(Long.valueOf(1), employee.getPartyId());
+
 			sessionFactory.getCurrentSession().getTransaction().commit();
 		}
 	}

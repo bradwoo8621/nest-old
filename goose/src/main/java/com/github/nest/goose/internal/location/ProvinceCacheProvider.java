@@ -4,11 +4,11 @@
 package com.github.nest.goose.internal.location;
 
 /**
- * country cache provider
+ * province cache provider
  * 
  * @author brad.wu
  */
-public class CountryCacheProvider extends FileLineCacheProvider {
+public class ProvinceCacheProvider extends FileLineCacheProvider {
 	/**
 	 * create bean by given line
 	 * 
@@ -18,11 +18,10 @@ public class CountryCacheProvider extends FileLineCacheProvider {
 	@SuppressWarnings("unchecked")
 	protected <T> T createBean(String line) {
 		String[] ss = line.split("[|]");
-		Country country = new Country();
-		country.setAbbr2(ss[0]);
-		country.setAbbr3(ss[1]);
-		country.setInternationalDialingCode(ss[2]);
-		country.setName(ss[3]);
-		return (T) country;
+		Province province = new Province();
+		province.setCode(ss[0]);
+		province.setName(ss[1]);
+		province.setCountryCode(ss[2]);
+		return (T) province;
 	}
 }

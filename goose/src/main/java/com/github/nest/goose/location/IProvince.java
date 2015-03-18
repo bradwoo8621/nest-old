@@ -24,4 +24,11 @@ public interface IProvince extends Serializable {
 	 * @return
 	 */
 	String getName();
+
+	/**
+	 * get country code
+	 * 
+	 * @return
+	 */
+	String getCountryCode();
 }

@@ -48,7 +48,7 @@
 
 				<ref bean="PartyRole" />
 				<!-- Individual party role -->
-				<ref bean="Employee" />
+				<ref bean="MyEmployee" />
 				<!-- Organization party role -->
 				<ref bean="MyBranch" />
 			</list>
@@ -866,18 +866,21 @@
 			</list>
 		</property>
 	</bean>
-	<!-- com.github.nest.sparrow.party.internal.Employee -->
+	<!-- com.github.nest.sparrow.party.internal.MyEmployee -->
 	<bean
-		id="Employee"
+		id="MyEmployee"
 		class="com.github.nest.arcteryx.persistent.internal.StandalonePersistentBeanDescriptor"
-		p:resourceClass="com.github.nest.sparrow.party.internal.Employee"
-		p:name="Employee"
+		p:resourceClass="com.github.nest.sparrow.party.internal.MyEmployee"
+		p:name="MyEmployee"
 		p:description="Individual employee, which will be treated as a party role."
 		scope="singleton"
 		p:tableName="T_EMPLOYEE"
 		p:extendsFromBeanClass="com.github.nest.sparrow.party.internal.PartyRole"
-		p:discriminatorValue="EMP"
 		p:foreignKeyColumnName="EMPLOYEE_ID">
+		<property name="discriminatorValue">
+			<util:constant
+				static-field="com.github.nest.sparrow.party.IPartyConstants.ROLE_CODE_MY_EMPLOYEE" />
+		</property>
 		<property
 			name="abandonedProperties"
 			ref="PartyProperties" />
@@ -908,8 +911,11 @@
 		scope="singleton"
 		p:tableName="T_MY_BRANCH"
 		p:extendsFromBeanClass="com.github.nest.sparrow.party.internal.PartyRole"
-		p:discriminatorValue="MBR"
 		p:foreignKeyColumnName="MY_BRANCH_ID">
+		<property name="discriminatorValue">
+			<util:constant
+				static-field="com.github.nest.sparrow.party.IPartyConstants.ROLE_CODE_MY_BRANCH" />
+		</property>
 		<property
 			name="abandonedProperties"
 			ref="PartyProperties" />

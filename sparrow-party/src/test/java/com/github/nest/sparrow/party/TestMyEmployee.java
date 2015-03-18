@@ -44,13 +44,13 @@ import com.github.nest.goose.location.IDistrict;
 import com.github.nest.goose.location.IProvince;
 import com.github.nest.goose.operate.OperateLog;
 import com.github.nest.sparrow.party.internal.Address;
-import com.github.nest.sparrow.party.internal.Employee;
+import com.github.nest.sparrow.party.internal.MyEmployee;
 import com.github.nest.sparrow.party.internal.Individual;
 
 /**
  * @author brad.wu
  */
-public class TestEmployee {
+public class TestMyEmployee {
 	private static final String SPARROW_PARTY_CONTEXT_ID = "sparrow-party-context";
 	private static final String GOOSE_CONTEXT_ID = "goose-context";
 
@@ -76,7 +76,7 @@ public class TestEmployee {
 
 		IResourceDescriptorContext sparrowParty = ResourceDescriptorContextRepository
 				.getContext(SPARROW_PARTY_CONTEXT_ID);
-		IPersistentBeanDescriptor employeeDescriptor = sparrowParty.get(Employee.class);
+		IPersistentBeanDescriptor employeeDescriptor = sparrowParty.get(MyEmployee.class);
 
 		IPersistentConfiguration configuration = sparrowParty
 				.getInitializedData(IPersistentConfigurationInitializer.KEY);
@@ -86,7 +86,7 @@ public class TestEmployee {
 
 		{
 			sessionFactory.getCurrentSession().beginTransaction();
-			Employee employee = new Employee();
+			MyEmployee employee = new MyEmployee();
 			employee.setParty(new Individual());
 			employee.setPartyCode("PartyCode");
 
@@ -179,7 +179,7 @@ public class TestEmployee {
 			rst.next();
 			assertEquals(1, rst.getLong("PARTY_ROLE_ID"));
 			assertEquals("RoleCode", rst.getString("PARTY_ROLE_CODE"));
-			assertEquals("EMP", rst.getString("PARTY_ROLE_TYPE"));
+			assertEquals("MEM", rst.getString("PARTY_ROLE_TYPE"));
 			assertEquals(true, rst.getBoolean("PARTY_ROLE_ENABLED"));
 			assertEquals(1, rst.getLong("PARTY_ID"));
 			rst.close();
@@ -193,7 +193,7 @@ public class TestEmployee {
 
 		{
 			sessionFactory.getCurrentSession().beginTransaction();
-			Employee employee = employeeDescriptor.getLoader().load(1l);
+			MyEmployee employee = employeeDescriptor.getLoader().load(1l);
 			employee.getParty();
 
 			assertEquals(Long.valueOf(1), employee.getPartyId());

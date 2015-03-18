@@ -46,7 +46,7 @@
 				<ref bean="Organization" />
 
 				<ref bean="PartyRole" />
-				<ref bean="Employee" />
+				<ref bean="MyEmployee" />
 			</list>
 		</property>
 		<property name="operatorProviders">
@@ -657,15 +657,15 @@
 	</bean>
 
 	<bean
-		id="Employee"
+		id="MyEmployee"
 		class="com.github.nest.arcteryx.persistent.internal.StandalonePersistentBeanDescriptor"
-		p:resourceClass="com.github.nest.sparrow.party.internal.Employee"
-		p:name="Employee"
+		p:resourceClass="com.github.nest.sparrow.party.internal.MyEmployee"
+		p:name="MyEmployee"
 		p:description="Individual employee, which will be treated as a party role."
 		scope="singleton"
 		p:tableName="T_EMPLOYEE"
 		p:extendsFromBeanClass="com.github.nest.sparrow.party.internal.PartyRole"
-		p:discriminatorValue="EMP"
+		p:discriminatorValue="MEM"
 		p:foreignKeyColumnName="EMPLOYEE_ID">
 		<!-- extends Party directly -->
 		<!-- use property of Individual -->

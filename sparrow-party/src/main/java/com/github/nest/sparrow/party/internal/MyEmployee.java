@@ -5,14 +5,14 @@ package com.github.nest.sparrow.party.internal;
 
 import com.github.nest.sparrow.party.generalization.IBranch;
 import com.github.nest.sparrow.party.generalization.IDepartment;
-import com.github.nest.sparrow.party.generalization.IEmpolyee;
+import com.github.nest.sparrow.party.generalization.IEmployee;
 
 /**
  * employee
  * 
  * @author brad.wu
  */
-public class Employee extends IndividualAndRole implements IEmpolyee {
+public class MyEmployee extends IndividualAndRole implements IEmployee {
 	private static final long serialVersionUID = -2292815680913274625L;
 
 	private IBranch branch = null;
@@ -21,7 +21,7 @@ public class Employee extends IndividualAndRole implements IEmpolyee {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.generalization.IEmpolyee#getDepartment()
+	 * @see com.github.nest.sparrow.party.generalization.IEmployee#getDepartment()
 	 */
 	@Override
 	public IDepartment getDepartment() {
@@ -39,7 +39,7 @@ public class Employee extends IndividualAndRole implements IEmpolyee {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.generalization.IEmpolyee#getBranch()
+	 * @see com.github.nest.sparrow.party.generalization.IEmployee#getBranch()
 	 */
 	@Override
 	public IBranch getBranch() {

@@ -34,7 +34,7 @@ import com.github.nest.goose.internal.human.Gender;
 import com.github.nest.goose.internal.location.Country;
 import com.github.nest.goose.location.ICountry;
 import com.github.nest.goose.operate.OperateLog;
-import com.github.nest.sparrow.party.internal.Employee;
+import com.github.nest.sparrow.party.internal.MyEmployee;
 import com.github.nest.sparrow.party.internal.Individual;
 
 /**
@@ -116,7 +116,7 @@ public class TestSeparatedPartyTables {
 
 		IResourceDescriptorContext sparrowParty = ResourceDescriptorContextRepository
 				.getContext(SPARROW_PARTY_CONTEXT_ID);
-		IPersistentBeanDescriptor employeeDescriptor = sparrowParty.get(Employee.class);
+		IPersistentBeanDescriptor employeeDescriptor = sparrowParty.get(MyEmployee.class);
 
 		IPersistentConfiguration configuration = sparrowParty
 				.getInitializedData(IPersistentConfigurationInitializer.KEY);
@@ -126,7 +126,7 @@ public class TestSeparatedPartyTables {
 
 		{
 			sessionFactory.getCurrentSession().beginTransaction();
-			Employee employee = new Employee();
+			MyEmployee employee = new MyEmployee();
 			employee.setParty(new Individual());
 			employee.setPartyCode("PartyCode");
 
@@ -186,7 +186,7 @@ public class TestSeparatedPartyTables {
 			rst.next();
 			assertEquals(1, rst.getLong("PARTY_ROLE_ID"));
 			assertEquals("RoleCode", rst.getString("PARTY_ROLE_CODE"));
-			assertEquals("EMP", rst.getString("PARTY_ROLE_TYPE"));
+			assertEquals("MEM", rst.getString("PARTY_ROLE_TYPE"));
 			assertEquals(true, rst.getBoolean("PARTY_ROLE_ENABLED"));
 			assertEquals(1, rst.getLong("PARTY_ID"));
 			rst.close();
@@ -203,7 +203,7 @@ public class TestSeparatedPartyTables {
 			// T_PARTY/T_INDIVIDUAL/T_ORGANIZATION, maybe with performance
 			// issue. 
 			sessionFactory.getCurrentSession().beginTransaction();
-			Employee employee = employeeDescriptor.getLoader().load(1l);
+			MyEmployee employee = employeeDescriptor.getLoader().load(1l);
 			employee.getParty();
 
 			assertEquals(Long.valueOf(1), employee.getPartyId());

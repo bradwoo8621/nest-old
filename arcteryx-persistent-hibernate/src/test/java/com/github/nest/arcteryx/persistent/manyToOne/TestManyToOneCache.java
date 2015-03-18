@@ -145,7 +145,7 @@ public class TestManyToOneCache {
 		student = studentDescriptor.getLoader().load(101l);
 		assertEquals(101, student.getId().longValue());
 		assertEquals("Student", student.getName());
-		// TODO teacher only contains id value since it is from another domain.
+		// teacher only contains id value since it is from another domain.
 		// must get teacher object manually.
 		assertEquals(1001, student.getTeacher().getId().longValue());
 		assertNull(student.getTeacher().getName());

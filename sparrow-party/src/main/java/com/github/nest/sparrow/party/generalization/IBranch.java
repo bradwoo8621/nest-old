@@ -23,5 +23,5 @@ public interface IBranch extends IOrganization {
 	 * 
 	 * @return
 	 */
-	boolean isHeadOffice();
+	Boolean isHeadOffice();
 }

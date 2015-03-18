@@ -40,7 +40,7 @@ import com.github.nest.sparrow.party.internal.Individual;
 /**
  * @author brad.wu
  */
-public class TestSparrowPartyXML2Tables {
+public class TestSeparatedPartyTables {
 	private static final String SPARROW_PARTY_CONTEXT_ID = "sparrow-party-context";
 	private static final String GOOSE_CONTEXT_ID = "goose-context";
 

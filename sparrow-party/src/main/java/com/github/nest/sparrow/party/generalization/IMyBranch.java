@@ -17,4 +17,11 @@ public interface IMyBranch extends IBranch, IPartyRole {
 	 * @see com.github.nest.sparrow.party.generalization.IBranch#getParentBranch()
 	 */
 	IMyBranch getParentBranch();
+
+	/**
+	 * set parent branch
+	 * 
+	 * @param parentBranch
+	 */
+	void setParentBranch(IMyBranch parentBranch);
 }

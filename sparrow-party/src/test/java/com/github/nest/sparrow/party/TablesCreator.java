@@ -67,11 +67,17 @@ public class TablesCreator {
 				+ "OPTIMISTIC_LOCK BIGINT)");
 		stat.execute("create sequence S_PARTY_ROLE AS BIGINT start with 1");
 
-		stat.execute("create table T_EMPLOYEE(EMPLOYEE_ID BIGINT)");
+		stat.execute("create table T_MY_EMPLOYEE(MY_EMPLOYEE_ID BIGINT, "//
+				+ "BRANCH_ID BIGINT, "//
+				+ "DEPARTMENT_ID BIGINT)");
 
 		stat.execute("create table T_MY_BRANCH(MY_BRANCH_ID BIGINT, "//
 				+ "PARENT_BRANCH_ID BIGINT, "//
 				+ "IS_HEAD_OFFICE INT)");
+
+		stat.execute("create table T_MY_DEPARTMENT(MY_DEPARTMENT_ID BIGINT, "//
+				+ "BRANCH_ID BIGINT, "//
+				+ "PARENT_DEPARTMENT_ID BIGINT)");
 
 		conn.commit();
 		conn.close();

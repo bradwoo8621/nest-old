@@ -3,20 +3,20 @@
  */
 package com.github.nest.sparrow.party.internal;
 
-import com.github.nest.sparrow.party.generalization.IBranch;
-import com.github.nest.sparrow.party.generalization.IDepartment;
-import com.github.nest.sparrow.party.generalization.IEmployee;
+import com.github.nest.sparrow.party.generalization.IMyBranch;
+import com.github.nest.sparrow.party.generalization.IMyDepartment;
+import com.github.nest.sparrow.party.generalization.IMyEmployee;
 
 /**
- * employee
+ * my employee
  * 
  * @author brad.wu
  */
-public class MyEmployee extends IndividualAndRole implements IEmployee {
+public class MyEmployee extends IndividualAndRole implements IMyEmployee {
 	private static final long serialVersionUID = -2292815680913274625L;
 
-	private IBranch branch = null;
-	private IDepartment department = null;
+	private IMyBranch branch = null;
+	private IMyDepartment department = null;
 
 	/**
 	 * (non-Javadoc)
@@ -24,15 +24,17 @@ public class MyEmployee extends IndividualAndRole implements IEmployee {
 	 * @see com.github.nest.sparrow.party.generalization.IEmployee#getDepartment()
 	 */
 	@Override
-	public IDepartment getDepartment() {
+	public IMyDepartment getDepartment() {
 		return this.department;
 	}
 
 	/**
-	 * @param department
-	 *            the department to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.generalization.IMyEmployee#setDepartment(com.github.nest.sparrow.party.generalization.IMyDepartment)
 	 */
-	public void setDepartment(IDepartment department) {
+	@Override
+	public void setDepartment(IMyDepartment department) {
 		this.department = department;
 	}
 
@@ -42,15 +44,17 @@ public class MyEmployee extends IndividualAndRole implements IEmployee {
 	 * @see com.github.nest.sparrow.party.generalization.IEmployee#getBranch()
 	 */
 	@Override
-	public IBranch getBranch() {
+	public IMyBranch getBranch() {
 		return this.branch;
 	}
 
 	/**
-	 * @param branch
-	 *            the branch to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.generalization.IMyEmployee#setBranch(com.github.nest.sparrow.party.generalization.IMyBranch)
 	 */
-	public void setBranch(IBranch branch) {
+	@Override
+	public void setBranch(IMyBranch branch) {
 		this.branch = branch;
 	}
 }

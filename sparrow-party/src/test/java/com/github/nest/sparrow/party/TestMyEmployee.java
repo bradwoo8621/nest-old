@@ -43,6 +43,7 @@ import com.github.nest.goose.location.ICountry;
 import com.github.nest.goose.location.IDistrict;
 import com.github.nest.goose.location.IProvince;
 import com.github.nest.goose.operate.OperateLog;
+import com.github.nest.sparrow.party.generalization.IMyEmployee;
 import com.github.nest.sparrow.party.internal.Address;
 import com.github.nest.sparrow.party.internal.MyEmployee;
 import com.github.nest.sparrow.party.internal.Individual;
@@ -86,7 +87,7 @@ public class TestMyEmployee {
 
 		{
 			sessionFactory.getCurrentSession().beginTransaction();
-			MyEmployee employee = new MyEmployee();
+			IMyEmployee employee = new MyEmployee();
 			employee.setParty(new Individual());
 			employee.setPartyCode("PartyCode");
 
@@ -183,9 +184,9 @@ public class TestMyEmployee {
 			assertEquals(true, rst.getBoolean("PARTY_ROLE_ENABLED"));
 			assertEquals(1, rst.getLong("PARTY_ID"));
 			rst.close();
-			rst = stat.executeQuery("SELECT * FROM T_EMPLOYEE");
+			rst = stat.executeQuery("SELECT * FROM T_MY_EMPLOYEE");
 			rst.next();
-			assertEquals(1, rst.getLong("EMPLOYEE_ID"));
+			assertEquals(1, rst.getLong("MY_EMPLOYEE_ID"));
 			rst.close();
 			stat.close();
 			conn.close();
@@ -193,7 +194,7 @@ public class TestMyEmployee {
 
 		{
 			sessionFactory.getCurrentSession().beginTransaction();
-			MyEmployee employee = employeeDescriptor.getLoader().load(1l);
+			IMyEmployee employee = employeeDescriptor.getLoader().load(1l);
 			employee.getParty();
 
 			assertEquals(Long.valueOf(1), employee.getPartyId());

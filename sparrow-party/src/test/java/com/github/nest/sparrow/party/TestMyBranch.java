@@ -45,6 +45,7 @@ import com.github.nest.goose.location.ICountry;
 import com.github.nest.goose.location.IDistrict;
 import com.github.nest.goose.location.IProvince;
 import com.github.nest.goose.operate.OperateLog;
+import com.github.nest.sparrow.party.generalization.IMyBranch;
 import com.github.nest.sparrow.party.internal.Address;
 import com.github.nest.sparrow.party.internal.MyBranch;
 import com.github.nest.sparrow.party.internal.Organization;
@@ -88,8 +89,8 @@ public class TestMyBranch {
 
 		{
 			sessionFactory.getCurrentSession().beginTransaction();
-			MyBranch myBranch = createHeadOffice(goose, countryDescriptor, now);
-			MyBranch subBranch = createSubBranch(goose, countryDescriptor, now, myBranch);
+			IMyBranch myBranch = createHeadOffice(goose, countryDescriptor, now);
+			IMyBranch subBranch = createSubBranch(goose, countryDescriptor, now, myBranch);
 
 			myBranchDescriptor.getSaver().save(myBranch);
 			myBranchDescriptor.getSaver().save(subBranch);
@@ -103,8 +104,8 @@ public class TestMyBranch {
 
 		{
 			sessionFactory.getCurrentSession().beginTransaction();
-			MyBranch headOffice = validateHeadOfficeByDescriptor(myBranchDescriptor);
-			MyBranch subBranch = validateSubBranchByDescriptor(myBranchDescriptor);
+			IMyBranch headOffice = validateHeadOfficeByDescriptor(myBranchDescriptor);
+			IMyBranch subBranch = validateSubBranchByDescriptor(myBranchDescriptor);
 			assertEquals(headOffice, subBranch.getParentBranch());
 
 			sessionFactory.getCurrentSession().getTransaction().commit();
@@ -114,8 +115,8 @@ public class TestMyBranch {
 	/**
 	 * @param myBranchDescriptor
 	 */
-	protected MyBranch validateHeadOfficeByDescriptor(IPersistentBeanDescriptor myBranchDescriptor) {
-		MyBranch myBranch = myBranchDescriptor.getLoader().load(1l);
+	protected IMyBranch validateHeadOfficeByDescriptor(IPersistentBeanDescriptor myBranchDescriptor) {
+		IMyBranch myBranch = myBranchDescriptor.getLoader().load(1l);
 
 		assertEquals(Long.valueOf(1), myBranch.getPartyId());
 		assertEquals("PartyCode", myBranch.getPartyCode());
@@ -156,8 +157,8 @@ public class TestMyBranch {
 	/**
 	 * @param myBranchDescriptor
 	 */
-	protected MyBranch validateSubBranchByDescriptor(IPersistentBeanDescriptor myBranchDescriptor) {
-		MyBranch myBranch = myBranchDescriptor.getLoader().load(2l);
+	protected IMyBranch validateSubBranchByDescriptor(IPersistentBeanDescriptor myBranchDescriptor) {
+		IMyBranch myBranch = myBranchDescriptor.getLoader().load(2l);
 
 		assertEquals(Long.valueOf(2), myBranch.getPartyId());
 		assertEquals("SubCode", myBranch.getPartyCode());
@@ -309,9 +310,9 @@ public class TestMyBranch {
 	 * @return
 	 * @throws ParseException
 	 */
-	protected MyBranch createHeadOffice(IResourceDescriptorContext goose, ICachedBeanDescriptor countryDescriptor,
+	protected IMyBranch createHeadOffice(IResourceDescriptorContext goose, ICachedBeanDescriptor countryDescriptor,
 			long now) throws ParseException {
-		MyBranch myBranch = new MyBranch();
+		IMyBranch myBranch = new MyBranch();
 		myBranch.setParty(new Organization());
 		myBranch.setPartyCode("PartyCode");
 
@@ -364,9 +365,9 @@ public class TestMyBranch {
 	 * @return
 	 * @throws ParseException
 	 */
-	protected MyBranch createSubBranch(IResourceDescriptorContext goose, ICachedBeanDescriptor countryDescriptor,
-			long now, MyBranch parent) throws ParseException {
-		MyBranch myBranch = new MyBranch();
+	protected IMyBranch createSubBranch(IResourceDescriptorContext goose, ICachedBeanDescriptor countryDescriptor,
+			long now, IMyBranch parent) throws ParseException {
+		IMyBranch myBranch = new MyBranch();
 		myBranch.setParty(new Organization());
 		myBranch.setPartyCode("SubCode");
 

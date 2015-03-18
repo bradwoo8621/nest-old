@@ -27,9 +27,11 @@ public class MyBranch extends OrganizationAndRole implements IMyBranch {
 	}
 
 	/**
-	 * @param headOffice
-	 *            the headOffice to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.generalization.IBranch#setHeadOffice(java.lang.Boolean)
 	 */
+	@Override
 	public void setHeadOffice(Boolean headOffice) {
 		this.headOffice = headOffice;
 	}
@@ -45,9 +47,11 @@ public class MyBranch extends OrganizationAndRole implements IMyBranch {
 	}
 
 	/**
-	 * @param parentBranch
-	 *            the parentBranch to set
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.sparrow.party.generalization.IMyBranch#setParentBranch(com.github.nest.sparrow.party.generalization.IMyBranch)
 	 */
+	@Override
 	public void setParentBranch(IMyBranch parentBranch) {
 		this.parentBranch = parentBranch;
 	}

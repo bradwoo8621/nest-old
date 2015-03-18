@@ -12,6 +12,13 @@ import com.github.nest.sparrow.party.IOrganization;
  */
 public interface IDepartment extends IOrganization {
 	/**
+	 * get branch
+	 * 
+	 * @return
+	 */
+	IBranch getBranch();
+
+	/**
 	 * get parent department
 	 * 
 	 * @return

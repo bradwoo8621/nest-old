@@ -29,5 +29,10 @@ public interface IPartyConstants {
 	 * @see IMyBranch
 	 */
 	String ROLE_CODE_MY_BRANCH = "MBR";
-
+	/**
+	 * my department role code
+	 * 
+	 * @see IMyDepartment
+	 */
+	String ROLE_CODE_MY_DEPARTMENT = "MDP";
 }

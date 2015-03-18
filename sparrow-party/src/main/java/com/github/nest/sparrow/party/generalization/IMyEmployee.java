@@ -16,7 +16,14 @@ public interface IMyEmployee extends IEmployee, IPartyRole {
 	 * 
 	 * @return
 	 */
-	IDepartment getDepartment();
+	IMyDepartment getDepartment();
+
+	/**
+	 * set department
+	 * 
+	 * @param department
+	 */
+	void setDepartment(IMyDepartment department);
 
 	/**
 	 * get branch
@@ -24,4 +31,11 @@ public interface IMyEmployee extends IEmployee, IPartyRole {
 	 * @return
 	 */
 	IMyBranch getBranch();
+
+	/**
+	 * set branch
+	 * 
+	 * @param branch
+	 */
+	void setBranch(IMyBranch branch);
 }

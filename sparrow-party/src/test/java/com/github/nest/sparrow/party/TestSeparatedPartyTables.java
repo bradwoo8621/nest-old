@@ -34,6 +34,7 @@ import com.github.nest.goose.internal.human.Gender;
 import com.github.nest.goose.internal.location.Country;
 import com.github.nest.goose.location.ICountry;
 import com.github.nest.goose.operate.OperateLog;
+import com.github.nest.sparrow.party.generalization.IMyEmployee;
 import com.github.nest.sparrow.party.internal.MyEmployee;
 import com.github.nest.sparrow.party.internal.Individual;
 
@@ -126,7 +127,7 @@ public class TestSeparatedPartyTables {
 
 		{
 			sessionFactory.getCurrentSession().beginTransaction();
-			MyEmployee employee = new MyEmployee();
+			IMyEmployee employee = new MyEmployee();
 			employee.setParty(new Individual());
 			employee.setPartyCode("PartyCode");
 
@@ -203,7 +204,7 @@ public class TestSeparatedPartyTables {
 			// T_PARTY/T_INDIVIDUAL/T_ORGANIZATION, maybe with performance
 			// issue. 
 			sessionFactory.getCurrentSession().beginTransaction();
-			MyEmployee employee = employeeDescriptor.getLoader().load(1l);
+			IMyEmployee employee = employeeDescriptor.getLoader().load(1l);
 			employee.getParty();
 
 			assertEquals(Long.valueOf(1), employee.getPartyId());

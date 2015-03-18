@@ -34,7 +34,7 @@ public class City extends AbstractCodeBaseBean implements ICity {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.goose.location.ICity#getCode()
+	 * @see com.github.nest.goose.ICodeBaseBean#getCode()
 	 */
 	@Override
 	public String getCode() {

@@ -6,7 +6,6 @@ package com.github.nest.sparrow.party.internal;
 import java.util.Date;
 
 import com.github.nest.goose.location.ICountry;
-import com.github.nest.sparrow.party.IIndividual;
 import com.github.nest.sparrow.party.IOrganization;
 import com.github.nest.sparrow.party.codes.IIndustry;
 
@@ -23,7 +22,6 @@ public class Organization extends Party implements IOrganization {
 	private Date closeDownDate = null;
 	private ICountry registerIn = null;
 	private IIndustry industry = null;
-	private IIndividual artificialPerson = null;
 
 	/**
 	 * (non-Javadoc)
@@ -118,24 +116,5 @@ public class Organization extends Party implements IOrganization {
 	 */
 	public void setIndustry(IIndustry industry) {
 		this.industry = industry;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.sparrow.party.IOrganization#getArtificialPerson()
-	 */
-	@Override
-	public IIndividual getArtificialPerson() {
-		return this.artificialPerson;
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.sparrow.party.IOrganization#setArtificialPerson(com.github.nest.sparrow.party.IIndividual)
-	 */
-	public void setArtificialPerson(IIndividual artificialPerson) {
-		this.artificialPerson = artificialPerson;
 	}
 }

@@ -10,6 +10,6 @@ import com.github.nest.sparrow.party.IPartyRole;
  * 
  * @author brad.wu
  */
-public interface IEducationalOrganization extends IBranch, IPartyRole {
+public interface IEducationalOrganization extends IRelatedBranch, IPartyRole {
 
 }

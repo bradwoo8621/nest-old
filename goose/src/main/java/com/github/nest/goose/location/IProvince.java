@@ -3,21 +3,14 @@
  */
 package com.github.nest.goose.location;
 
-import java.io.Serializable;
+import com.github.nest.goose.ICodeBaseBean;
 
 /**
  * province
  * 
  * @author brad.wu
  */
-public interface IProvince extends Serializable {
-	/**
-	 * get code
-	 * 
-	 * @return
-	 */
-	String getCode();
-
+public interface IProvince extends ICodeBaseBean {
 	/**
 	 * get name
 	 * 

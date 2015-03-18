@@ -3,21 +3,14 @@
  */
 package com.github.nest.goose.location;
 
-import java.io.Serializable;
+import com.github.nest.goose.ICodeBaseBean;
 
 /**
  * city
  * 
  * @author brad.wu
  */
-public interface ICity extends Serializable {
-	/**
-	 * get code
-	 * 
-	 * @return
-	 */
-	String getCode();
-
+public interface ICity extends ICodeBaseBean {
 	/**
 	 * get name
 	 * 

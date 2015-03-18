@@ -36,7 +36,7 @@ public class District extends AbstractCodeBaseBean implements IDistrict {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.goose.location.IDistrict#getCode()
+	 * @see com.github.nest.goose.ICodeBaseBean#getCode()
 	 */
 	@Override
 	public String getCode() {

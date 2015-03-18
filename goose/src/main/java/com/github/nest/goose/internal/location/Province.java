@@ -32,7 +32,7 @@ public class Province extends AbstractCodeBaseBean implements IProvince {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.goose.location.IProvince#getCode()
+	 * @see com.github.nest.goose.ICodeBaseBean#getCode()
 	 */
 	@Override
 	public String getCode() {

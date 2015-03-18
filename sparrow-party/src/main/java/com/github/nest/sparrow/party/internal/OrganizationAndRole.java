@@ -9,7 +9,6 @@ import java.util.List;
 import com.github.nest.goose.location.ICountry;
 import com.github.nest.goose.operate.OperateLog;
 import com.github.nest.sparrow.party.IAddress;
-import com.github.nest.sparrow.party.IIndividual;
 import com.github.nest.sparrow.party.IOrganization;
 import com.github.nest.sparrow.party.IParty;
 import com.github.nest.sparrow.party.PartyException;
@@ -256,27 +255,6 @@ public abstract class OrganizationAndRole extends PartyRole implements IOrganiza
 	@Override
 	public void setIndustry(IIndustry industry) {
 		checkParty().setIndustry(industry);
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.sparrow.party.IOrganization#getArtificialPerson()
-	 */
-	@Override
-	public IIndividual getArtificialPerson() {
-		IOrganization party = this.getParty();
-		return party == null ? null : party.getArtificialPerson();
-	}
-
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.sparrow.party.IOrganization#setArtificialPerson(com.github.nest.sparrow.party.IIndividual)
-	 */
-	@Override
-	public void setArtificialPerson(IIndividual artificialPerson) {
-		checkParty().setArtificialPerson(artificialPerson);
 	}
 
 	/**

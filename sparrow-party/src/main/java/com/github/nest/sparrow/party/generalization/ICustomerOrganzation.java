@@ -8,6 +8,6 @@ package com.github.nest.sparrow.party.generalization;
  * 
  * @author brad.wu
  */
-public interface ICustomerOrganzation extends ICustomer, IBranch {
+public interface ICustomerOrganzation extends ICustomer, IRelatedBranch {
 
 }

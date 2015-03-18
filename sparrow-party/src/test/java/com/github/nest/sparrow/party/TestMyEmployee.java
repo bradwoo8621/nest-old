@@ -16,21 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.github.nest.arcteryx.context.Context;
 import com.github.nest.arcteryx.meta.IResourceDescriptorContext;
 import com.github.nest.arcteryx.meta.ResourceDescriptorContextRepository;
 import com.github.nest.arcteryx.meta.beans.ICachedBeanDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentBeanDescriptor;
 import com.github.nest.arcteryx.persistent.IPersistentConfiguration;
 import com.github.nest.arcteryx.persistent.IPersistentConfigurationInitializer;
-import com.github.nest.arcteryx.persistent.internal.hibernate.HibernatePersistentConfigurationInitializer;
 import com.github.nest.goose.human.IGender;
 import com.github.nest.goose.internal.Code;
 import com.github.nest.goose.internal.human.Gender;
@@ -45,38 +40,29 @@ import com.github.nest.goose.location.IProvince;
 import com.github.nest.goose.operate.OperateLog;
 import com.github.nest.sparrow.party.generalization.IMyEmployee;
 import com.github.nest.sparrow.party.internal.Address;
-import com.github.nest.sparrow.party.internal.MyEmployee;
 import com.github.nest.sparrow.party.internal.Individual;
+import com.github.nest.sparrow.party.internal.MyEmployee;
 
 /**
  * @author brad.wu
  */
 public class TestMyEmployee {
-	private static final String SPARROW_PARTY_CONTEXT_ID = "sparrow-party-context";
-	private static final String GOOSE_CONTEXT_ID = "goose-context";
-
 	@BeforeClass
 	public static void initialize() throws Exception {
-		BasicConfigurator.configure();
-		Logger.getRootLogger().setLevel(Level.FATAL);
-		Logger.getLogger(HibernatePersistentConfigurationInitializer.class).setLevel(Level.DEBUG);
-
-		{
-			Context.createApplicationContextByClassPath(GOOSE_CONTEXT_ID, "/goose.xml");
-			Context.createApplicationContextByClassPath(SPARROW_PARTY_CONTEXT_ID, "/sparrow-party.xml");
-		}
-
-		TablesCreator.create();
+		CaseInitializer.initLog();
+		CaseInitializer.loadContext();
+		CaseInitializer.create();
 	}
 
 	@Test
 	public void test() throws Exception {
-		IResourceDescriptorContext goose = ResourceDescriptorContextRepository.getContext(GOOSE_CONTEXT_ID);
+		IResourceDescriptorContext goose = ResourceDescriptorContextRepository
+				.getContext(CaseInitializer.GOOSE_CONTEXT_ID);
 		ICachedBeanDescriptor countryDescriptor = goose.get(Country.class);
 		ICachedBeanDescriptor genderDescriptor = goose.get(Gender.class);
 
 		IResourceDescriptorContext sparrowParty = ResourceDescriptorContextRepository
-				.getContext(SPARROW_PARTY_CONTEXT_ID);
+				.getContext(CaseInitializer.SPARROW_PARTY_CONTEXT_ID);
 		IPersistentBeanDescriptor employeeDescriptor = sparrowParty.get(MyEmployee.class);
 
 		IPersistentConfiguration configuration = sparrowParty

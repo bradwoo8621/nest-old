@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util 
+    	http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<!-- com.github.nest.sparrow.party.IPartyRole -->
+	<bean
+		id="PartyRole"
+		class="com.github.nest.arcteryx.persistent.internal.StandalonePersistentBeanDescriptor"
+		p:resourceClass="com.github.nest.sparrow.party.internal.PartyRole"
+		p:name="IPartyRole"
+		p:description="Party role interface"
+		scope="singleton"
+		p:tableName="T_PARTY_ROLE"
+		p:discriminatorColumnName="PARTY_ROLE_TYPE">
+		<!-- abandon the properties from party -->
+		<property
+			name="abandonedProperties"
+			ref="PartyProperties" />
+		<property name="properties">
+			<list>
+				<!-- ID of party role -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="roleId"
+					p:description="ID of party role">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="PARTY_ROLE_ID"
+							p:primaryKey="true"
+							p:type="LONG">
+							<property name="primaryKeyGenerator">
+								<bean
+									class="com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.SequenceKey"
+									p:sequenceName="S_PARTY_ROLE" />
+							</property>
+						</bean>
+					</property>
+				</bean>
+				<!-- Code of party role -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="roleCode"
+					p:description="Code of party role">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="PARTY_ROLE_CODE"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- enabled of party role -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="roleEnabled"
+					p:description="Enabled of party role">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="PARTY_ROLE_ENABLED"
+							p:type="BOOLEAN" />
+					</property>
+				</bean>
+				<!-- party -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="party"
+					p:description="Party of party role">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
+							p:referencedBeanClass="com.github.nest.sparrow.party.internal.Party"
+							p:foreignKeyColumnName="PARTY_ID"
+							p:foreignKeyPropertyName="partyId" />
+					</property>
+				</bean>
+				<!-- operate log -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="roleOperateLog"
+					p:description="Operate log of party role">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.EmbeddedPersistentColumn"
+							p:embeddedBeanClass="com.github.nest.goose.operate.OperateLog"
+							p:referencedBeanContextName="goose-context" />
+					</property>
+				</bean>
+				<!-- optimistic lock -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="roleOptimisticLock"
+					p:description="Optimistic lock of party role">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="OPTIMISTIC_LOCK"
+							p:type="LONG"
+							p:version="true" />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+</beans>

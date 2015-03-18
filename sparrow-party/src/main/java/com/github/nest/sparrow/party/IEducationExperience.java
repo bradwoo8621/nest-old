@@ -17,11 +17,32 @@ import com.github.nest.sparrow.party.generalization.IEducationalOrganization;
  */
 public interface IEducationExperience extends Serializable {
 	/**
-	 * get employer
+	 * get id
+	 * 
+	 * @return
+	 */
+	Long getExperienceId();
+
+	/**
+	 * set id
+	 * 
+	 * @param experienceId
+	 */
+	void setExperienceId(Long experienceId);
+
+	/**
+	 * get organization
 	 * 
 	 * @return
 	 */
 	IEducationalOrganization getOrganization();
+
+	/**
+	 * set organization
+	 * 
+	 * @param organization
+	 */
+	void setOrganization(IEducationalOrganization organization);
 
 	/**
 	 * get academic major(主修专业)
@@ -31,6 +52,13 @@ public interface IEducationExperience extends Serializable {
 	IAcademicMajor getAcademicMajor();
 
 	/**
+	 * set academic major
+	 * 
+	 * @param academicMajor
+	 */
+	void setAcademicMajor(IAcademicMajor academicMajor);
+
+	/**
 	 * get degree
 	 * 
 	 * @return
@@ -38,23 +66,37 @@ public interface IEducationExperience extends Serializable {
 	IEducationDegree getDegree();
 
 	/**
+	 * set degree
+	 * 
+	 * @param degree
+	 */
+	void setDegree(IEducationDegree degree);
+
+	/**
 	 * get start from
 	 * 
 	 * @return
 	 */
-	Date getStart();
+	Date getStartDate();
+
+	/**
+	 * get start date
+	 * 
+	 * @param date
+	 */
+	void setStartDate(Date startDate);
 
 	/**
 	 * get end to
 	 * 
 	 * @return
 	 */
-	Date getEnd();
+	Date getEndDate();
 
 	/**
-	 * get title
+	 * set end date
 	 * 
-	 * @return
+	 * @param endDate
 	 */
-	String getTitle();
+	void setEndDate(Date endDate);
 }

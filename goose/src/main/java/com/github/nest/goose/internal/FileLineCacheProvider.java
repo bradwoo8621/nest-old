@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.goose.internal.location;
+package com.github.nest.goose.internal;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.github.nest.arcteryx.meta.ResourceException;
-import com.github.nest.goose.internal.AbstractCodeBaseBeanCacheProvider;
 
 /**
  * file line cache provider

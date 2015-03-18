@@ -10,6 +10,6 @@ import com.github.nest.sparrow.party.IPartyRole;
  * 
  * @author brad.wu
  */
-public interface IBank extends IBranch, IPartyRole {
+public interface IBank extends IRelatedBranch, IPartyRole {
 
 }

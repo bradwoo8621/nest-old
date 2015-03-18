@@ -7,11 +7,21 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import com.github.nest.arcteryx.context.Context;
+import com.github.nest.arcteryx.persistent.internal.hibernate.HibernatePersistentConfigurationInitializer;
+
 /**
  * @author brad.wu
  *
  */
-public class TablesCreator {
+public class CaseInitializer {
+	public static final String SPARROW_PARTY_CONTEXT_ID = "sparrow-party-context";
+	public static final String GOOSE_CONTEXT_ID = "goose-context";
+
 	public static void create() throws Exception {
 		Class.forName("org.hsqldb.jdbc.JDBCDriver");
 		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:memdb", "username", "password");
@@ -81,5 +91,26 @@ public class TablesCreator {
 
 		conn.commit();
 		conn.close();
+	}
+
+	public static void loadContext() {
+		Context.createApplicationContextByClassPath(GOOSE_CONTEXT_ID, "/goose.xml");
+		Context.createApplicationContextByClassPath(SPARROW_PARTY_CONTEXT_ID,//
+				"/sparrow-party-Context.xml",//
+				"/sparrow-party-Codes.xml",//
+				"/sparrow-party-Party.xml",//
+				"/sparrow-party-Individual.xml",//
+				"/sparrow-party-Organization.xml",//
+				"/sparrow-party-Role.xml",//
+				"/sparrow-party-MyBranch.xml",//
+				"/sparrow-party-MyDepartment.xml",//
+				"/sparrow-party-MyEmployee.xml");
+	}
+
+	public static void initLog() {
+		BasicConfigurator.configure();
+		Logger.getRootLogger().setLevel(Level.FATAL);
+		Logger.getLogger(HibernatePersistentConfigurationInitializer.class).setLevel(Level.DEBUG);
+		// Logger.getLogger("org.hibernate.type").setLevel(Level.TRACE);
 	}
 }

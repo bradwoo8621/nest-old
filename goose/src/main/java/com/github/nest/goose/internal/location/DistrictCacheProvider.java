@@ -3,6 +3,8 @@
  */
 package com.github.nest.goose.internal.location;
 
+import com.github.nest.goose.internal.FileLineCacheProvider;
+
 /**
  * district cache provider
  * 

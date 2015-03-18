@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util 
+    	http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<!-- com.github.nest.sparrow.party.internal.Party -->
+	<bean
+		id="Party"
+		class="com.github.nest.arcteryx.persistent.internal.StandalonePersistentBeanDescriptor"
+		p:resourceClass="com.github.nest.sparrow.party.internal.Party"
+		p:name="Party"
+		p:description="Party abstract implementation, lead all sub classes"
+		scope="singleton"
+		p:tableName="T_PARTY"
+		p:discriminatorColumnName="PARTY_TYPE">
+		<property name="properties">
+			<list>
+				<!-- ID of party -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="partyId"
+					p:description="ID of party">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="PARTY_ID"
+							p:primaryKey="true"
+							p:type="LONG">
+							<property name="primaryKeyGenerator">
+								<bean
+									class="com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.SequenceKey"
+									p:sequenceName="S_PARTY" />
+							</property>
+						</bean>
+					</property>
+				</bean>
+				<!-- Name of party -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="partyName"
+					p:description="Name of party">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="PARTY_NAME"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- Code of party -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="partyCode"
+					p:description="Code of party">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="PARTY_CODE"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- Enabled of party -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="partyEnabled"
+					p:description="Enabled of party">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="PARTY_ENABLED"
+							p:type="BOOLEAN" />
+					</property>
+				</bean>
+				<!-- addresses -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="partyAddresses"
+					p:description="Addresses of party">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.OneToManyPersistentColumn"
+							p:subordinateBeanClass="com.github.nest.sparrow.party.internal.Address"
+							p:foreignKeyColumnName="PARTY_ID">
+							<property name="collectionParameter">
+								<bean
+									class="com.github.nest.arcteryx.persistent.internal.BagCollectionParameter"
+									p:cascadeTypes="ALL_DELETE_ORPHAN" />
+							</property>
+						</bean>
+					</property>
+				</bean>
+				<!-- operate log -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="partyOperateLog"
+					p:description="Operate log of party">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.EmbeddedPersistentColumn"
+							p:embeddedBeanClass="com.github.nest.goose.operate.OperateLog"
+							p:referencedBeanContextName="goose-context" />
+					</property>
+				</bean>
+				<!-- optimistic lock -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="partyOptimisticLock"
+					p:description="Optimistic lock of party">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="OPTIMISTIC_LOCK"
+							p:type="LONG"
+							p:version="true" />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!-- com.github.nest.sparrow.party.internal.Address -->
+	<bean
+		id="Address"
+		class="com.github.nest.arcteryx.persistent.internal.StandalonePersistentBeanDescriptor"
+		scope="singleton"
+		p:resourceClass="com.github.nest.sparrow.party.internal.Address"
+		p:description="Address"
+		p:tableName="T_PARTY_ADDRESS">
+		<property name="properties">
+			<list>
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="addressId"
+					p:description="ID of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="ADDRESS_ID"
+							p:primaryKey="true"
+							p:type="LONG">
+							<property name="primaryKeyGenerator">
+								<bean
+									class="com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.SequenceKey"
+									p:sequenceName="S_PARTY_ADDRESS" />
+							</property>
+						</bean>
+					</property>
+				</bean>
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="postcode"
+					p:description="Postcode of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="POSTCODE"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- country -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="country"
+					p:description="Country of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
+							p:referencedBeanClass="com.github.nest.goose.internal.location.Country"
+							p:referencedBeanContextName="goose-context"
+							p:foreignKeyColumnName="COUNTRY_CODE"
+							p:foreignKeyPropertyName="code" />
+					</property>
+				</bean>
+				<!-- province -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="province"
+					p:description="Province of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
+							p:referencedBeanClass="com.github.nest.goose.internal.location.Province"
+							p:referencedBeanContextName="goose-context"
+							p:foreignKeyColumnName="PROVINCE_CODE"
+							p:foreignKeyPropertyName="code" />
+					</property>
+				</bean>
+				<!-- city -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="city"
+					p:description="City of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
+							p:referencedBeanClass="com.github.nest.goose.internal.location.City"
+							p:referencedBeanContextName="goose-context"
+							p:foreignKeyColumnName="CITY_CODE"
+							p:foreignKeyPropertyName="code" />
+					</property>
+				</bean>
+				<!-- district -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="district"
+					p:description="District of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
+							p:referencedBeanClass="com.github.nest.goose.internal.location.District"
+							p:referencedBeanContextName="goose-context"
+							p:foreignKeyColumnName="DISTRICT_CODE"
+							p:foreignKeyPropertyName="code" />
+					</property>
+				</bean>
+				<!-- address line1 -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="addressLine1"
+					p:description="Address line1 of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="ADDRESS_LINE1"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- address line2 -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="addressLine2"
+					p:description="Address line2 of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="ADDRESS_LINE2"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- address line3 -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="addressLine3"
+					p:description="Address line3 of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="ADDRESS_LINE3"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- address line4 -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="addressLine4"
+					p:description="Address line4 of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="ADDRESS_LINE4"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- address line5 -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="addressLine5"
+					p:description="Address line5 of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="ADDRESS_LINE5"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- telephone -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="telephone"
+					p:description="Telephone of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="TELEPHONE"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- fax -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="fax"
+					p:description="Fax of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="FAX"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- enabled -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="enabled"
+					p:description="Enabled of address">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="IS_ENABLED"
+							p:type="BOOLEAN" />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+</beans>

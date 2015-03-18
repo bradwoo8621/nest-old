@@ -3,21 +3,14 @@
  */
 package com.github.nest.goose.location;
 
-import java.io.Serializable;
+import com.github.nest.goose.ICodeBaseBean;
 
 /**
  * district
  * 
  * @author brad.wu
  */
-public interface IDistrict extends Serializable {
-	/**
-	 * get code
-	 * 
-	 * @return
-	 */
-	String getCode();
-
+public interface IDistrict extends ICodeBaseBean {
 	/**
 	 * get name
 	 * 

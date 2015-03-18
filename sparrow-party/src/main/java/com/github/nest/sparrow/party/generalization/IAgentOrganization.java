@@ -8,6 +8,6 @@ package com.github.nest.sparrow.party.generalization;
  * 
  * @author brad.wu
  */
-public interface IAgentOrganization extends IAgent, IBranch {
+public interface IAgentOrganization extends IAgent, IRelatedBranch {
 
 }

@@ -3,21 +3,14 @@
  */
 package com.github.nest.sparrow.party.codes;
 
-import java.io.Serializable;
+import com.github.nest.goose.ICodeBaseBean;
 
 /**
  * education degree
  * 
  * @author brad.wu
  */
-public interface IEducationDegree extends Serializable {
-	/**
-	 * get code
-	 * 
-	 * @return
-	 */
-	String getCode();
-
+public interface IEducationDegree extends ICodeBaseBean {
 	/**
 	 * get name
 	 * 

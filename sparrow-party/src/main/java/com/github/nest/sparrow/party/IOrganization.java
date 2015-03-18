@@ -78,17 +78,4 @@ public interface IOrganization extends IParty {
 	 * @param industry
 	 */
 	void setIndustry(IIndustry industry);
-
-	/**
-	 * get artificial person(法人代表)
-	 * 
-	 * @return
-	 */
-	IIndividual getArtificialPerson();
-
-	/**
-	 * 
-	 * @param artificialPerson
-	 */
-	void setArtificialPerson(IIndividual artificialPerson);
 }

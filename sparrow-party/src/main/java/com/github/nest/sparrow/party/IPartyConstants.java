@@ -3,7 +3,7 @@
  */
 package com.github.nest.sparrow.party;
 
-import com.github.nest.sparrow.party.generalization.IEducationalOrganization;
+import com.github.nest.sparrow.party.generalization.IEducationOrganization;
 import com.github.nest.sparrow.party.generalization.IMyBranch;
 import com.github.nest.sparrow.party.generalization.IMyDepartment;
 import com.github.nest.sparrow.party.generalization.IMyEmployee;
@@ -41,7 +41,7 @@ public interface IPartyConstants {
 	/**
 	 * educational organization role code
 	 * 
-	 * @see IEducationalOrganization
+	 * @see IEducationOrganization
 	 */
 	String ROLE_CODE_EDUCATIONAL_ORGANIZATION = "EDU";
 }

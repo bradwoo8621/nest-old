@@ -58,6 +58,7 @@
 				<!-- Organization party role -->
 				<ref bean="MyBranch" />
 				<ref bean="MyDepartment" />
+				<ref bean="EducationOrganization" />
 			</list>
 		</property>
 		<property name="operatorProviders">
@@ -163,4 +164,18 @@
 		<value>registerIn</value>
 		<value>registerNumber</value>
 	</util:set>
+
+	<import resource="classpath:/sparrow-party-Codes.xml" />
+
+	<import resource="classpath:/sparrow-party-Party.xml" />
+	<import resource="classpath:/sparrow-party-Individual.xml" />
+	<import resource="classpath:/sparrow-party-Organization.xml" />
+
+	<import resource="classpath:/sparrow-party-Role.xml" />
+	<import resource="classpath:/sparrow-party-RelatedBranch.xml" />
+
+	<import resource="classpath:/sparrow-party-MyBranch.xml" />
+	<import resource="classpath:/sparrow-party-MyDepartment.xml" />
+	<import resource="classpath:/sparrow-party-MyEmployee.xml" />
+	<import resource="classpath:/sparrow-party-EducationOrganization.xml" />
 </beans>

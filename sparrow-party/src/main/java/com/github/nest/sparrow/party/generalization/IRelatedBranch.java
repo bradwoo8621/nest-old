@@ -3,26 +3,40 @@
  */
 package com.github.nest.sparrow.party.generalization;
 
+import com.github.nest.sparrow.party.IOrganization;
 
 /**
  * related organization, not me.
  * 
  * @author brad.wu
  */
-public interface IRelatedBranch extends IBranch {
+public interface IRelatedBranch extends IOrganization {
 	/**
 	 * (non-Javadoc)
 	 * 
 	 * @see com.github.nest.sparrow.party.generalization.IBranch#getParentBranch()
 	 */
-	IRelatedBranch getParentBranch();
+	IOrganization getParentBranch();
 
 	/**
 	 * set parent branch
 	 * 
 	 * @param parentBranch
 	 */
-	void setParentBranch(IRelatedBranch parentBranch);
+	void setParentBranch(IOrganization parentBranch);
+
+	/**
+	 * is head office or not. if true, no parent branch.
+	 * 
+	 * @return
+	 */
+	Boolean isHeadOffice();
+
+	/**
+	 * 
+	 * @param headOffice
+	 */
+	void setHeadOffice(Boolean headOffice);
 
 	/**
 	 * get artificial person(法人代表)

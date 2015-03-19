@@ -65,6 +65,15 @@ public class CaseInitializer {
 				+ "IS_ENABLED INT)");
 		stat.execute("create sequence S_PARTY_ADDRESS AS BIGINT start with 1");
 
+		stat.execute("create table T_PARTY_EDUCATION_EXPERIENCE(EDUCATION_EXPERIENCE_ID BIGINT, "//
+				+ "PARTY_ID BIGINT, "//
+				+ "EDUCATION_ORGANIZATION_ID BIGINT, "//
+				+ "MAJOR_CODE VARCHAR(5), "//
+				+ "DEGREE_CODE VARCHAR(5), "//
+				+ "START_DATE DATE, "//
+				+ "END_DATE DATE)");
+		stat.execute("create sequence S_PARTY_EDUCATION_EXPERIENCE AS BIGINT start with 1");
+
 		stat.execute("create table T_PARTY_ROLE(PARTY_ROLE_ID BIGINT, "//
 				+ "PARTY_ROLE_CODE VARCHAR(10), "//
 				+ "PARTY_ROLE_ENABLED INT, " //
@@ -89,28 +98,23 @@ public class CaseInitializer {
 				+ "BRANCH_ID BIGINT, "//
 				+ "PARENT_DEPARTMENT_ID BIGINT)");
 
+		stat.execute("create table T_EDUCATION_ORGANIZATION(EDUCATION_ORGANIZATION_ID BIGINT, "//
+				+ "PARENT_ORGAN_ID BIGINT, "//
+				+ "IS_HEAD_OFFICE INT)");
+
 		conn.commit();
 		conn.close();
 	}
 
 	public static void loadContext() {
 		Context.createApplicationContextByClassPath(GOOSE_CONTEXT_ID, "/goose.xml");
-		Context.createApplicationContextByClassPath(SPARROW_PARTY_CONTEXT_ID,//
-				"/sparrow-party-Context.xml",//
-				"/sparrow-party-Codes.xml",//
-				"/sparrow-party-Party.xml",//
-				"/sparrow-party-Individual.xml",//
-				"/sparrow-party-Organization.xml",//
-				"/sparrow-party-Role.xml",//
-				"/sparrow-party-MyBranch.xml",//
-				"/sparrow-party-MyDepartment.xml",//
-				"/sparrow-party-MyEmployee.xml");
+		Context.createApplicationContextByClassPath(SPARROW_PARTY_CONTEXT_ID, "/sparrow-party-Context.xml");
 	}
 
 	public static void initLog() {
 		BasicConfigurator.configure();
 		Logger.getRootLogger().setLevel(Level.FATAL);
 		Logger.getLogger(HibernatePersistentConfigurationInitializer.class).setLevel(Level.DEBUG);
-		// Logger.getLogger("org.hibernate.type").setLevel(Level.TRACE);
+//		Logger.getLogger("org.hibernate.type").setLevel(Level.TRACE);
 	}
 }

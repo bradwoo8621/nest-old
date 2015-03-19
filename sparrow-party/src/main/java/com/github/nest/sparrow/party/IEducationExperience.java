@@ -8,7 +8,7 @@ import java.util.Date;
 
 import com.github.nest.sparrow.party.codes.IAcademicMajor;
 import com.github.nest.sparrow.party.codes.IEducationDegree;
-import com.github.nest.sparrow.party.generalization.IEducationalOrganization;
+import com.github.nest.sparrow.party.generalization.IEducationOrganization;
 
 /**
  * education experience
@@ -35,14 +35,14 @@ public interface IEducationExperience extends Serializable {
 	 * 
 	 * @return
 	 */
-	IEducationalOrganization getOrganization();
+	IEducationOrganization getOrganization();
 
 	/**
 	 * set organization
 	 * 
 	 * @param organization
 	 */
-	void setOrganization(IEducationalOrganization organization);
+	void setOrganization(IEducationOrganization organization);
 
 	/**
 	 * get academic major(主修专业)

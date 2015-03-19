@@ -58,7 +58,8 @@ public class TestMyBranch {
 
 	@Test
 	public void test() throws Exception {
-		IResourceDescriptorContext goose = ResourceDescriptorContextRepository.getContext(CaseInitializer.GOOSE_CONTEXT_ID);
+		IResourceDescriptorContext goose = ResourceDescriptorContextRepository
+				.getContext(CaseInitializer.GOOSE_CONTEXT_ID);
 		ICachedBeanDescriptor countryDescriptor = goose.get(Country.class);
 
 		IResourceDescriptorContext sparrowParty = ResourceDescriptorContextRepository
@@ -78,6 +79,7 @@ public class TestMyBranch {
 
 			myBranchDescriptor.getSaver().save(myBranch);
 			myBranchDescriptor.getSaver().save(subBranch);
+			
 			sessionFactory.getCurrentSession().getTransaction().commit();
 		}
 
@@ -95,6 +97,7 @@ public class TestMyBranch {
 			sessionFactory.getCurrentSession().getTransaction().commit();
 		}
 	}
+
 
 	/**
 	 * @param myBranchDescriptor

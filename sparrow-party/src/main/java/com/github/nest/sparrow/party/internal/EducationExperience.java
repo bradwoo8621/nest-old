@@ -8,7 +8,7 @@ import java.util.Date;
 import com.github.nest.sparrow.party.IEducationExperience;
 import com.github.nest.sparrow.party.codes.IAcademicMajor;
 import com.github.nest.sparrow.party.codes.IEducationDegree;
-import com.github.nest.sparrow.party.generalization.IEducationalOrganization;
+import com.github.nest.sparrow.party.generalization.IEducationOrganization;
 
 /**
  * education experience
@@ -19,7 +19,7 @@ public class EducationExperience implements IEducationExperience {
 	private static final long serialVersionUID = 379326214658747655L;
 
 	private Long experienceId = null;
-	private IEducationalOrganization organization = null;
+	private IEducationOrganization organization = null;
 	private IAcademicMajor academicMajor = null;
 	private IEducationDegree degree = null;
 	private Date startDate = null;
@@ -51,17 +51,17 @@ public class EducationExperience implements IEducationExperience {
 	 * @see com.github.nest.sparrow.party.IEducationExperience#getOrganization()
 	 */
 	@Override
-	public IEducationalOrganization getOrganization() {
+	public IEducationOrganization getOrganization() {
 		return this.organization;
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.IEducationExperience#setOrganization(com.github.nest.sparrow.party.generalization.IEducationalOrganization)
+	 * @see com.github.nest.sparrow.party.IEducationExperience#setOrganization(com.github.nest.sparrow.party.generalization.IEducationOrganization)
 	 */
 	@Override
-	public void setOrganization(IEducationalOrganization organization) {
+	public void setOrganization(IEducationOrganization organization) {
 		this.organization = organization;
 	}
 

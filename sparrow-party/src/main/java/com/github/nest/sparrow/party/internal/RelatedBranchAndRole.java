@@ -3,6 +3,7 @@
  */
 package com.github.nest.sparrow.party.internal;
 
+import com.github.nest.sparrow.party.IOrganization;
 import com.github.nest.sparrow.party.generalization.IRelatedBranch;
 import com.github.nest.sparrow.party.generalization.IRelatedEmployee;
 
@@ -15,7 +16,7 @@ public abstract class RelatedBranchAndRole extends OrganizationAndRole implement
 	private static final long serialVersionUID = -929331264290048131L;
 
 	private Boolean headOffice = Boolean.FALSE;
-	private IRelatedBranch parentBranch = null;
+	private IOrganization parentBranch = null;
 	private IRelatedEmployee artificialPerson = null;
 
 	/**
@@ -44,7 +45,7 @@ public abstract class RelatedBranchAndRole extends OrganizationAndRole implement
 	 * @see com.github.nest.sparrow.party.generalization.IRelatedBranch#getParentBranch()
 	 */
 	@Override
-	public IRelatedBranch getParentBranch() {
+	public IOrganization getParentBranch() {
 		return this.parentBranch;
 	}
 
@@ -54,7 +55,7 @@ public abstract class RelatedBranchAndRole extends OrganizationAndRole implement
 	 * @see com.github.nest.sparrow.party.generalization.IRelatedBranch#setParentBranch(com.github.nest.sparrow.party.generalization.IRelatedBranch)
 	 */
 	@Override
-	public void setParentBranch(IRelatedBranch parentBranch) {
+	public void setParentBranch(IOrganization parentBranch) {
 		this.parentBranch = parentBranch;
 	}
 

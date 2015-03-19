@@ -38,6 +38,7 @@
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
 					p:name="branch"
 					p:description="Branch">
+					<!-- the column is refer to a role, not a party -->
 					<property name="persistentColumn">
 						<bean
 							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
@@ -50,6 +51,7 @@
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
 					p:name="department"
 					p:description="Parent department">
+					<!-- the column is refer to a role, not a party -->
 					<property name="persistentColumn">
 						<bean
 							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"

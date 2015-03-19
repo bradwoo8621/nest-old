@@ -308,7 +308,6 @@
 							p:type="BOOLEAN" />
 					</property>
 				</bean>
-				<!-- TODO addresses -->
 				<!-- operate log -->
 				<bean
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
@@ -466,8 +465,6 @@
 							p:foreignKeyPropertyName="code" />
 					</property>
 				</bean>
-				<!-- TODO work experiences -->
-				<!-- TODO education experiences -->
 			</list>
 		</property>
 	</bean>
@@ -549,7 +546,6 @@
 							p:foreignKeyPropertyName="code" />
 					</property>
 				</bean>
-				<!-- TODO artificial person -->
 			</list>
 		</property>
 	</bean>

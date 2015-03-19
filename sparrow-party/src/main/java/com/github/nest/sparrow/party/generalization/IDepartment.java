@@ -16,7 +16,7 @@ public interface IDepartment extends IOrganization {
 	 * 
 	 * @return
 	 */
-	IBranch getBranch();
+	IOrganization getBranch();
 
 	/**
 	 * get parent department

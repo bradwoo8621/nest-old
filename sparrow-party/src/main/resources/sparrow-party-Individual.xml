@@ -167,7 +167,7 @@
 		scope="singleton"
 		p:resourceClass="com.github.nest.sparrow.party.internal.EducationExperience"
 		p:description="EducationExperience"
-		p:tableName="T_PARTY_EDU_EXP">
+		p:tableName="T_PARTY_EDUCATION_EXPERIENCE">
 		<property name="properties">
 			<list>
 				<bean
@@ -177,31 +177,31 @@
 					<property name="persistentColumn">
 						<bean
 							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
-							p:name="EDU_EXP_ID"
+							p:name="EDUCATION_EXPERIENCE_ID"
 							p:primaryKey="true"
 							p:type="LONG">
 							<property name="primaryKeyGenerator">
 								<bean
 									class="com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.SequenceKey"
-									p:sequenceName="S_PARTY_EDU_EXP" />
+									p:sequenceName="S_PARTY_EDUCATION_EXPERIENCE" />
 							</property>
 						</bean>
 					</property>
 				</bean>
 				<!-- educational organization -->
 				<!-- TODO consider a simple object of education organization -->
-				<!-- <bean
+				<bean
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
 					p:name="organization"
 					p:description="Educational organization of educational experience">
+					<!-- the column is refer to a role, not a party -->
 					<property name="persistentColumn">
 						<bean
 							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
 							p:referencedBeanClass="com.github.nest.sparrow.party.internal.EducationOrganization"
-							p:foreignKeyColumnName="PARTY_ROLE_ID"
-							p:foreignKeyPropertyName="roleId" />
+							p:foreignKeyColumnName="EDUCATION_ORGANIZATION_ID" />
 					</property>
-				</bean> -->
+				</bean>
 				<!-- academic major -->
 				<bean
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"

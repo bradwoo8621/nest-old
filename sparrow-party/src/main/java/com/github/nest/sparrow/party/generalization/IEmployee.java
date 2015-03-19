@@ -4,6 +4,7 @@
 package com.github.nest.sparrow.party.generalization;
 
 import com.github.nest.sparrow.party.IIndividual;
+import com.github.nest.sparrow.party.IOrganization;
 
 /**
  * employee
@@ -23,5 +24,5 @@ public interface IEmployee extends IIndividual {
 	 * 
 	 * @return
 	 */
-	IBranch getBranch();
+	IOrganization getBranch();
 }

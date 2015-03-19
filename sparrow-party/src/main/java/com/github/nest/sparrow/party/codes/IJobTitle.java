@@ -6,11 +6,11 @@ package com.github.nest.sparrow.party.codes;
 import com.github.nest.goose.ICodeBaseBean;
 
 /**
- * occupation
+ * job title
  * 
  * @author brad.wu
  */
-public interface IOccupation extends ICodeBaseBean {
+public interface IJobTitle extends ICodeBaseBean {
 	/**
 	 * get name
 	 * 

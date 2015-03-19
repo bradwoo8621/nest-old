@@ -6,23 +6,23 @@ package com.github.nest.sparrow.party.internal.codes;
 import org.apache.commons.lang3.StringUtils;
 
 import com.github.nest.goose.internal.AbstractCodeBaseBean;
-import com.github.nest.sparrow.party.codes.IIndustry;
+import com.github.nest.sparrow.party.codes.IOccupation;
 
 /**
- * industry
+ * Occupation
  * 
  * @author brad.wu
  */
-public class Industry extends AbstractCodeBaseBean implements IIndustry {
-	private static final long serialVersionUID = -6822902539780831746L;
+public class Occupation extends AbstractCodeBaseBean implements IOccupation {
+	private static final long serialVersionUID = 6675457458267634142L;
 
 	private String code = null;
 	private String name = null;
 
-	public Industry() {
+	public Occupation() {
 	}
 
-	public Industry(String code, String name) {
+	public Occupation(String code, String name) {
 		this.setCode(code);
 		this.setName(name);
 	}
@@ -49,7 +49,7 @@ public class Industry extends AbstractCodeBaseBean implements IIndustry {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.codes.IIndustry#getName()
+	 * @see com.github.nest.sparrow.party.codes.IOccupation#getName()
 	 */
 	@Override
 	public String getName() {

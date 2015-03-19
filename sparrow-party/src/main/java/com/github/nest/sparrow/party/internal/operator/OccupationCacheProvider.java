@@ -4,14 +4,14 @@
 package com.github.nest.sparrow.party.internal.operator;
 
 import com.github.nest.goose.internal.FileLineCacheProvider;
-import com.github.nest.sparrow.party.internal.codes.Industry;
+import com.github.nest.sparrow.party.internal.codes.Occupation;
 
 /**
- * industry cache provider
+ * occupation cache provider
  * 
  * @author brad.wu
  */
-public class IndustryCacheProvider extends FileLineCacheProvider {
+public class OccupationCacheProvider extends FileLineCacheProvider {
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -21,9 +21,9 @@ public class IndustryCacheProvider extends FileLineCacheProvider {
 	@Override
 	protected <T> T createBean(String line) {
 		String[] ss = line.split("[|]");
-		Industry industry = new Industry();
-		industry.setCode(ss[0]);
-		industry.setName(ss[1]);
-		return (T) industry;
+		Occupation occupation = new Occupation();
+		occupation.setCode(ss[0]);
+		occupation.setName(ss[1]);
+		return (T) occupation;
 	}
 }

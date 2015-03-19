@@ -139,12 +139,28 @@
 							p:foreignKeyPropertyName="code" />
 					</property>
 				</bean>
-				<!-- TODO work experiences -->
+				<!-- work experiences -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="workExperiences"
+					p:description="Work experiences of individual">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.OneToManyPersistentColumn"
+							p:subordinateBeanClass="com.github.nest.sparrow.party.internal.WorkExperience"
+							p:foreignKeyColumnName="PARTY_ID">
+							<property name="collectionParameter">
+								<bean
+									class="com.github.nest.arcteryx.persistent.internal.BagCollectionParameter" />
+							</property>
+						</bean>
+					</property>
+				</bean>
 				<!-- education experiences -->
 				<bean
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
 					p:name="educationExperiences"
-					p:description="education experiences of individual">
+					p:description="Education experiences of individual">
 					<property name="persistentColumn">
 						<bean
 							class="com.github.nest.arcteryx.persistent.internal.OneToManyPersistentColumn"
@@ -189,7 +205,6 @@
 					</property>
 				</bean>
 				<!-- educational organization -->
-				<!-- TODO consider a simple object of education organization -->
 				<bean
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
 					p:name="organization"
@@ -245,6 +260,124 @@
 					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
 					p:name="endDate"
 					p:description="End date of educational experience">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="END_DATE"
+							p:type="DATE" />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!-- com.github.nest.sparrow.party.internal.WorkExperience -->
+	<bean
+		id="WorkExperience"
+		class="com.github.nest.arcteryx.persistent.internal.StandalonePersistentBeanDescriptor"
+		scope="singleton"
+		p:resourceClass="com.github.nest.sparrow.party.internal.WorkExperience"
+		p:description="WorkExperience"
+		p:tableName="T_PARTY_WORK_EXPERIENCE">
+		<property name="properties">
+			<list>
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="experienceId"
+					p:description="ID of work experience">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="WORK_EXPERIENCE_ID"
+							p:primaryKey="true"
+							p:type="LONG">
+							<property name="primaryKeyGenerator">
+								<bean
+									class="com.github.nest.arcteryx.persistent.internal.hibernate.pkgenerator.SequenceKey"
+									p:sequenceName="S_PARTY_WORK_EXPERIENCE" />
+							</property>
+						</bean>
+					</property>
+				</bean>
+				<!-- employer -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="employer"
+					p:description="Employer of work experience">
+					<!-- the column is refer to a party, not a role -->
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
+							p:referencedBeanClass="com.github.nest.sparrow.party.internal.Organization"
+							p:foreignKeyColumnName="EMPLOYER_PARTY_ID" />
+					</property>
+				</bean>
+				<!-- occupation -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="occupation"
+					p:description="Occupation of work experience">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
+							p:referencedBeanClass="com.github.nest.sparrow.party.internal.codes.Occupation"
+							p:foreignKeyColumnName="OCCUPATION_CODE"
+							p:foreignKeyPropertyName="code" />
+					</property>
+				</bean>
+				<!-- other occupation -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="otherOccupation"
+					p:description="Other occupation of work experience">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="OTHER_OCCUPATION"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- job title -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="jobTitle"
+					p:description="Job title of work experience">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
+							p:referencedBeanClass="com.github.nest.sparrow.party.internal.codes.JobTitle"
+							p:foreignKeyColumnName="JOB_TITLE_CODE"
+							p:foreignKeyPropertyName="code" />
+					</property>
+				</bean>
+				<!-- other job title -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="otherJobTitle"
+					p:description="Other job title of work experience">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="OTHER_JOB_TITLE"
+							p:type="STRING" />
+					</property>
+				</bean>
+				<!-- start date -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="startDate"
+					p:description="Start date of work experience">
+					<property name="persistentColumn">
+						<bean
+							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"
+							p:name="START_DATE"
+							p:type="DATE" />
+					</property>
+				</bean>
+				<!-- end date -->
+				<bean
+					class="com.github.nest.arcteryx.persistent.internal.PersistentBeanPropertyDescriptor"
+					p:name="endDate"
+					p:description="End date of work experience">
 					<property name="persistentColumn">
 						<bean
 							class="com.github.nest.arcteryx.persistent.internal.PrimitivePersistentColumn"

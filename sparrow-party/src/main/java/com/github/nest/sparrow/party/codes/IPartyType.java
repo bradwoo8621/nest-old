@@ -21,13 +21,6 @@ public interface IPartyType extends ICodeBaseBean {
 	String ORGANIZATION = "O";
 
 	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see com.github.nest.goose.ICodeBaseBean#getCode()
-	 */
-	String getCode();
-
-	/**
 	 * get name of party type
 	 * 
 	 * @return

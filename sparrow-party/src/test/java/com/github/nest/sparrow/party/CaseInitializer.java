@@ -74,6 +74,17 @@ public class CaseInitializer {
 				+ "END_DATE DATE)");
 		stat.execute("create sequence S_PARTY_EDUCATION_EXPERIENCE AS BIGINT start with 1");
 
+		stat.execute("create table T_PARTY_WORK_EXPERIENCE(WORK_EXPERIENCE_ID BIGINT, "//
+				+ "PARTY_ID BIGINT, "//
+				+ "EMPLOYER_PARTY_ID BIGINT, "//
+				+ "OCCUPATION_CODE VARCHAR(5), "//
+				+ "OTHER_OCCUPATION VARCHAR(30), "//
+				+ "JOB_TITLE_CODE VARCHAR(5), "//
+				+ "OTHER_JOB_TITLE VARCHAR(30), "//
+				+ "START_DATE DATE, "//
+				+ "END_DATE DATE)");
+		stat.execute("create sequence S_PARTY_WORK_EXPERIENCE AS BIGINT start with 1");
+
 		stat.execute("create table T_PARTY_ROLE(PARTY_ROLE_ID BIGINT, "//
 				+ "PARTY_ROLE_CODE VARCHAR(10), "//
 				+ "PARTY_ROLE_ENABLED INT, " //

@@ -5,6 +5,7 @@ package com.github.nest.sparrow.party;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -41,6 +42,10 @@ import com.github.nest.goose.location.ICountry;
 import com.github.nest.goose.location.IDistrict;
 import com.github.nest.goose.location.IProvince;
 import com.github.nest.goose.operate.OperateLog;
+import com.github.nest.sparrow.party.codes.IAcademicMajor;
+import com.github.nest.sparrow.party.codes.IEducationDegree;
+import com.github.nest.sparrow.party.codes.IJobTitle;
+import com.github.nest.sparrow.party.codes.IOccupation;
 import com.github.nest.sparrow.party.generalization.IEducationOrganization;
 import com.github.nest.sparrow.party.generalization.IMyEmployee;
 import com.github.nest.sparrow.party.internal.Address;
@@ -49,6 +54,11 @@ import com.github.nest.sparrow.party.internal.EducationOrganization;
 import com.github.nest.sparrow.party.internal.Individual;
 import com.github.nest.sparrow.party.internal.MyEmployee;
 import com.github.nest.sparrow.party.internal.Organization;
+import com.github.nest.sparrow.party.internal.WorkExperience;
+import com.github.nest.sparrow.party.internal.codes.AcademicMajor;
+import com.github.nest.sparrow.party.internal.codes.EducationDegree;
+import com.github.nest.sparrow.party.internal.codes.JobTitle;
+import com.github.nest.sparrow.party.internal.codes.Occupation;
 
 /**
  * @author brad.wu
@@ -83,7 +93,9 @@ public class TestMyEmployee {
 		// and role is different
 		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:memdb", "username", "password");
 		Statement stat = conn.createStatement();
-		stat.execute("call next value for S_PARTY");
+		for (int index = 0; index < 10; index++) {
+			stat.execute("call next value for S_PARTY");
+		}
 		stat.close();
 		conn.close();
 
@@ -98,7 +110,21 @@ public class TestMyEmployee {
 			IEducationExperience iee = new EducationExperience();
 			iee.setOrganization(edu);
 			iee.setStartDate(DateUtils.parseDate("20000901", "yyyyMMdd"));
+			iee.setEndDate(DateUtils.parseDate("20060731", "yyyyMMdd"));
+			iee.setAcademicMajor((IAcademicMajor) ((ICachedBeanDescriptor) sparrowParty.get(AcademicMajor.class))
+					.getFromCache(new Code("CTS")));
+			iee.setDegree((IEducationDegree) ((ICachedBeanDescriptor) sparrowParty.get(EducationDegree.class))
+					.getFromCache(new Code("MST")));
 			employee.setEducationExperiences(Arrays.asList(iee));
+
+			IWorkExperience iwe = new WorkExperience();
+			iwe.setEmployer(edu);
+			iwe.setStartDate(DateUtils.parseDate("20060901", "yyyyMMdd"));
+			iwe.setJobTitle((IJobTitle) ((ICachedBeanDescriptor) sparrowParty.get(JobTitle.class))
+					.getFromCache(new Code("ANA")));
+			iwe.setOccupation((IOccupation) ((ICachedBeanDescriptor) sparrowParty.get(Occupation.class))
+					.getFromCache(new Code("MMO")));
+			employee.setWorkExperiences(Arrays.asList(iwe));
 
 			employeeDescriptor.getSaver().save(employee);
 			sessionFactory.getCurrentSession().getTransaction().commit();
@@ -111,15 +137,17 @@ public class TestMyEmployee {
 
 		{
 			sessionFactory.getCurrentSession().beginTransaction();
-			validateEmployeeByDescriptor(employeeDescriptor);
+			validateEmployeeByDescriptor(sparrowParty);
 			sessionFactory.getCurrentSession().getTransaction().commit();
 		}
 	}
 
-	protected void validateEmployeeByDescriptor(IPersistentBeanDescriptor employeeDescriptor) throws ParseException {
+	protected void validateEmployeeByDescriptor(IResourceDescriptorContext sparrowParty) throws ParseException {
+		IPersistentBeanDescriptor employeeDescriptor = sparrowParty.get(MyEmployee.class);
+
 		IMyEmployee employee = employeeDescriptor.getLoader().load(1l);
 
-		assertEquals(Long.valueOf(2), employee.getPartyId());
+		assertEquals(Long.valueOf(11), employee.getPartyId());
 		assertEquals("PartyCode", employee.getPartyCode());
 		assertEquals("ID123456", employee.getIdNumber());
 		assertEquals("First", employee.getFirstName());
@@ -153,7 +181,7 @@ public class TestMyEmployee {
 		assertEquals(Long.valueOf(1), employee.getRoleId());
 		assertEquals("RoleCode", employee.getRoleCode());
 		assertEquals(true, employee.isRoleEnabled());
-		assertEquals(Long.valueOf(2), employee.getPartyId());
+		assertEquals(Long.valueOf(11), employee.getPartyId());
 
 		List<IEducationExperience> eduList = employee.getEducationExperiences();
 		assertEquals(1, eduList.size());
@@ -161,6 +189,26 @@ public class TestMyEmployee {
 		assertEquals(Long.valueOf(1), edu.getExperienceId());
 		assertEquals(DateUtils.parseDate("20000901", "yyyyMMdd"), edu.getStartDate());
 		assertEquals(Long.valueOf(2), edu.getOrganization().getRoleId());
+		assertEquals("MST", edu.getDegree().getCode());
+		assertEquals("CTS", edu.getAcademicMajor().getCode());
+
+		List<IWorkExperience> workList = employee.getWorkExperiences();
+		assertEquals(1, workList.size());
+		IWorkExperience work = workList.get(0);
+		assertEquals(Long.valueOf(1), work.getExperienceId());
+		assertEquals(DateUtils.parseDate("20060901", "yyyyMMdd"), work.getStartDate());
+		assertEquals("ANA", work.getJobTitle().getCode());
+		assertEquals("MMO", work.getOccupation().getCode());
+		assertEquals(Long.valueOf(12), work.getEmployer().getPartyId());
+		assertTrue(Organization.class.isAssignableFrom(work.getEmployer().getClass()));
+
+		IEducationOrganization eduRole = ((IPersistentBeanDescriptor) sparrowParty.get(EducationOrganization.class))
+				.getLoader().load(2l);
+		assertTrue(eduRole.getParty() == work.getEmployer());
+		assertEquals(Long.valueOf(2), eduRole.getRoleId());
+		assertEquals("EDU001", eduRole.getPartyCode());
+		assertEquals("Education 001", eduRole.getPartyName());
+		assertEquals("EDUR001", eduRole.getRoleCode());
 	}
 
 	protected IMyEmployee createEmployee(IResourceDescriptorContext goose, ICachedBeanDescriptor countryDescriptor,
@@ -219,9 +267,9 @@ public class TestMyEmployee {
 	protected void validateEmployeeBySQL() throws SQLException, ParseException {
 		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:memdb", "username", "password");
 		Statement stat = conn.createStatement();
-		ResultSet rst = stat.executeQuery("select * from T_PARTY where PARTY_ID = 2");
+		ResultSet rst = stat.executeQuery("select * from T_PARTY where PARTY_ID = 11");
 		rst.next();
-		assertEquals(2, rst.getLong("PARTY_ID"));
+		assertEquals(11, rst.getLong("PARTY_ID"));
 		assertEquals("PartyCode", rst.getString("PARTY_CODE"));
 		assertEquals("I", rst.getString("PARTY_TYPE"));
 		assertEquals("ID123456", rst.getString("ID_NUMBER"));
@@ -238,7 +286,7 @@ public class TestMyEmployee {
 		rst = stat.executeQuery("select * from T_PARTY_ADDRESS ORDER BY ADDRESS_ID");
 		rst.next();
 		assertEquals(1, rst.getLong("ADDRESS_ID"));
-		assertEquals(2, rst.getLong("PARTY_ID"));
+		assertEquals(11, rst.getLong("PARTY_ID"));
 		assertEquals("100001", rst.getString("POSTCODE"));
 		assertEquals("CHN", rst.getString("COUNTRY_CODE"));
 		assertEquals("SH", rst.getString("PROVINCE_CODE"));
@@ -259,7 +307,7 @@ public class TestMyEmployee {
 		assertEquals("RoleCode", rst.getString("PARTY_ROLE_CODE"));
 		assertEquals("MEM", rst.getString("PARTY_ROLE_TYPE"));
 		assertEquals(true, rst.getBoolean("PARTY_ROLE_ENABLED"));
-		assertEquals(2, rst.getLong("PARTY_ID"));
+		assertEquals(11, rst.getLong("PARTY_ID"));
 		rst.close();
 		rst = stat.executeQuery("SELECT * FROM T_MY_EMPLOYEE");
 		rst.next();
@@ -269,7 +317,18 @@ public class TestMyEmployee {
 		rst.next();
 		assertEquals(1, rst.getLong("EDUCATION_EXPERIENCE_ID"));
 		assertEquals(DateUtils.parseDate("20000901", "yyyyMMdd"), rst.getDate("START_DATE"));
+		// role id
 		assertEquals(2, rst.getLong("EDUCATION_ORGANIZATION_ID"));
+		assertEquals("MST", rst.getString("DEGREE_CODE"));
+		assertEquals("CTS", rst.getString("MAJOR_CODE"));
+		rst.close();
+		rst = stat.executeQuery("SELECT * FROM T_PARTY_WORK_EXPERIENCE");
+		rst.next();
+		assertEquals(1, rst.getLong("WORK_EXPERIENCE_ID"));
+		assertEquals(DateUtils.parseDate("20060901", "yyyyMMdd"), rst.getDate("START_DATE"));
+		assertEquals("ANA", rst.getString("JOB_TITLE_CODE"));
+		assertEquals("MMO", rst.getString("OCCUPATION_CODE"));
+		assertEquals(12, rst.getLong("EMPLOYER_PARTY_ID"));
 		rst.close();
 		stat.close();
 		conn.close();
@@ -287,9 +346,9 @@ public class TestMyEmployee {
 	private void validateEducationOrganizationBySQL() throws SQLException {
 		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:memdb", "username", "password");
 		Statement stat = conn.createStatement();
-		ResultSet rst = stat.executeQuery("select * from T_PARTY WHERE PARTY_ID = 3");
+		ResultSet rst = stat.executeQuery("select * from T_PARTY WHERE PARTY_ID = 12");
 		rst.next();
-		assertEquals(3, rst.getLong("PARTY_ID"));
+		assertEquals(12, rst.getLong("PARTY_ID"));
 		assertEquals("EDU001", rst.getString("PARTY_CODE"));
 		assertEquals("O", rst.getString("PARTY_TYPE"));
 		assertEquals("Education 001", rst.getString("PARTY_NAME"));
@@ -300,7 +359,7 @@ public class TestMyEmployee {
 		assertEquals("EDUR001", rst.getString("PARTY_ROLE_CODE"));
 		assertEquals("EDU", rst.getString("PARTY_ROLE_TYPE"));
 		assertEquals(true, rst.getBoolean("PARTY_ROLE_ENABLED"));
-		assertEquals(3, rst.getLong("PARTY_ID"));
+		assertEquals(12, rst.getLong("PARTY_ID"));
 		rst.close();
 		rst = stat.executeQuery("SELECT * FROM T_EDUCATION_ORGANIZATION WHERE EDUCATION_ORGANIZATION_ID = 2");
 		rst.next();

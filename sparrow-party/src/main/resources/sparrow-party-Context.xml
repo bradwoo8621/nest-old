@@ -43,6 +43,8 @@
 				<ref bean="Industry" />
 				<ref bean="AcademicMajor" />
 				<ref bean="EducationDegree" />
+				<ref bean="JobTitle" />
+				<ref bean="Occupation" />
 
 				<!-- party -->
 				<ref bean="Party" />
@@ -50,6 +52,7 @@
 				<ref bean="Organization" />
 				<ref bean="Address" />
 				<ref bean="EducationExperience" />
+				<ref bean="WorkExperience" />
 
 				<!-- role -->
 				<ref bean="PartyRole" />

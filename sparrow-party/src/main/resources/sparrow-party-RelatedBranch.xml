@@ -23,8 +23,7 @@
 			<bean
 				class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
 				p:referencedBeanClass="com.github.nest.sparrow.party.internal.Organization"
-				p:foreignKeyColumnName="PARENT_ORGAN_ID"
-				p:foreignKeyPropertyName="partyId" />
+				p:foreignKeyColumnName="PARENT_ORGAN_ID" />
 		</property>
 	</bean>
 	<!-- head office -->

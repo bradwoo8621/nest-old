@@ -81,8 +81,7 @@
 						<bean
 							class="com.github.nest.arcteryx.persistent.internal.ManyToOnePersistentColumn"
 							p:referencedBeanClass="com.github.nest.sparrow.party.internal.Party"
-							p:foreignKeyColumnName="PARTY_ID"
-							p:foreignKeyPropertyName="partyId" />
+							p:foreignKeyColumnName="PARTY_ID" />
 					</property>
 				</bean>
 				<!-- operate log -->

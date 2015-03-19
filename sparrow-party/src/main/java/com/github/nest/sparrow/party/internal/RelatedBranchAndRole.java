@@ -4,6 +4,7 @@
 package com.github.nest.sparrow.party.internal;
 
 import com.github.nest.sparrow.party.IOrganization;
+import com.github.nest.sparrow.party.IPartyRole;
 import com.github.nest.sparrow.party.generalization.IRelatedBranch;
 import com.github.nest.sparrow.party.generalization.IRelatedEmployee;
 
@@ -56,7 +57,11 @@ public abstract class RelatedBranchAndRole extends OrganizationAndRole implement
 	 */
 	@Override
 	public void setParentBranch(IOrganization parentBranch) {
-		this.parentBranch = parentBranch;
+		if (parentBranch != null && parentBranch instanceof IPartyRole) {
+			this.parentBranch = (IOrganization) ((IPartyRole) parentBranch).getParty();
+		} else {
+			this.parentBranch = parentBranch;
+		}
 	}
 
 	/**

@@ -33,7 +33,7 @@ public final class PartyType extends AbstractCodeBaseBean implements IPartyType 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.codes.IPartyType#getCode()
+	 * @see com.github.nest.goose.ICodeBaseBean#getCode()
 	 */
 	@Override
 	public String getCode() {

@@ -31,7 +31,7 @@ public class PartyRoleType extends AbstractCodeBaseBean implements IPartyRoleTyp
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.sparrow.party.codes.IPartyRoleType#getCode()
+	 * @see com.github.nest.goose.ICodeBaseBean#getCode()
 	 */
 	@Override
 	public String getCode() {

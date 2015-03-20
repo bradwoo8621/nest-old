@@ -4,13 +4,14 @@
 package com.github.nest.sparrow.party.generalization;
 
 import com.github.nest.sparrow.party.IOrganization;
+import com.github.nest.sparrow.party.IPartyRole;
 
 /**
  * related organization, not me.
  * 
  * @author brad.wu
  */
-public interface IRelatedBranch extends IOrganization {
+public interface IRelatedBranch extends IOrganization, IPartyRole {
 	/**
 	 * (non-Javadoc)
 	 * 

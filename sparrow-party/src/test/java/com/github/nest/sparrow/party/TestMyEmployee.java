@@ -69,6 +69,7 @@ public class TestMyEmployee {
 		CaseInitializer.initLog();
 		CaseInitializer.loadContext();
 		CaseInitializer.create();
+		CaseInitializer.increasePartySequence();
 	}
 
 	@Test
@@ -88,16 +89,6 @@ public class TestMyEmployee {
 
 		SessionFactory sessionFactory = configuration.getRealConfiguration();
 		long now = System.currentTimeMillis();
-
-		// to increase party sequence manually to ensure the sequence of party
-		// and role is different
-		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:memdb", "username", "password");
-		Statement stat = conn.createStatement();
-		for (int index = 0; index < 10; index++) {
-			stat.execute("call next value for S_PARTY");
-		}
-		stat.close();
-		conn.close();
 
 		{
 			sessionFactory.getCurrentSession().beginTransaction();

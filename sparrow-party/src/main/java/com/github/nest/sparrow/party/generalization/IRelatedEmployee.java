@@ -3,12 +3,15 @@
  */
 package com.github.nest.sparrow.party.generalization;
 
+import com.github.nest.sparrow.party.IOrganization;
+import com.github.nest.sparrow.party.IPartyRole;
+
 /**
  * employee in related organization
  * 
  * @author brad.wu
  */
-public interface IRelatedEmployee extends IEmployee {
+public interface IRelatedEmployee extends IEmployee, IPartyRole {
 	/**
 	 * get department
 	 * 
@@ -24,16 +27,9 @@ public interface IRelatedEmployee extends IEmployee {
 	void setDepartment(IRelatedDepartment department);
 
 	/**
-	 * get branch
-	 * 
-	 * @return
-	 */
-	IRelatedBranch getBranch();
-
-	/**
 	 * set branch
 	 * 
 	 * @param branch
 	 */
-	void setBranch(IRelatedBranch branch);
+	void setBranch(IOrganization branch);
 }

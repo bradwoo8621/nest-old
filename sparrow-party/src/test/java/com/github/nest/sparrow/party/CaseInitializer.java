@@ -5,6 +5,7 @@ package com.github.nest.sparrow.party;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.log4j.BasicConfigurator;
@@ -97,10 +98,6 @@ public class CaseInitializer {
 				+ "OPTIMISTIC_LOCK BIGINT)");
 		stat.execute("create sequence S_PARTY_ROLE AS BIGINT start with 1");
 
-		stat.execute("create table T_MY_EMPLOYEE(MY_EMPLOYEE_ID BIGINT, "//
-				+ "BRANCH_ID BIGINT, "//
-				+ "DEPARTMENT_ID BIGINT)");
-
 		stat.execute("create table T_MY_BRANCH(MY_BRANCH_ID BIGINT, "//
 				+ "PARENT_BRANCH_ID BIGINT, "//
 				+ "IS_HEAD_OFFICE INT)");
@@ -109,11 +106,35 @@ public class CaseInitializer {
 				+ "BRANCH_ID BIGINT, "//
 				+ "PARENT_DEPARTMENT_ID BIGINT)");
 
+		stat.execute("create table T_MY_EMPLOYEE(MY_EMPLOYEE_ID BIGINT, "//
+				+ "BRANCH_ID BIGINT, "//
+				+ "DEPARTMENT_ID BIGINT)");
+
+		stat.execute("create table T_RELATED_DEPARTMENT(RELATED_DEPARTMENT_ID BIGINT, "//
+				+ "BRANCH_ID BIGINT, "//
+				+ "PARENT_DEPARTMENT_ID BIGINT)");
+
+		stat.execute("create table T_RELATED_EMPLOYEE(RELATED_EMPLOYEE_ID BIGINT, "//
+				+ "BRANCH_ID BIGINT, "//
+				+ "DEPARTMENT_ID BIGINT)");
+
 		stat.execute("create table T_EDUCATION_ORGANIZATION(EDUCATION_ORGANIZATION_ID BIGINT, "//
 				+ "PARENT_ORGAN_ID BIGINT, "//
 				+ "IS_HEAD_OFFICE INT)");
 
 		conn.commit();
+		conn.close();
+	}
+	
+	public static void increasePartySequence() throws SQLException {
+		// to increase party sequence manually to ensure the sequence of party
+		// and role is different
+		Connection conn = DriverManager.getConnection("jdbc:hsqldb:mem:memdb", "username", "password");
+		Statement stat = conn.createStatement();
+		for (int index = 0; index < 10; index++) {
+			stat.execute("call next value for S_PARTY");
+		}
+		stat.close();
 		conn.close();
 	}
 

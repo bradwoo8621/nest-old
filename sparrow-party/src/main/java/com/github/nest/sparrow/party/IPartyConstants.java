@@ -7,6 +7,8 @@ import com.github.nest.sparrow.party.generalization.IEducationOrganization;
 import com.github.nest.sparrow.party.generalization.IMyBranch;
 import com.github.nest.sparrow.party.generalization.IMyDepartment;
 import com.github.nest.sparrow.party.generalization.IMyEmployee;
+import com.github.nest.sparrow.party.generalization.IRelatedDepartment;
+import com.github.nest.sparrow.party.generalization.IRelatedEmployee;
 
 /**
  * internal party constants
@@ -44,4 +46,18 @@ public interface IPartyConstants {
 	 * @see IEducationOrganization
 	 */
 	String ROLE_CODE_EDUCATIONAL_ORGANIZATION = "EDU";
+
+	/**
+	 * related department role code
+	 * 
+	 * @see IRelatedDepartment
+	 */
+	String ROLE_CODE_RELATED_DEPARTMENT = "RDP";
+	
+	/**
+	 * related employee role code
+	 * 
+	 * @see IRelatedEmployee
+	 */
+	String ROLE_CODE_RELATED_EMPLOYEE = "REP";
 }

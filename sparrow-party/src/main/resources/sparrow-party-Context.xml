@@ -57,11 +57,17 @@
 				<!-- role -->
 				<ref bean="PartyRole" />
 				<!-- Individual party role -->
+				<!-- my roles -->
 				<ref bean="MyEmployee" />
+				<!-- related roles -->
+				<ref bean="RelatedEmployee" />
 				<!-- Organization party role -->
+				<!-- my roles -->
 				<ref bean="MyBranch" />
 				<ref bean="MyDepartment" />
+				<!-- related roles -->
 				<ref bean="EducationOrganization" />
+				<ref bean="RelatedDepartment" />
 			</list>
 		</property>
 		<property name="operatorProviders">
@@ -160,7 +166,6 @@
 		<value>nationality</value>
 		<value>workExperiences</value>
 		<!-- from Organization -->
-		<value>artificialPerson</value>
 		<value>closeDownDate</value>
 		<value>industry</value>
 		<value>registerDate</value>
@@ -176,9 +181,12 @@
 
 	<import resource="classpath:/sparrow-party-Role.xml" />
 	<import resource="classpath:/sparrow-party-RelatedBranch.xml" />
+	<import resource="classpath:/sparrow-party-RelatedDepartment.xml" />
+	<import resource="classpath:/sparrow-party-RelatedEmployee.xml" />
 
 	<import resource="classpath:/sparrow-party-MyBranch.xml" />
 	<import resource="classpath:/sparrow-party-MyDepartment.xml" />
 	<import resource="classpath:/sparrow-party-MyEmployee.xml" />
+
 	<import resource="classpath:/sparrow-party-EducationOrganization.xml" />
 </beans>

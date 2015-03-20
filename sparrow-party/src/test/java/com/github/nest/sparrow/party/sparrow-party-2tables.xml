@@ -206,7 +206,7 @@
 				<bean
 					class="com.github.nest.sparrow.party.internal.operator.PartyRoleTypeCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/partyRoleTypes.list" />
+					p:fileClassPath="/codes/partyRoleTypes.list" />
 			</list>
 		</property>
 	</bean>
@@ -235,7 +235,7 @@
 				<bean
 					class="com.github.nest.sparrow.party.internal.operator.IndustryCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/industry.list" />
+					p:fileClassPath="/codes/industry.list" />
 			</list>
 		</property>
 	</bean>

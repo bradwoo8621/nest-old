@@ -52,7 +52,7 @@ public class TestSeparatedPartyTables {
 		Logger.getLogger(HibernatePersistentConfigurationInitializer.class).setLevel(Level.DEBUG);
 
 		{
-			Context.createApplicationContextByClassPath(GOOSE_CONTEXT_ID, "/goose.xml");
+			Context.createApplicationContextByClassPath(GOOSE_CONTEXT_ID, "/goose/goose.xml");
 			Context.createApplicationContextByClassPath(SPARROW_PARTY_CONTEXT_ID,
 					"/com/github/nest/sparrow/party/sparrow-party-2tables.xml");
 		}

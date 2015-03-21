@@ -33,7 +33,7 @@ public class TestGooseXML {
 	@Test
 	public void test() {
 		{
-			Context.createApplicationContextByClassPath("goose", "/goose.xml");
+			Context.createApplicationContextByClassPath("goose", "/goose/goose.xml");
 		}
 
 		IPersistentBeanDescriptorContext context = ResourceDescriptorContextRepository.getContext("goose-context");

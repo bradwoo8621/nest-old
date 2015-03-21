@@ -139,8 +139,8 @@ public class CaseInitializer {
 	}
 
 	public static void loadContext() {
-		Context.createApplicationContextByClassPath(GOOSE_CONTEXT_ID, "/goose.xml");
-		Context.createApplicationContextByClassPath(SPARROW_PARTY_CONTEXT_ID, "/sparrow-party-Context.xml");
+		Context.createApplicationContextByClassPath(GOOSE_CONTEXT_ID, "/goose/goose.xml");
+		Context.createApplicationContextByClassPath(SPARROW_PARTY_CONTEXT_ID, "/sparrow-party/sparrow-party-Context.xml");
 	}
 
 	public static void initLog() {

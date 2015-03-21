@@ -67,7 +67,7 @@
 				<bean
 					class="com.github.nest.sparrow.party.internal.operator.PartyRoleTypeCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/codes/partyRoleTypes.list" />
+					p:fileClassPath="/sparrow-party/codes/partyRoleTypes.list" />
 			</list>
 		</property>
 	</bean>
@@ -96,7 +96,7 @@
 				<bean
 					class="com.github.nest.sparrow.party.internal.operator.IndustryCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/codes/industry.list" />
+					p:fileClassPath="/sparrow-party/codes/industry.list" />
 			</list>
 		</property>
 	</bean>
@@ -125,7 +125,7 @@
 				<bean
 					class="com.github.nest.sparrow.party.internal.operator.AcademicMajorCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/codes/academicMajors.list" />
+					p:fileClassPath="/sparrow-party/codes/academicMajors.list" />
 			</list>
 		</property>
 	</bean>
@@ -154,7 +154,7 @@
 				<bean
 					class="com.github.nest.sparrow.party.internal.operator.EducationDegreeCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/codes/educationDegrees.list" />
+					p:fileClassPath="/sparrow-party/codes/educationDegrees.list" />
 			</list>
 		</property>
 	</bean>
@@ -183,7 +183,7 @@
 				<bean
 					class="com.github.nest.sparrow.party.internal.operator.JobTitleCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/codes/jobTitles.list" />
+					p:fileClassPath="/sparrow-party/codes/jobTitles.list" />
 			</list>
 		</property>
 	</bean>
@@ -212,7 +212,7 @@
 				<bean
 					class="com.github.nest.sparrow.party.internal.operator.OccupationCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/codes/occupations.list" />
+					p:fileClassPath="/sparrow-party/codes/occupations.list" />
 			</list>
 		</property>
 	</bean>

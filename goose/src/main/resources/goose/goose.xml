@@ -131,7 +131,7 @@
 				<bean
 					class="com.github.nest.goose.internal.location.CountryCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/countries.list" />
+					p:fileClassPath="/goose/codes/countries.list" />
 			</list>
 		</property>
 	</bean>
@@ -164,7 +164,7 @@
 				<bean
 					class="com.github.nest.goose.internal.location.ProvinceCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/provinces.list" />
+					p:fileClassPath="/goose/codes/provinces.list" />
 			</list>
 		</property>
 	</bean>
@@ -201,7 +201,7 @@
 				<bean
 					class="com.github.nest.goose.internal.location.CityCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/cities.list" />
+					p:fileClassPath="/goose/codes/cities.list" />
 			</list>
 		</property>
 	</bean>
@@ -242,7 +242,7 @@
 				<bean
 					class="com.github.nest.goose.internal.location.DistrictCacheProvider"
 					init-method="readFromClassPath"
-					p:fileClassPath="/districts.list" />
+					p:fileClassPath="/goose/codes/districts.list" />
 			</list>
 		</property>
 	</bean>

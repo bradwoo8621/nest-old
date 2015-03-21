@@ -173,20 +173,20 @@
 		<value>registerNumber</value>
 	</util:set>
 
-	<import resource="classpath:/sparrow-party-Codes.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-Codes.xml" />
 
-	<import resource="classpath:/sparrow-party-Party.xml" />
-	<import resource="classpath:/sparrow-party-Individual.xml" />
-	<import resource="classpath:/sparrow-party-Organization.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-Party.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-Individual.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-Organization.xml" />
 
-	<import resource="classpath:/sparrow-party-Role.xml" />
-	<import resource="classpath:/sparrow-party-RelatedBranch.xml" />
-	<import resource="classpath:/sparrow-party-RelatedDepartment.xml" />
-	<import resource="classpath:/sparrow-party-RelatedEmployee.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-Role.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-RelatedBranch.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-RelatedDepartment.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-RelatedEmployee.xml" />
 
-	<import resource="classpath:/sparrow-party-MyBranch.xml" />
-	<import resource="classpath:/sparrow-party-MyDepartment.xml" />
-	<import resource="classpath:/sparrow-party-MyEmployee.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-MyBranch.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-MyDepartment.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-MyEmployee.xml" />
 
-	<import resource="classpath:/sparrow-party-EducationOrganization.xml" />
+	<import resource="classpath:/sparrow-party/sparrow-party-EducationOrganization.xml" />
 </beans>

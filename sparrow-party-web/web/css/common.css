@@ -1,0 +1,293 @@
+body {
+	padding-top: 50px;
+}
+
+div.hide {
+	display: none;
+}
+
+.panel-bold>.panel-heading {
+	font-weight: bold;
+}
+
+label.form-horizontal-label {
+	padding-top: 7px;
+	text-align: left;
+}
+
+label.form-vertical-label {
+	padding-left: 5px;
+}
+
+input[type=checkbox].form-vertical-checkbox, input[type=radio].form-vertical-radio
+	{
+	margin-top: 10px;
+	margin-left: 5px;
+}
+
+div.btn-toolbar-left {
+	text-align: left;
+}
+
+div.btn-toolbar-right {
+	text-align: right;
+}
+
+div.alert-last-row {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+
+div.panel-remove-bottom-padding>div.panel-body {
+	padding-bottom: 0px;
+}
+
+div.panel-heading ul.pagination {
+	margin: 0px;
+	margin-top: -6px;
+	font-weight: normal;
+}
+
+div.panel-heading ul.pagination a {
+	padding: 4px 6px;
+}
+
+div.datatable-heading {
+	padding-bottom: 5px\9;
+}
+
+div.datatable-body {
+	position: relative;
+}
+
+div.datatable-body>div.no-data {
+	padding: 5px;
+	text-align: center;
+}
+
+div.datatable-pagination {
+	padding-top: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+div.datatable-pagination ul.pagination {
+	margin: 0px;
+}
+
+ul.pagination a:focus {
+	background-color: white;
+}
+
+div.pagination-status>div {
+	display: table;
+	height: 34px;
+}
+
+div.pagination-status>div>span {
+	vertical-align: middle;
+	display: table-cell;
+}
+
+div.pagination-status-buttons {
+	text-align: right;
+}
+
+div.panel-body.table-only {
+	padding: 0px;
+	overflow: auto;
+	width: 100%;
+	box-sizing: content-box;
+}
+
+div.table-only .table-heading {
+	overflow: hidden;
+}
+
+div.table-only .table-heading .table-heading-inner {
+	padding-right: 17px;
+	box-sizing: content-box;
+	background-image: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5',
+		endColorstr='#ffe8e8e8', GradientType=0);
+	background-repeat: repeat-x;
+}
+
+div.table-only .table-body {
+	overflow: auto;
+}
+
+div.table-only thead, div.table-fix-left thead, div.table-fix-right thead
+	{
+	font-weight: bold;
+}
+
+div.table-only .datatable {
+	margin-bottom: 0px;
+	max-width: 100%;
+	width: 100%;
+}
+
+table.datatable.cell-border tbody tr.odd.hover, table.datatable.cell-border tbody tr.even.hover {
+	background-color: #eee;
+}
+
+table.datatable.cell-border tbody tr.odd {
+	background-color: #f5f5f5;
+}
+
+table.datatable.cell-border tbody tr.even {
+	background-color: white;
+}
+
+div.table-only table.datatable.cell-border thead tr td, div.table-fix-left table.datatable.cell-border thead tr td,
+	div.table-fix-right table.datatable thead tr td {
+	padding: 5px;
+	height: 32px;
+}
+
+div.table-only table.datatable.cell-border tbody tr td, div.table-fix-left table.datatable.cell-border tbody tr td,
+	div.table-fix-right table.datatable tbody tr td {
+	padding: 5px;
+	height: 32px;
+	height: 33px\9;
+	white-space: nowrap;
+}
+
+div.table-only table.datatable.cell-border tbody tr td:last-child, div.table-only>table.datatable.cell-border thead tr td:last-child
+	{
+	border-right: 0px;
+}
+
+div.table-only table.datatable.cell-border tbody tr:last-child td {
+	border-bottom: 1px solid #ddd;
+}
+
+div.table-only table.datatable.cell-border tbody tr td, div.table-fix-left table.datatable.cell-border tbody tr td
+	{
+	border-top: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+
+div.table-fix-right table.datatable.cell-border tbody tr td {
+	border-top: 1px solid #ddd;
+	border-left: 1px solid #ddd;
+}
+
+div.table-fix-right table.datatable.cell-border tbody tr td:last-child {
+	
+}
+
+div.table-only>table.datatable.cell-border thead tr td {
+	
+}
+
+div.table-fix-left {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 1px;
+}
+
+div.table-fix-right {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	height: 1px;
+}
+
+div.table-fix-right div.table-fix-right-head-wrapper {
+	position: relative;
+	top: 0px;
+	left: 0px;
+}
+
+div.table-fix-right div.table-fix-right-top-corner {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	width: 17px;
+	right: -17px;
+	display: block;
+	background-image: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5',
+		endColorstr='#ffe8e8e8', GradientType=0);
+	background-repeat: repeat-x;
+}
+
+div.table-fix-left thead tr td, div.table-fix-right thead tr td, div.table-only thead tr td
+	{
+	background-image: linear-gradient(to bottom, #f5f5f5 0, #e8e8e8 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5',
+		endColorstr='#ffe8e8e8', GradientType=0);
+	background-repeat: repeat-x;
+}
+
+div.button-in-table-cell>button {
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+div.datatable-edit-dialog>div.modal-dialog {
+	width: 900px;
+}
+
+div.datatable-edit-dialog>div.modal-dialog>div.modal-content>div.modal-body .form-group
+	{
+	margin-bottom: 3px;
+}
+
+div.datatable-edit-dialog>div.modal-dialog>div.modal-content>div.modal-body
+	{
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+
+div.datatable-edit-dialog>div.modal-dialog>div.modal-content>div.modal-footer
+	{
+	padding-right: 0px;
+	padding-left: 0px;
+	padding-top: 5px;
+}
+
+.input-group .form-control.search-code {
+	width: 50.4%;
+	width: 50.2% \9;
+	width: 50.5% \9\0;
+}
+
+.input-group .form-control.search-label {
+	border-left: 0px;
+	border-right: 0px\9;
+	width: 150%;
+	margin-left: -50%;
+	background-color: #fff;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+	position: relative;
+	min-height: 100%;
+	overflow-y: scroll;
+}
+
+body {
+	/* Margin bottom by footer height */
+	margin-bottom: 40px;
+}
+
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	/* Set the fixed height of the footer here */
+	height: 40px;
+	background-color: #f5f5f5;
+}
+
+.container .text-muted {
+	margin: 10px 0;
+}

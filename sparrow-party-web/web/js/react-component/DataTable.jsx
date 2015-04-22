@@ -10,12 +10,7 @@ var DataTable = React.createClass({
 		model: React.PropTypes.object.isRequired,
 		title: React.PropTypes.string,
 		
-		columns: React.PropTypes.arrayOf(React.PropTypes.shape({
-			title: React.PropTypes.string,
-			data: React.PropTypes.string, // path of value
-			render: React.PropTypes.func,
-			width: React.PropTypes.number, // eg. 100 is 100px
-		})),
+		columns: React.PropTypes.object,
 		layout: React.PropTypes.shape({
 				scrollY: React.PropTypes.number, // eg. 200 is 200px
 				scrollX: React.PropTypes.bool,
@@ -27,6 +22,8 @@ var DataTable = React.createClass({
 				indexable: React.PropTypes.bool,
 				pagable: React.PropTypes.bool,
 				countPerPage: React.PropTypes.number,
+				searchable: React.PropTypes.bool,
+				sortable: React.PropTypes.oneOfType([React.PropTypes.bool, React.PropTypes.object]),
 		}),
 		editLayout: React.PropTypes.object,
 		
@@ -41,6 +38,9 @@ var DataTable = React.createClass({
 			currentPageIndex: 1, // page number count from 1
 			pageCount: 1, // page count default 1
 			countPerPage: 2, // count per page default 10
+			searchText: null, // search text,
+			sortColumn: null,
+			sortWay: null,
 		};
 	},
 	componentDidMount: function () {
@@ -59,6 +59,16 @@ var DataTable = React.createClass({
 			$("#scrolled-right-columns-body-" + _this.props.id).scrollTop($this.scrollTop());
 		});
 	},
+	renderSearchBox: function() {
+		if (this.props.layout.searchable) {
+			return (
+				<input id={"datatable-search-" + this.props.id} className="form-control table-search-box pull-right" 
+					placeholder="Search..." onChange={this.handleSearchBoxChanged}/>
+			);
+		} else {
+			return null;
+		}
+	},
 	renderHeadingButtons: function() {
 		if (this.props.layout.addable) {
 			return (
@@ -69,6 +79,19 @@ var DataTable = React.createClass({
 		} else {
 			return null;
 		}
+	},
+	renderPanelHeading: function() {
+		return (<div className="panel-heading datatable-heading">
+			<div className="row">
+				<div className="col-md-3">
+					<label className="datatable-heading-label">{this.props.title}</label>
+				</div>
+				<div className="col-md-9" style={{paddingRight: "5px"}}>
+					{this.renderHeadingButtons()}
+					{this.renderSearchBox()}
+				</div>
+			</div>
+		</div>);
 	},
 	// render operation cell
 	renderOperationCell: function(column, data) {
@@ -102,13 +125,11 @@ var DataTable = React.createClass({
 						data = _this.renderOperationCell(column, row);
 					} else if (column.indexable) {
 						data = rowIndex;
-					} else if (row.get) {
-						data = row.get(column.data);
 					} else {
 						data = row[column.data];
 					}
 					if (data != null && column.render) {
-						data = column.render(data);
+						data = column.render(data, row);
 					}
 					return (<td style={style}>{data}</td>);
 				} else {
@@ -137,7 +158,7 @@ var DataTable = React.createClass({
 	},
 	// render body content
 	renderBody: function(all, leftFixed, rightFixed) {
-		var data = this.getValueFromModel();
+		var data = this.getDataToDisplay();
 		var rowIndex = 1;
 		var _this = this;
 		var range = this.computePagination();
@@ -151,6 +172,23 @@ var DataTable = React.createClass({
 				}
 			})}
 		</tbody>);
+	},
+	renderSortButton: function(column) {
+		if (this.isSortable(column)) {
+			var icon = "sort";
+			var sortClass = "pull-right datatable-sort";
+			if (this.state.sortColumn == column.data) {
+				sortClass += " datatable-column-sorted";
+				if (this.state.sortWay == "asc") {
+					icon = "sort-by-attributes";
+				} else {
+					icon = "sort-by-attributes-alt";
+				}
+			}
+			return (<a href="javascript:void(0);" className={sortClass} onClick={this.sortColumn} data-prop={column.data}>
+				<Glyphicon glyph={icon} bsStyle="small" />
+			</a>);
+		}
 	},
 	// render heading content
 	renderHeading: function(all, leftFixed, rightFixed) {
@@ -167,7 +205,10 @@ var DataTable = React.createClass({
 					if (!(column.visible === undefined || column.visible === true)) {
 						style.display = "none";
 					}
-					return (<td style={style}>{column.title}</td>);
+					return (<td style={style}>
+						{column.title}
+						{_this.renderSortButton(column)}
+					</td>);
 				} else {
 					columnIndex++;
 				}
@@ -199,7 +240,7 @@ var DataTable = React.createClass({
 	// eg. there are 3 columns in table, if no fixed right column, return 3. if
 	// 1 fixed right column, return 2.
 	getMinFixedRightColumnIndex: function() {
-		return this.columns.length - this.fixedRightColumns;
+		return this.columns.length() - this.fixedRightColumns;
 	},
 	// compute table style
 	computeTableStyle: function() {
@@ -428,7 +469,7 @@ var DataTable = React.createClass({
 			this.props.layout.scrollX = true;
 		}
 		// copy from this.props.columns
-		this.columns = this.props.columns.slice(0);
+		this.columns = this.props.columns.clone();
 		this.fixedRightColumns = this.props.layout.fixedRightColumns ? this.props.layout.fixedRightColumns : 0;
 		this.fixedLeftColumns = this.props.layout.fixedLeftColumns ? this.props.layout.fixedLeftColumns : 0;
 		
@@ -453,10 +494,7 @@ var DataTable = React.createClass({
 		}
 		return (
 			<div className="panel panel-default panel-bold">
-				<div className="panel-heading datatable-heading">
-					{this.props.title}
-					{this.renderHeadingButtons()}
-				</div>
+				{this.renderPanelHeading()}
 				<div className="datatable-body">
 					{this.renderTable()}
 					{this.renderFixedLeftColumns()}
@@ -468,6 +506,14 @@ var DataTable = React.createClass({
 				{this.props.layout.removable ? <ModalConfirmDialog ref="removeConfirmDialog" /> : null}
 			</div>
 		);
+	},
+	handleSearchBoxChanged: function(evt) {
+		var value = evt.target.value;
+		if (value == "") {
+			this.setState({searchText: null});
+		} else {
+			this.setState({searchText: value});
+		}
 	},
 	// handle model change
 	handleModelChange: function(evt) {
@@ -501,6 +547,44 @@ var DataTable = React.createClass({
 			// no pagination
 			return index;
 		}
+	},
+	sortColumn: function(evt) {
+		var prop = $(evt.target).closest("a").attr("data-prop");
+		var sortWay = "asc";
+		if (this.state.sortColumn != null && this.state.sortColumn == prop) {
+			sortWay = this.state.sortWay == "asc" ? "desc" : "asc";
+		}
+		var render = null;
+		var sorter = function(a, b) {
+			var v1 = a[prop], v2 = b[prop];
+			if (render !== undefined && render != null) {
+				v1 = render(v1, a);
+				v2 = render(v2, a);
+			}
+			if (v1 == null) {
+				return v2 == null ? 0 : -1;
+			} else if (v1 == null) {
+				return 1;
+			} else if (v1 > v2) {
+				return 1;
+			} else if (v1 < v2) {
+				return -1;
+			} else {
+				return 0;
+			}
+		};
+		var column = this.props.columns.get(prop);
+		if (column.sort !== undefined && (typeof(column.sort) === "function")) {
+			sorter = column.sort;
+		}
+		render = column.render;
+		
+		if (sortWay == "asc") {
+			this.getValueFromModel().sort(sorter);
+		} else {
+			this.getValueFromModel().sort(function(a, b) {return 0 - sorter(a, b);});
+		}
+		this.setState({sortColumn: prop, sortWay: sortWay});
 	},
 	rowMouseMove: function(evt) {
 		var index = this.getOperatingRowIndex(evt);
@@ -574,12 +658,60 @@ var DataTable = React.createClass({
 	getComponent: function() {
 		return $("#" + this.props.id);
 	},
+	// check is pagable
 	isPagable: function() {
 		return this.props.layout.pagable === true ? true : false;
 	},
+	isSearchable: function() {
+		return this.props.layout.searchable === true ? true : false;
+	},
+	isSearching: function() {
+		return this.isSearchable() && this.state.searchText != null && this.state.searchText != "";
+	},
+	isSortable: function(column) {
+		if (this.props.layout.sortable === true) {
+			if (column.sort === false) {
+				return false;
+			} else if (column.editable || column.removable || column.indexable) {
+				// operation and index column no sort
+				return false;
+			} else {
+				return true;
+			}
+		} else {
+			return column.sort === true || typeof(column.sort) === "function";
+		}
+	},
+	// has data to display
 	hasDataToDisplay: function() {
-		var data = this.getValueFromModel();
+		var data = this.getDataToDisplay();
 		return data != null && data.length > 0;
+	},
+	// filter data for display
+	filterData: function(row, rowIndex, all) {
+		var text = this.state.searchText.toUpperCase();
+		var columns = this.props.columns.columns();
+		for (var index = 0, count = columns.length; index < count; index++) {
+			var data = row[columns[index].data];
+			if (data == null || data == "") {
+				continue;
+			}
+			if (columns[index].render) {
+				data = columns[index].render(data, row);
+			}
+			if (data == null || data == "") {
+				continue;
+			}
+			if (data.toString().toUpperCase().indexOf(text) != -1) {
+				return true;
+			}
+		}
+		return false;
+	},
+	// get data to display
+	getDataToDisplay: function() {
+		var data = this.getValueFromModel();
+		return this.isSearching() ? data.filter(this.filterData) : data;
 	},
 	// get model
 	getModel: function() {

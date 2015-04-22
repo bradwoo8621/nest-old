@@ -76,10 +76,11 @@ var Codes = ModelProxyClass({
  * object.
  */
 var ModelProxy = ModelProxyClass({
-	initialize : function(model) {
+	initialize : function(model, modelConfig) {
 		// init listeners
 		this.__propertyListeners = {};
 		// init model
+		this.__modelConfig = modelConfig;
 		this.__initModel = model;
 		this.__model = ModelUtil.clone(model);
 		var _this = this;
@@ -342,6 +343,9 @@ var ModelProxy = ModelProxyClass({
 	getDataModel : function() {
 		return this.__model;
 	},
+	getDataModelConfig : function() {
+		return this.__modelConfig;
+	},
 });
 
 /**
@@ -354,7 +358,7 @@ var ModelUtil = {
 	// create a model, layout is an instance of Layout
 	create : function(layout) {
 		var model = {};
-		for (var key in layout.all()) {
+		for ( var key in layout.all()) {
 			var cell = layout.cell(key);
 			if (cell.type == "table") {
 				// array, initialize to empty array
@@ -387,7 +391,7 @@ var LayoutProxyClass = function(methods) {
 /**
  * Row Layout
  */
-var RowLayout = LayoutProxyClass({
+var FormRowLayout = LayoutProxyClass({
 	initialize : function() {
 		this.cellData = [];
 	},
@@ -424,7 +428,7 @@ var Layout = LayoutProxyClass({
 					var rowIndex = element[key].cell.row;
 					if (rows[rowIndex]) {
 					} else {
-						rows[rowIndex] = new RowLayout({});
+						rows[rowIndex] = new FormRowLayout({});
 					}
 					rows[rowIndex].put($.extend({
 						id : key
@@ -463,11 +467,11 @@ var TableLayout = LayoutProxyClass({
 		this.type = layout.type;
 		this.cell = layout.cell;
 		this.layout = layout.layout;
-		this.columns = layout.columns;
+		this.columns = new TableColumnLayout(layout.columns);
 		this.editWidth = layout.editWidth;
 
 		var form = {};
-		this.columns.forEach(function(column) {
+		this.columns.columns().forEach(function(column) {
 			form[column.data] = {
 				label : column.title,
 				cell : {
@@ -487,4 +491,47 @@ var TableLayout = LayoutProxyClass({
 	editLayout : function() {
 		return this.form;
 	}
+});
+/**
+ * table column layout
+ */
+var TableColumnLayout = LayoutProxyClass({
+	initialize : function(columns) {
+		this.all = {};
+		this.array = [];
+		for ( var key in columns) {
+			var column = columns[key];
+			column.data = key;
+			this.all[key] = column;
+			this.array.push(column);
+		}
+		this.array.sort(function(a, b) {
+			return a.index - b.index;
+		});
+	},
+	columns : function() {
+		return this.array;
+	},
+	map: function(func) {
+		return this.columns().map(func);
+	},
+	forEach: function(func) {
+		this.columns().forEach(func);
+	},
+	push : function(column) {
+		this.array.push(column);
+	},
+	// parameters same as array.splice
+	splice : function() {
+		Array.prototype.splice.apply(this.array, arguments);
+	},
+	get : function(key) {
+		return this.all[key];
+	},
+	length: function() {
+		return this.array.length;
+	},
+	clone: function() {
+		return new TableColumnLayout(this.all);
+	},
 });

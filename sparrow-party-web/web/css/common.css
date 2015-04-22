@@ -46,8 +46,8 @@ div.panel-remove-bottom-padding>div.panel-body {
 
 div.panel-heading ul.pagination {
 	margin: 0px;
-	margin-top: -6px;
 	font-weight: normal;
+	padding-left: 5px;
 }
 
 div.panel-heading ul.pagination a {
@@ -56,10 +56,40 @@ div.panel-heading ul.pagination a {
 
 div.datatable-heading {
 	padding-bottom: 5px\9;
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+
+div.datatable-heading label.datatable-heading-label {
+	margin-top: 5px;
+}
+
+div.datatable-heading .table-search-box {
+	width: 200px;
+	height: 30px;
+	font-weight: normal;
 }
 
 div.datatable-body {
 	position: relative;
+}
+
+div.datatable-body a.datatable-sort {
+	font-size: 10px;
+	line-height: 1.5;
+	color: #f9f9f9;
+}
+
+div.datatable-body a.datatable-sort:hover, div.datatable-body a.datatable-sort:active,
+	div.datatable-body a.datatable-sort:visited, div.datatable-body a.datatable-sort:link
+	{
+	color: #9f9f9f;
+}
+
+div.datatable-body a.datatable-sort.datatable-column-sorted:hover, div.datatable-body a.datatable-sort.datatable-column-sorted:active,
+	div.datatable-body a.datatable-sort.datatable-column-sorted:visited,
+	div.datatable-body a.datatable-sort.datatable-column-sorted:link {
+	color: #337ab7;
 }
 
 div.datatable-body>div.no-data {
@@ -130,7 +160,8 @@ div.table-only .datatable {
 	width: 100%;
 }
 
-table.datatable.cell-border tbody tr.odd.hover, table.datatable.cell-border tbody tr.even.hover {
+table.datatable.cell-border tbody tr.odd.hover, table.datatable.cell-border tbody tr.even.hover
+	{
 	background-color: #eee;
 }
 
@@ -149,7 +180,7 @@ div.table-only table.datatable.cell-border thead tr td, div.table-fix-left table
 }
 
 div.table-only table.datatable.cell-border tbody tr td, div.table-fix-left table.datatable.cell-border tbody tr td,
-	div.table-fix-right table.datatable tbody tr td {
+	div.table-fix-right table.datatable.cell-border tbody tr td {
 	padding: 5px;
 	height: 32px;
 	height: 33px\9;
@@ -165,6 +196,16 @@ div.table-only table.datatable.cell-border tbody tr:last-child td {
 	border-bottom: 1px solid #ddd;
 }
 
+/*
+div.table-only table.datatable.cell-border thead tr td, div.table-fix-right table.datatable.cell-border thead tr td
+	{
+	border-left: 1px solid #ddd;
+}
+
+div.table-fix-left table.datatable.cell-border thead tr td {
+	border-right: 1px solid #ddd;
+}
+*/
 div.table-only table.datatable.cell-border tbody tr td, div.table-fix-left table.datatable.cell-border tbody tr td
 	{
 	border-top: 1px solid #ddd;
@@ -215,6 +256,7 @@ div.table-fix-right div.table-fix-right-top-corner {
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff5f5f5',
 		endColorstr='#ffe8e8e8', GradientType=0);
 	background-repeat: repeat-x;
+	border-right: 1px solid #ddd;
 }
 
 div.table-fix-left thead tr td, div.table-fix-right thead tr td, div.table-only thead tr td

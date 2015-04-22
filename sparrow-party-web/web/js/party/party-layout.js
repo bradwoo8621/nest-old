@@ -10,155 +10,172 @@ var Addresses = new TableLayout({
 		col : 1,
 		width : 12
 	},
-	columns : [ {
-		title : "Country",
-		data : "country",
-		render : function(data) {
-			return  Codes.countryList.get(data).name;
+	columns : {
+		country : {
+			title : "Country",
+			render : function(data) {
+				var code = Codes.countryList.get(data);
+				return code == null ? "" : code.name;
+			},
+			width : 120,
+			edit : {
+				row : 1,
+				col : 1,
+				type : "select",
+				selectOptions : Codes.countryList,
+				needSearchBox : true,
+			},
+			index : 10
 		},
-		width : 120,
-		edit : {
-			row : 1,
-			col : 1,
-			type : "select",
-			selectOptions : Codes.countryList,
-			needSearchBox : true,
-		}
-	}, {
-		title : "Province",
-		data : "province",
-		render : function(data) {
-			return Codes.provinceList.get(data).name;
+		province : {
+			title : "Province",
+			render : function(data) {
+				var code = Codes.provinceList.get(data);
+				return code == null ? "" : code.name;
+			},
+			width : 100,
+			edit : {
+				row : 1,
+				col : 2,
+				type : "select",
+				selectOptions : Codes.provinceList,
+				needSearchBox : true,
+				parent : {
+					prop : "country",
+					filter : "type"
+				}
+			},
+			index : 20
 		},
-		width : 100,
-		edit : {
-			row : 1,
-			col : 2,
-			type : "select",
-			selectOptions : Codes.provinceList,
-			needSearchBox : true,
-			parent : {
-				prop : "country",
-				filter : "type"
-			}
-		}
-	}, {
-		title : "City",
-		data : "city",
-		render : function(data) {
-			return Codes.cityList.get(data).name;
+		city : {
+			title : "City",
+			render : function(data) {
+				var code = Codes.cityList.get(data);
+				return code == null ? "" : code.name;
+			},
+			width : 100,
+			edit : {
+				row : 1,
+				col : 3,
+				type : "select",
+				selectOptions : Codes.cityList,
+				needSearchBox : true,
+				parent : {
+					prop : "province",
+					filter : "type"
+				}
+			},
+			index : 30
 		},
-		width : 100,
-		edit : {
-			row : 1,
-			col : 3,
-			type : "select",
-			selectOptions : Codes.cityList,
-			needSearchBox : true,
-			parent : {
-				prop : "province",
-				filter : "type"
-			}
-		}
-	}, {
-		title : "District",
-		data : "district",
-		render : function(data) {
-			return Codes.districtList.get(data).name;
+		district : {
+			title : "District",
+			render : function(data) {
+				var code = Codes.districtList.get(data);
+				return code == null ? "" : code.name;
+			},
+			width : 100,
+			edit : {
+				row : 1,
+				col : 4,
+				type : "select",
+				selectOptions : Codes.districtList,
+				needSearchBox : true,
+				parent : {
+					prop : "city",
+					filter : "type"
+				}
+			},
+			index : 40
 		},
-		width : 100,
-		edit : {
-			row : 1,
-			col : 4,
-			type : "select",
-			selectOptions : Codes.districtList,
-			needSearchBox : true,
-			parent : {
-				prop : "city",
-				filter : "type"
-			}
+		addressLine1 : {
+			title : "Line1",
+			width : 200,
+			edit : {
+				row : 2,
+				col : 1,
+				width : 6,
+				type : "text",
+			},
+			index : 50
+		},
+		addressLine2 : {
+			title : "Line2",
+			width : 150,
+			edit : {
+				row : 2,
+				col : 2,
+				width : 6,
+				type : "text",
+			},
+			index : 60
+		},
+		addressLine3 : {
+			title : "Line3",
+			width : 150,
+			edit : {
+				row : 3,
+				col : 1,
+				width : 6,
+				type : "text",
+			},
+			index : 70
+		},
+		addressLine4 : {
+			title : "Line4",
+			width : 150,
+			edit : {
+				row : 3,
+				col : 2,
+				width : 6,
+				type : "text",
+			},
+			index : 80
+		},
+		addressLine5 : {
+			title : "Line5",
+			width : 150,
+			edit : {
+				row : 4,
+				col : 1,
+				width : 6,
+				type : "text",
+			},
+			index : 90
+		},
+		postcode : {
+			title : "Postcode",
+			width : 100,
+			edit : {
+				row : 5,
+				col : 1,
+				width : 4,
+				type : "text",
+			},
+			index : 100
+		},
+		telephone : {
+			title : "Telephone",
+			width : 100,
+			edit : {
+				row : 5,
+				col : 2,
+				width : 4,
+				type : "text",
+			},
+			index : 110
+		},
+		fax : {
+			title : "Fax",
+			width : 100,
+			edit : {
+				row : 5,
+				col : 3,
+				width : 4,
+				type : "text",
+			},
+			index : 120
 		}
-	}, {
-		title : "Line1",
-		data : "addressLine1",
-		width : 200,
-		edit : {
-			row : 2,
-			col : 1,
-			width : 6,
-			type : "text",
-		}
-	}, {
-		title : "Line2",
-		data : "addressLine2",
-		width : 150,
-		edit : {
-			row : 2,
-			col : 2,
-			width : 6,
-			type : "text",
-		}
-	}, {
-		title : "Line3",
-		data : "addressLine3",
-		width : 150,
-		edit : {
-			row : 3,
-			col : 1,
-			width : 6,
-			type : "text",
-		}
-	}, {
-		title : "Line4",
-		data : "addressLine4",
-		width : 150,
-		edit : {
-			row : 3,
-			col : 2,
-			width : 6,
-			type : "text",
-		}
-	}, {
-		title : "Line5",
-		data : "addressLine5",
-		width : 150,
-		edit : {
-			row : 4,
-			col : 1,
-			width : 6,
-			type : "text",
-		}
-	}, {
-		title : "Postcode",
-		data : "postcode",
-		width : 100,
-		edit : {
-			row : 5,
-			col : 1,
-			width : 4,
-			type : "text",
-		}
-	}, {
-		title : "Telephone",
-		data : "telephone",
-		width : 100,
-		edit : {
-			row : 5,
-			col : 2,
-			width : 4,
-			type : "text",
-		}
-	}, {
-		title : "Fax",
-		data : "fax",
-		width : 100,
-		edit : {
-			row : 5,
-			col : 3,
-			width : 4,
-			type : "text",
-		}
-	} ],
+	},
 	layout : {
 		scrollY : 200,
 		scrollX : true,
@@ -169,6 +186,8 @@ var Addresses = new TableLayout({
 		// fixedLeftColumns : 1,
 		// fixedRightColumns: 1,
 		pagable : true,
+		searchable : true,
+		sortable : true,
 	}
 });
 // row 1 - 3

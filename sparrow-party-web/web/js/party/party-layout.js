@@ -151,7 +151,8 @@ var Addresses = new TableLayout({
 				width : 4,
 				type : "text",
 			},
-			index : 100
+			index : 100,
+			sort : "number", // can be function(a, b) or true/false
 		},
 		telephone : {
 			title : "Telephone",
@@ -173,7 +174,8 @@ var Addresses = new TableLayout({
 				width : 4,
 				type : "text",
 			},
-			index : 120
+			index : 120,
+			sort : false
 		}
 	},
 	layout : {
@@ -187,7 +189,7 @@ var Addresses = new TableLayout({
 		// fixedRightColumns: 1,
 		pagable : true,
 		searchable : true,
-		sortable : true,
+		sortable : true, // can be defined in each column
 	}
 });
 // row 1 - 3

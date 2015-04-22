@@ -555,6 +555,7 @@ var DataTable = React.createClass({
 			sortWay = this.state.sortWay == "asc" ? "desc" : "asc";
 		}
 		var render = null;
+		var isNumberValue = false;
 		var sorter = function(a, b) {
 			var v1 = a[prop], v2 = b[prop];
 			if (render !== undefined && render != null) {
@@ -565,17 +566,29 @@ var DataTable = React.createClass({
 				return v2 == null ? 0 : -1;
 			} else if (v1 == null) {
 				return 1;
-			} else if (v1 > v2) {
-				return 1;
-			} else if (v1 < v2) {
-				return -1;
 			} else {
-				return 0;
+				if (isNumberValue) {
+					v1 *= 1;
+					v2 *= 1;
+				}
+				if (v1 > v2) {
+					return 1;
+				} else if (v1 < v2) {
+					return -1;
+				} else {
+					return 0;
+				}
 			}
 		};
 		var column = this.props.columns.get(prop);
-		if (column.sort !== undefined && (typeof(column.sort) === "function")) {
-			sorter = column.sort;
+		if (column.sort !== undefined && column.sort != null) {
+			if (typeof(column.sort) === "function") {
+				sorter = column.sort;
+			} else if (column.sort == "number") {
+				isNumberValue = true;
+			} else {
+				throw {name: "TableSorterTypeError", message: "Sorter type [" + column.sort + "] is not supported."};
+			}
 		}
 		render = column.render;
 		
@@ -679,7 +692,7 @@ var DataTable = React.createClass({
 				return true;
 			}
 		} else {
-			return column.sort === true || typeof(column.sort) === "function";
+			return column.sort !== undefined && column.sort != null;
 		}
 	},
 	// has data to display

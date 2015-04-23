@@ -92,6 +92,13 @@ div.datatable-body a.datatable-sort.datatable-column-sorted:hover, div.datatable
 	color: #337ab7;
 }
 
+div.datatable-body div.button-in-table-cell button.datatable-operation-button
+	{
+	font-size: 10px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
 div.datatable-body>div.no-data {
 	padding: 5px;
 	text-align: center;
@@ -182,9 +189,8 @@ div.table-only table.datatable.cell-border thead tr td, div.table-fix-left table
 div.table-only table.datatable.cell-border tbody tr td, div.table-fix-left table.datatable.cell-border tbody tr td,
 	div.table-fix-right table.datatable.cell-border tbody tr td {
 	padding: 5px;
-	height: 32px;
-	height: 33px\9;
 	white-space: nowrap;
+	height: 32px;
 }
 
 div.table-only table.datatable.cell-border tbody tr td:last-child, div.table-only>table.datatable.cell-border thead tr td:last-child
@@ -192,7 +198,8 @@ div.table-only table.datatable.cell-border tbody tr td:last-child, div.table-onl
 	border-right: 0px;
 }
 
-div.table-only table.datatable.cell-border tbody tr:last-child td {
+div.table-only table.datatable.cell-border tbody tr:last-child td, div.table-fix-right table.datatable.cell-border tbody:last-child tr td,
+	div.table-fix-left table.datatable.cell-border tbody tr:last-child td {
 	border-bottom: 1px solid #ddd;
 }
 
@@ -267,11 +274,6 @@ div.table-fix-left thead tr td, div.table-fix-right thead tr td, div.table-only 
 	background-repeat: repeat-x;
 }
 
-div.button-in-table-cell>button {
-	padding-top: 0px;
-	padding-bottom: 0px;
-}
-
 div.datatable-edit-dialog>div.modal-dialog {
 	width: 900px;
 }
@@ -292,6 +294,10 @@ div.datatable-edit-dialog>div.modal-dialog>div.modal-content>div.modal-footer
 	padding-right: 0px;
 	padding-left: 0px;
 	padding-top: 5px;
+}
+
+div.datatable-confirm {
+	z-index: 9999;
 }
 
 .input-group .form-control.search-code {

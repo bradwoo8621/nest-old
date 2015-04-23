@@ -1,12 +1,22 @@
 // modal confirm dialog
 var ModalConfirmDialog = React.createClass({
+	propTypes: {
+		className: React.PropTypes.string,
+		zIndex: React.PropTypes.number
+	},
 	getInitialState: function() {
 		return {
 			visible: false,
 			title: null,
 			messages: null,
-			callback: null
+			callback: null,
 		};
+	},
+	componentDidUpdate: function(prevProps, prevState) {
+		this.setZIndex();
+	},
+	componentDidMount: function () {
+		this.setZIndex();
 	},
 	render: function() {
 		if (!this.state.visible) {
@@ -17,8 +27,9 @@ var ModalConfirmDialog = React.createClass({
 		if (!this.state.messages.length) {
 			messages = [this.state.messages];
 		}
-		return (<Modal bsStyle="danger" title={this.state.title} onRequestHide={this.hide} backdrop="static">
-					<div className="modal-body">
+		return (<Modal className={this.props.className} bsStyle="danger" title={this.state.title} 
+			onRequestHide={this.hide} backdrop="static">
+					<div className="modal-body" ref="body">
 						{messages.map(function(element) {
 							return <h5>{element}</h5>;
 						})}
@@ -52,5 +63,14 @@ var ModalConfirmDialog = React.createClass({
 	},
 	hide: function() {
 		this.setState({visible: false});
+	},
+	setZIndex: function() {
+		if (this.props.zIndex != undefined) {
+			var div = $(React.findDOMNode(this.refs.body)).closest(".modal");
+			if (div.length > 0) {
+				div.css({"z-index": this.props.zIndex * 1 + 1});
+				div.prev().css({"z-index": this.props.zIndex});
+			}
+		}
 	}
 });

@@ -37,11 +37,14 @@ var DataTable = React.createClass({
 		return {
 			currentPageIndex: 1, // page number count from 1
 			pageCount: 1, // page count default 1
-			countPerPage: 2, // count per page default 10
+			countPerPage: 10, // count per page default 10
 			searchText: null, // search text,
 			sortColumn: null,
 			sortWay: null,
 		};
+	},
+	componentDidUpdate: function(prevProps, prevState) {
+		this.renderIfIE8();
 	},
 	componentDidMount: function () {
 		this.createComponent();
@@ -50,8 +53,27 @@ var DataTable = React.createClass({
 	componentWillUnmount: function() {
 		this.getModel().removeListener(this.getPropertyName(), ["post-add", "post-remove", "post"], this.handleModelChange);
 	},
+	renderIfIE8: function() {
+		if (isIE() != 8 || this.props.layout.scrollY === undefined) {
+			return;
+		}
+		var mainTable = $("#" + this.props.id);
+		var leftFixedDiv = $("#scrolled-left-columns-body-" + this.props.id);
+		var rightFixedDiv = $("#scrolled-right-columns-body-" + this.props.id);
+		var trs = mainTable.find("tr");
+		var rowCount = trs.length;
+		var height = rowCount * 32; // 32 is defined in css, if value in css is changed, it must be changed together
+		if (height > this.props.layout.scrollY) {
+			height = this.props.layout.scrollY;
+		}
+		// calculate height of body if ie8 and scrollY
+		mainTable.closest("div").css({height: height + 17});
+		leftFixedDiv.css({height: height});
+		rightFixedDiv.css({height: height});
+	},
 	createComponent: function() {
 		var _this = this;
+		this.renderIfIE8();
 		$("#scrolled-body-" + this.props.id).scroll(function(e) {
 			var $this = $(this);
 			$("#scrolled-head-" + _this.props.id).scrollLeft($this.scrollLeft());
@@ -96,11 +118,11 @@ var DataTable = React.createClass({
 	// render operation cell
 	renderOperationCell: function(column, data) {
 		var editButton = column.editable ? 
-			(<Button bsSize="small" bsStyle="link" onClick={this.editClicked}>
+			(<Button bsSize="xsmall" bsStyle="link" onClick={this.editClicked} className="datatable-operation-button">
 				<Glyphicon glyph="pencil" />
 			</Button>) : null;
 		var removeButton = column.removable ? 
-			(<Button bsSize="small" bsStyle="link" onClick={this.removeClicked}>
+			(<Button bsSize="xsmall" bsStyle="link" onClick={this.removeClicked} className="datatable-operation-button">
 				<Glyphicon glyph="remove" />
 			</Button>) : null;
 		return (<ButtonGroup className="button-in-table-cell">{editButton}{removeButton}</ButtonGroup>);
@@ -185,8 +207,9 @@ var DataTable = React.createClass({
 					icon = "sort-by-attributes-alt";
 				}
 			}
-			return (<a href="javascript:void(0);" className={sortClass} onClick={this.sortColumn} data-prop={column.data}>
-				<Glyphicon glyph={icon} bsStyle="small" />
+			return (<a href="javascript:void(0);" className={sortClass}
+				onClick={this.sortColumn} data-prop={column.data}>
+				<Glyphicon glyph={icon} />
 			</a>);
 		}
 	},
@@ -303,7 +326,7 @@ var DataTable = React.createClass({
 		if (this.props.layout.scrollX) {
 			// ie8 box mode, scrollbar is not in height.
 			// ie>8 or chrome, scrollbar is in height.
-			bodyDivStyle.maxHeight = this.props.layout.scrollY - ((isIE() == 8) ? 0 : 17);
+			bodyDivStyle.maxHeight = this.props.layout.scrollY - ((isIE() == 8) ? 0 : 18);
 		}
 		var bodyId = "scrolled-right-columns-body-" + this.props.id;
 		return (
@@ -351,7 +374,7 @@ var DataTable = React.createClass({
 		var divStyle = {width: this.computeFixedLeftColumnsWidth() + 1};
 		var bodyDivStyle = {width: "100%", overflow: "hidden"};
 		if (this.props.layout.scrollX) {
-			bodyDivStyle.maxHeight = this.props.layout.scrollY - ((isIE() == 8) ? 0 : 17);
+			bodyDivStyle.maxHeight = this.props.layout.scrollY - ((isIE() == 8) ? 0 : 18);
 		}
 		var bodyId = "scrolled-left-columns-body-" + this.props.id;
 		return (
@@ -454,7 +477,6 @@ var DataTable = React.createClass({
 						<Button bsStyle="primary" onClick={this.confirmClicked}><Glyphicon glyph="floppy-save" /> Confirm</Button>
 					</div>
 				</div>
-				<ModalConfirmDialog ref="editConfirmDialog" />
 			</Modal>);
 		} else {
 			return null;
@@ -479,7 +501,7 @@ var DataTable = React.createClass({
 				removable: this.props.layout.removable === true ? true : false,
 				title: "",
 			};
-			config.width = (config.editable ? 40 : 0) + (config.removable ? 40 : 0);
+			config.width = (config.editable ? 30 : 0) + (config.removable ? 30 : 0);
 			this.columns.push(config);
 			this.fixedRightColumns++;
 		}
@@ -493,7 +515,7 @@ var DataTable = React.createClass({
 			this.fixedLeftColumns++;
 		}
 		return (
-			<div className="panel panel-default panel-bold">
+			<div className="panel panel-default panel-bold" id={"datatable-" + this.props.id}>
 				{this.renderPanelHeading()}
 				<div className="datatable-body">
 					{this.renderTable()}
@@ -503,7 +525,7 @@ var DataTable = React.createClass({
 				</div>
 				{this.renderPagination()}
 				{this.renderCreateDialog()}
-				{this.props.layout.removable ? <ModalConfirmDialog ref="removeConfirmDialog" /> : null}
+				<ModalConfirmDialog ref="confirmDialog" className="datatable-confirm" zIndex={9000} />
 			</div>
 		);
 	},
@@ -625,30 +647,30 @@ var DataTable = React.createClass({
 	},
 	// on remove button clicked
 	removeClicked: function(evt) {
-		this.refs.removeConfirmDialog.show("Delete data?",
+		this.refs.confirmDialog.show("Delete data?",
 		 	["Are you sure you want to delete data?", "It cannot be recovered."],
 		 	this.removeRow, this.getAbsoluteOperatingRowIndex(evt));
 	},
 	// remove row
 	removeRow: function(selectedRowIndex) {
-		this.refs.removeConfirmDialog.hide();
+		this.refs.confirmDialog.hide();
 		this.getModel().remove(this.getPropertyName(), selectedRowIndex);
 	},
 	// discard editing/creating clicked
 	discardEditClicked: function() {
-		this.refs.editConfirmDialog.show("Discard data?",
+		this.refs.confirmDialog.show("Discard data?",
 		 	["Are you sure you want to discard the editing data?", "All data will be lost and cannot be recovered."],
 		 	this.discard);
 	},
 	// discard
 	discard: function() {
 		// hide the confirm dialog
-		this.refs.editConfirmDialog.hide();
+		this.refs.confirmDialog.hide();
 		this.setState({editRow: null});
 	},
 	// reset editing/creating clicked
 	resetClicked: function() {
-		this.refs.editConfirmDialog.show("Reset data?",
+		this.refs.confirmDialog.show("Reset data?",
 		 	["Are you sure you want to reset the editing data?", "All updated data will be lost and cannot be recovered."],
 		 	this.reset);
 	},
@@ -659,7 +681,7 @@ var DataTable = React.createClass({
 		// invoke update force
 		this.refs.editForm.forceUpdate();
 		// hide the confirm dialog
-		this.refs.editConfirmDialog.hide();
+		this.refs.confirmDialog.hide();
 	},
 	confirmClicked: function() {
 		if (this.state.editType == "add") {

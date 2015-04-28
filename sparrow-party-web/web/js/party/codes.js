@@ -15,12 +15,16 @@ var Codes = {
 	// party role type
 	// type: O: Organization; I: Individual; B: Both
 	roleTypeList : new Codes([ {
-		id : "AGT",
-		text : "Agent",
-		type : "B"
-	}, {
 		id : "EDU",
 		text : "Education Organization",
+		type : "O"
+	}, {
+		id : "AGI",
+		text : "Individual Agent",
+		type : "I"
+	}, {
+		id : "AGO",
+		text : "Organization Agent",
 		type : "O"
 	}, {
 		id : "MBR",

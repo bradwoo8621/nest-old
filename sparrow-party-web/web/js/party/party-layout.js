@@ -1,4 +1,296 @@
 /**
+ * model layout
+ */
+var AddressModelLayout = {
+	type : "list",
+	layout : {
+		addressId : {
+			type : "number"
+		},
+		partyId : {
+			type : "number"
+		},
+		country : {
+			type : "code",
+			check : {}
+		},
+		province : {
+			type : "code",
+			check : {}
+		},
+		city : {
+			type : "code",
+		},
+		district : {
+			type : "code",
+		},
+		addressLine1 : {
+			type : "text",
+			check : {
+				length : 100
+			}
+		},
+		addressLine2 : {
+			type : "text",
+			check : {
+				length : 100
+			}
+		},
+		addressLine3 : {
+			type : "text",
+			check : {
+				length : 100
+			}
+		},
+		addressLine4 : {
+			type : "text",
+			check : {
+				length : 100
+			}
+		},
+		addressLine5 : {
+			type : "text",
+			check : {
+				length : 100
+			}
+		},
+		postcode : {
+			type : "text",
+			check : {
+				length : 6,
+				minLength : 6
+			}
+		},
+		telephone : {
+			type : "text",
+			check : {}
+		},
+		fax : {
+			type : "text",
+			check : {}
+		}
+	},
+};
+var IndividualModelLayout = {
+	partyId : {
+		type : "number"
+	},
+	firstName : {
+		type : "text",
+		check : {
+			length : 30,
+			required : true,
+		}
+	},
+	middelName : {
+		type : "text",
+		check : {
+			length : 30
+		}
+	},
+	lastName : {
+		type : "text",
+		check : {
+			length : 30,
+			required : true,
+		}
+	},
+	idNumber : {
+		type : "text",
+		check : {
+			length : 10,
+			required : true
+		}
+	},
+	gender : {
+		type : "code",
+		check : {
+			required : true,
+		}
+	},
+	dateOfBirth : {
+		type : "date",
+		check : {
+
+		}
+	},
+	dateOfDeath : {
+		type : "date",
+		check : {
+
+		}
+	},
+	bornIn : {
+		type : "code",
+		check : {
+
+		}
+	},
+	nationality : {
+		type : "code",
+		check : {}
+	},
+	partyCode : {
+		type : "text",
+		check : {
+			lenght : 10,
+			required : true
+		}
+	},
+	partyEnabled : {
+		type : "boolean",
+		dVal : true,
+		check : {
+			required : true,
+		}
+	},
+	addresses : AddressModelLayout,
+};
+var OrganizationModelLayout = {
+	partyId : {
+		type : "number"
+	},
+	partyName : {
+		type : "text",
+		check : {
+			length : 100,
+			required : true,
+		}
+	},
+	registerNumber : {
+		type : "text",
+		check : {
+			length : 10,
+			required : true
+		}
+	},
+	registerDate : {
+		type : "date",
+		check : {
+
+		}
+	},
+	closeDownDate : {
+		type : "date",
+		check : {
+
+		}
+	},
+	registerIn : {
+		type : "code",
+		check : {
+
+		}
+	},
+	industry : {
+		type : "code",
+		check : {}
+	},
+	partyCode : {
+		type : "text",
+		check : {
+			length : 10,
+			required : true
+		}
+	},
+	partyEnabled : {
+		type : "boolean",
+		dVal : true,
+		check : {
+			required : true,
+		}
+	},
+	addresses : AddressModelLayout,
+};
+var RoleModelLayout = {
+	roleCode : {
+		type : "text",
+		check : {
+			length : 10,
+			required : true
+		}
+	},
+	roleEnabled : {
+		type : "boolean",
+		dVal : true,
+		check : {
+			required : true
+		}
+	}
+
+};
+var PartyRoleModelLayoutConfig = {
+	EDU : new ModelLayoutProxy($.extend({}, OrganizationModelLayout, RoleModelLayout, {
+		headOffice : {
+			type : "boolean",
+			dVal : false,
+			check : {}
+		},
+		parentBranch : {
+			type : "refer",
+			check : {}
+		},
+		artificialPerson : {
+			type : "refer",
+			check : {}
+		}
+	})),
+	MBR : new ModelLayoutProxy($.extend({}, OrganizationModelLayout, RoleModelLayout, {
+		headOffice : {
+			type : "boolean",
+			dVal : false,
+			check : {}
+		},
+		parentBranch : {
+			type : "refer",
+			check : {}
+		},
+	})),
+	MDP : new ModelLayoutProxy($.extend({}, OrganizationModelLayout, RoleModelLayout, {
+		branch : {
+			type : "refer",
+			check : {}
+		},
+		parentDepartment : {
+			type : "refer",
+			check : {}
+		}
+	})),
+	MEM : new ModelLayoutProxy($.extend({}, IndividualModelLayout, RoleModelLayout, {
+		branch : {
+			type : "refer",
+			check : {}
+		},
+		department : {
+			type : "refer",
+			check : {}
+		}
+	})),
+	RDP : new ModelLayoutProxy($.extend({}, OrganizationModelLayout, RoleModelLayout, {
+		branch : {
+			type : "refer",
+			check : {}
+		},
+		parentDepartment : {
+			type : "refer",
+			check : {}
+		}
+	})),
+	REP : new ModelLayoutProxy($.extend({}, IndividualModelLayout, RoleModelLayout, {
+		branch : {
+			type : "refer",
+			check : {}
+		},
+		department : {
+			type : "refer",
+			check : {}
+		}
+	})),
+	AGO : new ModelLayoutProxy($.extend({}, OrganizationModelLayout, RoleModelLayout)),
+	AGI : new ModelLayoutProxy($.extend({}, IndividualModelLayout, RoleModelLayout)),
+};
+
+/**
  * party layout
  */
 // row 11
@@ -235,7 +527,7 @@ var Organization = {
 			col : 1,
 		}
 	},
-	closeDowndate : {
+	closeDownDate : {
 		label : "End Date",
 		type : "date",
 		cell : {
@@ -503,6 +795,6 @@ var PartyRoleConfig = {
 			}
 		}
 	}),
-	AGT_O : new Layout(Organization, Role),
-	AGT_I : new Layout(Individual, Role)
-}
+	AGO : new Layout(Organization, Role),
+	AGI : new Layout(Individual, Role)
+};

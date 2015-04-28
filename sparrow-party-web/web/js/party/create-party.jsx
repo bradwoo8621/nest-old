@@ -6,22 +6,20 @@ var app = {
 		roleTypeCode: null
 	}),
 	// edit model
-	editModel: new ModelProxy({}),
+	editModel: null,
 	// reset model
 	// TODO call common initializer
 	initModel: function() {
 		// all clear
-		this.editModel = ModelUtil.create(this.getUIConfig());
+		this.editModel = ModelUtil.create(this.getModelLayoutConfig());
+	},
+	getModelLayoutConfig: function() {
+		return PartyRoleModelLayoutConfig[this.typeSelectionModel.getRoleTypeCode()];
 	},
 	getUIConfig: function() {
 		// find layout configuration by given role type code
-		var config = PartyRoleConfig[this.typeSelectionModel.getRoleTypeCode()];
-		if (config == undefined) {
-			// the role type is suit for all party types, add party type suffix to find the layout configuration
-			config = PartyRoleConfig[this.typeSelectionModel.getRoleTypeCode() + "_" + this.typeSelectionModel.getPartyTypeCode()];
-		}
-		return config;
-	}
+		return PartyRoleConfig[this.typeSelectionModel.getRoleTypeCode()];
+	},
 };
 
 // creation panel
@@ -161,16 +159,12 @@ var TypeSelectionPanel = React.createClass({
 		this.hideWarning();
 	},
 	createClicked: function() {
-		var partyTypeCode = this.getModel().getPartyTypeCode();
 		var roleTypeCode = this.getModel().getRoleTypeCode();
 		if (roleTypeCode != null) {
 			// role type selected
 			if (this.getParent().isCreating()) {
 				// a party is creating now
 				this.showWarning("Sorry, a party is creating now, discard it if really want to create a new one.");
-			} else if (partyTypeCode == null && this.checkRoleTypeIsSuitAllPartyType(roleTypeCode)) {
-				// the selected role type is suit for all party types, ask for select party type
-				this.showWarning("Sorry, the selected role can be either organization or individual, please select \"Party Type\" first.");
 			} else {
 				// start creating
 				this.hideWarning();
@@ -193,14 +187,8 @@ var TypeSelectionPanel = React.createClass({
 	// role type with type 'B' always be shown
 	filterRoleType: function(partyTypeCode, roleTypeList) {
 		return roleTypeList.filter(function(element) {
-			return element.type == partyTypeCode || element.type == 'B';
+			return element.type == partyTypeCode;
 		}); 
-	},
-	// check the given role code is suit all party type or not
-	checkRoleTypeIsSuitAllPartyType: function(roleTypeCode) {
-		return Codes.roleTypeList.some(function(element) {
-					return element.id == roleTypeCode && element.type == 'B';
-				});
 	},
 });
 // edit panel
@@ -222,7 +210,8 @@ var EditPanel = React.createClass({
 
 		return (
 			<Panel header={header} className={this._panelClassName}>
-				<Form layout={this.getApp().getUIConfig()} model={this.getEditModel()} ref="form" />
+				<Form layout={this.getApp().getUIConfig()} model={this.getEditModel()}
+					modelLayout={this.getApp().getModelLayoutConfig()} ref="form" />
 				<div className="row">
 					<div className="col-md-6">
 						<ButtonToolbar>

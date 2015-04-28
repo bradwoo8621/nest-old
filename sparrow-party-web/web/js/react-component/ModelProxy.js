@@ -357,18 +357,7 @@ var ModelUtil = {
 	},
 	// create a model, layout is an instance of Layout
 	create : function(layout) {
-		var model = {};
-		for ( var key in layout.all()) {
-			var cell = layout.cell(key);
-			if (cell.type == "table") {
-				// array, initialize to empty array
-				model[key] = [];
-			} else {
-				// plain field, initialize to null
-				model[key] = null;
-			}
-		}
-		return new ModelProxy(model);
+		return new ModelProxy(layout.create());
 	}
 };
 
@@ -512,10 +501,10 @@ var TableColumnLayout = LayoutProxyClass({
 	columns : function() {
 		return this.array;
 	},
-	map: function(func) {
+	map : function(func) {
 		return this.columns().map(func);
 	},
-	forEach: function(func) {
+	forEach : function(func) {
 		this.columns().forEach(func);
 	},
 	push : function(column) {
@@ -528,10 +517,84 @@ var TableColumnLayout = LayoutProxyClass({
 	get : function(key) {
 		return this.all[key];
 	},
-	length: function() {
+	length : function() {
 		return this.array.length;
 	},
-	clone: function() {
+	clone : function() {
 		return new TableColumnLayout(this.all);
 	},
+});
+
+/**
+ * validation proxy class
+ */
+var ModelLayoutProxyClass = function(methods) {
+	var ModelLayoutProxy = function() {
+		this.initialize.apply(this, arguments);
+	};
+	for ( var property in methods) {
+		ModelLayoutProxy.prototype[property] = methods[property];
+	}
+	if (!ModelLayoutProxy.prototype.initialize) {
+		ModelLayoutProxy.prototype.initialize = function() {
+		};
+	}
+	return ModelLayoutProxy;
+}
+/**
+ * validation proxy
+ */
+var ModelLayoutProxy = ModelLayoutProxyClass({
+	initialize : function(modelLayout) {
+		this.__modelLayout = modelLayout;
+	},
+	// create model
+	create : function(modelLayout) {
+		if (modelLayout === undefined) {
+			modelLayout = this.__modelLayout;
+		}
+		var model = {};
+		for ( var key in modelLayout) {
+			var propLayout = modelLayout[key];
+			model[key] = this["__create" + propLayout.type.upperFirst()].call(this, propLayout);
+		}
+		return model;
+	},
+	__createPropValue : function(propLayout) {
+		if (propLayout.dVal) {
+			if (typeof (propLayout.dVal) === "function") {
+				return propLayout.dVal();
+			} else {
+				return propLayout.dVal;
+			}
+		} else {
+			return null;
+		}
+	},
+	__createNumber : function(propLayout) {
+		return this.__createPropValue(propLayout);
+	},
+	__createText : function(propLayout) {
+		return this.__createPropValue(propLayout);
+	},
+	__createCode : function(propLayout) {
+		return this.__createPropValue(propLayout);
+	},
+	__createBoolean : function(propLayout) {
+		return this.__createPropValue(propLayout);
+	},
+	__createDate : function(propLayout) {
+		return this.__createPropValue(propLayout);
+	},
+	__createList : function(propLayout) {
+		var value = this.__createPropValue(propLayout);
+		return value == null ? [] : value;
+	},
+	__createRefer : function(propLayout) {
+		return this.__createPropValue(propLayout);
+	},
+	// get model layout of property
+	get : function(propName) {
+		return this.__modelLayout[propName];
+	}
 });

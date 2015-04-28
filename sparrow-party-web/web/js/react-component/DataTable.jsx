@@ -7,7 +7,8 @@ var DataTable = React.createClass({
 	propTypes: {
 		id: React.PropTypes.string.isRequired, // id used in UI
 		name: React.PropTypes.string, // property name in model, use id instead if not exists
-		model: React.PropTypes.object.isRequired,
+		model: React.PropTypes.object.isRequired, // model itself
+		modelLayout: React.PropTypes.object.isRequired, // model layout
 		title: React.PropTypes.string,
 		
 		columns: React.PropTypes.object,
@@ -41,6 +42,9 @@ var DataTable = React.createClass({
 			searchText: null, // search text,
 			sortColumn: null,
 			sortWay: null,
+			
+			// model layout of element in list
+			editModelLayout: new ModelLayoutProxy(this.props.modelLayout.layout),
 		};
 	},
 	componentDidUpdate: function(prevProps, prevState) {
@@ -459,7 +463,9 @@ var DataTable = React.createClass({
 	},
 	renderCreateContent: function() {
 		return (
-			<Form model={this.state.editRow} layout={this.props.editLayout} className="modal-body" ref="editForm" />
+			<Form model={this.state.editRow} layout={this.props.editLayout}
+				modelLayout={this.state.editModelLayout}
+				className="modal-body" ref="editForm" />
 		);
 	},
 	renderCreateDialog: function() {
@@ -637,7 +643,7 @@ var DataTable = React.createClass({
 	},
 	// on add button clicked
 	addClicked: function() {
-		this.setState({editRow: ModelUtil.create(this.props.editLayout), editType: "add"});
+		this.setState({editRow: ModelUtil.create(this.state.editModelLayout), editType: "add"});
 	},
 	// on edit button clicked
 	editClicked: function(evt) {

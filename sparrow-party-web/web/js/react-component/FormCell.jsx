@@ -2,6 +2,7 @@
 var Form = React.createClass({
 	propTypes: {
 		model: React.PropTypes.object.isRequired,
+		modelLayout: React.PropTypes.object.isRequired,
 		layout: React.PropTypes.object.isRequired,
 		
 		className: React.PropTypes.string,
@@ -9,7 +10,8 @@ var Form = React.createClass({
 	renderRows: function (row) {
 		var _this = this;
 		var cells = row.cells().map(function(cell) {
-			return (<FormCell options={cell} model={_this.getModel()} ref={cell.id} />);
+			return (<FormCell options={cell} model={_this.getModel()} 
+				modelLayout={_this.props.modelLayout.get(cell.id)} ref={cell.id} />);
 		});
 		return (<div className="row">{cells}</div>);
 	},
@@ -23,7 +25,10 @@ var Form = React.createClass({
 	},
 	getModel: function() {
 		return this.props.model;
-	}
+	},
+	getModelLayout: function() {
+		return this.props.modelLayout;
+	},
 });
 // form cell
 var FormCell = React.createClass({
@@ -63,7 +68,8 @@ var FormCell = React.createClass({
 			// layout
 			cellWidth: React.PropTypes.oneOf([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
 		}).isRequired,
-		model: React.PropTypes.object.isRequired
+		model: React.PropTypes.object.isRequired,
+		modelLayout: React.PropTypes.object.isRequired,
 	},
 	getDefaultProps: function() {
 		return {
@@ -128,8 +134,9 @@ var FormCell = React.createClass({
 		// test data
 		return (
 			<DataTable id={this.props.options.id} title={this.props.options.label}
-					columns={this.props.options.columns} layout={this.props.options.layout} 
-					model={this.props.model} editLayout={this.props.options.editLayout()}/>
+					columns={this.props.options.columns}
+					model={this.props.model} modelLayout={this.props.modelLayout}
+					layout={this.props.options.layout}  editLayout={this.props.options.editLayout()} />
 		);
 	},
 	// get cell width class name

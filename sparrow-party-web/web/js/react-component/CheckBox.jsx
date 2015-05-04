@@ -18,13 +18,37 @@ var CheckBox = React.createClass({
 	componentWillUnmount: function() {
 		this.getModel().removeListener(this.getPropertyName(), "post", this.handleModelChange);
 	},
+	renderCheckbox: function() {
+		if (this.getValueFromModel() == true) {
+			return (<a href="javascript:void(0)" onClick={this.handleHrefClick}>
+				<Glyphicon glyph="check" bsSize="large"/>
+			</a>);
+		} else {
+			return (<a href="javascript:void(0)" onClick={this.handleHrefClick}>
+				<Glyphicon glyph="unchecked" bsSize="large" />
+			</a>);
+		}
+	},
 	render: function() {
 		return (
 			<div>
-				<label><input type="checkbox" id={this.props.id} className={this._className}
-					onChange={this.handleComponentChange} /></label>
+				<label className="form-vertical-checkbox">
+					{this.renderCheckbox()}
+					<input type="checkbox" id={this.props.id}
+								onChange={this.handleComponentChange} style={{display: "none"}} />
+				</label>
 			</div>
 		);
+	},
+	handleHrefClick: function() {
+		var value = this.getValueFromModel();
+		if (value == true) {
+			value = false;
+		} else {
+			value = true;
+		}
+		this.setValueToModel(value);
+		this.forceUpdate();
 	},
 	// handle component change
 	handleComponentChange: function(e) {

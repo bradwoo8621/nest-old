@@ -210,8 +210,7 @@ var EditPanel = React.createClass({
 
 		return (
 			<Panel header={header} className={this._panelClassName}>
-				<Form layout={this.getApp().getUIConfig()} model={this.getEditModel()}
-					modelLayout={this.getApp().getModelLayoutConfig()} ref="form" />
+				<Form layout={this.getApp().getUIConfig()} model={this.getEditModel()} ref="form" />
 				<div className="row">
 					<div className="col-md-6">
 						<ButtonToolbar>
@@ -275,13 +274,7 @@ var EditPanel = React.createClass({
 	},
 	// validate
 	validateClicked: function() {
-		this.getEditModel().setRegisterNumber("XYZ12345");
-		this.getEditModel().setPartyEnabled(true);
-		this.getEditModel().setRegisterDate("2005/02/03");
-		this.getEditModel().setParentBranch("P001");
-		this.getEditModel().setRegisterIn("AND");
-		console.log("Here is the model:");
-		console.log(this.getEditModel());
+		this.refs.form.validate();
 	},
 });
 

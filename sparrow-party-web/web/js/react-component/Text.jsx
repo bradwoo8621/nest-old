@@ -3,9 +3,15 @@ var Text = React.createClass({
 	propTypes: {
 		id: React.PropTypes.string.isRequired, // id used in UI
 		name: React.PropTypes.string, // property name in model, use id instead if not exists
+		label: React.PropTypes.string, // label of text
 		model: React.PropTypes.object.isRequired,
+		error: React.PropTypes.object,
 		
 		onChange: React.PropTypes.func,
+	},
+	getDefaultProps: function() {
+		return {
+		};
 	},
 	// handle component change
 	componentDidUpdate: function(prevProps, prevState) {
@@ -18,9 +24,38 @@ var Text = React.createClass({
 	componentWillUnmount: function() {
 		this.getModel().removeListener(this.getPropertyName(), "post", this.handleModelChange);
 	},
+	hasError: function() {
+		if (this.props.error === undefined || this.props.error == null) {
+			return false;
+		}
+		var error = this.getError();
+		if (error === undefined || error == null) {
+			return false;
+		}
+		if (Array.isArray(error)) {
+			return error.length > 0;
+		} else {
+			return false;
+		}
+	},
+	renderErrorPopover: function() {
+		var _this = this;
+		return (<Popover className="error-popover">
+			{this.getError().map(function(element) {
+				return (<div>{element.replaceMessage([_this.props.label])}</div>);
+			})}
+		</Popover>);
+	},
 	render: function() {
-		return <input type="text" className="form-control" id={this.props.id}
+		if (this.hasError()) {
+			return (<OverlayTrigger placement="top" overlay={this.renderErrorPopover()}>
+				<input type="text" className="form-control" id={this.props.id}
 					onChange={this.handleComponentChange} />
+			</OverlayTrigger>);
+		} else {
+			return <input type="text" className="form-control" id={this.props.id}
+						onChange={this.handleComponentChange} />
+		}
 	},
 	// handle component change
 	handleComponentChange: function(e) {
@@ -54,5 +89,8 @@ var Text = React.createClass({
 	// set value to model
 	setValueToModel: function(value) {
 		this.getModel().set(this.getPropertyName(), value);
+	},
+	getError: function() {
+		return this.props.error[this.props.id];
 	},
 });

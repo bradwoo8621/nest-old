@@ -2,16 +2,21 @@
 var Form = React.createClass({
 	propTypes: {
 		model: React.PropTypes.object.isRequired,
-		modelLayout: React.PropTypes.object.isRequired,
 		layout: React.PropTypes.object.isRequired,
 		
 		className: React.PropTypes.string,
+	},
+	getInitialState: function() {
+		return {
+			validateResult: null,
+		};
 	},
 	renderRows: function (row) {
 		var _this = this;
 		var cells = row.cells().map(function(cell) {
 			return (<FormCell options={cell} model={_this.getModel()} 
-				modelLayout={_this.props.modelLayout.get(cell.id)} ref={cell.id} />);
+				modelLayout={_this.getModelLayout().get(cell.id)} error={_this.getValidateResult()}
+				ref={cell.id} />);
 		});
 		return (<div className="row">{cells}</div>);
 	},
@@ -27,8 +32,19 @@ var Form = React.createClass({
 		return this.props.model;
 	},
 	getModelLayout: function() {
-		return this.props.modelLayout;
+		return this.props.model.getDataModelLayout();
 	},
+	validate: function() {
+		var result = this.getModel().validate();
+		this.setState({validateResult: result});
+	},
+	getValidateResult: function() {
+		if (this.state.validateResult === undefined || this.state.validateResult == null) {
+			return null;
+		} else {
+			return this.state.validateResult;
+		}
+	}
 });
 // form cell
 var FormCell = React.createClass({
@@ -70,6 +86,7 @@ var FormCell = React.createClass({
 		}).isRequired,
 		model: React.PropTypes.object.isRequired,
 		modelLayout: React.PropTypes.object.isRequired,
+		error: React.PropTypes.object,
 	},
 	getDefaultProps: function() {
 		return {
@@ -101,7 +118,8 @@ var FormCell = React.createClass({
 	},
 	// create normal text
 	createText: function() {
-		return <Text id={this.props.options.id} model={this.props.model} />;
+		return <Text id={this.props.options.id} model={this.props.model} error={this.props.error} 
+			label={this.props.options.label} />;
 	},
 	// create date text
 	createDateText: function() {
@@ -115,10 +133,12 @@ var FormCell = React.createClass({
 	createSelect: function() {
 		if (this.props.options.needSearchBox) {
 			return (<Select2 id={this.props.options.id} options={this.props.options.selectOptions} minimumResultsForSearch={1} 
-						model={this.props.model} parent={this.props.options.parent} />);
+						model={this.props.model} parent={this.props.options.parent}
+						error={this.props.error} label={this.props.options.label} />);
 		} else {
 			return (<Select2 id={this.props.options.id} options={this.props.options.selectOptions} 
-						model={this.props.model} parent={this.props.options.parent} />)
+						model={this.props.model} parent={this.props.options.parent}
+						error={this.props.error} label={this.props.options.label} />)
 		}
 	},
 	// create search text
@@ -160,6 +180,9 @@ var FormCell = React.createClass({
 				</div>
 			);
 		} else {
+			if (this.hasError()) {
+				className = "has-error " + className;
+			}
 			return (
 				<div className={className}>
 					<label htmlFor={this.props.options.id} className={this.props.labelClassName}>{this.props.options.label}:</label>
@@ -167,5 +190,19 @@ var FormCell = React.createClass({
 				</div>
 			);
 		}
-	}
+	},
+	hasError: function() {
+		if (this.props.error === undefined || this.props.error == null) {
+			return false;
+		}
+		var error = this.props.error[this.props.options.id];
+		if (error === undefined || error == null) {
+			return false;
+		}
+		if (Array.isArray(error)) {
+			return error.length > 0;
+		} else {
+			return false;
+		}
+	},
 });

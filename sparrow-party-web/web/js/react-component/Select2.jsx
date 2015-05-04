@@ -6,7 +6,9 @@ var Select2 = React.createClass({
 	propTypes: {
 		id: React.PropTypes.string.isRequired, // id used in UI
 		name: React.PropTypes.string, // property name in model, use id instead if not exists
+		label: React.PropTypes.string, // label of text
 		model: React.PropTypes.object.isRequired, 
+		error: React.PropTypes.object,
 		
 		// property
 		allowClear: React.PropTypes.bool,
@@ -68,6 +70,7 @@ var Select2 = React.createClass({
 		}
 		// reset the value when component update
 		comp.val(newValue).trigger("change");
+		this.removeTooltip();
 	},
 	componentDidMount: function () {
 		// Set up Select2
@@ -77,6 +80,7 @@ var Select2 = React.createClass({
 		if (parentModel != null) {
 			parentModel.addListener(this.props.parent.prop, "post", this.handleParentChange);
 		}
+		this.removeTooltip();
 	},
 	componentWillUnmount: function() {
 		this.getModel().removeListener(this.getPropertyName(), "post", this.handleModelChange);
@@ -84,6 +88,9 @@ var Select2 = React.createClass({
 		if (parentModel != null) {
 			parentModel.removeListener(this.props.parent.prop, "post", this.handleParentChange);
 		}
+	},
+	removeTooltip: function() {
+		$("#select2-" + this.props.id + "-container").removeAttr("title");
 	},
 	// jquery component creating
 	createComponent: function() {
@@ -99,9 +106,47 @@ var Select2 = React.createClass({
 			.val(this.getValueFromModel()).trigger("change")
 			.change(this.handleComponentChange);
 	},
+	hasError: function() {
+		if (this.props.error === undefined || this.props.error == null) {
+			return false;
+		}
+		var error = this.getError();
+		if (error === undefined || error == null) {
+			return false;
+		}
+		if (Array.isArray(error)) {
+			return error.length > 0;
+		} else {
+			return false;
+		}
+	},
+	renderErrorPopover: function() {
+		if (this.hasError()) {
+			var _this = this;
+			return (<Popover className="error-popover">
+				{this.getError().map(function(element) {
+					return (<div>{element.replaceMessage([_this.props.label])}</div>);
+				})}
+			</Popover>);
+		} else {
+			return (<Popover />);
+		}
+	},
 	render : function() {
 		var style = {width: this.props.width};
-		return (<div><select style={style} id={this.props.id} /></div>);
+		return (<OverlayTrigger placement="top" overlay={this.renderErrorPopover()} trigger="manual" ref="overlay">
+			<div id={this.props.id + "_select2"} onMouseMove={this.mouseMove} onMouseOut={this.mouseOut}>
+				<select style={style} id={this.props.id} />
+			</div>
+		</OverlayTrigger>);
+	},
+	mouseMove: function() {
+		if (this.hasError()) {
+			this.refs.overlay.show();
+		}
+	},
+	mouseOut: function() {
+		this.refs.overlay.hide();
 	},
 	// handle component change
 	handleComponentChange: function(e) {
@@ -111,6 +156,7 @@ var Select2 = React.createClass({
 		if (this.props.onChange) {
 			this.props.onChange(e, value);
 		}
+		this.removeTooltip();
 	},
 	// get available options according to give parent value
 	getAvailableOptions: function(parentValue) {
@@ -185,6 +231,9 @@ var Select2 = React.createClass({
 	// set value to model
 	setValueToModel: function(value) {
 		this.getModel().set(this.getPropertyName(), value);
+	},
+	getError: function() {
+		return this.props.error[this.props.id];
 	},
 	// set select options, use to reset the options. options is a json array
 	// which has id and text of each element.

@@ -21,8 +21,47 @@ label.form-vertical-label {
 
 input[type=checkbox].form-vertical-checkbox, input[type=radio].form-vertical-radio
 	{
-	margin-top: 10px;
+	/*margin-top: 10px;*/
+	/*margin-left: 5px;*/
+	
+}
+
+.has-error .form-control {
+	color: #a94442;
+}
+
+.has-error .select2-selection, .has-error .select2-selection .select2-selection__rendered,
+	.has-error .select2-selection .select2-selection__rendered .select2-selection__placeholder
+	{
+	border-color: #a94442;
+	color: #a94442;
+}
+
+.has-error .select2-selection .select2-selection__arrow>b {
+	border-color: #a94442 transparent transparent transparent;
+}
+
+.error-popover {
+	border-color: #a94442;
+	color: #a94442;
+}
+
+.error-popover.popover.top>.arrow {
+	border-top-color: #a94442;
+	border-top-color: rgba(169, 68, 66, 1);
+}
+
+label.form-vertical-checkbox {
+	margin-top: 5px;
 	margin-left: 5px;
+	color: black;
+	font-size: 16px;
+}
+
+label.form-vertical-checkbox>a:visited, label.form-vertical-checkbox>a:hover,
+	label.form-vertical-checkbox>a:link, label.form-vertical-checkbox>a:active
+	{
+	color: #999;
 }
 
 div.btn-toolbar-left {

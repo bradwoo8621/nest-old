@@ -82,7 +82,7 @@ var IndividualModelLayout = {
 			required : true,
 		}
 	},
-	middelName : {
+	middleName : {
 		type : "text",
 		check : {
 			length : 30
@@ -98,7 +98,8 @@ var IndividualModelLayout = {
 	idNumber : {
 		type : "text",
 		check : {
-			length : 10,
+			length : 18,
+			minLength: 18,
 			required : true
 		}
 	},
@@ -133,7 +134,7 @@ var IndividualModelLayout = {
 	partyCode : {
 		type : "text",
 		check : {
-			lenght : 10,
+			length : 10,
 			required : true
 		}
 	},

@@ -28,6 +28,16 @@ String.prototype.upperFirst = function() {
 	}
 };
 /**
+ * replace place holders %1, %2, etc with given string array
+ * @param strArray
+ * @returns
+ */
+String.prototype.replaceMessage = function(strArray) {
+	return this.replace(/%(\d+)/g, function(_, m) {
+		return strArray[--m];
+	});
+};
+/**
  * Model Proxy class.
  */
 var ModelProxyClass = function(methods) {
@@ -76,11 +86,11 @@ var Codes = ModelProxyClass({
  * object.
  */
 var ModelProxy = ModelProxyClass({
-	initialize : function(model, modelConfig) {
+	initialize : function(model, modelLayout) {
 		// init listeners
 		this.__propertyListeners = {};
 		// init model
-		this.__modelConfig = modelConfig;
+		this.__modelLayout = modelLayout;
 		this.__initModel = model;
 		this.__model = ModelUtil.clone(model);
 		var _this = this;
@@ -339,12 +349,29 @@ var ModelProxy = ModelProxyClass({
 	reset : function() {
 		this.__model = ModelUtil.clone(this.__initModel);
 	},
+	// validate data model, use model layout
+	validate : function() {
+		var layout = this.getDataModelLayout();
+		if (layout === undefined || layout == null) {
+			// no constraints
+			return true;
+		}
+		var model = this.getDataModel();
+		var result = {};
+		for ( var key in model) {
+			var options = layout.get(key)
+			var validator = new ValidationProxy(options);
+			validator.validate(this.get(key), model);
+			result[key] = validator.getMessages();
+		}
+		return result;
+	},
 	// get data model, json object
 	getDataModel : function() {
 		return this.__model;
 	},
-	getDataModelConfig : function() {
-		return this.__modelConfig;
+	getDataModelLayout : function() {
+		return this.__modelLayout;
 	},
 });
 
@@ -357,7 +384,7 @@ var ModelUtil = {
 	},
 	// create a model, layout is an instance of Layout
 	create : function(layout) {
-		return new ModelProxy(layout.create());
+		return new ModelProxy(layout.create(), layout);
 	}
 };
 
@@ -376,7 +403,7 @@ var LayoutProxyClass = function(methods) {
 		};
 	}
 	return LayoutProxy;
-}
+};
 /**
  * Row Layout
  */
@@ -526,7 +553,7 @@ var TableColumnLayout = LayoutProxyClass({
 });
 
 /**
- * validation proxy class
+ * model layout proxy class
  */
 var ModelLayoutProxyClass = function(methods) {
 	var ModelLayoutProxy = function() {
@@ -540,9 +567,9 @@ var ModelLayoutProxyClass = function(methods) {
 		};
 	}
 	return ModelLayoutProxy;
-}
+};
 /**
- * validation proxy
+ * model layout proxy
  */
 var ModelLayoutProxy = ModelLayoutProxyClass({
 	initialize : function(modelLayout) {
@@ -598,3 +625,121 @@ var ModelLayoutProxy = ModelLayoutProxyClass({
 		return this.__modelLayout[propName];
 	}
 });
+
+/**
+ * validation proxy class
+ */
+var ValidationProxyClass = function(methods) {
+	var ValidationProxy = function() {
+		this.initialize.apply(this, arguments);
+	};
+	for ( var property in methods) {
+		ValidationProxy.prototype[property] = methods[property];
+	}
+	if (!ValidationProxy.prototype.initialize) {
+		ValidationProxy.prototype.initialize = function() {
+		};
+	}
+	return ValidationProxy;
+};
+/**
+ * validation proxy
+ */
+var ValidationProxy = ValidationProxyClass({
+	initialize : function(options) {
+		this.__options = options;
+	},
+	getOptions : function() {
+		return this.__options;
+	},
+	validate : function(value, model) {
+		return this.__checkType(value, model) && this.__checkRules(value, model);
+	},
+	__initMessages : function() {
+		if (this.__messages === undefined) {
+			this.__messages = new Array();
+		}
+	},
+	__pushMessage : function(message) {
+		this.__initMessages();
+		this.__messages.push(message);
+	},
+	__handleResult : function(result) {
+		if (result.passed) {
+			return true;
+		} else {
+			this.__pushMessage(result.msg);
+			return false;
+		}
+	},
+	__checkType : function(value, model) {
+		var options = this.getOptions();
+		var type = options.type;
+		var typeValidator = Validators["_" + type];
+		if (typeValidator === undefined) {
+			return true;
+		} else {
+			return this.__handleResult(typeValidator(value, model));
+		}
+	},
+	__checkRules : function(value, model) {
+		var rules = this.getOptions().check;
+		if (rules === undefined || rules == null) {
+			return true;
+		}
+		var ret = true;
+		for ( var key in rules) {
+			var validator = Validators[key];
+			if (validator == undefined) {
+				console.log("Validator of [" + key + "] is undefined.");
+			}
+			ret = ret && this.__handleResult(validator(value, model, rules));
+		}
+		return ret;
+	},
+	getMessages : function() {
+		return this.__messages === undefined ? [] : this.__messages;
+	},
+});
+/**
+ * validators
+ */
+var Validators = {
+	_number : function(value) {
+		return {
+			passed : value == null || !isNaN(value),
+			msg : "\"%1\" must be a number."
+		};
+	},
+	_boolean : function(value) {
+		return {
+			passed : value == null || value == true || value == false,
+			msg : "\"%1\" must be a boolean."
+		};
+	},
+	_date : function(value) {
+		return {
+			passed : true
+		};
+	},
+	required : function(value) {
+		return {
+			passed : value != null && (typeof (value) === "string" ? value.length != 0 : true),
+			msg : "\"%1\" is required."
+		};
+	},
+	// value must be a string
+	length : function(value, model, rules) {
+		return {
+			passed : value == null || value.length <= rules.length,
+			msg : "Maximum length of \"%1\" is " + rules.length + "."
+		};
+	},
+	// value must be a string
+	minLength : function(value, model, rules) {
+		return {
+			passed : value == null || value.length >= rules.minLength,
+			msg : "Minimum length of \"%1\" is " + rules.minLength + "."
+		};
+	}
+};

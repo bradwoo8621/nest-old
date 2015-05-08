@@ -41,6 +41,27 @@ input[type=checkbox].form-vertical-checkbox, input[type=radio].form-vertical-rad
 	border-color: #a94442 transparent transparent transparent;
 }
 
+.has-error label.form-vertical-checkbox>a:visited, .has-error label.form-vertical-checkbox>a:hover,
+	.has-error label.form-vertical-checkbox>a:link, .has-error label.form-vertical-checkbox>a:active
+	{
+	color: #a94442;
+}
+
+.has-error div.input-group.search-text div.input-group-btn button {
+	border-color: #a94442;
+	color: #a94442;
+	background-color: #f2dede;
+}
+
+td.has-error {
+	color: #a94442;
+	background-color: #f2dede;
+}
+
+.table-has-error label.datatable-heading-label {
+	color: #a94442;
+}
+
 .error-popover {
 	border-color: #a94442;
 	color: #a94442;
@@ -62,6 +83,20 @@ label.form-vertical-checkbox>a:visited, label.form-vertical-checkbox>a:hover,
 	label.form-vertical-checkbox>a:link, label.form-vertical-checkbox>a:active
 	{
 	color: #999;
+}
+
+div.input-group.search-text div.input-group-btn button {
+	background-color: #eee;
+	background-image: none;
+}
+
+div.input-group.search-text div.input-group-btn>.btn+.btn {
+	margin-left: 0px\0;
+}
+
+div.input-group.search-text div.input-group-btn:last-child>.btn, div.input-group.search-text div.input-group-btn:last-child>.btn-group
+	{
+	margin-left: 0px\0;
 }
 
 div.btn-toolbar-left {

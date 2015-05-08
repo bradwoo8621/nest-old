@@ -1,96 +1,168 @@
-// text input
+/**
+ * text input
+ */
 var Text = React.createClass({
-	propTypes: {
-		id: React.PropTypes.string.isRequired, // id used in UI
-		name: React.PropTypes.string, // property name in model, use id instead if not exists
-		label: React.PropTypes.string, // label of text
-		model: React.PropTypes.object.isRequired,
-		error: React.PropTypes.object,
-		
-		onChange: React.PropTypes.func,
-	},
-	getDefaultProps: function() {
-		return {
-		};
-	},
-	// handle component change
-	componentDidUpdate: function(prevProps, prevState) {
-		this.getComponent().val(this.getValueFromModel());
-	},
-	componentDidMount: function() {
-		this.getComponent().val(this.getValueFromModel());
-		this.getModel().addListener(this.getPropertyName(), "post", this.handleModelChange);
-	},
-	componentWillUnmount: function() {
-		this.getModel().removeListener(this.getPropertyName(), "post", this.handleModelChange);
-	},
-	hasError: function() {
-		if (this.props.error === undefined || this.props.error == null) {
-			return false;
-		}
-		var error = this.getError();
-		if (error === undefined || error == null) {
-			return false;
-		}
-		if (Array.isArray(error)) {
-			return error.length > 0;
-		} else {
-			return false;
-		}
-	},
-	renderErrorPopover: function() {
-		var _this = this;
-		return (<Popover className="error-popover">
-			{this.getError().map(function(element) {
-				return (<div>{element.replaceMessage([_this.props.label])}</div>);
-			})}
-		</Popover>);
-	},
-	render: function() {
-		if (this.hasError()) {
-			return (<OverlayTrigger placement="top" overlay={this.renderErrorPopover()}>
-				<input type="text" className="form-control" id={this.props.id}
-					onChange={this.handleComponentChange} />
-			</OverlayTrigger>);
-		} else {
-			return <input type="text" className="form-control" id={this.props.id}
-						onChange={this.handleComponentChange} />
-		}
-	},
-	// handle component change
-	handleComponentChange: function(e) {
-		// synchronize value to model
-		this.setValueToModel(e.target.value);
-		// invoke change event
-		if (this.props.onChange) {
-			this.props.onChange(e, this.getComponent().val());
-		}
-	},
-	// handle model change
-	handleModelChange: function(evt) {
-		this.getComponent().val(evt.newValue);
-	},
-	// get component
-	getComponent: function() {
-		return $("#" + this.props.id);
-	},
-	// get model
-	getModel: function() {
-		return this.props.model;
-	},
-	// get property name
-	getPropertyName: function() {
-		return this.props.name ? this.props.name : this.props.id;
-	},
-	// get value from model
-	getValueFromModel: function() {
-		return this.getModel().get(this.getPropertyName());
-	},
-	// set value to model
-	setValueToModel: function(value) {
-		this.getModel().set(this.getPropertyName(), value);
-	},
-	getError: function() {
-		return this.props.error[this.props.id];
-	},
+    __classNames: {
+        control: "form-control",
+        errorPopover: "error-popover"
+    },
+    /**
+     * get CSS class
+     * @param name {String}
+     * @returns {String}
+     */
+    getCSSClass: function (name) {
+        return this.props["css_" + name] ? this.props["css_" + name] : this.__classNames[name];
+    },
+    /**
+     * @override
+     */
+    propTypes: {
+        // id of component
+        id: React.PropTypes.string.isRequired,
+        // label of component
+        label: React.PropTypes.string,
+        // model
+        model: React.PropTypes.object.isRequired,
+        // error model
+        error: React.PropTypes.object,
+
+        // onChange event handler
+        onChange: React.PropTypes.func
+    },
+    /**
+     * override react method
+     * @param prevProps {*}
+     * @param prevState {*}
+     * @override
+     */
+    componentDidUpdate: function (prevProps, prevState) {
+        this.getComponent().val(this.getValueFromModel());
+    },
+    /**
+     * override react method
+     * @override
+     */
+    componentDidMount: function () {
+        // set model value to component
+        this.getComponent().val(this.getValueFromModel());
+        // add post change listener to handle model change
+        this.getModel().addListener(this.getId(), "post", this.handleModelChange);
+    },
+    /**
+     * override react method
+     * @override
+     */
+    componentWillUnmount: function () {
+        // remove post change listener to handle model change
+        this.getModel().removeListener(this.getId(), "post", this.handleModelChange);
+    },
+    /**
+     * render error popover.
+     * error messages will be rendered as divs.
+     * @returns {XML}
+     */
+    renderErrorPopover: function () {
+        var _this = this;
+        return (<Popover className={this.getCSSClass("errorPopover")}>
+            {this.getError().map(function (element) {
+                return (<div>{element.replaceMessage([_this.getLabel()])}</div>);
+            })}
+        </Popover>);
+    },
+    /**
+     * override react method
+     * @returns {XML}
+     * @override
+     */
+    render: function () {
+        if (this.hasError()) {
+            return (<OverlayTrigger placement="top" overlay={this.renderErrorPopover()}>
+                <input type="text" className={this.getCSSClass("control")} id={this.getId()}
+                       onChange={this.handleComponentChange}/>
+            </OverlayTrigger>);
+        } else {
+            return <input type="text" className={this.getCSSClass("control")} id={this.getId()}
+                          onChange={this.handleComponentChange}/>
+        }
+    },
+    /**
+     * handle component change
+     * @param e
+     */
+    handleComponentChange: function (e) {
+        // synchronize value to model
+        this.setValueToModel(e.target.value);
+        // invoke change event
+        if (this.props.onChange) {
+            this.props.onChange(e, this.getComponent().val());
+        }
+    },
+    /**
+     * handle model change
+     * @param evt
+     */
+    handleModelChange: function (evt) {
+        this.getComponent().val(evt.newValue);
+    },
+    /**
+     * get component
+     * @returns {*|jQuery|HTMLElement}
+     */
+    getComponent: function () {
+        return $("#" + this.getId());
+    },
+    /**
+     * get data model
+     * @returns {ModelProxy}
+     */
+    getModel: function () {
+        return this.props.model;
+    },
+    /**
+     * get id
+     * @returns {String}
+     */
+    getId: function () {
+        return this.props.id;
+    },
+    /**
+     * get label
+     * @returns {String}
+     */
+    getLabel: function () {
+        return this.props.label;
+    },
+    /**
+     * get value from model by id of props
+     * @returns {String}
+     */
+    getValueFromModel: function () {
+        return this.getModel().get(this.getId());
+    },
+    /**
+     * set value to model by id of props
+     * @param value {String}
+     */
+    setValueToModel: function (value) {
+        this.getModel().set(this.getId(), value);
+    },
+    /**
+     * get error
+     * @returns {[String]}
+     */
+    getError: function () {
+        if (this.props.error === undefined || this.props.error == null) {
+            return null;
+        }
+        return this.props.error[this.getId()];
+    },
+    /**
+     * check if there is error existed
+     * @returns {boolean}
+     */
+    hasError: function () {
+        var error = this.getError();
+        return error != null && error.length > 0;
+    }
 });

@@ -9,8 +9,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.github.nest.arcteryx.data.codes.ICodeTable;
-
 /**
  * Code table resource annotation
  * 
@@ -27,11 +25,4 @@ public @interface CodeTableRegistration {
 	 * @return
 	 */
 	String name();
-
-	/**
-	 * code table registration class
-	 * 
-	 * @return
-	 */
-	Class<? extends ICodeTable> registerClass();
 }

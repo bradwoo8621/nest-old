@@ -11,7 +11,7 @@ import com.github.nest.arcteryx.data.internal.codes.annotation.CodeTableRegistra
 /**
  * @author brad.wu
  */
-@CodeTableRegistration(registerClass = CodeTableA.class, name = "CodeTableA")
+@CodeTableRegistration(name = "CodeTableA")
 @CodeTableProvider(contentProviderClass = HierarchyCodeTableContentProvider.class)
 public class CodeTableA extends AbstractCodeTable {
 	private static final long serialVersionUID = -4676077845092953939L;

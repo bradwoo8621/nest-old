@@ -31,6 +31,7 @@ import com.github.nest.arcteryx.data.codes.ICodeTableFilter;
  * @author brad.wu
  */
 public class DefaultCodeTableContentProvider implements ICodeTableContentProvider {
+	public static final char DESCRIPTION_SEPARATOR = ':';
 	private ICodeTable codeTable = null;
 	private Map<String, ICodeItem> itemsMap = null;
 
@@ -92,7 +93,12 @@ public class DefaultCodeTableContentProvider implements ICodeTableContentProvide
 	 * @return
 	 */
 	protected ICodeItem createCodeItem(String line) {
-		return new CodeItem(line.trim());
+		int pos = line.indexOf(DESCRIPTION_SEPARATOR);
+		if (pos == -1) {
+			return new CodeItem(line.trim());
+		} else {
+			return new CodeItem(line.substring(0, pos));
+		}
 	}
 
 	/**

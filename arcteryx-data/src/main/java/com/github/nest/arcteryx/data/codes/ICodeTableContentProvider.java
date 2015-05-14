@@ -25,7 +25,7 @@ public interface ICodeTableContentProvider {
 	 * @param code
 	 * @return
 	 */
-	boolean containsKey(String code);
+	boolean contains(String code);
 
 	/**
 	 * get item by given code

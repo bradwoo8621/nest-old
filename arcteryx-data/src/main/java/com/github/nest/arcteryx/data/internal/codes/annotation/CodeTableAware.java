@@ -70,13 +70,7 @@ public class CodeTableAware implements ApplicationContextAware, InitializingBean
 				continue;
 			}
 			// construct code table
-			ICodeTable codeTable;
-			try {
-				codeTable = codeTableClass.newInstance();
-			} catch (Exception e) {
-				throw new CodesRuntimeException(IArcteryxDataExceptionCodes.CODE_TABLE_CONSTRUCT,
-						"Failed to construct code table[" + codeTableClass + "].", e);
-			}
+			ICodeTable codeTable = createCodeTable(codeTableClass);
 			// check the code table was registered or not
 			if (this.getRegistry().getCodeTable(codeTable.getName()) != null) {
 				if (logger.isWarnEnabled()) {
@@ -94,6 +88,22 @@ public class CodeTableAware implements ApplicationContextAware, InitializingBean
 	}
 
 	/**
+	 * create code table
+	 * 
+	 * @param codeTableClass
+	 * @return
+	 */
+	protected ICodeTable createCodeTable(Class<? extends ICodeTable> codeTableClass) {
+		// must have a constructor with no parameter
+		try {
+			return codeTableClass.newInstance();
+		} catch (Exception e) {
+			throw new CodesRuntimeException(IArcteryxDataExceptionCodes.CODE_TABLE_CONSTRUCT,
+					"Failed to construct code table[" + codeTableClass + "].", e);
+		}
+	}
+
+	/**
 	 * scan code table by scanners
 	 */
 	protected void scanByScanners() {
@@ -106,16 +116,6 @@ public class CodeTableAware implements ApplicationContextAware, InitializingBean
 				scanner.scan(this.getRegistry());
 			}
 		}
-	}
-
-	/**
-	 * get registration
-	 * 
-	 * @param codeTableClass
-	 * @return
-	 */
-	protected CodeTableRegistration getRegistration(Class<? extends ICodeTable> codeTableClass) {
-		return AnnotationUtil.getRegistration(codeTableClass);
 	}
 
 	/**

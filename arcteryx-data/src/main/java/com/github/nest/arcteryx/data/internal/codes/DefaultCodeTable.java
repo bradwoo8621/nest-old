@@ -48,7 +48,7 @@ public class DefaultCodeTable implements ICodeTable {
 	 */
 	@Override
 	public boolean contains(String code) {
-		return this.getContentProvider().containsKey(code);
+		return this.getContentProvider().contains(code);
 	}
 
 	/**
@@ -84,20 +84,20 @@ public class DefaultCodeTable implements ICodeTable {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.data.codes.ICodeTable#filter(com.github.nest.arcteryx.data.codes.ICodeItemFilter)
+	 * @see com.github.nest.arcteryx.data.codes.ICodeTable#getItems(com.github.nest.arcteryx.data.codes.ICodeItemFilter)
 	 */
 	@Override
-	public Collection<ICodeItem> filter(ICodeItemFilter filter) {
+	public Collection<ICodeItem> getItems(ICodeItemFilter filter) {
 		return this.getContentProvider().getItems(filter);
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.data.codes.ICodeTable#filter(com.github.nest.arcteryx.data.codes.ICodeTableFilter)
+	 * @see com.github.nest.arcteryx.data.codes.ICodeTable#getItems(com.github.nest.arcteryx.data.codes.ICodeTableFilter)
 	 */
 	@Override
-	public Collection<ICodeItem> filter(ICodeTableFilter filter) {
+	public Collection<ICodeItem> getItems(ICodeTableFilter filter) {
 		return this.getContentProvider().getItems(filter);
 	}
 

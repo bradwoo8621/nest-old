@@ -114,10 +114,10 @@ public class DefaultCodeTableContentProvider implements ICodeTableContentProvide
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.data.codes.ICodeTableContentProvider#containsKey(java.lang.String)
+	 * @see com.github.nest.arcteryx.data.codes.ICodeTableContentProvider#contains(java.lang.String)
 	 */
 	@Override
-	public boolean containsKey(String code) {
+	public boolean contains(String code) {
 		return this.getItemsMap().containsKey(code);
 	}
 

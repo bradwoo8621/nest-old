@@ -8,7 +8,6 @@ import java.util.Iterator;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.github.nest.arcteryx.data.IArcteryxDataExceptionCodes;
 import com.github.nest.arcteryx.data.codes.CodesRuntimeException;
 import com.github.nest.arcteryx.data.codes.ICodeItem;
 import com.github.nest.arcteryx.data.codes.ICodeItemFilter;
@@ -16,7 +15,6 @@ import com.github.nest.arcteryx.data.codes.ICodeTable;
 import com.github.nest.arcteryx.data.codes.ICodeTableContentProvider;
 import com.github.nest.arcteryx.data.codes.ICodeTableFilter;
 import com.github.nest.arcteryx.data.internal.codes.annotation.AnnotationUtil;
-import com.github.nest.arcteryx.data.internal.codes.annotation.CodeTableProvider;
 
 /**
  * code table
@@ -73,17 +71,8 @@ public abstract class AbstractCodeTable implements ICodeTable {
 	 * @throws CodesRuntimeException
 	 */
 	protected ICodeTableContentProvider createContentProvider() throws CodesRuntimeException {
-		CodeTableProvider annotation = getClass().getAnnotation(CodeTableProvider.class);
-		if (annotation == null) {
-			return createDefaultContentProvider();
-		}
-		// else
-		try {
-			return annotation.contentProviderClass().newInstance();
-		} catch (Exception e) {
-			throw new CodesRuntimeException(IArcteryxDataExceptionCodes.CODE_TABLE_CONTENT_PROVIDER_CONSTRUCT,
-					"Failed to construct code table provider[" + annotation.contentProviderClass() + "].", e);
-		}
+		ICodeTableContentProvider provider = AnnotationUtil.createContentProvider(getClass());
+		return provider == null ? createDefaultContentProvider() : provider;
 	}
 
 	/**
@@ -101,7 +90,7 @@ public abstract class AbstractCodeTable implements ICodeTable {
 	 * @return
 	 */
 	protected void initializeName() {
-		this.setName(AnnotationUtil.getRegistration(getClass()).name());
+		this.setName(AnnotationUtil.getRegistrationName(getClass()));
 	}
 
 	/**
@@ -128,7 +117,7 @@ public abstract class AbstractCodeTable implements ICodeTable {
 	 */
 	@Override
 	public boolean contains(String code) {
-		return this.getContentProvider().containsKey(code);
+		return this.getContentProvider().contains(code);
 	}
 
 	/**
@@ -164,19 +153,20 @@ public abstract class AbstractCodeTable implements ICodeTable {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.arcteryx.data.codes.ICodeTable#filter(com.github.nest.arcteryx.data.codes.ICodeItemFilter)
+	 * @see com.github.nest.arcteryx.data.codes.ICodeTable#getItems(com.github.nest.arcteryx.data.codes.ICodeItemFilter)
 	 */
 	@Override
-	public Collection<ICodeItem> filter(ICodeItemFilter filter) {
+	public Collection<ICodeItem> getItems(ICodeItemFilter filter) {
 		return this.getContentProvider().getItems(filter);
 	}
 
 	/**
 	 * (non-Javadoc)
-	 * @see com.github.nest.arcteryx.data.codes.ICodeTable#filter(com.github.nest.arcteryx.data.codes.ICodeTableFilter)
+	 * 
+	 * @see com.github.nest.arcteryx.data.codes.ICodeTable#getItems(com.github.nest.arcteryx.data.codes.ICodeTableFilter)
 	 */
 	@Override
-	public Collection<ICodeItem> filter(ICodeTableFilter filter) {
+	public Collection<ICodeItem> getItems(ICodeTableFilter filter) {
 		return this.getContentProvider().getItems(filter);
 	}
 }

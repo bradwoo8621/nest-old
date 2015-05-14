@@ -49,7 +49,7 @@ public interface ICodeTable extends Serializable {
 	 * @param filter
 	 * @return
 	 */
-	Collection<ICodeItem> filter(ICodeItemFilter filter);
+	Collection<ICodeItem> getItems(ICodeItemFilter filter);
 
 	/**
 	 * filter items by give table filter
@@ -57,7 +57,7 @@ public interface ICodeTable extends Serializable {
 	 * @param filter
 	 * @return
 	 */
-	Collection<ICodeItem> filter(ICodeTableFilter filter);
+	Collection<ICodeItem> getItems(ICodeTableFilter filter);
 
 	/**
 	 * get items

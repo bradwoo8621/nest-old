@@ -33,14 +33,14 @@ public class UT07Test extends EnableLogger {
 		assertFalse(codeTable.contains("CodeD"));
 
 		HierarchyCodeItemFilter filter = new HierarchyCodeItemFilter("X");
-		Collection<ICodeItem> items = codeTable.filter(filter);
+		Collection<ICodeItem> items = codeTable.getItems(filter);
 		assertEquals(2, items.size());
 		for (ICodeItem item : items) {
 			assertTrue("CodeA, CodeB".indexOf(item.getCode()) != -1);
 		}
 
 		filter = new HierarchyCodeItemFilter("Y");
-		items = codeTable.filter(filter);
+		items = codeTable.getItems(filter);
 		assertEquals(1, items.size());
 		assertEquals("CodeC", items.iterator().next().getCode());
 

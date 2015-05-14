@@ -35,7 +35,7 @@ public class UT08Test extends EnableLogger {
 		assertTrue(codeTable.contains("CodeC"));
 		assertFalse(codeTable.contains("CodeD"));
 
-		Collection<ICodeItem> items = codeTable.filter(new ICodeTableFilter() {
+		Collection<ICodeItem> items = codeTable.getItems(new ICodeTableFilter() {
 			/**
 			 * (non-Javadoc)
 			 * 

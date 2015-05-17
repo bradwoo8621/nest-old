@@ -47,6 +47,7 @@ public class CodeTableRegistry implements ICodeTableRegistry {
 	@Override
 	public void register(ICodeTable codeTable) {
 		this.codeTableMap.put(codeTable.getName(), codeTable);
+		codeTable.setRegistry(this);
 	}
 
 	/**
@@ -57,6 +58,7 @@ public class CodeTableRegistry implements ICodeTableRegistry {
 	@Override
 	public void deregister(ICodeTable codeTable) {
 		this.codeTableMap.remove(codeTable.getName());
+		codeTable.setRegistry(null);
 	}
 
 	/**
@@ -66,6 +68,9 @@ public class CodeTableRegistry implements ICodeTableRegistry {
 	 */
 	@Override
 	public void deregister(String codeTableName) {
-		this.codeTableMap.remove(codeTableName);
+		ICodeTable codeTable = this.codeTableMap.remove(codeTableName);
+		if (codeTable != null) {
+			codeTable.setRegistry(null);
+		}
 	}
 }

@@ -11,6 +11,7 @@ import com.github.nest.arcteryx.data.codes.ICodeItemFilter;
 import com.github.nest.arcteryx.data.codes.ICodeTable;
 import com.github.nest.arcteryx.data.codes.ICodeTableContentProvider;
 import com.github.nest.arcteryx.data.codes.ICodeTableFilter;
+import com.github.nest.arcteryx.data.codes.ICodeTableRegistry;
 
 /**
  * default code table.
@@ -22,6 +23,27 @@ public class DefaultCodeTable implements ICodeTable {
 
 	private String name = null;
 	private ICodeTableContentProvider contentProvider = null;
+	private ICodeTableRegistry registry = null;
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.data.codes.ICodeTable#getRegistry()
+	 */
+	@Override
+	public ICodeTableRegistry getRegistry() {
+		return this.registry;
+	}
+
+	/**
+	 * (non-Javadoc)
+	 * 
+	 * @see com.github.nest.arcteryx.data.codes.ICodeTable#setRegistry(com.github.nest.arcteryx.data.codes.ICodeTableRegistry)
+	 */
+	@Override
+	public void setRegistry(ICodeTableRegistry registry) {
+		this.registry = registry;
+	}
 
 	/**
 	 * (non-Javadoc)

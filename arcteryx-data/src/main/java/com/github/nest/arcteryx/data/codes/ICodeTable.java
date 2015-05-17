@@ -14,6 +14,20 @@ import java.util.Iterator;
  */
 public interface ICodeTable extends Serializable {
 	/**
+	 * get registry
+	 * 
+	 * @return
+	 */
+	ICodeTableRegistry getRegistry();
+
+	/**
+	 * set registry
+	 * 
+	 * @param registry
+	 */
+	void setRegistry(ICodeTableRegistry registry);
+
+	/**
 	 * get name of code table
 	 * 
 	 * @return

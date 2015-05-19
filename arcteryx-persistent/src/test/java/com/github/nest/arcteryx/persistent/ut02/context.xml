@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+	xsi:schemaLocation=" 
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd 
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd 
+        http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd 
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd 
+        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa-1.8.xsd"
+	default-lazy-init="true">
+
+	<bean
+		id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
+		p:dataSource-ref="dataSource"
+		p:jpaVendorAdapter-ref="hibernateJpaVendorAdapter"
+		p:packagesToScan="com.github.nest.arcteryx.persistent.ut02"
+		p:mappingResources="com/github/nest/arcteryx/persistent/ut02/orm.xml">
+	</bean>
+
+	<jpa:repositories
+		base-package="com.github.nest.arcteryx.persistent.ut02"
+		transaction-manager-ref="transactionManager"
+		entity-manager-factory-ref="entityManagerFactory" />
+	<jpa:auditing auditor-aware-ref="auditorAwareBean" />
+
+	<bean id="auditorAwareBean" class="com.github.nest.arcteryx.persistent.ut02.AuditorAwareImpl"/>
+
+	<bean
+		id="transactionManager"
+		class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property
+			name="entityManagerFactory"
+			ref="entityManagerFactory" />
+	</bean>
+
+	<tx:annotation-driven
+		transaction-manager="transactionManager"
+		proxy-target-class="true" />
+
+	<beans profile="test">
+		<bean
+			id="hibernateJpaVendorAdapter"
+			class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"
+			p:databasePlatform="org.hibernate.dialect.H2Dialect"
+			p:showSql="true" />
+
+		<bean
+			id="dataSource"
+			class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<property
+				name="driverClass"
+				value="org.hsqldb.jdbc.JDBCDriver" />
+			<property
+				name="url"
+				value="jdbc:hsqldb:mem:memdb" />
+			<property
+				name="username"
+				value="username" />
+			<property
+				name="password"
+				value="password" />
+		</bean>
+
+		<jdbc:initialize-database
+			data-source="dataSource"
+			ignore-failures="ALL">
+			<jdbc:script
+				location="classpath:/com/github/nest/arcteryx/persistent/ut02/schema.sql" />
+			<!-- <jdbc:script location="classpath:/com/github/nest/arcteryx/persistent/ut01/data.sql" 
+				encoding="UTF-8" /> -->
+		</jdbc:initialize-database>
+	</beans>
+</beans>

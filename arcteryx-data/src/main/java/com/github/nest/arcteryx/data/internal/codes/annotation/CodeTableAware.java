@@ -98,7 +98,7 @@ public class CodeTableAware implements ApplicationContextAware, InitializingBean
 		try {
 			return codeTableClass.newInstance();
 		} catch (Exception e) {
-			throw new CodesRuntimeException(IArcteryxDataExceptionCodes.CODE_TABLE_CONSTRUCT,
+			throw new CodesRuntimeException(IArcteryxDataExceptionCodes.CODETABLE_CONSTRUCT_FAIL,
 					"Failed to construct code table[" + codeTableClass + "].", e);
 		}
 	}

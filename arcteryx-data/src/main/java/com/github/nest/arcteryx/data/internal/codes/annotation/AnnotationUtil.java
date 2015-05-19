@@ -25,7 +25,7 @@ public class AnnotationUtil {
 		if (registration == null) {
 			CodeTableReplacement replacement = codeTableClass.getAnnotation(CodeTableReplacement.class);
 			if (replacement == null) {
-				throw new CodesRuntimeException(IArcteryxDataExceptionCodes.CODE_TABLE_ANN_INVALID, "Neither ["
+				throw new CodesRuntimeException(IArcteryxDataExceptionCodes.CODETABLE_ANNOTATION_INVALID, "Neither ["
 						+ CodeTableRegistration.class.getName() + "] nor [" + CodeTableReplacement.class.getName()
 						+ "] annotation was defined in code table class.");
 			} else {
@@ -51,7 +51,7 @@ public class AnnotationUtil {
 		try {
 			return annotation.contentProviderClass().newInstance();
 		} catch (Exception e) {
-			throw new CodesRuntimeException(IArcteryxDataExceptionCodes.CODE_TABLE_CONTENT_PROVIDER_CONSTRUCT,
+			throw new CodesRuntimeException(IArcteryxDataExceptionCodes.CODETABLE_CONTENT_PROVIDER_CONSTRUCT_FAIL,
 					"Failed to construct code table provider[" + annotation.contentProviderClass() + "].", e);
 		}
 	}

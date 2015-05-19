@@ -79,7 +79,7 @@ public class DefaultCodeTableContentProvider implements ICodeTableContentProvide
 			}
 			reader.close();
 		} catch (Exception e) {
-			throw new CodesRuntimeException(IArcteryxDataExceptionCodes.CODE_TABLE_INITIAL,
+			throw new CodesRuntimeException(IArcteryxDataExceptionCodes.CODETABLE_INITIAL_FAIL,
 					"Failed to read code of code table[" + codeTable.getName() + "] from class path[/"
 							+ fileName.replace('.', '/') + "].", e);
 		}

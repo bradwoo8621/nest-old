@@ -15,17 +15,17 @@ public interface IArcteryxDataExceptionCodes extends INestExceptionCodes {
 	/**
 	 * construct code table error
 	 */
-	String CODE_TABLE_CONSTRUCT = "NEST-00000001";
+	String CODETABLE_CONSTRUCT_FAIL = "NEST-00000001";
 	/**
 	 * initialize code table error
 	 */
-	String CODE_TABLE_INITIAL = "NEST-00000002";
+	String CODETABLE_INITIAL_FAIL = "NEST-00000002";
 	/**
 	 * construct code table provider error
 	 */
-	String CODE_TABLE_CONTENT_PROVIDER_CONSTRUCT = "NEST-00000003";
+	String CODETABLE_CONTENT_PROVIDER_CONSTRUCT_FAIL = "NEST-00000003";
 	/**
 	 * annotation in code table class invalid error
 	 */
-	String CODE_TABLE_ANN_INVALID = "NEST-00000004";
+	String CODETABLE_ANNOTATION_INVALID = "NEST-00000004";
 }

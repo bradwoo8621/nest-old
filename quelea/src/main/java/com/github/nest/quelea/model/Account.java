@@ -18,6 +18,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.github.nest.quelea.codes.AccountType;
+import com.github.nest.quelea.codes.CreditCardType;
+
 /**
  * party account
  * 
@@ -99,6 +102,7 @@ public class Account implements Serializable {
 
 	/**
 	 * @return the accountTypeCode
+	 * @see AccountType
 	 */
 	public String getAccountTypeCode() {
 		return accountTypeCode;
@@ -107,6 +111,7 @@ public class Account implements Serializable {
 	/**
 	 * @param accountTypeCode
 	 *            the accountTypeCode to set
+	 * @see AccountType
 	 */
 	public void setAccountTypeCode(String accountTypeCode) {
 		this.accountTypeCode = accountTypeCode;
@@ -114,6 +119,7 @@ public class Account implements Serializable {
 
 	/**
 	 * @return the bankCode
+	 * @see Bank
 	 */
 	public String getBankCode() {
 		return bankCode;
@@ -122,6 +128,7 @@ public class Account implements Serializable {
 	/**
 	 * @param bankCode
 	 *            the bankCode to set
+	 * @see Bank
 	 */
 	public void setBankCode(String bankCode) {
 		this.bankCode = bankCode;
@@ -144,6 +151,7 @@ public class Account implements Serializable {
 
 	/**
 	 * @return the creditCardTypeCode
+	 * @see CreditCardType
 	 */
 	public String getCreditCardTypeCode() {
 		return creditCardTypeCode;
@@ -152,6 +160,7 @@ public class Account implements Serializable {
 	/**
 	 * @param creditCardTypeCode
 	 *            the creditCardTypeCode to set
+	 * @see CreditCardType
 	 */
 	public void setCreditCardTypeCode(String creditCardTypeCode) {
 		this.creditCardTypeCode = creditCardTypeCode;

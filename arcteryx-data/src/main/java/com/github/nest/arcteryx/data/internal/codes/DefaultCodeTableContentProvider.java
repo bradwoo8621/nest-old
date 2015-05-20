@@ -75,7 +75,7 @@ public class DefaultCodeTableContentProvider implements ICodeTableContentProvide
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is));
 			String line = null;
 			while ((line = reader.readLine()) != null) {
-				items.add(createCodeItem(line));
+				items.add(createCodeItemAfterRemoveDescription(line));
 			}
 			reader.close();
 		} catch (Exception e) {
@@ -87,18 +87,28 @@ public class DefaultCodeTableContentProvider implements ICodeTableContentProvide
 	}
 
 	/**
+	 * create code item after remove description.<br>
+	 * description is separated by ":"
+	 * 
+	 * @param line
+	 */
+	protected ICodeItem createCodeItemAfterRemoveDescription(String line) {
+		int pos = line.indexOf(DESCRIPTION_SEPARATOR);
+		if (pos == -1) {
+			return createCodeItem(line);
+		} else {
+			return createCodeItem(line.substring(0, pos));
+		}
+	}
+
+	/**
 	 * create code item
 	 * 
 	 * @param line
 	 * @return
 	 */
 	protected ICodeItem createCodeItem(String line) {
-		int pos = line.indexOf(DESCRIPTION_SEPARATOR);
-		if (pos == -1) {
-			return new CodeItem(line.trim());
-		} else {
-			return new CodeItem(line.substring(0, pos));
-		}
+		return new CodeItem(line.trim());
 	}
 
 	/**

@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 
 import org.joda.time.DateTime;
 
+import com.github.nest.quelea.codes.OrganizationIdType;
 import com.github.nest.quelea.codes.PartyType;
 
 /**
@@ -89,6 +90,7 @@ public class Organization extends Party implements Serializable {
 
 	/**
 	 * @return the idTypeCode
+	 * @see OrganizationIdType
 	 */
 	public String getIdTypeCode() {
 		return idTypeCode;
@@ -97,6 +99,7 @@ public class Organization extends Party implements Serializable {
 	/**
 	 * @param idTypeCode
 	 *            the idTypeCode to set
+	 * @see OrganizationIdType
 	 */
 	public void setIdTypeCode(String idTypeCode) {
 		this.idTypeCode = idTypeCode;
@@ -119,6 +122,7 @@ public class Organization extends Party implements Serializable {
 
 	/**
 	 * @return the legalTypeCode
+	 * @See LegalType
 	 */
 	public String getLegalTypeCode() {
 		return legalTypeCode;
@@ -127,6 +131,7 @@ public class Organization extends Party implements Serializable {
 	/**
 	 * @param legalTypeCode
 	 *            the legalTypeCode to set
+	 * @See LegalType
 	 */
 	public void setLegalTypeCode(String legalTypeCode) {
 		this.legalTypeCode = legalTypeCode;

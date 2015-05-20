@@ -15,6 +15,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.github.nest.quelea.codes.AddressType;
+import com.github.nest.quelea.codes.City;
+import com.github.nest.quelea.codes.Country;
+import com.github.nest.quelea.codes.District;
+import com.github.nest.quelea.codes.Province;
+
 /**
  * party address
  * 
@@ -88,6 +94,7 @@ public class Address implements Serializable {
 
 	/**
 	 * @return the addressTypeCode
+	 * @see AddressType
 	 */
 	public String getAddressTypeCode() {
 		return addressTypeCode;
@@ -96,6 +103,7 @@ public class Address implements Serializable {
 	/**
 	 * @param addressTypeCode
 	 *            the addressTypeCode to set
+	 * @see AddressType
 	 */
 	public void setAddressTypeCode(String addressTypeCode) {
 		this.addressTypeCode = addressTypeCode;
@@ -103,6 +111,7 @@ public class Address implements Serializable {
 
 	/**
 	 * @return the cityCode
+	 * @see City
 	 */
 	public String getCityCode() {
 		return cityCode;
@@ -111,6 +120,7 @@ public class Address implements Serializable {
 	/**
 	 * @param cityCode
 	 *            the cityCode to set
+	 * @see City
 	 */
 	public void setCityCode(String cityCode) {
 		this.cityCode = cityCode;
@@ -118,6 +128,7 @@ public class Address implements Serializable {
 
 	/**
 	 * @return the countryCode
+	 * @see Country
 	 */
 	public String getCountryCode() {
 		return countryCode;
@@ -126,6 +137,7 @@ public class Address implements Serializable {
 	/**
 	 * @param countryCode
 	 *            the countryCode to set
+	 * @see Country
 	 */
 	public void setCountryCode(String countryCode) {
 		this.countryCode = countryCode;
@@ -133,6 +145,7 @@ public class Address implements Serializable {
 
 	/**
 	 * @return the districtCode
+	 * @see District
 	 */
 	public String getDistrictCode() {
 		return districtCode;
@@ -141,6 +154,7 @@ public class Address implements Serializable {
 	/**
 	 * @param districtCode
 	 *            the districtCode to set
+	 * @see District
 	 */
 	public void setDistrictCode(String districtCode) {
 		this.districtCode = districtCode;
@@ -238,6 +252,7 @@ public class Address implements Serializable {
 
 	/**
 	 * @return the provinceCode
+	 * @see Province
 	 */
 	public String getProvinceCode() {
 		return provinceCode;
@@ -246,6 +261,7 @@ public class Address implements Serializable {
 	/**
 	 * @param provinceCode
 	 *            the provinceCode to set
+	 * @see Province
 	 */
 	public void setProvinceCode(String provinceCode) {
 		this.provinceCode = provinceCode;

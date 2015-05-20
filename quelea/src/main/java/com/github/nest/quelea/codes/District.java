@@ -207,8 +207,8 @@ public class District extends AbstractCodeTable {
 	}
 
 	/**
-	 * province content provider.<br>
-	 * only read the first, second and third parts of line, separated by "|".
+	 * district content provider.<br>
+	 * only read the first, second, third and forth parts of line, separated by "|".
 	 * 
 	 * @author brad.wu
 	 */

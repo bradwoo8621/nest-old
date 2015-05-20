@@ -19,9 +19,9 @@ import javax.persistence.InheritanceType;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.github.nest.arteryx.persistent.AbstractVersionAuditable;
+import com.github.nest.quelea.codes.PartyType;
 
 /**
  * party
@@ -53,9 +53,8 @@ public abstract class Party extends AbstractVersionAuditable implements Serializ
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "party")
 	private List<Address> addresses = null;
 
-	// @OneToMany
-	@Transient
-	private List<IRelation> relations = null;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "party")
+	private List<Relation> relations = null;
 
 	@Column(name = "IS_ENABLED")
 	private Boolean enabled = null;
@@ -138,7 +137,7 @@ public abstract class Party extends AbstractVersionAuditable implements Serializ
 	/**
 	 * @return the relations
 	 */
-	public List<IRelation> getRelations() {
+	public List<Relation> getRelations() {
 		return relations;
 	}
 
@@ -146,7 +145,7 @@ public abstract class Party extends AbstractVersionAuditable implements Serializ
 	 * @param relations
 	 *            the relations to set
 	 */
-	public void setRelations(List<IRelation> relations) {
+	public void setRelations(List<Relation> relations) {
 		this.relations = relations;
 	}
 
@@ -169,6 +168,7 @@ public abstract class Party extends AbstractVersionAuditable implements Serializ
 	 * get party type code
 	 * 
 	 * @return
+	 * @see PartyType
 	 */
 	public abstract String getPartyTypeCode();
 }

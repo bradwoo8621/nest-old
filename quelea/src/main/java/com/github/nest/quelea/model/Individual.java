@@ -14,7 +14,14 @@ import javax.persistence.TemporalType;
 
 import org.joda.time.DateTime;
 
+import com.github.nest.quelea.codes.Country;
+import com.github.nest.quelea.codes.Gender;
+import com.github.nest.quelea.codes.IndividualIdType;
+import com.github.nest.quelea.codes.MaritalStatus;
+import com.github.nest.quelea.codes.Occupation;
 import com.github.nest.quelea.codes.PartyType;
+import com.github.nest.quelea.codes.Race;
+import com.github.nest.quelea.codes.Religion;
 
 /**
  * individual party
@@ -135,6 +142,7 @@ public class Individual extends Party implements Serializable {
 
 	/**
 	 * @return the countryCodeOfBirth
+	 * @see Country
 	 */
 	public String getCountryCodeOfBirth() {
 		return countryCodeOfBirth;
@@ -143,6 +151,7 @@ public class Individual extends Party implements Serializable {
 	/**
 	 * @param countryCodeOfBirth
 	 *            the countryCodeOfBirth to set
+	 * @see Country
 	 */
 	public void setCountryCodeOfBirth(String countryCodeOfBirth) {
 		this.countryCodeOfBirth = countryCodeOfBirth;
@@ -195,6 +204,7 @@ public class Individual extends Party implements Serializable {
 
 	/**
 	 * @return the genderCode
+	 * @see Gender
 	 */
 	public String getGenderCode() {
 		return genderCode;
@@ -203,6 +213,7 @@ public class Individual extends Party implements Serializable {
 	/**
 	 * @param genderCode
 	 *            the genderCode to set
+	 * @see Gender
 	 */
 	public void setGenderCode(String genderCode) {
 		this.genderCode = genderCode;
@@ -210,6 +221,7 @@ public class Individual extends Party implements Serializable {
 
 	/**
 	 * @return the idTypeCode
+	 * @see IndividualIdType
 	 */
 	public String getIdTypeCode() {
 		return idTypeCode;
@@ -218,6 +230,7 @@ public class Individual extends Party implements Serializable {
 	/**
 	 * @param idTypeCode
 	 *            the idTypeCode to set
+	 * @see IndividualIdType
 	 */
 	public void setIdTypeCode(String idTypeCode) {
 		this.idTypeCode = idTypeCode;
@@ -225,6 +238,7 @@ public class Individual extends Party implements Serializable {
 
 	/**
 	 * @return the nationalityCode
+	 * @see Country
 	 */
 	public String getNationalityCode() {
 		return nationalityCode;
@@ -233,6 +247,7 @@ public class Individual extends Party implements Serializable {
 	/**
 	 * @param nationalityCode
 	 *            the nationalityCode to set
+	 * @see Country
 	 */
 	public void setNationalityCode(String nationalityCode) {
 		this.nationalityCode = nationalityCode;
@@ -240,6 +255,7 @@ public class Individual extends Party implements Serializable {
 
 	/**
 	 * @return the occupationCode
+	 * @See Occupation
 	 */
 	public String getOccupationCode() {
 		return occupationCode;
@@ -248,6 +264,7 @@ public class Individual extends Party implements Serializable {
 	/**
 	 * @param occupationCode
 	 *            the occupationCode to set
+	 * @see Occupation
 	 */
 	public void setOccupationCode(String occupationCode) {
 		this.occupationCode = occupationCode;
@@ -255,6 +272,7 @@ public class Individual extends Party implements Serializable {
 
 	/**
 	 * @return the raceCode
+	 * @see Race
 	 */
 	public String getRaceCode() {
 		return raceCode;
@@ -263,6 +281,7 @@ public class Individual extends Party implements Serializable {
 	/**
 	 * @param raceCode
 	 *            the raceCode to set
+	 * @see Race
 	 */
 	public void setRaceCode(String raceCode) {
 		this.raceCode = raceCode;
@@ -270,6 +289,7 @@ public class Individual extends Party implements Serializable {
 
 	/**
 	 * @return the religionCode
+	 * @see Religion
 	 */
 	public String getReligionCode() {
 		return religionCode;
@@ -278,6 +298,7 @@ public class Individual extends Party implements Serializable {
 	/**
 	 * @param religionCode
 	 *            the religionCode to set
+	 * @see Religion
 	 */
 	public void setReligionCode(String religionCode) {
 		this.religionCode = religionCode;
@@ -285,6 +306,7 @@ public class Individual extends Party implements Serializable {
 
 	/**
 	 * @return the maritalCode
+	 * @see MaritalStatus
 	 */
 	public String getMaritalCode() {
 		return maritalCode;
@@ -293,6 +315,7 @@ public class Individual extends Party implements Serializable {
 	/**
 	 * @param maritalCode
 	 *            the maritalCode to set
+	 * @see MaritalStatus
 	 */
 	public void setMaritalCode(String maritalCode) {
 		this.maritalCode = maritalCode;

@@ -198,7 +198,7 @@ public class City extends AbstractCodeTable {
 	}
 
 	/**
-	 * province content provider.<br>
+	 * city content provider.<br>
 	 * only read the first, second and third parts of line, separated by "|".
 	 * 
 	 * @author brad.wu

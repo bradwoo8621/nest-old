@@ -5,9 +5,10 @@ package com.github.nest.quelea.internal.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 
 import com.github.nest.quelea.internal.model.Party;
 
@@ -23,8 +24,7 @@ public interface PartyRepository extends CrudRepository<Party, Long> {
 	 * @param partyName
 	 * @return
 	 */
-	@Query("select p from Party p where p.partyName = :partyName")
-	List<Party> findByPartyName(@Param("partyName") String partyName);
+	List<Party> findByPartyName(String partyName);
 
 	/**
 	 * find by given party name%
@@ -32,8 +32,16 @@ public interface PartyRepository extends CrudRepository<Party, Long> {
 	 * @param partyName
 	 * @return
 	 */
-	@Query("select p from Party p where p.partyName like :partyName%")
-	List<Party> findByPartyNameStartingWith(@Param("partyName") String partyName);
+	List<Party> findByPartyNameStartingWith(String partyName);
+
+	/**
+	 * find by given party name%
+	 * 
+	 * @param partyName
+	 * @param pageable
+	 * @return
+	 */
+	Page<Party> findByPartyNameStartingWith(String partyName, Pageable pageable);
 
 	/**
 	 * find by given %party name%
@@ -41,8 +49,18 @@ public interface PartyRepository extends CrudRepository<Party, Long> {
 	 * @param partyName
 	 * @return
 	 */
-	@Query("select p from Party p where p.partyName like %:partyName%")
-	List<Party> findByPartyNameLike(@Param("partyName") String partyName);
+	@Query("select p from Party p where p.partyName like %?1%")
+	List<Party> findByPartyNameLike(String partyName);
+
+	/**
+	 * find by given %party name%
+	 * 
+	 * @param partyName
+	 * @param pageable
+	 * @return
+	 */
+	@Query("select p from Party p where p.partyName like %?1%")
+	Page<Party> findByPartyNameLike(String partyName, Pageable pageable);
 
 	/**
 	 * find by given id number
@@ -50,37 +68,5 @@ public interface PartyRepository extends CrudRepository<Party, Long> {
 	 * @param idNumber
 	 * @return
 	 */
-	@Query("select p from Party p where p.idNumber = :idNumber")
-	List<Party> findByIdNumber(@Param("idNumber") String idNumber);
-
-	/**
-	 * find by given party name and id number
-	 * 
-	 * @param partyName
-	 * @param idNumber
-	 * @return
-	 */
-	@Query("select p from Party p where p.partyName = :partyName and p.idNumber = :idNumber")
-	List<Party> findByPartyNameAndIdNumber(@Param("partyName") String partyName, @Param("idNumber") String idNumber);
-
-	/**
-	 * find by given party name% and id number
-	 * 
-	 * @param partyName
-	 * @param idNumber
-	 * @return
-	 */
-	@Query("select p from Party p where p.partyName like :partyName% and p.idNumber = :idNumber")
-	List<Party> findByPartyNameStartingWithAndIdNumber(@Param("partyName") String partyName,
-			@Param("idNumber") String idNumber);
-
-	/**
-	 * find by given %party name% and id number
-	 * 
-	 * @param partyName
-	 * @param idNumber
-	 * @return
-	 */
-	@Query("select p from Party p where p.partyName like %:partyName% and p.idNumber = :idNumber")
-	List<Party> findByPartyNameLikeAndIdNumber(@Param("partyName") String partyName, @Param("idNumber") String idNumber);
+	Party findByIdNumber(String idNumber);
 }

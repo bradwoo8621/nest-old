@@ -72,9 +72,7 @@
 				value="password" />
 		</bean>
 
-		<jdbc:initialize-database
-			data-source="dataSource"
-			ignore-failures="ALL">
+		<jdbc:initialize-database data-source="dataSource">
 			<jdbc:script
 				location="classpath:/com/github/nest/arcteryx/persistent/ut01/schema.sql" />
 			<!-- <jdbc:script location="classpath:/com/github/nest/arcteryx/persistent/ut01/data.sql" 

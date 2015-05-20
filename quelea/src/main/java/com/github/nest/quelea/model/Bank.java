@@ -8,5 +8,6 @@ package com.github.nest.quelea.model;
  * 
  * @author brad.wu
  */
-public interface IBank extends IRole {
+public class Bank extends Role {
+	private static final long serialVersionUID = -789606068847945119L;
 }

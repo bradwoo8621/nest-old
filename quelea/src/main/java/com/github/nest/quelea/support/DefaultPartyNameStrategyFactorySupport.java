@@ -1,16 +1,16 @@
 /**
  * 
  */
-package com.github.nest.quelea.internal.support;
+package com.github.nest.quelea.support;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.github.nest.quelea.QueleaRuntimeException;
-import com.github.nest.quelea.model.IIndividual;
-import com.github.nest.quelea.model.IOrganization;
-import com.github.nest.quelea.model.IParty;
+import com.github.nest.quelea.model.Individual;
+import com.github.nest.quelea.model.Organization;
+import com.github.nest.quelea.model.Party;
 
 /**
  * default party name strategy factory support
@@ -31,13 +31,13 @@ public class DefaultPartyNameStrategyFactorySupport implements IPartyNameStrateg
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.quelea.internal.support.IPartyNameStrategyFactory#getPartyNameStrategy(com.github.nest.quelea.model.IParty)
+	 * @see com.github.nest.quelea.support.IPartyNameStrategyFactory#getPartyNameStrategy(com.github.nest.quelea.model.Party)
 	 */
 	@Override
-	public IPartyNameStrategy getPartyNameStrategy(IParty party) {
-		if (party instanceof IIndividual) {
+	public IPartyNameStrategy getPartyNameStrategy(Party party) {
+		if (party instanceof Individual) {
 			return individualPartyNameStrategy;
-		} else if (party instanceof IOrganization) {
+		} else if (party instanceof Organization) {
 			return organizationPartyNameStrategy;
 		} else {
 			throw new QueleaRuntimeException(QueleaRuntimeException.UNSUPPORTED_PARTY_TYPE, "Unsupported party["

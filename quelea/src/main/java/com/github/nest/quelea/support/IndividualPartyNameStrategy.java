@@ -1,12 +1,12 @@
 /**
  * 
  */
-package com.github.nest.quelea.internal.support;
+package com.github.nest.quelea.support;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.github.nest.quelea.model.IIndividual;
+import com.github.nest.quelea.model.Individual;
 import com.google.common.base.Joiner;
 
 /**
@@ -15,14 +15,14 @@ import com.google.common.base.Joiner;
  * @author brad.wu
  */
 @Component("individualPartyNameStrategy")
-public class IndividualPartyNameStrategy implements IPartyNameStrategy<IIndividual> {
+public class IndividualPartyNameStrategy implements IPartyNameStrategy<Individual> {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.quelea.internal.support.IPartyNameStrategy#getPartyName(com.github.nest.quelea.model.IParty)
+	 * @see com.github.nest.quelea.support.IPartyNameStrategy#getPartyName(com.github.nest.quelea.model.Party)
 	 */
 	@Override
-	public String getPartyName(IIndividual party) {
+	public String getPartyName(Individual party) {
 		return this.concat(party.getFirstName(), party.getLastName());
 	}
 

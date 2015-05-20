@@ -7,8 +7,8 @@ import org.springframework.context.ApplicationContext;
 
 import com.github.nest.arcteryx.common.ut.EnableLogger;
 import com.github.nest.arcteryx.context.Context;
-import com.github.nest.quelea.internal.model.Individual;
-import com.github.nest.quelea.internal.support.IPartyNameStrategyFactory;
+import com.github.nest.quelea.model.Individual;
+import com.github.nest.quelea.support.IPartyNameStrategyFactory;
 
 public class UT01Test extends EnableLogger {
 	/**

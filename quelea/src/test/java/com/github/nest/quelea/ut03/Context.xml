@@ -15,7 +15,7 @@
 
 	<context:annotation-config />
 
-	<context:component-scan base-package="com.github.nest.quelea.internal.support" />
+	<context:component-scan base-package="com.github.nest.quelea.support" />
 
 	<bean
 		id="partyNameStrategyFactory"

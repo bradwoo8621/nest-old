@@ -20,19 +20,19 @@
 	<context:annotation-config />
 
 	<context:component-scan
-		base-package="com.github.nest.quelea.internal.support" />
+		base-package="com.github.nest.quelea.support" />
 
 	<bean
 		id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
 		p:dataSource-ref="dataSource"
 		p:jpaVendorAdapter-ref="hibernateJpaVendorAdapter"
-		p:packagesToScan="com.github.nest.quelea.internal.model"
+		p:packagesToScan="com.github.nest.quelea.model"
 		p:mappingResources="com/github/nest/quelea/ut05/orm.xml">
 	</bean>
 
 	<jpa:repositories
-		base-package="com.github.nest.quelea.internal.repository"
+		base-package="com.github.nest.quelea.repository"
 		transaction-manager-ref="transactionManager"
 		entity-manager-factory-ref="entityManagerFactory" />
 	<jpa:auditing auditor-aware-ref="auditorAwareBean" />
@@ -78,7 +78,7 @@
 		</bean>
 
 		<jdbc:initialize-database data-source="dataSource">
-			<jdbc:script location="classpath:/com/github/nest/quelea/ut05/schema.sql" />
+			<jdbc:script location="classpath:/com/github/nest/quelea/schema.sql" />
 			<!-- <jdbc:script location="classpath:/com/github/nest/arcteryx/persistent/ut01/data.sql" 
 				encoding="UTF-8" /> -->
 		</jdbc:initialize-database>

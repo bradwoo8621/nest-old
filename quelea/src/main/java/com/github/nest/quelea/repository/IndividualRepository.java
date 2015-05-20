@@ -1,11 +1,11 @@
 /**
  * 
  */
-package com.github.nest.quelea.internal.repository;
+package com.github.nest.quelea.repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.github.nest.quelea.internal.model.Individual;
+import com.github.nest.quelea.model.Individual;
 
 /**
  * individual repository

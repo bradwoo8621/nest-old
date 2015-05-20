@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.github.nest.quelea.internal.repository;
+package com.github.nest.quelea.repository;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.github.nest.quelea.internal.model.Party;
+import com.github.nest.quelea.model.Party;
 
 /**
  * party repository

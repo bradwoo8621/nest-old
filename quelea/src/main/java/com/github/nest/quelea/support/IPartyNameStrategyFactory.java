@@ -1,9 +1,9 @@
 /**
  * 
  */
-package com.github.nest.quelea.internal.support;
+package com.github.nest.quelea.support;
 
-import com.github.nest.quelea.model.IParty;
+import com.github.nest.quelea.model.Party;
 
 /**
  * party name strategy factory
@@ -18,5 +18,5 @@ public interface IPartyNameStrategyFactory {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	IPartyNameStrategy getPartyNameStrategy(IParty party);
+	IPartyNameStrategy getPartyNameStrategy(Party party);
 }

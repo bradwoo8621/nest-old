@@ -22,6 +22,26 @@ public class Country extends AbstractCodeTable {
 	private static final long serialVersionUID = 1799017142460502603L;
 	public static final String CODE_TABLE_NAME = "Country";
 
+	public final static String China = "CHN";
+	public final static String Taiwan = "TWN";
+	public final static String Hongkong = "HKG";
+	public final static String Macau = "MAC";
+	public final static String Japan = "JPN";
+	public final static String Korea = "KOR";
+	public final static String India = "IND";
+	public final static String Thailand = "THA";
+	public final static String Malaysia = "MYS";
+	public final static String Indonesia = "IDN";
+
+	public final static String USA = "USA";
+	public final static String Canada = "CAN";
+	public final static String Brazil = "BRA";
+
+	public final static String UK = "GBR";
+	public final static String Netherlands = "NLD";
+	public final static String Germany = "DEU";
+	public final static String Switzerland = "CHE";
+
 	/**
 	 * get province by given country code
 	 * 

@@ -11,10 +11,10 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.github.nest.arcteryx.common.ut.EnableLogger;
 import com.github.nest.arcteryx.context.Context;
-import com.github.nest.quelea.internal.model.Individual;
-import com.github.nest.quelea.internal.model.Party;
-import com.github.nest.quelea.internal.repository.PartyRepository;
-import com.github.nest.quelea.internal.support.IPartyNameStrategyFactory;
+import com.github.nest.quelea.model.Individual;
+import com.github.nest.quelea.model.Party;
+import com.github.nest.quelea.repository.PartyRepository;
+import com.github.nest.quelea.support.IPartyNameStrategyFactory;
 
 public class UT02Test extends EnableLogger {
 	/**

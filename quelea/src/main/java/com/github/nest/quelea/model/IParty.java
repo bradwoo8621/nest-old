@@ -39,13 +39,6 @@ public interface IParty extends IAuditable, IVersionable, Serializable {
 	String getPartyTypeCode();
 
 	/**
-	 * set party type code
-	 * 
-	 * @param partyTypeCode
-	 */
-	void setPartyTypeCode(String partyTypeCode);
-
-	/**
 	 * get party name
 	 * 
 	 * @return

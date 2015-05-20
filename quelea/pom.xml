@@ -33,13 +33,19 @@
 		</dependency>
 		<dependency>
 			<groupId>com.github.nest</groupId>
-			<artifactId>arcteryx-persistent</artifactId>
+			<artifactId>arcteryx-data</artifactId>
 			<version>0.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.nest</groupId>
-			<artifactId>arcteryx-data</artifactId>
+			<artifactId>arcteryx-persistent</artifactId>
 			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.3.2</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

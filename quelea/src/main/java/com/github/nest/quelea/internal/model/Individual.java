@@ -382,13 +382,4 @@ public class Individual extends Party implements IIndividual {
 	public String getPartyTypeCode() {
 		return PartyType.INDIVIDUAL;
 	}
-
-	/**
-	 * do nothing
-	 * 
-	 * @see com.github.nest.quelea.internal.model.Party#setPartyTypeCode(java.lang.String)
-	 */
-	@Override
-	public void setPartyTypeCode(String partyTypeCode) {
-	}
 }

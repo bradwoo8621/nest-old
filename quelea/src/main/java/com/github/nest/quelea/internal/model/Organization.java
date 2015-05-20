@@ -15,7 +15,7 @@ import com.github.nest.quelea.codes.PartyType;
 import com.github.nest.quelea.model.IOrganization;
 
 /**
- * organization
+ * organization party
  * 
  * @author brad.wu
  */
@@ -170,14 +170,5 @@ public class Organization extends Party implements IOrganization {
 	@Override
 	public String getPartyTypeCode() {
 		return PartyType.ORGANIZATION;
-	}
-
-	/**
-	 * do nothing
-	 * 
-	 * @see com.github.nest.quelea.internal.model.Party#setPartyTypeCode(java.lang.String)
-	 */
-	@Override
-	public void setPartyTypeCode(String partyTypeCode) {
 	}
 }

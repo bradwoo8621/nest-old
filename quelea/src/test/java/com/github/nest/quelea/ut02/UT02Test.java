@@ -14,7 +14,7 @@ import com.github.nest.arcteryx.context.Context;
 import com.github.nest.quelea.model.Individual;
 import com.github.nest.quelea.model.Party;
 import com.github.nest.quelea.repository.PartyRepository;
-import com.github.nest.quelea.support.IPartyNameStrategyFactory;
+import com.github.nest.quelea.support.IPartyStrategyFactory;
 
 public class UT02Test extends EnableLogger {
 	/**
@@ -26,13 +26,13 @@ public class UT02Test extends EnableLogger {
 		System.setProperty("spring.profiles.active", "test");
 		ApplicationContext context = Context.createApplicationContextByClassPath("ut02",
 				"/com/github/nest/quelea/ut02/Context.xml");
-		IPartyNameStrategyFactory factory = context.getBean(IPartyNameStrategyFactory.class);
+		IPartyStrategyFactory factory = context.getBean(IPartyStrategyFactory.class);
 
 		Individual individual = new Individual();
 		individual.setFirstName("John");
 		individual.setLastName("Doe");
 		individual.setIdNumber("X000001");
-		individual.setPartyName(factory.getPartyNameStrategy(individual).getPartyName(individual));
+		individual.setPartyName(factory.getPartyStrategy(individual).getPartyName(individual));
 
 		PartyRepository rep = context.getBean(PartyRepository.class);
 		assertNotNull(rep);

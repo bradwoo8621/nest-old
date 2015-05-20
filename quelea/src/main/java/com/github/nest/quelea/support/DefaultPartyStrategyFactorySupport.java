@@ -18,30 +18,30 @@ import com.github.nest.quelea.model.Party;
  * @author brad.wu
  */
 @SuppressWarnings("rawtypes")
-@Component("partyNameStrategyFactory")
-public class DefaultPartyNameStrategyFactorySupport implements IPartyNameStrategyFactory {
+@Component("partyStrategyFactory")
+public class DefaultPartyStrategyFactorySupport implements IPartyStrategyFactory {
 	@Autowired
-	@Qualifier("individualPartyNameStrategy")
-	private IPartyNameStrategy individualPartyNameStrategy;
+	@Qualifier("individualStrategy")
+	private IPartyStrategy individualStrategy;
 
 	@Autowired
-	@Qualifier("organizationPartyNameStrategy")
-	private IPartyNameStrategy organizationPartyNameStrategy;
+	@Qualifier("organizationStrategy")
+	private IPartyStrategy organizationStrategy;
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.quelea.support.IPartyNameStrategyFactory#getPartyNameStrategy(com.github.nest.quelea.model.Party)
+	 * @see com.github.nest.quelea.support.IPartyStrategyFactory#getPartyStrategy(com.github.nest.quelea.model.Party)
 	 */
 	@Override
-	public IPartyNameStrategy getPartyNameStrategy(Party party) {
+	public IPartyStrategy getPartyStrategy(Party party) {
 		if (party instanceof Individual) {
-			return individualPartyNameStrategy;
+			return individualStrategy;
 		} else if (party instanceof Organization) {
-			return organizationPartyNameStrategy;
+			return organizationStrategy;
 		} else {
 			throw new QueleaRuntimeException(QueleaRuntimeException.UNSUPPORTED_PARTY_TYPE, "Unsupported party["
-					+ party.getClass().getName() + "] when get party name strategy.");
+					+ party.getClass().getName() + "] when get party strategy.");
 		}
 	}
 }

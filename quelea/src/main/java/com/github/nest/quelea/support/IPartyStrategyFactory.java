@@ -10,7 +10,7 @@ import com.github.nest.quelea.model.Party;
  * 
  * @author brad.wu
  */
-public interface IPartyNameStrategyFactory {
+public interface IPartyStrategyFactory {
 	/**
 	 * get party name strategy by given party
 	 * 
@@ -18,5 +18,5 @@ public interface IPartyNameStrategyFactory {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	IPartyNameStrategy getPartyNameStrategy(Party party);
+	IPartyStrategy getPartyStrategy(Party party);
 }

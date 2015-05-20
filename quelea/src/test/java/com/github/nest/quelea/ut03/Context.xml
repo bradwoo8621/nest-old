@@ -18,6 +18,6 @@
 	<context:component-scan base-package="com.github.nest.quelea.support" />
 
 	<bean
-		id="partyNameStrategyFactory"
-		class="com.github.nest.quelea.ut03.CustomPartyNameStrategyFactorySupport" />
+		id="partyStrategyFactory"
+		class="com.github.nest.quelea.ut03.CustomPartyStrategyFactorySupport" />
 </beans>

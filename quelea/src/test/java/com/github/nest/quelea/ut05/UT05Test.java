@@ -26,7 +26,7 @@ import com.github.nest.quelea.model.Party;
 import com.github.nest.quelea.repository.IndividualRepository;
 import com.github.nest.quelea.repository.OrganizationRepository;
 import com.github.nest.quelea.repository.PartyRepository;
-import com.github.nest.quelea.support.IPartyNameStrategyFactory;
+import com.github.nest.quelea.support.IPartyStrategyFactory;
 
 public class UT05Test extends EnableLogger {
 	/**
@@ -40,14 +40,14 @@ public class UT05Test extends EnableLogger {
 		System.setProperty("spring.profiles.active", "test");
 		ApplicationContext context = Context.createApplicationContextByClassPath("ut052",
 				"/com/github/nest/quelea/ut05/Context.xml");
-		IPartyNameStrategyFactory factory = context.getBean(IPartyNameStrategyFactory.class);
+		IPartyStrategyFactory factory = context.getBean(IPartyStrategyFactory.class);
 
 		Individual individual = new Individual();
 		individual.setFirstName("John");
 		individual.setLastName("Doe");
 		individual.setIdNumber("I000001");
 		individual.setIdTypeCode(IndividualIdType.ID_CARD);
-		individual.setPartyName(factory.getPartyNameStrategy(individual).getPartyName(individual));
+		individual.setPartyName(factory.getPartyStrategy(individual).getPartyName(individual));
 		Address address = new Address();
 		address.setCountryCode(Country.China);
 		// set parent
@@ -60,7 +60,7 @@ public class UT05Test extends EnableLogger {
 		organization.setOrganizationName("Oracle");
 		organization.setIdNumber("O000001");
 		organization.setIdTypeCode(OrganizationIdType.ID_CARD);
-		organization.setPartyName(factory.getPartyNameStrategy(organization).getPartyName(organization));
+		organization.setPartyName(factory.getPartyStrategy(organization).getPartyName(organization));
 
 		PartyRepository rep = context.getBean(PartyRepository.class);
 		assertNotNull(rep);

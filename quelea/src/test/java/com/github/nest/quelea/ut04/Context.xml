@@ -19,6 +19,6 @@
 		base-package="com.github.nest.quelea.support, com.github.nest.quelea.ut04">
 		<context:exclude-filter
 			type="regex"
-			expression="com.github.nest.quelea.support.DefaultPartyNameStrategyFactorySupport" />
+			expression="com.github.nest.quelea.support.DefaultPartyStrategyFactorySupport" />
 	</context:component-scan>
 </beans>

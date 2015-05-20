@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 import com.github.nest.arcteryx.common.ut.EnableLogger;
 import com.github.nest.arcteryx.context.Context;
 import com.github.nest.quelea.model.Individual;
-import com.github.nest.quelea.support.IPartyNameStrategyFactory;
+import com.github.nest.quelea.support.IPartyStrategyFactory;
 
 public class UT04Test extends EnableLogger {
 	/**
@@ -19,18 +19,18 @@ public class UT04Test extends EnableLogger {
 	public void test() {
 		ApplicationContext context = Context.createApplicationContextByClassPath("ut04",
 				"/com/github/nest/quelea/ut04/Context.xml");
-		IPartyNameStrategyFactory factory = context.getBean(IPartyNameStrategyFactory.class);
+		IPartyStrategyFactory factory = context.getBean(IPartyStrategyFactory.class);
 
 		Individual party = new Individual();
 		party.setFirstName("John");
 		party.setLastName("Doe");
-		party.setPartyName(factory.getPartyNameStrategy(party).getPartyName(party));
+		party.setPartyName(factory.getPartyStrategy(party).getPartyName(party));
 		assertEquals("Hello, world!", party.getPartyName());
 
 		party = new Individual();
 		party.setFirstName("三");
 		party.setLastName("張");
-		party.setPartyName(factory.getPartyNameStrategy(party).getPartyName(party));
+		party.setPartyName(factory.getPartyStrategy(party).getPartyName(party));
 		assertEquals("Hello, world!", party.getPartyName());
 	}
 }

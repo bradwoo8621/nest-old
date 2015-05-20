@@ -10,7 +10,7 @@ import com.github.nest.quelea.model.Party;
  * 
  * @author brad.wu
  */
-public interface IPartyNameStrategy<P extends Party> {
+public interface IPartyStrategy<P extends Party> {
 	/**
 	 * get party name of given party
 	 * 

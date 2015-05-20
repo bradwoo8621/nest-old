@@ -14,12 +14,12 @@ import com.google.common.base.Joiner;
  * 
  * @author brad.wu
  */
-@Component("individualPartyNameStrategy")
-public class IndividualPartyNameStrategy implements IPartyNameStrategy<Individual> {
+@Component("individualStrategy")
+public class IndividualStrategy implements IPartyStrategy<Individual> {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.quelea.support.IPartyNameStrategy#getPartyName(com.github.nest.quelea.model.Party)
+	 * @see com.github.nest.quelea.support.IPartyStrategy#getPartyName(com.github.nest.quelea.model.Party)
 	 */
 	@Override
 	public String getPartyName(Individual party) {

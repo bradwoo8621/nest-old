@@ -12,12 +12,12 @@ import com.github.nest.quelea.model.Organization;
  * 
  * @author brad.wu
  */
-@Component("organizationPartyNameStrategy")
-public class OrganizationPartyNameStrategy implements IPartyNameStrategy<Organization> {
+@Component("organizationStrategy")
+public class OrganizationStrategy implements IPartyStrategy<Organization> {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see com.github.nest.quelea.support.IPartyNameStrategy#getPartyName(com.github.nest.quelea.model.Party)
+	 * @see com.github.nest.quelea.support.IPartyStrategy#getPartyName(com.github.nest.quelea.model.Party)
 	 */
 	@Override
 	public String getPartyName(Organization party) {

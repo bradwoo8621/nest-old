@@ -9,6 +9,9 @@ import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 
 /**
+ * extend this to enable the log4j logger to INFO level. <br>
+ * import slf4j-log4j12-xxx.jar is necessary.
+ * 
  * @author brad.wu
  */
 public class EnableLogger {

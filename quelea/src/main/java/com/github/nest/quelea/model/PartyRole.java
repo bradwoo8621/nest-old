@@ -4,6 +4,7 @@
 package com.github.nest.quelea.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -21,8 +22,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.joda.time.DateTime;
 
 import com.github.nest.arteryx.persistent.AbstractVersionAuditable;
+import com.github.nest.quelea.codes.RoleStatus;
 
 /**
  * role of party.<br>
@@ -69,6 +75,13 @@ public abstract class PartyRole extends AbstractVersionAuditable implements Seri
 
 	@Column(name = "IS_ENABLED")
 	private Boolean enabled = null;
+
+	@Column(name = "STATUS_CODE")
+	private String statusCode = null;
+
+	@Column(name = "TERMINATED_AT")
+	@Temporal(TemporalType.DATE)
+	private Date terminatedAt = null;
 
 	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	@JoinColumn(name = "PARTY_ID", nullable = false, updatable = false)
@@ -182,6 +195,44 @@ public abstract class PartyRole extends AbstractVersionAuditable implements Seri
 	 */
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	/**
+	 * set role status code
+	 * 
+	 * @param statusCode
+	 * @see RoleStatus
+	 */
+	public void setStatusCode(String statusCode) {
+		this.statusCode = statusCode;
+	}
+
+	/**
+	 * get role status code
+	 * 
+	 * @return
+	 * @see RoleStatus
+	 */
+	public String getStatusCode() {
+		return this.statusCode;
+	}
+
+	/**
+	 * set terminated date
+	 * 
+	 * @param terminatedAt
+	 */
+	public void setTerminatedAt(DateTime terminatedAt) {
+		this.terminatedAt = null == terminatedAt ? null : terminatedAt.toDate();
+	}
+
+	/**
+	 * get terminated date
+	 * 
+	 * @return
+	 */
+	public DateTime getTerminatedAt() {
+		return this.terminatedAt == null ? null : new DateTime(this.terminatedAt);
 	}
 
 	/**

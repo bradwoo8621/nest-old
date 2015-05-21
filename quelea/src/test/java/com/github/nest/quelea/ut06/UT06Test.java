@@ -5,8 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -18,6 +16,7 @@ import com.github.nest.arcteryx.context.Context;
 import com.github.nest.quelea.model.Address;
 import com.github.nest.quelea.model.Bank;
 import com.github.nest.quelea.model.IndividualAgent;
+import com.github.nest.quelea.model.OrganizationAgent;
 import com.github.nest.quelea.model.Party;
 import com.github.nest.quelea.repository.PartyRepository;
 import com.github.nest.quelea.repository.PartyRoleRepository;
@@ -28,7 +27,7 @@ public class UT06Test extends EnableLogger {
 	 */
 	@Test
 	public void test() {
-		Logger.getLogger("org.hibernate.type").setLevel(Level.TRACE);
+		// Logger.getLogger("org.hibernate.type").setLevel(Level.TRACE);
 
 		System.setProperty("spring.profiles.active", "test");
 		ApplicationContext context = Context.createApplicationContextByClassPath("ut06",
@@ -52,13 +51,18 @@ public class UT06Test extends EnableLogger {
 		addresses.add(address);
 		bank.setAddresses(addresses);
 
-		IndividualAgent agent = new IndividualAgent();
-		agent.setRoleCode("AGT00001");
-		agent.setParty(individual);
+		IndividualAgent iAgent = new IndividualAgent();
+		iAgent.setRoleCode("AGT00001");
+		iAgent.setParty(individual);
+
+		OrganizationAgent oAgent = new OrganizationAgent();
+		oAgent.setRoleCode("AGT00002");
+		oAgent.setParty(organization);
 
 		try {
 			prRep.save(bank);
-			prRep.save(agent);
+			prRep.save(iAgent);
+			prRep.save(oAgent);
 			tm.commit(status);
 		} catch (Exception e) {
 			tm.rollback(status);

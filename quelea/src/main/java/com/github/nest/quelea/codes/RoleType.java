@@ -25,6 +25,10 @@ public class RoleType extends AbstractConstantedCodeTable {
 	public static final String CUSTOMER_INDIVIDUAL = "CTI";
 	public static final String CUSTOMER_ORGANIZATION = "CTO";
 
+	public static final String BRANCH = "BRH";
+	public static final String DEPARTMENT = "DPT";
+	public static final String EMPLOYEE = "EMP";
+
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -35,6 +39,7 @@ public class RoleType extends AbstractConstantedCodeTable {
 		return new String[] { BANK, //
 				AGENT_INDIVIDUAL, AGENT_ORGANIZATION, //
 				CUSTOMER_INDIVIDUAL, CUSTOMER_ORGANIZATION, //
+				BRANCH, DEPARTMENT, EMPLOYEE, //
 		};
 	}
 }

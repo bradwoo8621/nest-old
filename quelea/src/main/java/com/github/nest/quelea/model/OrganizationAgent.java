@@ -17,14 +17,14 @@ import org.joda.time.DateTime;
 import com.github.nest.quelea.codes.RoleType;
 
 /**
- * individual agent
+ * organization agent
  * 
  * @author brad.wu
  */
 @Entity
 @Table(name = "T_AGENT")
-@DiscriminatorValue(RoleType.AGENT_INDIVIDUAL)
-public class IndividualAgent extends PartyRole implements IAgent {
+@DiscriminatorValue(RoleType.AGENT_ORGANIZATION)
+public class OrganizationAgent extends PartyRole implements IAgent {
 	private static final long serialVersionUID = -8741517553472003199L;
 
 	@Column(name = "LICENSE_NUMBER")
@@ -34,6 +34,7 @@ public class IndividualAgent extends PartyRole implements IAgent {
 	@Temporal(TemporalType.DATE)
 	private Date licenseExpiryDate = null;
 
+
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -41,7 +42,7 @@ public class IndividualAgent extends PartyRole implements IAgent {
 	 */
 	@Override
 	public String getRoleTypeCode() {
-		return RoleType.AGENT_INDIVIDUAL;
+		return RoleType.AGENT_ORGANIZATION;
 	}
 
 	/**

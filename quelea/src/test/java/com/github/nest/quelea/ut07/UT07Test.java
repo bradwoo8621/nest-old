@@ -1,4 +1,4 @@
-package com.github.nest.quelea.codes.ut01;
+package com.github.nest.quelea.ut07;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -18,14 +18,14 @@ import com.github.nest.quelea.codes.PartyType;
 import com.github.nest.quelea.codes.PartyRelationType.PartyRelationTypeCodeItem;
 import com.github.nest.quelea.codes.Province;
 
-public class UT01Test extends EnableLogger {
+public class UT07Test extends EnableLogger {
 	/**
 	 * normal test, code table with a .codetable file
 	 */
 	@Test
 	public void test() {
-		ApplicationContext context = Context.createApplicationContextByClassPath("ut01",
-				"/com/github/nest/quelea/codes/ut01/Context.xml");
+		ApplicationContext context = Context.createApplicationContextByClassPath("ut07",
+				"/com/github/nest/quelea/ut07/Context.xml");
 		ICodeTableRegistry registry = context.getBean("CodeTableRegistry", ICodeTableRegistry.class);
 
 		Country country = registry.getCodeTable(Country.CODE_TABLE_NAME);

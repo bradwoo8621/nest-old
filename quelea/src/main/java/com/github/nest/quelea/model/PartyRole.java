@@ -9,14 +9,18 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import com.github.nest.arteryx.persistent.AbstractVersionAuditable;
 
@@ -43,22 +47,31 @@ public abstract class PartyRole extends AbstractVersionAuditable implements Seri
 	@Column(name = "ROLE_CODE")
 	private String roleCode = null;
 
-	@Transient
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "DEFAULT_ACCOUNT_ID")
 	private Account defaultAccount = null;
 
-	@Transient
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "DEFAULT_ADDRESS_ID")
 	private Address defaultAddress = null;
 
-	@Transient
+	@ManyToMany
+	@JoinTable(name = "T_PARTY_ROLE_ACCOUNT", //
+	joinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID"), //
+	inverseJoinColumns = @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ACCOUNT_ID"))
 	private List<Account> accounts = null;
 
-	@Transient
+	@ManyToMany
+	@JoinTable(name = "T_PARTY_ROLE_ADDRESS", //
+	joinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID"), //
+	inverseJoinColumns = @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ADDRESS_ID"))
 	private List<Address> addresses = null;
 
 	@Column(name = "IS_ENABLED")
 	private Boolean enabled = null;
 
-	@Transient
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	@JoinColumn(name = "PARTY_ID", nullable = false, updatable = false)
 	private Party party = null;
 
 	/**

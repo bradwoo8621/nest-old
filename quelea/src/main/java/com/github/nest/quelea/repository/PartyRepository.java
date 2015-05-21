@@ -19,6 +19,14 @@ import com.github.nest.quelea.model.Party;
  */
 public interface PartyRepository extends CrudRepository<Party, Long> {
 	/**
+	 * find by given party code
+	 * 
+	 * @param partyCode
+	 * @return
+	 */
+	Party findByPartyCode(String partyCode);
+
+	/**
 	 * find by given party name
 	 * 
 	 * @param partyName

@@ -19,8 +19,7 @@
 
 	<context:annotation-config />
 
-	<context:component-scan
-		base-package="com.github.nest.quelea.support" />
+	<context:component-scan base-package="com.github.nest.quelea.support" />
 
 	<bean
 		id="entityManagerFactory"
@@ -39,7 +38,7 @@
 
 	<bean
 		id="auditorAwareBean"
-		class="com.github.nest.quelea.ut02.AuditorAwareImpl" />
+		class="com.github.nest.quelea.ut06.AuditorAwareImpl" />
 
 	<bean
 		id="transactionManager"
@@ -79,8 +78,9 @@
 
 		<jdbc:initialize-database data-source="dataSource">
 			<jdbc:script location="classpath:/com/github/nest/quelea/schema.sql" />
-			<!-- <jdbc:script location="classpath:/com/github/nest/arcteryx/persistent/ut01/data.sql" 
-				encoding="UTF-8" /> -->
+			<jdbc:script
+				location="classpath:/com/github/nest/quelea/ut06/data.sql"
+				encoding="UTF-8" />
 		</jdbc:initialize-database>
 	</beans>
 </beans>

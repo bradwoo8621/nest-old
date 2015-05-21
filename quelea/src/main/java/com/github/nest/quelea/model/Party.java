@@ -41,6 +41,9 @@ public abstract class Party extends AbstractVersionAuditable implements Serializ
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_PARTY")
 	private Long partyId = null;
 
+	@Column(name = "PARTY_CODE")
+	private String partyCode = null;
+
 	@Column(name = "ID_NUMBER")
 	private String idNumber = null;
 
@@ -72,6 +75,20 @@ public abstract class Party extends AbstractVersionAuditable implements Serializ
 	 */
 	public void setPartyId(Long partyId) {
 		this.partyId = partyId;
+	}
+
+	/**
+	 * @return the partyCode
+	 */
+	public String getPartyCode() {
+		return partyCode;
+	}
+
+	/**
+	 * @param partyCode the partyCode to set
+	 */
+	public void setPartyCode(String partyCode) {
+		this.partyCode = partyCode;
 	}
 
 	/**

@@ -35,10 +35,10 @@ public class UT05Test extends EnableLogger {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test() {
-//		Logger.getLogger("org.hibernate.type").setLevel(Level.TRACE);
+		// Logger.getLogger("org.hibernate.type").setLevel(Level.TRACE);
 
 		System.setProperty("spring.profiles.active", "test");
-		ApplicationContext context = Context.createApplicationContextByClassPath("ut052",
+		ApplicationContext context = Context.createApplicationContextByClassPath("ut05",
 				"/com/github/nest/quelea/ut05/Context.xml");
 		IPartyStrategyFactory factory = context.getBean(IPartyStrategyFactory.class);
 
@@ -46,6 +46,7 @@ public class UT05Test extends EnableLogger {
 		individual.setFirstName("John");
 		individual.setLastName("Doe");
 		individual.setIdNumber("I000001");
+		individual.setPartyCode("PI00001");
 		individual.setIdTypeCode(IndividualIdType.ID_CARD);
 		individual.setPartyName(factory.getPartyStrategy(individual).getPartyName(individual));
 		Address address = new Address();
@@ -60,6 +61,7 @@ public class UT05Test extends EnableLogger {
 		organization.setOrganizationName("Oracle");
 		organization.setIdNumber("O000001");
 		organization.setIdTypeCode(OrganizationIdType.ID_CARD);
+		organization.setPartyCode("PO00001");
 		organization.setPartyName(factory.getPartyStrategy(organization).getPartyName(organization));
 
 		PartyRepository rep = context.getBean(PartyRepository.class);
@@ -77,50 +79,70 @@ public class UT05Test extends EnableLogger {
 			e.printStackTrace();
 		}
 
-		List<Party> list = rep.findByPartyName("John Doe");
-		assertEquals(1, list.size());
-		assertEquals(Individual.class, list.get(0).getClass());
-		individual = (Individual) list.get(0);
-		assertEquals("John", individual.getFirstName());
-		assertEquals("Doe", individual.getLastName());
-		assertEquals("I000001", individual.getIdNumber());
-		assertEquals("John Doe", individual.getPartyName());
-		addresses = individual.getAddresses();
-		assertEquals(1, addresses.size());
-		address = (Address) addresses.get(0);
-		assertNotNull(address.getAddressId());
-		assertEquals(Country.China, address.getCountryCode());
+		{
+			Party party = rep.findByPartyCode("PI00001");
+			assertNotNull(party);
+			assertEquals(Individual.class, party.getClass());
+		}
 
-		list = rep.findByPartyName("Oracle");
-		assertEquals(1, list.size());
-		assertEquals(Organization.class, list.get(0).getClass());
-		organization = (Organization) list.get(0);
-		assertEquals("Oracle", organization.getOrganizationName());
-		assertEquals("O000001", organization.getIdNumber());
-		assertEquals("Oracle", organization.getPartyName());
+		{
+			List<Party> list = rep.findByPartyName("John Doe");
+			assertEquals(1, list.size());
+			assertEquals(Individual.class, list.get(0).getClass());
+			individual = (Individual) list.get(0);
+			assertEquals("John", individual.getFirstName());
+			assertEquals("Doe", individual.getLastName());
+			assertEquals("I000001", individual.getIdNumber());
+			assertEquals("John Doe", individual.getPartyName());
+			addresses = individual.getAddresses();
+			assertEquals(1, addresses.size());
+			address = (Address) addresses.get(0);
+			assertNotNull(address.getAddressId());
+			assertEquals(Country.China, address.getCountryCode());
+		}
 
-		list = rep.findByPartyNameLike("e");
-		assertEquals(2, list.size());
-		list = rep.findByPartyNameLike("O");
-		assertEquals(1, list.size());
-		list = rep.findByPartyNameLike("o");
-		assertEquals(1, list.size());
+		{
+			List<Party> list = rep.findByPartyName("Oracle");
+			assertEquals(1, list.size());
+			assertEquals(Organization.class, list.get(0).getClass());
+			organization = (Organization) list.get(0);
+			assertEquals("Oracle", organization.getOrganizationName());
+			assertEquals("O000001", organization.getIdNumber());
+			assertEquals("Oracle", organization.getPartyName());
+		}
 
-		list = rep.findByPartyNameStartingWith("Jo");
-		assertEquals(1, list.size());
-		Party party = rep.findByIdNumber("I000001");
-		assertEquals(Individual.class, party.getClass());
+		{
+			List<Party> list = rep.findByPartyNameLike("e");
+			assertEquals(2, list.size());
+			list = rep.findByPartyNameLike("O");
+			assertEquals(1, list.size());
+			list = rep.findByPartyNameLike("o");
+			assertEquals(1, list.size());
+		}
 
-		Page<Party> page = rep.findByPartyNameLike("e", new PageRequest(0, 10));
-		assertEquals(1, page.getTotalPages());
-		assertEquals(2, page.getTotalElements());
+		{
+			List<Party> list = rep.findByPartyNameStartingWith("Jo");
+			assertEquals(1, list.size());
+			Party party = rep.findByIdNumber("I000001");
+			assertEquals(Individual.class, party.getClass());
+		}
 
-		IndividualRepository iRep = context.getBean(IndividualRepository.class);
-		individual = iRep.findByIdNumberAndIdTypeCode("I000001", IndividualIdType.ID_CARD);
-		assertNotNull(individual);
+		{
+			Page<Party> page = rep.findByPartyNameLike("e", new PageRequest(0, 10));
+			assertEquals(1, page.getTotalPages());
+			assertEquals(2, page.getTotalElements());
+		}
 
-		OrganizationRepository oRep = context.getBean(OrganizationRepository.class);
-		organization = oRep.findByIdNumberAndIdTypeCode("O000001", OrganizationIdType.ID_CARD);
-		assertNotNull(organization);
+		{
+			IndividualRepository iRep = context.getBean(IndividualRepository.class);
+			individual = iRep.findByIdNumberAndIdTypeCode("I000001", IndividualIdType.ID_CARD);
+			assertNotNull(individual);
+		}
+
+		{
+			OrganizationRepository oRep = context.getBean(OrganizationRepository.class);
+			organization = oRep.findByIdNumberAndIdTypeCode("O000001", OrganizationIdType.ID_CARD);
+			assertNotNull(organization);
+		}
 	}
 }

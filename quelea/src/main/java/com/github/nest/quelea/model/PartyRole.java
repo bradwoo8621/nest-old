@@ -6,6 +6,18 @@ package com.github.nest.quelea.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import com.github.nest.arteryx.persistent.AbstractVersionAuditable;
 
 /**
@@ -15,17 +27,38 @@ import com.github.nest.arteryx.persistent.AbstractVersionAuditable;
  * 
  * @author brad.wu
  */
-public class Role extends AbstractVersionAuditable implements Serializable {
+@Entity
+@Table(name = "T_PARTY_ROLE")
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "ROLE_TYPE_CODE")
+@SequenceGenerator(name = "S_PARTY_ROLE", sequenceName = "S_PARTY_ROLE")
+public abstract class PartyRole extends AbstractVersionAuditable implements Serializable {
 	private static final long serialVersionUID = -3922692867497747575L;
 
+	@Id
+	@Column(name = "ROLE_ID")
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_PARTY_ROLE")
 	private Long roleId = null;
+
+	@Column(name = "ROLE_CODE")
 	private String roleCode = null;
-	private String roleTypeCode = null;
+
+	@Transient
 	private Account defaultAccount = null;
+
+	@Transient
 	private Address defaultAddress = null;
+
+	@Transient
 	private List<Account> accounts = null;
+
+	@Transient
 	private List<Address> addresses = null;
+
+	@Column(name = "IS_ENABLED")
 	private Boolean enabled = null;
+
+	@Transient
 	private Party party = null;
 
 	/**
@@ -61,17 +94,7 @@ public class Role extends AbstractVersionAuditable implements Serializable {
 	/**
 	 * @return the roleTypeCode
 	 */
-	public String getRoleTypeCode() {
-		return roleTypeCode;
-	}
-
-	/**
-	 * @param roleTypeCode
-	 *            the roleTypeCode to set
-	 */
-	public void setRoleTypeCode(String roleTypeCode) {
-		this.roleTypeCode = roleTypeCode;
-	}
+	public abstract String getRoleTypeCode();
 
 	/**
 	 * @return the defaultAccount

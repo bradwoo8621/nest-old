@@ -28,7 +28,7 @@
 		p:dataSource-ref="dataSource"
 		p:jpaVendorAdapter-ref="hibernateJpaVendorAdapter"
 		p:packagesToScan="com.github.nest.quelea.model"
-		p:mappingResources="com/github/nest/quelea/ut05/orm.xml">
+		p:mappingResources="META-INF/orm.xml">
 	</bean>
 
 	<jpa:repositories

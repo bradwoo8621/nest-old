@@ -49,6 +49,12 @@
 			<optional>true</optional>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.atomikos</groupId>
+			<artifactId>transactions-hibernate4</artifactId>
+			<version>4.0.0M4</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

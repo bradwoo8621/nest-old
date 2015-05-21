@@ -61,13 +61,13 @@ public abstract class PartyRole extends AbstractVersionAuditable implements Seri
 	@JoinColumn(name = "DEFAULT_ADDRESS_ID")
 	private Address defaultAddress = null;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "T_PARTY_ROLE_ACCOUNT", //
 	joinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID"), //
 	inverseJoinColumns = @JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ACCOUNT_ID"))
 	private List<Account> accounts = null;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "T_PARTY_ROLE_ADDRESS", //
 	joinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ROLE_ID"), //
 	inverseJoinColumns = @JoinColumn(name = "ADDRESS_ID", referencedColumnName = "ADDRESS_ID"))

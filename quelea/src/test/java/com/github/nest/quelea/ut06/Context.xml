@@ -24,10 +24,20 @@
 	<bean
 		id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"
-		p:dataSource-ref="dataSource"
+		p:jtaDataSource-ref="dataSource"
 		p:jpaVendorAdapter-ref="hibernateJpaVendorAdapter"
 		p:packagesToScan="com.github.nest.quelea.model"
 		p:mappingResources="META-INF/orm.xml">
+		<property name="jpaPropertyMap">
+			<props>
+				<prop key="hibernate.current_session_context_class">jta</prop>
+				<prop key="javax.persistence.transactionType">jta</prop>
+				<prop key="hibernate.transaction.jta.platform">com.atomikos.icatch.jta.hibernate4.AtomikosPlatform
+				</prop>
+				<prop key="hibernate.hbm2ddl.auto">none</prop>
+				<prop key="hibernate.search.autoregister_listeners">false</prop>
+			</props>
+		</property>
 	</bean>
 
 	<jpa:repositories
@@ -41,11 +51,31 @@
 		class="com.github.nest.quelea.ut06.AuditorAwareImpl" />
 
 	<bean
+		id="txService"
+		class="com.atomikos.icatch.config.UserTransactionServiceImp"
+		init-method="init"
+		destroy-method="shutdownWait">
+	</bean>
+
+	<bean
+		id="txManager"
+		class="com.atomikos.icatch.jta.J2eeTransactionManager"
+		depends-on="txService" />
+
+	<bean
+		id="userTx"
+		class="com.atomikos.icatch.jta.J2eeUserTransaction"
+		depends-on="txService" />
+
+	<bean
 		id="transactionManager"
-		class="org.springframework.orm.jpa.JpaTransactionManager">
+		class="org.springframework.transaction.jta.JtaTransactionManager">
 		<property
-			name="entityManagerFactory"
-			ref="entityManagerFactory" />
+			name="userTransaction"
+			ref="userTx"></property>
+		<property
+			name="transactionManager"
+			ref="txManager"></property>
 	</bean>
 
 	<tx:annotation-driven
@@ -61,20 +91,18 @@
 
 		<bean
 			id="dataSource"
-			class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-			<property
-				name="driverClass"
-				value="org.hsqldb.jdbc.JDBCDriver" />
-			<property
-				name="url"
-				value="jdbc:hsqldb:mem:memdb" />
-			<property
-				name="username"
-				value="username" />
-			<property
-				name="password"
-				value="password" />
-		</bean>
+			class="com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean"
+			destroy-method="close"
+			init-method="init"
+			depends-on="txService"
+			p:uniqueResourceName="atomikos-standalone"
+			p:maxPoolSize="2"
+			p:minPoolSize="1"
+			p:driverClassName="org.hsqldb.jdbc.JDBCDriver"
+			p:url="jdbc:hsqldb:mem:memdb"
+			p:user="username"
+			p:password="password"
+			p:testQuery="VALUES (CURRENT_TIMESTAMP)" />
 
 		<jdbc:initialize-database data-source="dataSource">
 			<jdbc:script location="classpath:/com/github/nest/quelea/schema.sql" />

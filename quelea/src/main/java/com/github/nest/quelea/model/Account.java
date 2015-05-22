@@ -11,8 +11,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -65,10 +63,6 @@ public class Account implements Serializable {
 
 	@Column(name = "IS_VALID")
 	private Boolean valid = null;
-
-	@ManyToOne
-	@JoinColumn(name = "PARTY_ID", nullable = false)
-	private Party party = null;
 
 	/**
 	 * @return the accountId
@@ -224,20 +218,5 @@ public class Account implements Serializable {
 	 */
 	public void setValid(Boolean valid) {
 		this.valid = valid;
-	}
-
-	/**
-	 * @return the party
-	 */
-	public Party getParty() {
-		return party;
-	}
-
-	/**
-	 * @param party
-	 *            the party to set
-	 */
-	public void setParty(Party party) {
-		this.party = party;
 	}
 }

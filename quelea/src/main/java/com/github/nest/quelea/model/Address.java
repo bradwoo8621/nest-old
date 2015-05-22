@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -72,10 +70,6 @@ public class Address implements Serializable {
 
 	@Column(name = "IS_ENABLED")
 	private Boolean enabled = null;
-
-	@ManyToOne
-	@JoinColumn(name = "PARTY_ID", nullable = false)
-	private Party party = null;
 
 	/**
 	 * @return the addressId
@@ -280,20 +274,5 @@ public class Address implements Serializable {
 	 */
 	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
-	}
-
-	/**
-	 * @return the party
-	 */
-	public Party getParty() {
-		return party;
-	}
-
-	/**
-	 * @param party
-	 *            the party to set
-	 */
-	public void setParty(Party party) {
-		this.party = party;
 	}
 }

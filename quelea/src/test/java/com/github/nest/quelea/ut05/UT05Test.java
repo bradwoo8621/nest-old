@@ -51,8 +51,6 @@ public class UT05Test extends EnableLogger {
 		individual.setPartyName(factory.getPartyStrategy(individual).getPartyName(individual));
 		Address address = new Address();
 		address.setCountryCode(Country.China);
-		// set parent
-		address.setParty(individual);
 		List<Address> addresses = new ArrayList<Address>();
 		addresses.add(address);
 		individual.setAddresses(addresses);

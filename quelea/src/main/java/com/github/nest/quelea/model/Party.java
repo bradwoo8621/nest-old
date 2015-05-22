@@ -16,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -50,13 +51,16 @@ public abstract class Party extends AbstractVersionAuditable implements Serializ
 	@Column(name = "PARTY_NAME")
 	private String partyName = null;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "party")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "PARTY_ID")
 	private List<Account> accounts = null;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "party")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "PARTY_ID")
 	private List<Address> addresses = null;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "party")
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "PARTY_ID")
 	private List<Relation> relations = null;
 
 	@Column(name = "IS_ENABLED")
@@ -85,7 +89,8 @@ public abstract class Party extends AbstractVersionAuditable implements Serializ
 	}
 
 	/**
-	 * @param partyCode the partyCode to set
+	 * @param partyCode
+	 *            the partyCode to set
 	 */
 	public void setPartyCode(String partyCode) {
 		this.partyCode = partyCode;

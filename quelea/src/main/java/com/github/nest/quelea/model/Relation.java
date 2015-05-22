@@ -10,8 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -38,10 +36,6 @@ public class Relation implements Serializable {
 
 	@Column(name = "ANOTHER_PARTY_ID")
 	private Long anotherPartyId = null;
-
-	@ManyToOne
-	@JoinColumn(name = "PARTY_ID", nullable = false)
-	private Party party = null;
 
 	/**
 	 * @return the relationId
@@ -88,19 +82,5 @@ public class Relation implements Serializable {
 	 */
 	public void setAnotherPartyId(Long anotherPartyId) {
 		this.anotherPartyId = anotherPartyId;
-	}
-
-	/**
-	 * @return the party
-	 */
-	public Party getParty() {
-		return party;
-	}
-
-	/**
-	 * @param party the party to set
-	 */
-	public void setParty(Party party) {
-		this.party = party;
 	}
 }

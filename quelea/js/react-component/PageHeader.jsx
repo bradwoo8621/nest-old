@@ -9,14 +9,12 @@ var NPageHeader = React.createClass({
         brandFunc: React.PropTypes.func,
         // menu object
         menus: React.PropTypes.array,
-        controller: React.PropTypes.object,
         // search box properties
-        searchEnabled: React.PropTypes.bool,
+        search: React.PropTypes.func,
         searchPlaceholder: React.PropTypes.string
     },
     getDefaultProps: function () {
         return {
-            searchEnabled: true,
             searchPlaceholder: "Search..."
         };
     },
@@ -28,9 +26,10 @@ var NPageHeader = React.createClass({
         return (<div className="navbar-form navbar-right" role="search">
             <div className="form-group">
                 <div className="input-group">
-                    <input type="text" className="form-control" placeholder={this.props.searchPlaceholder}/>
+                    <input id="nheader-search-text" type="text" className="form-control"
+                           placeholder={this.props.searchPlaceholder}/>
                         <span className="input-group-btn">
-                            <button className="btn btn-default" type="button">
+                            <button className="btn btn-default" type="button" onClick={this.onSearchClicked}>
                                 <span className="glyphicon glyphicon-search" aria-hidden="true"/>
                             </button>
                         </span>
@@ -69,13 +68,6 @@ var NPageHeader = React.createClass({
         }
     },
     /**
-     * on menu clicked
-     * @param func
-     */
-    onMenuClicked: function (func) {
-        this.callControllerFunction(func);
-    },
-    /**
      * render menus
      * @returns {XML}
      */
@@ -93,7 +85,7 @@ var NPageHeader = React.createClass({
         if (this.props.brandUrl) {
             return <a href={this.props.brandUrl}><span className="navbar-brand">{this.props.brand}</span></a>;
         } else if (this.props.brandFunc) {
-            return (<a href="javascript:void(0);" onClick={this.onBrandClicked.bind(this, this.props.brandFunc)}>
+            return (<a href="javascript:void(0);" onClick={this.onBrandClicked}>
                 <span className="navbar-brand">{this.props.brand}</span>
             </a>);
         } else {
@@ -104,8 +96,26 @@ var NPageHeader = React.createClass({
      * on brand clicked
      * @param func
      */
-    onBrandClicked: function (func) {
-        this.callControllerFunction(func);
+    onBrandClicked: function () {
+        this.props.brandFunc();
+    },
+    /**
+     * on menu clicked
+     * @param func
+     */
+    onMenuClicked: function (func) {
+        func();
+    },
+    /**
+     * on search clicked
+     */
+    onSearchClicked: function () {
+        var value = $("#nheader-search-text").val();
+        if (value == null || value.length == 0) {
+            // do nothing
+            return;
+        }
+        this.props.search(value);
     },
     /**
      * render component
@@ -127,17 +137,10 @@ var NPageHeader = React.createClass({
                     </div>
                     <div className="collapse navbar-collapse" id="navbar-1">
                         {this.renderMenus()}
-                        {this.props.searchEnabled ? this.renderSearchBox() : null}
+                        {this.props.search ? this.renderSearchBox() : null}
                     </div>
                 </div>
             </nav>
         );
-    },
-    callControllerFunction: function (func) {
-        if (this.props.controller) {
-            func.call(this.props.controller);
-        } else {
-            func();
-        }
     }
 });

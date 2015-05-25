@@ -13,7 +13,9 @@
          */
         renderHeader: function (menus) {
             // render page header
-            React.render(<NPageHeader brand="Quelea" menus={menus} brandFunc={this.home} controller={this}/>,
+            React.render(<NPageHeader brand="Quelea" menus={menus}
+                                      brandFunc={this.home.bind(this)}
+                                      search={this.onHeaderSearchClicked.bind(this)}/>,
                 document.getElementById("page-header"));
         },
         /**
@@ -120,6 +122,16 @@
             this.swtichPage(render);
         },
         /**
+         * on header search clicked
+         * @param text
+         */
+        onHeaderSearchClicked: function (text) {
+            // TODO
+            this.confirmDialog.show("Demo Event Handler",
+                ["You are searching...", "[" + text + "]"], function () {
+                }.bind(this));
+        },
+        /**
          * on cancel clicked
          */
         onCancelClicked: function (title) {
@@ -174,7 +186,7 @@
                 ["Party Search Button Clicked"], function () {
                 }.bind(this));
         },
-        onRoleSearchClicked: function() {
+        onRoleSearchClicked: function () {
             // TODO
             this.confirmDialog.show("Demo Event Handler",
                 ["Role Search Button Clicked"], function () {
@@ -207,30 +219,30 @@
     // create menus
     var menus = [{
         text: "Party",
-        children: [{text: "Find Party", func: controller.findParty},
-            {text: "Find Role", func: controller.findRole},
+        children: [{text: "Find Party", func: controller.findParty.bind(controller)},
+            {text: "Find Role", func: controller.findRole.bind(controller)},
             {divider: true},
             {
                 text: "Create Party",
-                children: [{text: "Individual", func: controller.createIndividualParty},
-                    {text: "Organization", func: controller.createOrganizationParty}]
+                children: [{text: "Individual", func: controller.createIndividualParty.bind(controller)},
+                    {text: "Organization", func: controller.createOrganizationParty.bind(controller)}]
             },
             {divider: true},
             {
                 text: "Create Customer",
-                children: [{text: "Individual", func: controller.demo},
-                    {text: "Organization", func: controller.demo}]
+                children: [{text: "Individual", func: controller.demo.bind(controller)},
+                    {text: "Organization", func: controller.demo.bind(controller)}]
             }, {
                 text: "Create Agent",
-                children: [{text: "Individual", func: controller.demo},
-                    {text: "Organization", func: controller.demo}]
+                children: [{text: "Individual", func: controller.demo.bind(controller)},
+                    {text: "Organization", func: controller.demo.bind(controller)}]
             },
-            {text: "Create Bank", func: controller.demo},
+            {text: "Create Bank", func: controller.demo.bind(controller)},
             {
                 text: "Create Own Roles",
-                children: [{text: "Branch", func: controller.demo},
-                    {text: "Department", func: controller.demo},
-                    {text: "Employee", func: controller.demo}]
+                children: [{text: "Branch", func: controller.demo.bind(controller)},
+                    {text: "Department", func: controller.demo.bind(controller)},
+                    {text: "Employee", func: controller.demo.bind(controller)}]
             }]
     }];
     // initialize

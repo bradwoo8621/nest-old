@@ -75,7 +75,7 @@
                                       right={[{icon:"search",
                                         text:"Search",
                                         style:"primary",
-                                        onClick:this.onPartySearchClicked.bind(this)}]}/>
+                                        onClick:this.onRoleSearchClicked.bind(this)}]}/>
                     </Panel>
                 </div>);
                 this.mainPanel = React.render(panel, document.getElementById("main"));
@@ -161,14 +161,24 @@
          */
         onPartySaveClicked: function () {
             // TODO
-            alert("Party Save Clicked");
+            this.confirmDialog.show("Demo Event Handler",
+                ["Party Save Button Clicked"], function () {
+                }.bind(this));
         },
         /**
          * on party search clicked
          */
         onPartySearchClicked: function () {
             // TODO
-            alert("Party Query Clicked");
+            this.confirmDialog.show("Demo Event Handler",
+                ["Party Search Button Clicked"], function () {
+                }.bind(this));
+        },
+        onRoleSearchClicked: function() {
+            // TODO
+            this.confirmDialog.show("Demo Event Handler",
+                ["Role Search Button Clicked"], function () {
+                }.bind(this));
         },
         /**
          * switch page

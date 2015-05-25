@@ -562,23 +562,23 @@ var LayoutDefine = {
                 type: ComponentConstants.Select,
                 data: Codes.RoleType
             },
-            pos: {col: 1, row: 1}
+            pos: {col: 1, row: 1, width: 4}
         },
         partyCode: {
             label: "Party Code",
-            pos: {col: 2, row: 1}
+            pos: {col: 2, row: 1, width: 4}
         },
         roleCode: {
             label: "Role Code",
-            pos: {col: 3, row: 1}
+            pos: {col: 3, row: 1, width: 4}
         },
         idNumber: {
             label: "ID Number",
-            pos: {col: 1, row: 2}
+            pos: {col: 1, row: 2, width: 4}
         },
         name: {
             label: "Party Name",
-            pos: {col: 2, row: 2}
+            pos: {col: 2, row: 2, width: 4}
         }
     }
 };

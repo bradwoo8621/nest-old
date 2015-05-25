@@ -44,37 +44,43 @@
          * find party
          */
         findParty: function () {
-            this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.PartyQueryModel));
-            var layout = new FormLayout(LayoutDefine.PartyQueryLayout);
-            var panel = (<div>
-                <Panel header="Find Party...">
-                    <NForm model={this.model} layout={layout}/>
-                    <NPanelFooter reset={this.onResetClicked.bind(this)}
-                                  right={[{icon:"search",
+            var render = function () {
+                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.PartyQueryModel));
+                var layout = new FormLayout(LayoutDefine.PartyQueryLayout);
+                var panel = (<div>
+                    <Panel header="Find Party...">
+                        <NForm model={this.model} layout={layout}/>
+                        <NPanelFooter reset={this.onResetClicked.bind(this)}
+                                      right={[{icon:"search",
                                         text:"Search",
                                         style:"primary",
                                         onClick:this.onPartySearchClicked.bind(this)}]}/>
-                </Panel>
-            </div>);
-            this.mainPanel = React.render(panel, document.getElementById("main"));
+                    </Panel>
+                </div>);
+                this.mainPanel = React.render(panel, document.getElementById("main"));
+            };
+            this.swtichPage(render);
         },
         /**
          * find role
          */
         findRole: function () {
-            this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.RoleQueryModel));
-            var layout = new FormLayout(LayoutDefine.RoleQueryLayout);
-            var panel = (<div>
-                <Panel header="Find Role...">
-                    <NForm model={this.model} layout={layout}/>
-                    <NPanelFooter reset={this.onResetClicked.bind(this)}
-                                  right={[{icon:"search",
+            var render = function () {
+                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.RoleQueryModel));
+                var layout = new FormLayout(LayoutDefine.RoleQueryLayout);
+                var panel = (<div>
+                    <Panel header="Find Role...">
+                        <NForm model={this.model} layout={layout}/>
+                        <NPanelFooter reset={this.onResetClicked.bind(this)}
+                                      right={[{icon:"search",
                                         text:"Search",
                                         style:"primary",
                                         onClick:this.onPartySearchClicked.bind(this)}]}/>
-                </Panel>
-            </div>);
-            this.mainPanel = React.render(panel, document.getElementById("main"));
+                    </Panel>
+                </div>);
+                this.mainPanel = React.render(panel, document.getElementById("main"));
+            };
+            this.swtichPage(render);
         },
         /**
          * create party
@@ -93,19 +99,25 @@
          * create individual party
          */
         createIndividualParty: function () {
-            this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.IndividualParty));
-            this.createParty(this.model,
-                new FormLayout(LayoutDefine.PartyCommon, LayoutDefine.IndividualParty),
-                "Individual Party");
+            var render = function () {
+                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.IndividualParty));
+                this.createParty(this.model,
+                    new FormLayout(LayoutDefine.PartyCommon, LayoutDefine.IndividualParty),
+                    "Individual Party");
+            };
+            this.swtichPage(render);
         },
         /**
          * create organization party
          */
         createOrganizationParty: function () {
-            this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.OrganizationParty));
-            this.createParty(this.model,
-                new FormLayout(LayoutDefine.PartyCommon, LayoutDefine.OrganizationParty),
-                "Organization Party");
+            var render = function () {
+                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.OrganizationParty));
+                this.createParty(this.model,
+                    new FormLayout(LayoutDefine.PartyCommon, LayoutDefine.OrganizationParty),
+                    "Organization Party");
+            };
+            this.swtichPage(render);
         },
         /**
          * on cancel clicked
@@ -172,6 +184,11 @@
             } else {
                 func.call(this);
             }
+        },
+        demo: function () {
+            this.confirmDialog.show("Demo Page",
+                ["Function is under developing"], function () {
+                }.bind(this));
         }
     });
 
@@ -191,15 +208,19 @@
             {divider: true},
             {
                 text: "Create Customer",
-                children: [{text: "Individual"}, {text: "Organization"}]
+                children: [{text: "Individual", func: controller.demo},
+                    {text: "Organization", func: controller.demo}]
             }, {
                 text: "Create Agent",
-                children: [{text: "Individual"}, {text: "Organization"}]
+                children: [{text: "Individual", func: controller.demo},
+                    {text: "Organization", func: controller.demo}]
             },
-            {text: "Create Bank"},
+            {text: "Create Bank", func: controller.demo},
             {
                 text: "Create Own Roles",
-                children: [{text: "Branch"}, {text: "Department"}, {text: "Employee"}]
+                children: [{text: "Branch", func: controller.demo},
+                    {text: "Department", func: controller.demo},
+                    {text: "Employee", func: controller.demo}]
             }]
     }];
     // initialize

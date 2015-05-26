@@ -53,6 +53,54 @@ var NFormCell = React.createClass({
         layout: React.PropTypes.object
     },
     /**
+     * will update
+     * @param nextProps
+     */
+    componentWillUpdate: function (nextProps) {
+        $("#" + this.getLabelId()).popover("destroy");
+    },
+    /**
+     * did update
+     * @param prevProps
+     * @param prevState
+     */
+    componentDidUpdate: function (prevProps, prevState) {
+        this.renderPopover();
+    },
+    /**
+     * did mount
+     */
+    componentDidMount: function () {
+        this.renderPopover();
+    },
+    /**
+     * will unmount
+     */
+    componentWillUnmount: function () {
+        $("#" + this.getLabelId()).popover("destroy");
+    },
+    renderPopover: function () {
+        if (this.getModel().hasError(this.getId())) {
+            var messages = this.getModel().getError(this.getId());
+            var _this = this;
+            var content = messages.map(function (msg) {
+                return "<span style='display:block'>" + msg.format([_this.getLayout().getLabel()]) + "</span>";
+            });
+            $("#" + this.getLabelId()).popover({
+                placement: 'top',
+                trigger: 'hover',
+                html: true,
+                content: content,
+                // false is very import, since when destroy popover,
+                // the really destroy will be invoked by some delay,
+                // and before really destory invoked,
+                // the new popover is bind by componentDidUpdate method.
+                // and finally new popover will be destroyed.
+                animation: false
+            });
+        }
+    },
+    /**
      * render text input
      * @returns {XML}
      */
@@ -107,15 +155,6 @@ var NFormCell = React.createClass({
         }
     },
     /**
-     * get css class
-     * @returns {string}
-     */
-    getCSSClassName: function () {
-        var width = this.getLayout().getWidth();
-        var css = "col-sm-" + width + " col-md-" + width + " col-lg-" + width;
-        return this.getLayout().getCellCSS(css);
-    },
-    /**
      * render
      * @returns {XML}
      */
@@ -125,12 +164,28 @@ var NFormCell = React.createClass({
                 {this.renderTable()}
             </div>);
         } else {
-            return (<div className={this.getCSSClassName()}>
-                <label htmlFor={this.getLayout().getId()}
-                       className={this.getLayout().getLabelCSS()}>{this.getLayout().getLabel()}:</label>
+            var css = this.getCSSClassName();
+            if (this.getModel().hasError(this.getId())) {
+                css += " has-error";
+            }
+            var requiredLabel = this.getModel().isRequired(this.getId()) ?
+                (<Glyphicon glyph="asterisk" bsSize="xsmall" className="required"/>) : null;
+            return (<div className={css}>
+                <label htmlFor={this.getId()}
+                       className={this.getLayout().getLabelCSS()}
+                       id={this.getLabelId()}>
+                    {this.getLayout().getLabel()}
+                    {requiredLabel}:
+                </label>
                 {this.renderInputComponent()}
             </div>);
         }
+    },
+    getId: function () {
+        return this.getLayout().getId();
+    },
+    getLabelId: function () {
+        return "nlabel-" + this.getId();
     },
     /**
      * get model
@@ -145,5 +200,14 @@ var NFormCell = React.createClass({
      */
     getLayout: function () {
         return this.props.layout;
+    },
+    /**
+     * get css class
+     * @returns {string}
+     */
+    getCSSClassName: function () {
+        var width = this.getLayout().getWidth();
+        var css = "col-sm-" + width + " col-md-" + width + " col-lg-" + width;
+        return this.getLayout().getCellCSS(css);
     }
 });

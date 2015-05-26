@@ -14,7 +14,7 @@
         renderHeader: function (menus) {
             // render page header
             React.render(<NPageHeader brand="Quelea" menus={menus}
-                                      brandFunc={this.home.bind(this)}
+                                      brandFunc={this.onHomeClicked.bind(this)}
                                       search={this.onHeaderSearchClicked.bind(this)}/>,
                 document.getElementById("page-header"));
         },
@@ -114,12 +114,19 @@
          */
         createOrganizationParty: function () {
             var render = function () {
-                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.OrganizationParty));
+                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.OrganizationParty),
+                    new ModelValidator(ValidatorDefine.OrganizationPartyValidator));
                 this.createParty(this.model,
                     new FormLayout(LayoutDefine.PartyCommon, LayoutDefine.OrganizationParty),
                     "Organization Party");
             };
             this.swtichPage(render);
+        },
+        /**
+         * on home clicked
+         */
+        onHomeClicked: function() {
+            this.swtichPage(this.home);
         },
         /**
          * on header search clicked
@@ -157,16 +164,8 @@
          * on validate clicked
          */
         onValidateClicked: function () {
-            var model = this.model;
-            model.setPartyCode("I00001");
-            model.setEnabled(false);
-            model.setIdTypeCode("1");
-
-            if (model.setDateOfBirth) {
-                model.setDateOfBirth("2001/02/03");
-            } else {
-                model.setDateOfRegister("2000/01/02");
-            }
+            this.model.validate();
+            this.mainPanel.forceUpdate();
         },
         /**
          * on party save clicked

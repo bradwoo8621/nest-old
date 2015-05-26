@@ -8,9 +8,37 @@ if (String.prototype.upperFirst === undefined) {
         }
     };
 }
-if (typeof String.prototype.endsWith === undefined) {
+if (String.prototype.endsWith === undefined) {
     String.prototype.endsWith = function (suffix) {
         return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+}
+if (String.prototype.trim === undefined) {
+    String.prototype.trim = function () {
+        return this.replace(/^\s+|\s+$/gm, '');
+    };
+}
+if (String.prototype.isEmpty === undefined) {
+    String.prototype.isEmpty = function () {
+        return this == "";
+    };
+}
+if (String.prototype.isBlank === undefined) {
+    String.prototype.isBlank = function () {
+        return this.trim() == "";
+    };
+}
+/**
+ * replace place holders %1, %2, etc with given string array
+ *
+ * @param strArray
+ * @returns
+ */
+if (String.prototype.format === undefined) {
+    String.prototype.format = function (strArray) {
+        return this.replace(/%(\d+)/g, function (_, m) {
+            return strArray[--m];
+        });
     };
 }
 /**
@@ -39,27 +67,6 @@ if (Array.prototype.findIndex === undefined) {
         return -1;
     };
 }
-Array.prototype.asString = function (separator, skipNull) {
-    var str = "";
-    for (var index = 0, count = this.length; index < count; index++) {
-        var item = this[index];
-        var concat = null;
-        if (item === undefined || item == null) {
-            if (skipNull === false) {
-                concat = "Null";
-            }
-        } else {
-            concat = item.toString();
-        }
-        if (concat != null) {
-            if (str.length != 0) {
-                str += separator;
-            }
-            str += concat;
-        }
-    }
-    return str;
-};
 
 /**
  * component constants
@@ -97,13 +104,16 @@ var ModelUtil = jsface.Class({
         /**
          * create model
          * @param jsonObject
+         * @param objectValidator {ModelValidator}
          */
-        createModel: function (jsonObject) {
+        createModel: function (jsonObject, objectValidator) {
             // create model
             var model = {
-                constructor: function (model) {
+                constructor: function (model, objectValidator) {
                     this.__base = model;
                     this.__model = ModelUtil.cloneJSON(model);
+                    this.__validator = objectValidator;
+                    this.__validateResults = {};
                 },
                 /**
                  * get original model
@@ -208,6 +218,51 @@ var ModelUtil = jsface.Class({
                  */
                 reset: function () {
                     this.__model = ModelUtil.cloneJSON(this.__base);
+                    this.__validateResults = {};
+                },
+                /**
+                 * validate
+                 */
+                validate: function (id) {
+                    if (id) {
+                        var ret = this.__validator.validate(this, id);
+                        if (ret !== true) {
+                            this.__validateResults[id] = ret;
+                        } else {
+                            delete this.__validateResults[id];
+                        }
+                    } else {
+                        this.__validateResults = this.__validator.validate(this);
+                    }
+                },
+                /**
+                 * check the property is required or not
+                 * @param id
+                 */
+                isRequired: function (id) {
+                    return this.__validator && this.__validator.getConfig()
+                        && this.__validator.getConfig()[id]
+                        && this.__validator.getConfig()[id].required != undefined;
+                },
+                getError: function (id) {
+                    if (id) {
+                        // property level
+                        return this.__validateResults[id];
+                    } else {
+                        return this.__validateResults;
+                    }
+                },
+                /**
+                 * check the model is has error or not
+                 * @returns {boolean}
+                 */
+                hasError: function (id) {
+                    if (id) {
+                        // property level
+                        return this.__validateResults[id] !== undefined && this.__validateResults[id] != null;
+                    } else {
+                        return Object.keys(this.__validateResults).length != 0;
+                    }
                 },
                 /**
                  * remove row from given id
@@ -301,7 +356,7 @@ var ModelUtil = jsface.Class({
                 };
             });
             var ModelClass = jsface.Class(model);
-            return new ModelClass(jsonObject);
+            return new ModelClass(jsonObject, objectValidator);
         },
         /**
          * clone json object
@@ -651,3 +706,230 @@ var TableColumnLayout = jsface.Class({
         return this.__columns.some(func);
     }
 });
+/**
+ * model validator
+ * @type {class}
+ */
+var ModelValidator = jsface.Class({
+    constructor: function (validatorConfig, rules) {
+        this.__validator = validatorConfig;
+        this.__rules = rules;
+        if (this.__rules === undefined) {
+            this.__rules = ValidateRules;
+        }
+    },
+    /**
+     * get configuration
+     * @returns {*}
+     */
+    getConfig: function () {
+        return this.__validator;
+    },
+    /**
+     * get rule
+     * @param ruleName
+     * @returns {*}
+     */
+    getRule: function (ruleName) {
+        return this.__rules[ruleName];
+    },
+    /**
+     * validate
+     * @param model
+     * @param id
+     * @returns {*}
+     */
+    validate: function (model, id) {
+        if (id) {
+            var config = this.getConfig()[id];
+            if (config === undefined) {
+                return true;
+            } else {
+                var _this = this;
+                var result = Object.keys(config).map(function (rule) {
+                    var ret = null;
+                    var ruleBody = config[rule];
+                    var value = model.get(id);
+                    if (typeof ruleBody === "function") {
+                        ret = ruleBody.call(_this, model, value);
+                    } else {
+                        ret = _this.getRule(rule).call(_this, model, value, ruleBody);
+                    }
+                    return ret != true ? ret : null;
+                });
+                var finalResult = [];
+                result.forEach(function (item) {
+                    if (item == null) {
+                        return;
+                    }
+                    if (Array.isArray(item)) {
+                        // array of plain string
+                        item.forEach(function (i) {
+                            finalResult.push(i);
+                        });
+                    } else {
+                        // plain string
+                        finalResult.push(item);
+                    }
+                });
+                return finalResult.length == 0 ? true : finalResult;
+            }
+        } else {
+            var result = {};
+            var _this = this;
+            Object.keys(this.getConfig()).forEach(function (id) {
+                var ret = _this.validate(model, id);
+                if (ret != true) {
+                    result[id] = ret;
+                }
+            });
+            return result;
+        }
+    }
+});
+/**
+ * validate rules
+ * @type {class}
+ */
+var ValidateRules = {
+    required: function (model, value) {
+        if (value == null || value.toString().isEmpty()) {
+            return "\"%1\" is Required.";
+        } else {
+            return true;
+        }
+    },
+    length: function (model, value, length) {
+        if (value == null) {
+            return true;
+        } else if (value.length != length) {
+            return "Length of \"%1\" should be " + length + "."
+        }
+    },
+    maxlength: function (model, value, length) {
+        if (value == null) {
+            return true;
+        } else if (value.length > length) {
+            return "Length of \"%1\" cannot be more than " + length + ".";
+        }
+    },
+    minlength: function (model, value, length) {
+        if (value == null) {
+            return true;
+        } else if (value.length < length) {
+            return "Length of \"%1\" cannot be less than " + length + ".";
+        }
+    },
+    before: function (model, value, settings) {
+        return ValidateRules.__dateCompare(value, model, settings, ValidateRules.__beforeSpecial);
+    },
+    /**
+     * before special time
+     * @param momentValue
+     * @param model
+     * @param check
+     * @param format
+     * @param label
+     * @returns {*}
+     * @private
+     */
+    __beforeSpecial: function (momentValue, model, check, format, label) {
+        var compareValue = ValidateRules.__convertToMomentValue(check, model, format);
+        if (compareValue != null) {
+            if (momentValue.unix() > compareValue.unix()) {
+                if (typeof check === "string") {
+                    return "Value of \"%1\" must be before than "
+                        + (label ? label : check) + ".";
+                }
+                return "Value of \"%1\" must be before than \"" + compareValue.format(format) + "\".";
+            }
+        }
+        return true;
+    },
+    after: function (model, value, settings) {
+        return ValidateRules.__dateCompare(value, model, settings, ValidateRules.__afterSpecial);
+    },
+    /**
+     * after special time
+     * @param momentValue
+     * @param model
+     * @param check
+     * @param format
+     * @param label
+     * @returns {*}
+     * @private
+     */
+    __afterSpecial: function (momentValue, model, check, format, label) {
+        var compareValue = ValidateRules.__convertToMomentValue(check, model, format);
+        if (compareValue != null) {
+            if (momentValue.unix() < compareValue.unix()) {
+                if (typeof check === "string") {
+                    return "Value of \"%1\" must be after than "
+                        + (label ? label : check) + ".";
+                }
+                return "Value of \"%1\" must be after than \"" + compareValue.format(format) + "\".";
+            }
+        }
+        return true;
+    },
+    /**
+     * convert value to momentjs object
+     * @param value
+     * @param model
+     * @param format
+     * @returns {*}
+     * @private
+     */
+    __convertToMomentValue: function (value, model, format) {
+        var compareValue = null;
+        if (value === "now") {
+            compareValue = moment();
+        } else if (value.unix !== undefined) {
+            // value is a moment value
+            compareValue = value;
+        } else if (typeof (value) === "function") {
+            compareValue = value();
+        } else if (model.get(value) !== undefined) {
+            // value from another property
+            if (model.get(value) != null) {
+                compareValue = moment(model.get(value), format);
+            }
+        } else {
+            // plain date time string
+            compareValue = moment(value, format);
+        }
+        return compareValue;
+    },
+    /**
+     * compare data
+     * @param value
+     * @param model
+     * @param settings
+     * @param checkFunc
+     * @returns {[string]|string}
+     * @private
+     */
+    __dateCompare: function (value, model, settings, checkFunc) {
+        if (value == null) {
+            return true;
+        }
+        var format = typeof settings.format === "string" ? settings.format : "YYYY/MM/DD";
+        var checks = settings.rule ? settings.rule : settings;
+        var labels = settings.rule ? settings.label : null;
+        var dateValue = moment(value, format);
+        var results = [];
+        if (Array.isArray(checks)) {
+            for (var index = 0, count = checks.length; index < count; index++) {
+                var check = checks[index];
+                var label = labels ? labels[index] : null;
+                results.push(checkFunc(dateValue, model, check, format, label));
+            }
+        } else {
+            results.push(checkFunc(dateValue, model, checks, format, labels));
+        }
+        var messages = results.filter(function (result) {
+            return result != true;
+        })
+        return messages.length == 0 ? true : (messages.length == 1 ? messages[0] : messages);
+    }
+};

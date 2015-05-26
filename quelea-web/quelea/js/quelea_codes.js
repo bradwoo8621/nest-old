@@ -1,10 +1,18 @@
 /**
+ * codes defined
+ * @type {*}
+ */
+var CodesDefine = {
+    Party_Individual: "I",
+    Party_Organization: "O"
+};
+/**
  * Code Tables
  */
 var Codes = {
     PartyType: new CodeTable([
-        {id: "I", text: "Individual"},
-        {id: "O", text: "Organization"}
+        {id: CodesDefine.Party_Individual, text: "Individual"},
+        {id: CodesDefine.Party_Organization, text: "Organization"}
     ]),
     RoleType: new CodeTable([
         {id: "BNK", text: "Bank"},
@@ -481,4 +489,4 @@ var Regions = {
         {id: "YP", pId: "SH", text: "杨浦区"},
         {id: "ZB", pId: "SH", text: "闸北区"}
     ])
-}
+};

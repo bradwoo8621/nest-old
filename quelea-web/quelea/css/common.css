@@ -594,3 +594,47 @@ div.modal-form-footer.modal-footer {
 div.modal-form-footer.modal-footer div.btn-toolbar.panel-footer {
     margin-top: 0px;
 }
+
+/** error styles */
+span.required {
+    color: #a94442;
+    font-size: 80%;
+}
+
+div.has-error > label {
+    color: #a94442;
+}
+
+div.has-error input[type="text"] {
+    color: #a94442;
+}
+
+div.has-error span.select2-selection {
+    border-color: #a94442;
+    color: #a94442;
+}
+
+div.has-error .select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #a94442;
+}
+
+div.has-error .select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #a94442 transparent transparent transparent;
+}
+
+div.has-error .select2-container--default .select2-selection--single .select2-selection__placeholder {
+    color: #a94442;
+}
+
+div.has-error div.popover {
+    max-width: 500px;
+    border-color: #a94442;
+}
+
+div.has-error div.popover div.arrow {
+    border-top-color: #a94442;
+}
+
+div.has-error div.popover div.popover-content {
+    color: #a94442;
+}

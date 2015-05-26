@@ -244,7 +244,9 @@ var LayoutDefine = {
                     width: 500,
                     render: function (data) {
                         var lines = [data.line1, data.line2, data.line3, data.line4, data.line5];
-                        return lines.asString(",");
+                        return lines.filter(function (item) {
+                            return item != null;
+                        }).join(",");
                     }
                 }, {
                     title: "Enabled",
@@ -579,6 +581,63 @@ var LayoutDefine = {
         name: {
             label: "Party Name",
             pos: {col: 2, row: 2, width: 4}
+        }
+    }
+};
+/**
+ * validator define
+ */
+var ValidatorDefine = {
+    OrganizationPartyValidator: {
+        partyCode: {
+            required: true,
+            maxlength: 10
+        },
+        idTypeCode: {
+            required: true
+        },
+        idNumber: {
+            required: true,
+            length: 10
+        },
+        organizationName: {
+            required: true,
+            minlength: 30
+        },
+        dateOfRegister: {
+            required: true,
+            before: {
+                rule: ["now", "dateOfDeregister"],
+                format: "YYYY/MM/DD", // optional, default is YYYY/MM/DD,
+                label: ["Now", "\"Date of Deregister\""] // optional, also an array if exists, with same length of rule property
+            }
+        },
+        dateOfDeregister: {
+            after: {
+                rule: "dateOfRegister",
+                label: "\"Date Of Register\""
+            }
+            /* after : "dateOfRegister" */ // sugar, also support array and available for "before"
+        }
+    },
+    RoleQueryValidator: {
+        _check: function (model) {
+            var isIdBlank = model.getIdNumber() == null || model.getIdNumber().isBlank();
+            var isNameBlank = model.getName() == null || model.getName().isBlank();
+            return isIdBlank && isNameBlank ? "請在ID Number和Party Name中至少填寫一個欄位." : true;
+        },
+        roleTypeCode: {
+            required: true
+        },
+        idNumber: {
+            required: true,
+            _check: function (model, value) {
+                if (value == null) {
+                    return true;
+                } else if (model.getRoleType() == CodesDefine.Party_Individual) {
+                    return value.length > 18 ? "Length of \"ID Number\" cannot be more than 18 digits." : true;
+                }
+            }
         }
     }
 };

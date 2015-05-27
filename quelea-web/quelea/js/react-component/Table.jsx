@@ -26,6 +26,9 @@ var NTable = React.createClass({
                 rowEditButtonIcon: "pencil",
                 removable: false,
                 rowRemoveButtonIcon: "remove",
+                editDialogSaveButtonText: "Save",
+                editDialogSaveButtonIcon: "floppy-save",
+
                 indexable: false,
 
                 sortable: true,
@@ -36,7 +39,8 @@ var NTable = React.createClass({
                 pageable: false,
                 countPerPage: 20,
 
-                noDataLabel: "No Data"
+                noDataLabel: "No Data",
+                detailErrorMessage: "Detail error please open item and do validate."
             }
         }
     },
@@ -61,9 +65,11 @@ var NTable = React.createClass({
      * @param nextProps
      */
     componentWillUpdate: function (nextProps) {
+        $("#" + this.getHeaderLabelId()).popover("destroy");
         this.getModel().removeListener(this.getId(), "post", "add", this.onModelChange);
         this.getModel().removeListener(this.getId(), "post", "remove", this.onModelChange);
         this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
+        this.getModel().removeListener(this.getId(), "post", "validate", this.onModelValidateChange);
     },
     /**
      * did update
@@ -72,26 +78,32 @@ var NTable = React.createClass({
      */
     componentDidUpdate: function (prevProps, prevState) {
         this.renderIfIE8();
+        this.renderHeaderPopover();
         this.getModel().addListener(this.getId(), "post", "add", this.onModelChange);
         this.getModel().addListener(this.getId(), "post", "remove", this.onModelChange);
         this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
+        this.getModel().addListener(this.getId(), "post", "validate", this.onModelValidateChange);
     },
     /**
      * did mount
      */
     componentDidMount: function () {
         this.createComponent();
+        this.renderHeaderPopover();
         this.getModel().addListener(this.getId(), "post", "add", this.onModelChange);
         this.getModel().addListener(this.getId(), "post", "remove", this.onModelChange);
         this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
+        this.getModel().addListener(this.getId(), "post", "validate", this.onModelValidateChange);
     },
     /**
      * will unmount
      */
     componentWillUnmount: function () {
+        $("#" + this.getHeaderLabelId()).popover("destroy");
         this.getModel().removeListener(this.getId(), "post", "add", this.onModelChange);
         this.getModel().removeListener(this.getId(), "post", "remove", this.onModelChange);
         this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
+        this.getModel().removeListener(this.getId(), "post", "validate", this.onModelValidateChange);
     },
     createComponent: function () {
         var _this = this;
@@ -215,9 +227,44 @@ var NTable = React.createClass({
      * @returns {XML}
      */
     renderPanelHeadingLabel: function () {
-        return <div className="col-sm-3 col-md-3 col-lg-3"><label
-            className={this.getCombineCSS("n-table-heading-label","headingLabel")}>{this.getLayout().getLabel()}</label>
+        var css = "col-sm-3 col-md-3 col-lg-3";
+        if (this.getModel().hasError(this.getId())) {
+            css += " has-error";
+        }
+        return <div className={css}>
+            <label className={this.getCombineCSS("n-table-heading-label","headingLabel")}
+                   id={this.getHeaderLabelId()}>
+                {this.getLayout().getLabel()}
+            </label>
         </div>;
+    },
+    /**
+     * render header popover
+     */
+    renderHeaderPopover: function () {
+        if (this.getModel().hasError(this.getId())) {
+            var messages = this.getModel().getError(this.getId());
+            var _this = this;
+            var content = messages.map(function (msg) {
+                if (typeof msg === "string") {
+                    return "<span style='display:block'>" + msg.format([_this.getLayout().getLabel()]) + "</span>";
+                } else {
+                    return "<span style='display:block'>" + _this.getComponentOption("detailErrorMessage") + "</span>";
+                }
+            });
+            $("#" + this.getHeaderLabelId()).popover({
+                placement: 'top',
+                trigger: 'hover',
+                html: true,
+                content: content,
+                // false is very import, since when destroy popover,
+                // the really destroy will be invoked by some delay,
+                // and before really destory invoked,
+                // the new popover is bind by componentDidUpdate method.
+                // and finally new popover will be destroyed.
+                animation: false
+            });
+        }
     },
     /**
      * render panel heading
@@ -327,6 +374,18 @@ var NTable = React.createClass({
         var columnIndex = 0;
         var _this = this;
         var className = rowIndex % 2 == 0 ? "even" : "odd";
+        if (this.getModel().hasError(this.getId())) {
+            var rowError = null;
+            var errors = this.getModel().getError(this.getId());
+            for (var index = 0, count = errors.length; index < count; index++) {
+                if (typeof errors[index] !== "string") {
+                    rowError = errors[index].getError(row);
+                }
+            }
+            if (rowError != null) {
+                className += " has-error";
+            }
+        }
         return (<tr className={className}>{
             this.columns.map(function (column) {
                 if (columnIndex >= indexToRender.min && columnIndex <= indexToRender.max) {
@@ -878,11 +937,11 @@ var NTable = React.createClass({
      */
     onAddClicked: function () {
         var data = ModelUtil.cloneJSON(this.getComponentOption("modelTemplate"));
-        this.refs.editDialog.show(ModelUtil.createModel(data),
+        this.refs.editDialog.show(this.createEditingModel(data),
             new FormLayout(this.getComponentOption("editLayout")), {
                 right: [{
-                    icon: "floppy-save",
-                    text: "Save",
+                    icon: this.getComponentOption("editDialogSaveButtonIcon"),
+                    text: this.getComponentOption("editDialogSaveButtonText"),
                     style: "primary",
                     onClick: this.onAddCompleted.bind(this)
                 }]
@@ -900,11 +959,11 @@ var NTable = React.createClass({
      * @param data {*} data of row
      */
     onEditClicked: function (data) {
-        this.refs.editDialog.show(ModelUtil.createModel(data),
+        this.refs.editDialog.show(this.createEditingModel(data),
             new FormLayout(this.getComponentOption("editLayout")), {
                 right: [{
-                    icon: "floppy-save",
-                    text: "Save",
+                    icon: this.getComponentOption("editDialogSaveButtonIcon"),
+                    text: this.getComponentOption("editDialogSaveButtonText"),
                     style: "primary",
                     onClick: this.onEditCompleted.bind(this)
                 }]
@@ -1001,18 +1060,37 @@ var NTable = React.createClass({
         this.setState({sortColumn: column, sortWay: sortWay});
     },
     /**
+     * create editing model
+     * @param item
+     */
+    createEditingModel: function (item) {
+        var modelValidator = this.getModel().getValidator();
+        var tableValidator = modelValidator ? modelValidator.getConfig()[this.getId()] : null;
+        var itemValidator = tableValidator ? new ModelValidator(tableValidator["table"]) : null;
+        return ModelUtil.createModel(item, itemValidator);
+    },
+    /**
      * on model change
      * @param evt
      */
     onModelChange: function (evt) {
         if (evt.type == "add") {
             this.computePagination(this.getDataToDisplay());
-            this.setState({currentPageIndex: this.state.pageCount});
+            this.state.currentPageIndex = this.state.pageCount;
         } else if (evt.type == "remove") {
-            this.forceUpdate();
+            // do nothing
         } else if (evt.type == "change") {
-            this.forceUpdate();
+            // do nothing
         }
+        this.getModel().validate(this.getId());
+    },
+    /**
+     * on model validate change
+     * @param evt
+     */
+    onModelValidateChange: function (evt) {
+        // maybe will introduce performance issue, cannot sure now.
+        this.forceUpdate();
     },
     /**
      * jump to page by given page index
@@ -1069,6 +1147,13 @@ var NTable = React.createClass({
      */
     getDivId: function () {
         return "ntable-" + this.getId();
+    },
+    /**
+     * get header label id
+     * @returns {string}
+     */
+    getHeaderLabelId: function () {
+        return "ntable-header-label-" + this.getId();
     },
     /**
      * get scrolled header div id

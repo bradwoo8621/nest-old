@@ -68,7 +68,8 @@
          */
         findRole: function () {
             var render = function () {
-                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.RoleQueryModel));
+                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.RoleQueryModel),
+                    new ModelValidator(ValidatorDefine.RoleQueryValidator));
                 var layout = new FormLayout(LayoutDefine.RoleQueryLayout);
                 var panel = (<div>
                     <Panel header="Find Role...">
@@ -102,7 +103,8 @@
          */
         createIndividualParty: function () {
             var render = function () {
-                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.IndividualParty));
+                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.IndividualParty),
+                    new ModelValidator(ValidatorDefine.IndividualPartyValidator));
                 this.createParty(this.model,
                     new FormLayout(LayoutDefine.PartyCommon, LayoutDefine.IndividualParty),
                     "Individual Party");
@@ -125,7 +127,7 @@
         /**
          * on home clicked
          */
-        onHomeClicked: function() {
+        onHomeClicked: function () {
             this.swtichPage(this.home);
         },
         /**
@@ -185,11 +187,13 @@
                 ["Party Search Button Clicked"], function () {
                 }.bind(this));
         },
+        /**
+         * on role search clicked
+         */
         onRoleSearchClicked: function () {
             // TODO
-            this.confirmDialog.show("Demo Event Handler",
-                ["Role Search Button Clicked"], function () {
-                }.bind(this));
+            this.model.validate();
+            this.mainPanel.forceUpdate();
         },
         /**
          * switch page

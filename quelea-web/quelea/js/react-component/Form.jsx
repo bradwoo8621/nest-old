@@ -58,6 +58,8 @@ var NFormCell = React.createClass({
      */
     componentWillUpdate: function (nextProps) {
         $("#" + this.getLabelId()).popover("destroy");
+        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
+        this.getModel().removeListener(this.getId(), "post", "validate", this.onModelValidateChange);
     },
     /**
      * did update
@@ -66,27 +68,40 @@ var NFormCell = React.createClass({
      */
     componentDidUpdate: function (prevProps, prevState) {
         this.renderPopover();
+        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
+        this.getModel().addListener(this.getId(), "post", "validate", this.onModelValidateChange);
     },
     /**
      * did mount
      */
     componentDidMount: function () {
         this.renderPopover();
+        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
+        this.getModel().addListener(this.getId(), "post", "validate", this.onModelValidateChange);
     },
     /**
      * will unmount
      */
     componentWillUnmount: function () {
         $("#" + this.getLabelId()).popover("destroy");
+        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
+        this.getModel().removeListener(this.getId(), "post", "validate", this.onModelValidateChange);
     },
+    /**
+     * render error popover
+     */
     renderPopover: function () {
         if (this.getModel().hasError(this.getId())) {
+            var labelComponent = $("#" + this.getLabelId());
+            if (labelComponent.length == 0) {
+                return;
+            }
             var messages = this.getModel().getError(this.getId());
             var _this = this;
             var content = messages.map(function (msg) {
                 return "<span style='display:block'>" + msg.format([_this.getLayout().getLabel()]) + "</span>";
             });
-            $("#" + this.getLabelId()).popover({
+            labelComponent.popover({
                 placement: 'top',
                 trigger: 'hover',
                 html: true,
@@ -180,6 +195,21 @@ var NFormCell = React.createClass({
                 {this.renderInputComponent()}
             </div>);
         }
+    },
+    /**
+     * on model change
+     * @param evt
+     */
+    onModelChange: function (evt) {
+        this.getModel().validate(evt.id);
+    },
+    /**
+     * on model validate change
+     * @param evt
+     */
+    onModelValidateChange: function (evt) {
+        // maybe will introduce performance issue, cannot sure now.
+        this.forceUpdate();
     },
     getId: function () {
         return this.getLayout().getId();

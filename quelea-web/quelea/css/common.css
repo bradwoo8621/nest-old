@@ -638,3 +638,11 @@ div.has-error div.popover div.arrow {
 div.has-error div.popover div.popover-content {
     color: #a94442;
 }
+
+table.n-table tbody tr.odd.has-error {
+    background-color: #f2dede;
+}
+
+table.n-table tbody tr.even.has-error {
+    background-color: #f2dede;
+}

@@ -129,6 +129,9 @@ var ModelUtil = jsface.Class({
                 getCurrentModel: function () {
                     return this.__model;
                 },
+                getValidator: function () {
+                    return this.__validator;
+                },
                 get: function (id) {
                     return this.__model[id];
                 },
@@ -195,7 +198,6 @@ var ModelUtil = jsface.Class({
                 /**
                  * fire event
                  * @param evt
-                 * @private
                  */
                 fireEvent: function (evt) {
                     if (this.listeners === undefined) {
@@ -224,15 +226,33 @@ var ModelUtil = jsface.Class({
                  * validate
                  */
                 validate: function (id) {
+                    var validator = this.getValidator();
+                    if (validator === undefined || validator == null) {
+                        // do nothing
+                        return;
+                    }
                     if (id) {
-                        var ret = this.__validator.validate(this, id);
+                        var ret = validator.validate(this, id);
                         if (ret !== true) {
                             this.__validateResults[id] = ret;
                         } else {
                             delete this.__validateResults[id];
                         }
+                        this.fireEvent({
+                            id: id,
+                            time: "post",
+                            type: "validate"
+                        });
                     } else {
-                        this.__validateResults = this.__validator.validate(this);
+                        this.__validateResults = validator.validate(this);
+                        var _this = this;
+                        Object.keys(this.getCurrentModel()).forEach(function (id) {
+                            _this.fireEvent({
+                                id: id,
+                                time: "post",
+                                type: "validate"
+                            });
+                        });
                     }
                 },
                 /**
@@ -240,9 +260,10 @@ var ModelUtil = jsface.Class({
                  * @param id
                  */
                 isRequired: function (id) {
-                    return this.__validator && this.__validator.getConfig()
-                        && this.__validator.getConfig()[id]
-                        && this.__validator.getConfig()[id].required != undefined;
+                    var validator = this.getValidator();
+                    return validator && validator.getConfig()
+                        && validator.getConfig()[id]
+                        && validator.getConfig()[id].required != undefined;
                 },
                 getError: function (id) {
                     if (id) {
@@ -299,7 +320,8 @@ var ModelUtil = jsface.Class({
                     var data = this.get(id);
                     if (data == null) {
                         data = [];
-                        this.set(id, data);
+                        // do not call #set, since #set will invoke event
+                        this.__model[id] = data;
                     }
                     var index = data.findIndex(function (item) {
                         return item == row;
@@ -349,7 +371,7 @@ var ModelUtil = jsface.Class({
             Object.keys(jsonObject).forEach(function (key) {
                 var name = key.upperFirst();
                 model["get" + name] = function () {
-                    return this.get(name);
+                    return this.get(key);
                 };
                 model["set" + name] = function (value) {
                     this.set(key, value);
@@ -667,7 +689,7 @@ var CellLayout = jsface.Class({
 });
 /**
  * table column layout, an array like object
- * @type
+ * @type {class}
  */
 var TableColumnLayout = jsface.Class({
     constructor: function (columns) {
@@ -820,6 +842,20 @@ var ValidateRules = {
             return "Length of \"%1\" cannot be less than " + length + ".";
         }
     },
+    maxsize: function (model, value, size) {
+        if (value == null || value.length == 0) {
+            return true;
+        } else if (value.length > size) {
+            return "Size of \"%1\" cannot be more than " + size + ".";
+        }
+    },
+    minsize: function (model, value, size) {
+        if (value == null || value.length < size) {
+            return "Size of \"%1\" cannot be less than " + size + ".";
+        } else {
+            return true;
+        }
+    },
     before: function (model, value, settings) {
         return ValidateRules.__dateCompare(value, model, settings, ValidateRules.__beforeSpecial);
     },
@@ -929,7 +965,89 @@ var ValidateRules = {
         }
         var messages = results.filter(function (result) {
             return result != true;
-        })
+        });
         return messages.length == 0 ? true : (messages.length == 1 ? messages[0] : messages);
+    },
+    /**
+     * table detail validate method
+     * @param model
+     * @param value
+     * @param config
+     */
+    table: function (model, value, config) {
+        if (value == null || value.length == 0) {
+            // no data
+            return true;
+        }
+
+        var results = new TableValidationResult();
+        var validator = new ModelValidator(config);
+        for (var index = 0, count = value.length; index < count; index++) {
+            var item = value[index];
+            var itemModel = ModelUtil.createModel(item, validator);
+            itemModel.validate();
+            var error = itemModel.getError();
+            results.push(item, error);
+        }
+
+        return results.hasError() ? results : true;
     }
 };
+/**
+ * table validation result
+ * @type {class}
+ */
+var TableValidationResult = jsface.Class({
+    constructor: function () {
+        this.__errors = {};
+        this.__models = {};
+        this.__startKeyIndex = 1;
+    },
+    /**
+     * push
+     * @param model
+     * @param error
+     */
+    push: function (model, error) {
+        this.__errors[this.__startKeyIndex] = error;
+        this.__models[this.__startKeyIndex] = model;
+        this.__startKeyIndex++;
+    },
+    /**
+     * remove
+     * @param model
+     */
+    remove: function (model) {
+        var _this = this;
+        Object.keys(this.__models).forEach(function (key) {
+            var item = _this.__models[key];
+            if (item == model) {
+                delete _this.__models[key];
+                delete _this.__errors[key];
+            }
+        });
+    },
+    /**
+     * has error
+     * @returns {boolean}
+     */
+    hasError: function () {
+        return Object.keys(this.__models).length != 0;
+    },
+    /**
+     * get error
+     * @param model
+     * @returns {*}
+     */
+    getError: function (model) {
+        var _this = this;
+        var keys = Object.keys(this.__models);
+        for (var index = 0, count = keys.length; index < count; index++) {
+            var item = this.__models[keys[index]];
+            if (item == model) {
+                return this.__errors[keys[index]];
+            }
+        }
+        return null;
+    }
+});

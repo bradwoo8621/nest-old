@@ -589,21 +589,11 @@ var LayoutDefine = {
  */
 var ValidatorDefine = {
     OrganizationPartyValidator: {
-        partyCode: {
-            required: true,
-            maxlength: 10
-        },
-        idTypeCode: {
-            required: true
-        },
-        idNumber: {
-            required: true,
-            length: 10
-        },
-        organizationName: {
-            required: true,
-            minlength: 30
-        },
+        partyCode: {required: true, maxlength: 10},
+        idTypeCode: {required: true},
+        idNumber: {required: true, length: 10},
+        organizationName: {required: true, maxlength: 100},
+        legalRepresentative: {maxlength: 30},
         dateOfRegister: {
             required: true,
             before: {
@@ -618,25 +608,53 @@ var ValidatorDefine = {
                 label: "\"Date Of Register\""
             }
             /* after : "dateOfRegister" */ // sugar, also support array and available for "before"
+        },
+        addresses: {
+            minsize: 1,
+            // "table" is a pre-defined key for validate detail data
+            table: {
+                addressTypeCode: {required: true},
+                line1: {required: true, maxlength: 50},
+                line2: {maxlength: 50},
+                line3: {maxlength: 50},
+                line4: {maxlength: 50},
+                line5: {maxlength: 50},
+                postcode: {maxlength: 6}
+            }
         }
     },
-    RoleQueryValidator: {
-        _check: function (model) {
-            var isIdBlank = model.getIdNumber() == null || model.getIdNumber().isBlank();
-            var isNameBlank = model.getName() == null || model.getName().isBlank();
-            return isIdBlank && isNameBlank ? "請在ID Number和Party Name中至少填寫一個欄位." : true;
+    IndividualPartyValidator: {
+        dateOfBirth: {
+            requried: true,
+            before: {
+                rule: ["now", "dateOfDeath"],
+                format: "YYYY/MM/DD",
+                label: ["Now", "\"Date Of Death\""]
+            }
         },
+        dateOfDeath: {
+            after: {
+                rule: "dateOfBirth",
+                label: "\"Date Of Birth\""
+            }
+        },
+        firstName: {required: true, maxlength: 30},
+        middleName: {maxlength: 30},
+        lastName: {required: true, maxlength: 30},
+        genderCode: {required: true},
+        idNumber: {required: true, length: 18},
+        idTypeCode: {required: true},
+        partyCode: {required: true, maxlength: 10}
+    },
+    RoleQueryValidator: {
         roleTypeCode: {
             required: true
         },
         idNumber: {
-            required: true,
-            _check: function (model, value) {
-                if (value == null) {
-                    return true;
-                } else if (model.getRoleType() == CodesDefine.Party_Individual) {
-                    return value.length > 18 ? "Length of \"ID Number\" cannot be more than 18 digits." : true;
-                }
+            _check: function (model) {
+                var isIdBlank = model.getIdNumber() == null || model.getIdNumber().isBlank();
+                var isNameBlank = model.getName() == null || model.getName().isBlank();
+                return isIdBlank && isNameBlank ? "請在ID Number和Party Name中至少填寫一個欄位." : true;
             }
         }
     }

@@ -80,7 +80,8 @@ var NModalForm = React.createClass({
      * on validate clicked
      */
     onValidateClicked: function () {
-        alert("Not implement yet");
+        this.getModel().validate();
+        this.forceUpdate();
     },
     /**
      * on cancel clicked

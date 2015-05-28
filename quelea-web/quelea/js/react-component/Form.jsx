@@ -144,6 +144,13 @@ var NFormCell = React.createClass({
         return <NSelect model={this.getModel()} layout={this.getLayout()}/>;
     },
     /**
+     * render search text
+     * @returns {XML}
+     */
+    renderSearch: function () {
+        return <NSearchText model={this.getModel()} layout={this.getLayout()}/>;
+    },
+    /**
      * render table
      * @returns {XML}
      */
@@ -163,6 +170,8 @@ var NFormCell = React.createClass({
                 return this.renderSelect();
             case ComponentConstants.Check:
                 return this.renderCheck();
+            case ComponentConstants.Search:
+                return this.renderSearch();
             case ComponentConstants.Radio:
             default:
                 throw new ComponentException(ComponentConstants.Err_Unsupported_Component,

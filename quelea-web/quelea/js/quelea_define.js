@@ -141,7 +141,10 @@ var LayoutDefine = {
                         label: "Province",
                         comp: {
                             type: ComponentConstants.Select,
-                            data: Regions.Province
+                            data: Regions.Province,
+                            /* panelModel */ // optional, default is current model
+                            parentPropId: "countryCode",
+                            parentFilter: "pId"
                         },
                         pos: {col: 2, row: 1}
                     },
@@ -149,7 +152,9 @@ var LayoutDefine = {
                         label: "City",
                         comp: {
                             type: ComponentConstants.Select,
-                            data: Regions.City
+                            data: Regions.City,
+                            parentPropId: "provinceCode",
+                            parentFilter: "pId"
                         },
                         pos: {col: 3, row: 1}
                     },
@@ -157,7 +162,9 @@ var LayoutDefine = {
                         label: "District",
                         comp: {
                             type: ComponentConstants.Select,
-                            data: Regions.District
+                            data: Regions.District,
+                            parentPropId: "cityCode",
+                            parentFilter: "pId"
                         },
                         pos: {col: 4, row: 1}
                     },
@@ -285,14 +292,14 @@ var LayoutDefine = {
                 editLayout: {
                     accountNumber: {
                         label: "Account Number",
-                        pos: {col: 1, row: 1}
+                        pos: {col: 1, row: 2}
                     },
                     bankCode: {
                         label: "Bank",
                         comp: {
-                            type: ComponentConstants.Text
+                            type: ComponentConstants.Search
                         },
-                        pos: {col: 2, row: 1}
+                        pos: {col: 1, row: 1, width: 9}
                     },
                     accountTypeCode: {
                         label: "Account Type",
@@ -301,14 +308,14 @@ var LayoutDefine = {
                             data: Codes.AccountType,
                             minimumResultsForSearch: Infinity
                         },
-                        pos: {col: 3, row: 1}
+                        pos: {col: 2, row: 2}
                     },
                     creditCard: {
                         label: "Is Credit Card",
                         comp: {
                             type: ComponentConstants.Check
                         },
-                        pos: {col: 1, row: 2}
+                        pos: {col: 3, row: 2}
                     },
                     creditCardTypeCode: {
                         label: "Credit Card Type",
@@ -317,29 +324,29 @@ var LayoutDefine = {
                             data: Codes.CreditCardType,
                             minimumResultsForSearch: Infinity
                         },
-                        pos: {col: 2, row: 2}
+                        pos: {col: 1, row: 3}
                     },
                     cardSecurityNumber: {
                         label: "Security Code",
-                        pos: {col: 3, row: 2}
+                        pos: {col: 2, row: 3}
                     },
                     expiryDate: {
                         label: "Expiry Date",
                         comp: {
                             type: ComponentConstants.Date
                         },
-                        pos: {col: 4, row: 2}
+                        pos: {col: 3, row: 3}
                     },
                     holderName: {
                         label: "Holder Name",
-                        pos: {col: 1, row: 3}
+                        pos: {col: 4, row: 3}
                     },
                     valid: {
                         label: "Is Valid",
                         comp: {
                             type: ComponentConstants.Check
                         },
-                        pos: {col: 2, row: 3}
+                        pos: {col: 1, row: 4}
                     }
                 },
                 columns: new TableColumnLayout([{
@@ -620,6 +627,13 @@ var ValidatorDefine = {
                 line4: {maxlength: 50},
                 line5: {maxlength: 50},
                 postcode: {maxlength: 6}
+            }
+        },
+        accounts: {
+            table: {
+                accountNumber: {required: true, maxlength: 30},
+                accountTypeCode: {required: true},
+                bankCode: {required: true}
             }
         }
     },

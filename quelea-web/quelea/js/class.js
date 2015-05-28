@@ -80,6 +80,7 @@ var ComponentConstants = {
     Radio: "radio",
     Table: "table",
     Date: "date",
+    Search: "search",
     // exception codes
     Err_Unsupported_Component: "NEST-00001",
     Err_Unuspported_Column_Sort: "NEXT_00002"
@@ -187,7 +188,7 @@ var ModelUtil = jsface.Class({
                         if (listeners !== undefined) {
                             // listeners is an array
                             var index = listeners.findIndex(function (item) {
-                                return item = listener;
+                                return item === listener;
                             });
                             if (index != -1) {
                                 listeners.splice(index, 1);
@@ -210,10 +211,20 @@ var ModelUtil = jsface.Class({
                         // no listener defined
                         return;
                     }
-                    var _this = this;
-                    listeners.forEach(function (listener) {
-                        listener.call(_this, evt);
-                    });
+                    // copy listeners array is very important.
+                    // since change will invoke validate by FormCell,
+                    // then validate will invoke forceUpdate,
+                    // then forceUpdate will invoke remove listener,
+                    // finally the original listeners are changed,
+                    // so maybe some listener will not be invoked.
+                    // this bug was found the relationship of 2 select2 component.
+                    var listenersCopy = [];
+                    for (var index = 0, count = listeners.length; index < count; index++) {
+                        listenersCopy.push(listeners[index]);
+                    }
+                    for (var index = 0, count = listenersCopy.length; index < count; index++) {
+                        listenersCopy[index].call(this, evt);
+                    }
                 },
                 /**
                  * reset model

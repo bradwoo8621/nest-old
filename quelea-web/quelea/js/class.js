@@ -77,7 +77,6 @@ var ComponentConstants = {
     Text: "text",
     Select: "select",
     Check: "check",
-    Radio: "radio",
     Table: "table",
     Date: "date",
     Search: "search",

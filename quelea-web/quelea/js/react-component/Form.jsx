@@ -172,7 +172,6 @@ var NFormCell = React.createClass({
                 return this.renderCheck();
             case ComponentConstants.Search:
                 return this.renderSearch();
-            case ComponentConstants.Radio:
             default:
                 throw new ComponentException(ComponentConstants.Err_Unsupported_Component,
                     "Component type[" + this.getLayout().getComponentType() + "] is not supported yet.");

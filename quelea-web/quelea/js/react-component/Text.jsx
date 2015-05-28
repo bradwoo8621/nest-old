@@ -8,6 +8,9 @@ var NText = React.createClass({
         // CellLayout
         layout: React.PropTypes.object
     },
+    getDefaultProps: function () {
+        return {defaultOptions: {}};
+    },
     /**
      * will update
      * @param nextProps
@@ -48,7 +51,7 @@ var NText = React.createClass({
      */
     render: function () {
         return <input type="text" className={this.getCSS()} id={this.getId()}
-                      onChange={this.onComponentChange}/>
+                      onChange={this.onComponentChange} disabled={this.isComponentDisabled()}/>
     },
     /**
      * on component change
@@ -122,5 +125,28 @@ var NText = React.createClass({
     getCombineCSS: function (originalCSS, additionalKey) {
         var additionalCSS = this.getLayout().getAdditionalCSS(additionalKey);
         return additionalCSS.length == 0 ? originalCSS : (originalCSS + " " + additionalCSS);
+    },
+    /**
+     * get option
+     * @param key
+     */
+    getComponentOption: function (key) {
+        var option = this.getLayout().getComponentOption(key);
+        if (option == null) {
+            option = this.props.defaultOptions[key];
+        }
+        return option === undefined ? null : option;
+    },
+    /**
+     * is component disabled
+     * @returns {boolean}
+     */
+    isComponentDisabled: function () {
+        var func = this.getComponentOption("enabled");
+        if (func == null) {
+            return false;
+        } else {
+            return !func.call(this, this.getModel(), this.getValueFromModel());
+        }
     }
 });

@@ -50,14 +50,16 @@ var NSelect = React.createClass({
     componentDidUpdate: function (prevProps, prevState) {
         // react will not clear the options when component updating,
         // so have to reset select options manually
-        var options = this.createDisplayOptions({
-            multiple: null,
-            allowClear: null,
-            placeholder: null,
-            minimumResultsForSearch: null,
-            data: null
-        });
-        this.resetOptions(options);
+        if (prevProps.model != this.props.model) {
+            var options = this.createDisplayOptions({
+                multiple: null,
+                allowClear: null,
+                placeholder: null,
+                minimumResultsForSearch: null,
+                data: null
+            });
+            this.resetOptions(options);
+        }
         // reset the value when component update
         this.getComponent().val(this.getValueFromModel()).trigger("change");
 
@@ -177,14 +179,21 @@ var NSelect = React.createClass({
      * @param evt
      */
     onModelChange: function (evt) {
-        this.getComponent().val(evt.new).trigger("change");
+        var oldValue = this.getComponent().val();
+        if (oldValue == evt.new) {
+            // do nothing
+            return;
+        } else {
+            this.getComponent().val(evt.new).trigger("change");
+        }
     },
     /**
      * on parent model change
      * @param evt
      */
     onParentModelChange: function (evt) {
-        this.resetOptions(this.getAvailableOptions(evt.new));
+        var data = this.getAvailableOptions(evt.new);
+        this.resetOptions({data: data});
     },
     /**
      * get model

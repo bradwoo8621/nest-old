@@ -595,6 +595,38 @@ div.modal-form-footer.modal-footer div.btn-toolbar.panel-footer {
     margin-top: 0px;
 }
 
+/* search text styles */
+div.input-group.search-text {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+div.input-group.search-text .input-btn-group > .btn {
+    float: none;
+}
+
+div.input-group .form-control.search-code {
+    width: 50%;
+    border: 0px;
+    border-right: 1px solid #ccc;
+}
+
+div.input-group .form-control.search-label {
+    border: 0px;
+    width: 150%;
+    margin-left: -50%;
+    background-color: #fff;
+}
+
+div.input-group.search-text > span.input-group-addon {
+    border: 0px;
+}
+
+div.input-group.search-text > span.input-group-addon.search-btn {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
 /** error styles */
 span.required {
     color: #a94442;
@@ -644,5 +676,20 @@ table.n-table tbody tr.odd.has-error {
 }
 
 table.n-table tbody tr.even.has-error {
+    background-color: #f2dede;
+}
+
+div.has-error div.input-group.search-text {
+    border-color: #a94442;
+}
+
+div.has-error div.input-group .form-control.search-code {
+    border-color: #a94442;
+    color: #a94442;
+}
+
+div.has-error div.input-group.search-text > span.input-group-addon.search-btn {
+    border-color: #a94442;
+    color: #a94442;
     background-color: #f2dede;
 }

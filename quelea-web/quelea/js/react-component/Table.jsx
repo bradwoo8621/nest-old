@@ -22,6 +22,7 @@ var NTable = React.createClass({
                 searchable: true,
                 searchPlaceholder: "Search...",
 
+                operationFixed: true,
                 editable: false,
                 rowEditButtonIcon: "pencil",
                 removable: false,
@@ -30,6 +31,7 @@ var NTable = React.createClass({
                 editDialogSaveButtonIcon: "floppy-save",
 
                 indexable: false,
+                indexFixed: true,
 
                 sortable: true,
                 sortIcon: "sort",
@@ -614,7 +616,7 @@ var NTable = React.createClass({
     },
     /**
      * render pagination
-     * @returns {*}
+     * @returns {XML}
      */
     renderPagination: function () {
         if (this.isPageable() && this.hasDataToDisplay()) {

@@ -47,7 +47,7 @@ var NPanelFooter = React.createClass({
     renderButton: function (option) {
         return (<Button bsStyle={option.style ? option.style : "default"}
                         onClick={this.onButtonClicked.bind(this, option.onClick)}>
-            {option.icon ? <Glyphicon glyph={option.icon}/> : null} {option.text}
+            {option.icon ? <Icon icon={option.icon}/> : null} {option.text}
         </Button>);
     },
     /**
@@ -59,10 +59,10 @@ var NPanelFooter = React.createClass({
             <div className="col-sm-6 col-md-6 col-lg-6">
                 <ButtonToolbar className="panel-footer panel-footer-left">
                     {this.props.reset ? this.renderButton({
-                        icon: "erase", text: "Reset", style: "warning", onClick: this.props.reset
+                        icon: "reply-all", text: "Reset", style: "warning", onClick: this.props.reset
                     }) : null}
                     {this.props.validate ? this.renderButton({
-                        icon: "check", text: "Validate", onClick: this.props.validate
+                        icon: "bug", text: "Validate", onClick: this.props.validate
                     }) : null}
                     {this.renderLeftButtons()}
                 </ButtonToolbar>
@@ -71,10 +71,10 @@ var NPanelFooter = React.createClass({
                 <ButtonToolbar className="panel-footer panel-footer-right">
                     {this.renderRightButtons()}
                     {this.props.save ? this.renderButton({
-                        icon: "floppy-save", text: "Save", style: "primary", onClick: this.props.save
+                        icon: "floppy-o", text: "Save", style: "primary", onClick: this.props.save
                     }) : null}
                     {this.props.cancel ? this.renderButton({
-                        icon: "trash", text: "Cancel", style: "danger", onClick: this.props.cancel
+                        icon: "trash-o", text: "Cancel", style: "danger", onClick: this.props.cancel
                     }) : null}
                 </ButtonToolbar>
             </div>

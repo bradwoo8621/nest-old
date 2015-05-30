@@ -30,7 +30,7 @@ var NPageHeader = React.createClass({
                            placeholder={this.props.searchPlaceholder}/>
                         <span className="input-group-btn">
                             <button className="btn btn-default" type="button" onClick={this.onSearchClicked}>
-                                <span className="glyphicon glyphicon-search" aria-hidden="true"/>
+                                <Icon icon="search"/>
                             </button>
                         </span>
                 </div>

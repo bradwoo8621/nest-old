@@ -114,6 +114,10 @@ var ModelUtil = jsface.Class({
                     this.__model = ModelUtil.cloneJSON(model);
                     this.__validator = objectValidator;
                     this.__validateResults = {};
+                    this.__changed = false;
+                },
+                isChanged: function () {
+                    return this.__changed;
                 },
                 /**
                  * get original model
@@ -142,6 +146,7 @@ var ModelUtil = jsface.Class({
                         return;
                     }
                     this.__model[id] = value;
+                    this.__changed = true;
                     this.fireEvent({
                         id: id,
                         old: oldValue,
@@ -231,6 +236,7 @@ var ModelUtil = jsface.Class({
                 reset: function () {
                     this.__model = ModelUtil.cloneJSON(this.__base);
                     this.__validateResults = {};
+                    this.__changed = false;
                 },
                 /**
                  * validate
@@ -310,6 +316,7 @@ var ModelUtil = jsface.Class({
                     });
                     if (index != -1) {
                         data.splice(index, 1);
+                        this.__changed = true;
                         this.fireEvent({
                             id: id,
                             array: data, // after remove
@@ -338,6 +345,7 @@ var ModelUtil = jsface.Class({
                     });
                     if (index == -1) {
                         data.push(row);
+                        this.__changed = true;
                         this.fireEvent({
                             id: id,
                             array: data,    // after add
@@ -365,6 +373,7 @@ var ModelUtil = jsface.Class({
                     })
                     if (index != -1) {
                         data.splice(index, 1, _new);
+                        this.__changed = true;
                         this.fireEvent({
                             id: id,
                             array: data, // after update
@@ -1065,3 +1074,18 @@ var TableValidationResult = jsface.Class({
         return null;
     }
 });
+
+// object definition
+var _$ = {
+    ComponentConstants: ComponentConstants,
+    CodeTableSorter: CodeTableSorter,
+    CodeTable: CodeTable,
+    FormLayout: FormLayout,
+    RowLayout: RowLayout,
+    CellLayout: CellLayout,
+    TableColumnLayout: TableColumnLayout,
+    ModelValidator: ModelValidator,
+    ModelUtil: ModelUtil,
+    ValidateRules: ValidateRules,
+    TableValidationResult: TableValidationResult
+};

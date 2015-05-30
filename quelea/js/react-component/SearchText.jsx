@@ -11,7 +11,7 @@ var NSearchText = React.createClass(ComponentDefine({
     getDefaultProps: function () {
         return {
             defaultOptions: {
-                searchButtonIcon: "screenshot",
+                searchButtonIcon: "check",
                 advancedSearchButtonIcon: "search"
             }
         };
@@ -62,10 +62,10 @@ var NSearchText = React.createClass(ComponentDefine({
             <input type="text" className={this.getCombineCSS("form-control search-label", "label")}
                    readOnly={true} onFocus={this.onLabelFocused}/>
             <span className="input-group-addon search-btn" onClick={this.onSearchClicked}>
-                <Glyphicon glyph={this.getComponentOption("searchButtonIcon")}/>
+                <Icon icon={this.getComponentOption("searchButtonIcon")}/>
             </span>
             <span className="input-group-addon advanced-search-btn" onClick={this.onAdvancedSearchClicked}>
-                <Glyphicon glyph={this.getComponentOption("advancedSearchButtonIcon")}/>
+                <Icon icon={this.getComponentOption("advancedSearchButtonIcon")}/>
             </span>
         </div>);
     },

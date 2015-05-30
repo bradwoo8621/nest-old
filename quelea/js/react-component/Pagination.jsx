@@ -95,7 +95,7 @@ var NPagination = React.createClass({
         }
         return (<li className={className}>
             <a href="javascript:void(0);" aria-label="First" onClick={this.toFirst}>
-                <Glyphicon glyph="fast-backward"/>
+                <Icon icon="fast-backward"/>
             </a>
         </li>);
     },
@@ -111,7 +111,7 @@ var NPagination = React.createClass({
         }
         return (<li className={className}>
             <a href="javascript:void(0);" aria-label="PreviousSection" onClick={this.toPreviousSection}>
-                <Glyphicon glyph="backward"/>
+                <Icon icon="backward"/>
             </a>
         </li>);
     },
@@ -127,7 +127,7 @@ var NPagination = React.createClass({
         }
         return (<li className={className}>
             <a href="javascript:void(0);" aria-label="Previous" onClick={this.toPrevious}>
-                <Glyphicon glyph="chevron-left"/>
+                <Icon icon="chevron-left"/>
             </a>
         </li>);
     },
@@ -164,7 +164,7 @@ var NPagination = React.createClass({
         }
         return (<li className={className}>
             <a href="javascript:void(0);" aria-label="Next" onClick={this.toNext}>
-                <Glyphicon glyph="chevron-right"/>
+                <Icon icon="chevron-right"/>
             </a>
         </li>);
     },
@@ -180,7 +180,7 @@ var NPagination = React.createClass({
         }
         return (<li className={className}>
             <a href="javascript:void(0);" aria-label="NextSection" onClick={this.toNextSection}>
-                <Glyphicon glyph="forward"/>
+                <Icon icon="forward"/>
             </a>
         </li>);
     },
@@ -196,7 +196,7 @@ var NPagination = React.createClass({
         }
         return (<li className={className}>
             <a href="javascript:void(0);" aria-label="Last" onClick={this.toLast}>
-                <Glyphicon glyph="fast-forward"/>
+                <Icon icon="fast-forward"/>
             </a>
         </li>);
     },

@@ -353,7 +353,6 @@ a.n-checkbox {
 
 a.n-checkbox > span {
     color: #9d9d9d;
-    font-size: 16px;
 }
 
 /* panel footer */
@@ -627,10 +626,14 @@ div.input-group.search-text > span.input-group-addon.search-btn {
     border-right: 1px solid #ccc;
 }
 
+/** icon style */
+span.fa.fa-middle {
+    vertical-align: middle;
+}
+
 /** error styles */
 span.required {
     color: #a94442;
-    font-size: 80%;
 }
 
 div.has-error > label {

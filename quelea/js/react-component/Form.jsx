@@ -192,7 +192,7 @@ var NFormCell = React.createClass(ComponentDefine({
                 css += " has-error";
             }
             var requiredLabel = this.getModel().isRequired(this.getId()) ?
-                (<Glyphicon glyph="asterisk" bsSize="xsmall" className="required"/>) : null;
+                (<Icon icon="star" fixWidth={true} iconClassName="required"/>) : null;
             return (<div className={css}>
                 <label htmlFor={this.getId()}
                        className={this.getLayout().getLabelCSS()}

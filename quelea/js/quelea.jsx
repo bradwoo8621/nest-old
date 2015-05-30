@@ -173,10 +173,19 @@
          * on party save clicked
          */
         onPartySaveClicked: function () {
-            // TODO
-            this.confirmDialog.show("Demo Event Handler",
-                ["Party Save Button Clicked"], function () {
-                }.bind(this));
+            this.onValidateClicked();
+            if (this.model.hasError()) {
+                this.confirmDialog.show("Validation Failed",
+                    {
+                        disableConfirm: true,
+                        messages: "Correct your input please.",
+                        close: true
+                    });
+            } else {
+                // TODO
+                this.confirmDialog.show("Demo Event Handler",
+                    ["Party Save Button Clicked"]);
+            }
         },
         /**
          * on party search clicked
@@ -200,7 +209,7 @@
          * @param func
          */
         swtichPage: function (func) {
-            if (this.model != null) {
+            if (this.model != null && this.model.isChanged()) {
                 // something editing
                 this.confirmDialog.show("Page Jumping",
                     ["Are you sure to jump to another page?",

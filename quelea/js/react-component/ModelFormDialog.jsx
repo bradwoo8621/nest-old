@@ -48,7 +48,7 @@ var NModalForm = React.createClass({
         }
 
         return (<Modal className={this.props.css} title={this.props.title}
-                       onRequestHide={this.hide} backdrop="static">
+                       closeButton={false} backdrop="static">
             <div className="modal-body" ref="body">
                 <NForm model={this.getModel()} layout={this.getLayout()} ref="form"/>
             </div>

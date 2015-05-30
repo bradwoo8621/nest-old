@@ -136,7 +136,7 @@ var NDateTime = React.createClass(ComponentDefine({
         return (<div className={this.getCombineCSS("input-group", "div")} id={this.getDivId()}>
             <input id={this.getId()} type='text' className={this.getComponentCSS("form-control")}/>
             <span className="input-group-addon">
-                <Glyphicon glyph="calendar"/>
+                <Icon icon="calendar"/>
             </span>
         </div>);
     },

@@ -1,7 +1,7 @@
 /**
  * table
  */
-var NTable = React.createClass({
+var NTable = React.createClass(ComponentDefine({
     propTypes: {
         // model
         model: React.PropTypes.object,
@@ -68,10 +68,10 @@ var NTable = React.createClass({
      */
     componentWillUpdate: function (nextProps) {
         $("#" + this.getHeaderLabelId()).popover("destroy");
-        this.getModel().removeListener(this.getId(), "post", "add", this.onModelChange);
-        this.getModel().removeListener(this.getId(), "post", "remove", this.onModelChange);
-        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
-        this.getModel().removeListener(this.getId(), "post", "validate", this.onModelValidateChange);
+        this.removePostChangeListener(this.onModelChange);
+        this.removePostRemoveListener(this.onModelChange);
+        this.removePostAddListener(this.onModelChange);
+        this.removePostValidateListener(this.onModelValidateChange);
     },
     /**
      * did update
@@ -81,10 +81,10 @@ var NTable = React.createClass({
     componentDidUpdate: function (prevProps, prevState) {
         this.renderIfIE8();
         this.renderHeaderPopover();
-        this.getModel().addListener(this.getId(), "post", "add", this.onModelChange);
-        this.getModel().addListener(this.getId(), "post", "remove", this.onModelChange);
-        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
-        this.getModel().addListener(this.getId(), "post", "validate", this.onModelValidateChange);
+        this.addPostChangeListener(this.onModelChange);
+        this.addPostRemoveListener(this.onModelChange);
+        this.addPostAddListener(this.onModelChange);
+        this.addPostValidateListener(this.onModelValidateChange);
     },
     /**
      * did mount
@@ -92,21 +92,24 @@ var NTable = React.createClass({
     componentDidMount: function () {
         this.createComponent();
         this.renderHeaderPopover();
-        this.getModel().addListener(this.getId(), "post", "add", this.onModelChange);
-        this.getModel().addListener(this.getId(), "post", "remove", this.onModelChange);
-        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
-        this.getModel().addListener(this.getId(), "post", "validate", this.onModelValidateChange);
+        this.addPostChangeListener(this.onModelChange);
+        this.addPostRemoveListener(this.onModelChange);
+        this.addPostAddListener(this.onModelChange);
+        this.addPostValidateListener(this.onModelValidateChange);
     },
     /**
      * will unmount
      */
     componentWillUnmount: function () {
         $("#" + this.getHeaderLabelId()).popover("destroy");
-        this.getModel().removeListener(this.getId(), "post", "add", this.onModelChange);
-        this.getModel().removeListener(this.getId(), "post", "remove", this.onModelChange);
-        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
-        this.getModel().removeListener(this.getId(), "post", "validate", this.onModelValidateChange);
+        this.removePostChangeListener(this.onModelChange);
+        this.removePostRemoveListener(this.onModelChange);
+        this.removePostAddListener(this.onModelChange);
+        this.removePostValidateListener(this.onModelValidateChange);
     },
+    /**
+     * create component
+     */
     createComponent: function () {
         var _this = this;
         this.renderIfIE8();
@@ -1102,48 +1105,6 @@ var NTable = React.createClass({
         this.setState({currentPageIndex: pageIndex});
     },
     /**
-     * get component
-     * @returns {*|jQuery|HTMLElement}
-     */
-    getComponent: function () {
-        return $("#" + this.getId());
-    },
-    /**
-     * get model
-     * @returns {*}
-     */
-    getModel: function () {
-        return this.props.model;
-    },
-    /**
-     * get value from model
-     * @returns {*}
-     */
-    getValueFromModel: function () {
-        return this.getModel().get(this.getId());
-    },
-    /**
-     * set value to model
-     * @param value
-     */
-    setValueToModel: function (value) {
-        this.getModel().set(this.getId(), value);
-    },
-    /**
-     * get layout
-     * @returns {CellLayout}
-     */
-    getLayout: function () {
-        return this.props.layout;
-    },
-    /**
-     * get id of component
-     * @returns {string}
-     */
-    getId: function () {
-        return this.getLayout().getId();
-    },
-    /**
      * get div id
      * @returns {string}
      */
@@ -1184,26 +1145,5 @@ var NTable = React.createClass({
      */
     getFixedRightBodyDivId: function () {
         return "ntable-scrolled-right-body-" + this.getId();
-    },
-    /**
-     * get combine css
-     * @param originalCSS css class names
-     * @param additionalKey key of additional css in layout
-     * @returns {*}
-     */
-    getCombineCSS: function (originalCSS, additionalKey) {
-        var additionalCSS = this.getLayout().getAdditionalCSS(additionalKey);
-        return additionalCSS.length == 0 ? originalCSS : (originalCSS + " " + additionalCSS);
-    },
-    /**
-     * get option
-     * @param key
-     */
-    getComponentOption: function (key) {
-        var option = this.getLayout().getComponentOption(key);
-        if (option == null) {
-            option = this.props.defaultOptions[key];
-        }
-        return option === undefined ? null : option;
     }
-});
+}));

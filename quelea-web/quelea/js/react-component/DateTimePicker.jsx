@@ -1,7 +1,7 @@
 /**
  * datetime picker, see datetimepicker from bootstrap
  */
-var NDateTime = React.createClass({
+var NDateTime = React.createClass(ComponentDefine({
     propTypes: {
         // model
         model: React.PropTypes.object,
@@ -50,7 +50,7 @@ var NDateTime = React.createClass({
      */
     componentWillUpdate: function (nextProps) {
         // remove post change listener to handle model change
-        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
+        this.removePostChangeListener(this.onModelChange);
     },
     /**
      * overrride react method
@@ -61,7 +61,7 @@ var NDateTime = React.createClass({
     componentDidUpdate: function (prevProps, prevState) {
         this.getComponent().data("DateTimePicker").date(this.getValueFromModel());
         // add post change listener
-        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
+        this.addPostChangeListener(this.onModelChange);
     },
     /**
      * override react method
@@ -71,7 +71,7 @@ var NDateTime = React.createClass({
         this.createComponent();
         this.getComponent().data("DateTimePicker").date(this.getValueFromModel());
         // add post change listener
-        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
+        this.addPostChangeListener(this.onModelChange);
     },
     /**
      * override react method
@@ -79,7 +79,7 @@ var NDateTime = React.createClass({
      */
     componentWillUnmount: function () {
         // remove post change listener
-        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
+        this.removePostChangeListener(this.onModelChange);
     },
     /**
      * create component
@@ -133,8 +133,8 @@ var NDateTime = React.createClass({
      * @returns {XML}
      */
     render: function () {
-        return (<div className={this.getDivCSS()} id={this.getDivId()}>
-            <input id={this.getId()} type='text' className={this.getCSS()}/>
+        return (<div className={this.getCombineCSS("input-group", "div")} id={this.getDivId()}>
+            <input id={this.getId()} type='text' className={this.getComponentCSS("form-control")}/>
             <span className="input-group-addon">
                 <Glyphicon glyph="calendar"/>
             </span>
@@ -158,20 +158,15 @@ var NDateTime = React.createClass({
     /**
      * get component
      * @returns {*|jQuery|HTMLElement}
+     * @override
      */
     getComponent: function () {
         return $("#" + this.getDivId());
     },
     /**
-     * get model
-     * @returns {*}
-     */
-    getModel: function () {
-        return this.props.model;
-    },
-    /**
      * get value from model
      * @returns {*}
+     * @override
      */
     getValueFromModel: function () {
         return this.convertValueFromModel(this.getModel().get(this.getId()));
@@ -179,6 +174,7 @@ var NDateTime = React.createClass({
     /**
      * set value to model
      * @param value
+     * @override
      */
     setValueToModel: function (value) {
         value = value == null ? null : value.format(this.getComponentOption("valueFormat"));
@@ -193,38 +189,10 @@ var NDateTime = React.createClass({
         return value == null ? null : moment(value, this.getComponentOption("valueFormat"));
     },
     /**
-     * get layout
-     * @returns {CellLayout}
-     */
-    getLayout: function () {
-        return this.props.layout;
-    },
-    /**
-     * get id of component
-     * @returns {string}
-     */
-    getId: function () {
-        return this.getLayout().getId();
-    },
-    /**
      * get div id
      * @returns {string}
      */
     getDivId: function () {
         return "div_" + this.getId();
-    },
-    /**
-     * get div css
-     * @returns {string}
-     */
-    getDivCSS: function () {
-        return this.getLayout().getAdditionalCSS("div", "input-group");
-    },
-    /**
-     * get component css
-     * @returns {string}
-     */
-    getCSS: function () {
-        return this.getLayout().getAdditionalCSS("comp", "form-control");
     }
-});
+}));

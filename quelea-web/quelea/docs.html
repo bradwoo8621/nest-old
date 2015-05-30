@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <title>Quelea Web - User Manual</title>
     <!-- bootstrap css -->
-    <link rel="stylesheet" href="bootstrap-3.3.4/css/bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap-3.3.4/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="codemirror-5.3/codemirror.css">
-    <link rel="stylesheet" href="codemirror-5.3/theme/solarized.css">
-    <link rel="stylesheet" href="quelea.css">
+    <link rel="stylesheet" href="js/bootstrap-3.3.4/css/bootstrap.min.css">
+    <link rel="stylesheet" href="js/bootstrap-3.3.4/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="js/codemirror-5.3/codemirror.css">
+    <link rel="stylesheet" href="js/codemirror-5.3/theme/solarized.css">
+    <link rel="stylesheet" href="css/docs.css">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-    <script src="html5shiv-3.7.2/html5shiv.min.js"></script>
-    <script src="html5shiv-3.7.2/html5shiv-printshiv.min.js"></script>
-    <script src="es5-sham-4.1.3/es5-shim.min.js"></script>
-    <script src="es5-sham-4.1.3/es5-sham.min.js"></script>
-    <script src="respond-1.4.2/respond.min.js"></script>
+    <script src="js/html5shiv-3.7.2/html5shiv.min.js"></script>
+    <script src="js/html5shiv-3.7.2/html5shiv-printshiv.min.js"></script>
+    <script src="js/es5-sham-4.1.3/es5-shim.min.js"></script>
+    <script src="js/es5-sham-4.1.3/es5-sham.min.js"></script>
+    <script src="js/respond-1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
 <body>
@@ -56,14 +56,19 @@
                 <li><a href="#components.form">2.13 Form</a></li>
                 <li><a href="#components.formdialog">2.14 Modal Form Dialog</a></li>
             </ul>
-            <li><a href="#event">4. Event Model</a></li>
+            <li><a href="#event">3. Event Mechanism</a></li>
             <ul>
-                <li><a href="#event.change">4.1 Change</a></li>
-                <li><a href="#event.add">4.2 Add</a></li>
-                <li><a href="#event.remove">4.3 Remove</a></li>
-                <li><a href="#event.validate">4.4 Validate</a></li>
+                <li><a href="#event.change">3.1 Change</a></li>
+                <li><a href="#event.add">3.2 Add</a></li>
+                <li><a href="#event.remove">3.3 Remove</a></li>
+                <li><a href="#event.validate">3.4 Validate</a></li>
             </ul>
-            <li><a href="#customize">5. Customize Component</a></li>
+            <li><a href="#customize">4. Customize Component</a></li>
+            <ul>
+                <li><a href="#customize.do">4.1 DO</a></li>
+                <li><a href="#customize.donot">4.2 DO NOT</a></li>
+            </ul>
+            <li><a href="#next">98. Next Features</a></li>
             <li><a href="#appendix">99. Appendix</a></li>
         </ul>
     </div>
@@ -358,7 +363,10 @@ React.render(form, document.getElementById("container"));</pre>
     label: "Text",
     comp: {
         type: ComponentConstants.Text, // optional, default is ComponentConstants.Text
-        enabled: function(model, value) {return false;} // optional, component is enabled if this property not exists
+        enabled: {
+            when: function(model, value) {return false;} // optional, component is enabled if this property not exists
+            depends: "otherPropertyId"
+        }
     },
     pos: {},
     css: {
@@ -846,22 +854,104 @@ hide: function () {};
  * show dialog
  * @param model created by ModelUtil.createModel();
  * @param layout FormLayout
- * @param buttons
+ * @param buttons refers to PanelFooter
  */
 show: function (model, layout, buttons) {};
 </pre>
     </div>
-    <h1 id="#event"><a class="anchor" name="event"></a>4. Event Model</h1>
+    <h1 id="#event"><a class="anchor" name="event"></a>3. Event Mechanism</h1>
 
-    <h3 id="#event.change"><a class="anchor" name="event.change"></a>4.1 Change</h3>
+    <div class="content">
+        There are four event provided by Quelea Web, and currently only be invoked when <code>post</code> event.
+    </div>
 
-    <h3 id="#event.add"><a class="anchor" name="event.add"></a>4.2 Add</h3>
+    <h3 id="#event.change"><a class="anchor" name="event.change"></a>3.1 Change</h3>
 
-    <h3 id="#event.remove"><a class="anchor" name="event.remove"></a>4.3 Remove</h3>
+    <div class="content">
+        Event invokes when value of model changed. Monitor event via <code>addListener</code>
+    </div>
+    <div class="example">
+        <div class="title">Example 23. Change Event</div>
+        <pre class="javascript">model.addListener("name", "post", "change", listener);
+model.removeListener("name", "post", "change", listener);</pre>
+    </div>
 
-    <h3 id="#event.validate"><a class="anchor" name="event.validate"></a>4.4 Validate</h3>
+    <h3 id="#event.add"><a class="anchor" name="event.add"></a>3.2 Add</h3>
 
-    <h1 id="#customize"><a class="anchor" name="customize"></a>5. Customize Component</h1>
+    <div class="content">
+        Event invokes when item of value added, only table property invokes this event. Monitor event via <code>addListener</code>
+    </div>
+    <div class="example">
+        <div class="title">Example 24. Add Event</div>
+        <pre class="javascript">model.addListener("table", "post", "add", listener);
+model.removeListener("table", "post", "add", listener);</pre>
+    </div>
+
+    <h3 id="#event.remove"><a class="anchor" name="event.remove"></a>3.3 Remove</h3>
+
+    <div class="content">
+        Event invokes when item of value removed, only table property invokes this event. Monitor event via <code>addListener</code>
+    </div>
+    <div class="example">
+        <div class="title">Example 24. Add Event</div>
+        <pre class="javascript">model.addListener("table", "post", "remove", listener);
+model.removeListener("table", "post", "remove", listener);</pre>
+    </div>
+
+    <h3 id="#event.validate"><a class="anchor" name="event.validate"></a>3.4 Validate</h3>
+
+    <div class="content">
+        Event invokes when finished property validation of model. Monitor event via <code>addListener</code>
+    </div>
+    <div class="example">
+        <div class="title">Example 23. Change Event</div>
+        <pre class="javascript">model.addListener("name", "post", "validate", listener);
+model.removeListener("name", "post", "validate", listener);</pre>
+    </div>
+
+    <h1 id="#customize"><a class="anchor" name="customize"></a>4. Customize Component</h1>
+
+    <h3 id="#customize.do"><a class="anchor" name="customize.do"></a>4.1 DO</h3>
+
+    <div class="content">
+        <ul class="level0">
+            <li>Base methods of component are provided in <code>base.js</code>, call <code>ComponentDefine</code> to
+                initialize the component definition, each method of <code>ComponentBase</code> can be override.
+            </li>
+
+            <li>Add and remove listeners in <code>componentWillUpdate</code>, <code>componentDidUpdate</code>, <code>componentDidMount</code>,
+                <code>componentWillUnmount</code>. Call <code>forceUpdate</code> when want to refresh the component.
+            </li>
+
+            <li>Add constants value into <code>ComponentConstants</code>. Add render method into <code>NFormCell</code>
+                at <code>Form.jsx</code>.
+            </li>
+            <li>Extend layout configuration as you want, it's unlimited. But follow the rules:
+                <ul>
+                    <li>Component options is under <code>comp</code>.</li>
+                    <li>CSS class names is under <code>css</code></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <h3 id="#customize.donot"><a class="anchor" name="customize.donot"></a>4.2 DO NOT</h3>
+
+    <div>
+        <ul>
+            <li>Monitor DOM element event out of component.</li>
+            <li>Confuse <code>this</code>.</li>
+        </ul>
+    </div>
+
+    <h1 id="#next"><a class="anchor" name="appendix"></a>98. Next Features</h1>
+    <h4>V0.0.1</h4>
+    <ul class="level0">
+        <li>Finish the <code>NSearchText</code>.</li>
+        <li>Add <code>enabled</code>, <code>visible</code>, <code>readonly</code> support.</li>
+        <li>Add dynamic data support of <code>NTable</code>.</li>
+        <li>Add dynamic data support of <code>NSelect</code>.</li>
+        <li>Add ajax mock service mechanism.</li>
+    </ul>
 
     <h1 id="#appendix"><a class="anchor" name="appendix"></a>99. Appendix</h1>
     <dl>
@@ -881,12 +971,12 @@ show: function (model, layout, buttons) {};
     </dl>
 </div>
 <!-- bootstrap -->
-<script src="jquery/jquery-2.1.4.min.js"></script>
-<script src="jquery/jquery.browser-0.0.7.min.js"></script>
-<script src="bootstrap-3.3.4/js/bootstrap.min.js"></script>
-<script src="bootstrap-3.3.4/js/ie10-viewport-bug-workaround.js"></script>
-<script src="codemirror-5.3/codemirror.js"></script>
-<script src="codemirror-5.3/javascript.js"></script>
+<script src="js/jquery/jquery-2.1.4.min.js"></script>
+<script src="js/jquery/jquery.browser-0.0.7.min.js"></script>
+<script src="js/bootstrap-3.3.4/js/bootstrap.min.js"></script>
+<script src="js/bootstrap-3.3.4/js/ie10-viewport-bug-workaround.js"></script>
+<script src="js/codemirror-5.3/codemirror.js"></script>
+<script src="js/codemirror-5.3/javascript.js"></script>
 <script>
     $('.javascript').each(function () {
         var $this = $(this), $code = $this.text();

@@ -329,11 +329,12 @@ var LayoutDefine = {
                     cardSecurityNumber: {
                         label: "Security Code",
                         comp: {
-                            enabled: function (model, value) {
-                                return model.getCreditCard() == true;
+                            enabled: {
+                                when: function (model, value) {
+                                    return model.getCreditCard() == true;
+                                },
+                                depends: "creditCard"
                             }
-                            // TODO just a sample, not supported yet
-                            /* depends: "creditCard" */
                         },
                         pos: {col: 2, row: 3}
                     },

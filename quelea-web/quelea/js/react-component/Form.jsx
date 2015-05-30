@@ -44,7 +44,7 @@ var NForm = React.createClass({
 /**
  * form cell component
  */
-var NFormCell = React.createClass({
+var NFormCell = React.createClass(ComponentDefine({
     propTypes: {
         // model, whole model, not only for this cell
         // use id to get the value of this cell from model
@@ -58,8 +58,8 @@ var NFormCell = React.createClass({
      */
     componentWillUpdate: function (nextProps) {
         $("#" + this.getLabelId()).popover("destroy");
-        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
-        this.getModel().removeListener(this.getId(), "post", "validate", this.onModelValidateChange);
+        this.removePostChangeListener(this.onModelChange);
+        this.removePostValidateListener(this.onModelValidateChange);
     },
     /**
      * did update
@@ -68,24 +68,24 @@ var NFormCell = React.createClass({
      */
     componentDidUpdate: function (prevProps, prevState) {
         this.renderPopover();
-        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
-        this.getModel().addListener(this.getId(), "post", "validate", this.onModelValidateChange);
+        this.addPostChangeListener(this.onModelChange);
+        this.addPostValidateListener(this.onModelValidateChange);
     },
     /**
      * did mount
      */
     componentDidMount: function () {
         this.renderPopover();
-        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
-        this.getModel().addListener(this.getId(), "post", "validate", this.onModelValidateChange);
+        this.addPostChangeListener(this.onModelChange);
+        this.addPostValidateListener(this.onModelValidateChange);
     },
     /**
      * will unmount
      */
     componentWillUnmount: function () {
         $("#" + this.getLabelId()).popover("destroy");
-        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
-        this.getModel().removeListener(this.getId(), "post", "validate", this.onModelValidateChange);
+        this.removePostChangeListener(this.onModelChange);
+        this.removePostValidateListener(this.onModelValidateChange);
     },
     /**
      * render error popover
@@ -219,25 +219,12 @@ var NFormCell = React.createClass({
         // maybe will introduce performance issue, cannot sure now.
         this.forceUpdate();
     },
-    getId: function () {
-        return this.getLayout().getId();
-    },
+    /**
+     * get label id
+     * @returns {string}
+     */
     getLabelId: function () {
         return "nlabel-" + this.getId();
-    },
-    /**
-     * get model
-     * @returns {*}
-     */
-    getModel: function () {
-        return this.props.model;
-    },
-    /**
-     * get layout
-     * @returns {CellLayout}
-     */
-    getLayout: function () {
-        return this.props.layout;
     },
     /**
      * get css class
@@ -248,4 +235,4 @@ var NFormCell = React.createClass({
         var css = "col-sm-" + width + " col-md-" + width + " col-lg-" + width;
         return this.getLayout().getCellCSS(css);
     }
-});
+}));

@@ -684,10 +684,17 @@ hide: function () {};
 /**
  * show dialog
  * @param title title of dialog
- * @param messages string or string array.
+ * @param options string or string array, or object as below.
+ *          {
+ *              disableButtons: true, // hide button bar
+ *              disableConfirm: true, // hide confirm button
+ *              disableClose: true, // hide close button
+ *              messsages: "" // string or string array
+ *              close: true // show close button text as "close"
+ *          }
  * @param onConfirm callback function when confirm button clicked
  */
-show: function (title, messages, onConfirm) {};
+show: function (title, options, onConfirm) {};
 </pre>
     </div>
 

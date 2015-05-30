@@ -6,11 +6,18 @@ var NConfirm = React.createClass({
         css: React.PropTypes.string,
         zIndex: React.PropTypes.number
     },
+    getDefaultProps: function () {
+        return {
+            confirmText: "OK",
+            closeText: "Close",
+            cancelText: "Cancel"
+        };
+    },
     getInitialState: function () {
         return {
             visible: false,
             title: null,
-            messages: null,
+            options: null,
             onConfirm: null
         };
     },
@@ -41,6 +48,63 @@ var NConfirm = React.createClass({
         this.setZIndex();
     },
     /**
+     * render confirm button
+     * @returns {XML}
+     */
+    renderConfirmButton: function () {
+        if (this.state.options && this.state.options.disableConfirm) {
+            return null;
+        }
+        return (<Button bsStyle="danger" onClick={this.onConfirmClicked}>
+            <Icon icon="check"/> {this.props.confirmText}
+        </Button>);
+    },
+    /**
+     * render close button
+     * @returns {XML}
+     */
+    renderCloseButton: function () {
+        if (this.state.options && this.state.options.disableClose) {
+            return null;
+        }
+        var text = (this.state.options && this.state.options.close) ? this.props.closeText : this.props.cancelText;
+        return (<Button onClick={this.hide}>
+            <Icon icon="times-circle"/> {text}
+        </Button>);
+    },
+    /**
+     * render footer
+     * @returns {XML}
+     */
+    renderFooter: function () {
+        if (this.state.options && this.state.options.disableButtons) {
+            return null;
+        }
+        return (<div className="modal-footer">
+            {this.renderConfirmButton()}
+            {this.renderCloseButton()}
+        </div>);
+    },
+    /**
+     * render content
+     */
+    renderContent: function () {
+        var messages = this.state.options;
+        if (typeof messages === "string") {
+            messages = [messages];
+        }
+        if (!Array.isArray(messages)) {
+            messages = messages.messages;
+            if (typeof messages === "string") {
+                messages = [messages];
+            }
+        }
+        // string array
+        return messages.map(function (element) {
+            return <h5>{element}</h5>;
+        });
+    },
+    /**
      * render
      * @returns {*}
      */
@@ -49,28 +113,19 @@ var NConfirm = React.createClass({
             return null;
         }
 
-        var messages = this.state.messages;
-        if (!Array.isArray(messages)) {
-            messages = [this.state.messages];
-        }
         return (<Modal className={this.props.css} bsStyle="danger" title={this.state.title}
                        onRequestHide={this.hide} backdrop="static">
             <div className="modal-body" ref="body">
-                {messages.map(function (element) {
-                    return <h5>{element}</h5>;
-                })}
+                {this.renderContent()}
             </div>
-            <div className="modal-footer">
-                <Button bsStyle="danger" onClick={this.onConfirmClicked}>OK</Button>
-                <Button onClick={this.hide}>Cancel</Button>
-            </div>
+            {this.renderFooter()}
         </Modal>);
     },
     /**
      * hide dialog
      */
     hide: function () {
-        this.setState({visible: false});
+        this.setState({visible: false, title: null, options: null, onConfirm: null});
     },
     /**
      * on confirm clicked
@@ -83,15 +138,22 @@ var NConfirm = React.createClass({
     },
     /**
      * show dialog
-     * @param title
-     * @param messages
-     * @param onConfirm
+     * @param title title of dialog
+     * @param options string or string array, or object as below.
+     *          {
+     *              disableButtons: true, // hide button bar
+     *              disableConfirm: true, // hide confirm button
+     *              disableClose: true, // hide close button
+     *              messsages: "", // string or string array,
+     *              close: true // show close button text as "close"
+     *          }
+     * @param onConfirm callback function when confirm button clicked
      */
-    show: function (title, messages, onConfirm) {
+    show: function (title, options, onConfirm) {
         var state = {
             visible: true,
             title: title,
-            messages: messages,
+            options: options,
             onConfirm: onConfirm
         };
         this.setState(state);

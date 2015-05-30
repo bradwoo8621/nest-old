@@ -44,12 +44,12 @@ var NCheck = React.createClass(ComponentDefine({
         this.removePostChangeListener(this.onModelChange);
     },
     /**
-     * render check box, using glyphicon instead
+     * render check box, using font awesome instead
      * @returns {XML}
      */
     renderCheckbox: function () {
         return (<a href="javascript:void(0);" onClick={this.handleHrefClicked} className="n-checkbox">
-            <Glyphicon glyph={this.isChecked() ? "check" : "unchecked"} bsSize="large"/>
+            <Icon icon={this.isChecked() ? "check-square-o" : "square-o"} size="lg"/>
         </a>);
     },
     /**

@@ -615,13 +615,13 @@ var ValidatorDefine = {
             before: {
                 rule: ["now", "dateOfDeregister"],
                 format: "YYYY/MM/DD", // optional, default is YYYY/MM/DD,
-                label: ["Now", "\"Date of Deregister\""] // optional, also an array if exists, with same length of rule property
+                label: ["Now", "\"Date of Deregistration\""] // optional, also an array if exists, with same length of rule property
             }
         },
         dateOfDeregister: {
             after: {
                 rule: "dateOfRegister",
-                label: "\"Date Of Register\""
+                label: "\"Date Of Registration\""
             }
             /* after : "dateOfRegister" */ // sugar, also support array and available for "before"
         },
@@ -648,7 +648,7 @@ var ValidatorDefine = {
     },
     IndividualPartyValidator: {
         dateOfBirth: {
-            requried: true,
+            required: true,
             before: {
                 rule: ["now", "dateOfDeath"],
                 format: "YYYY/MM/DD",

@@ -17,26 +17,26 @@ var NTable = React.createClass(ComponentDefine({
                 fixedLeftColumns: 0,
 
                 addable: true,
-                addButtonIcon: "plus-sign",
+                addButtonIcon: "plus-square-o",
                 addButtonText: "Add",
                 searchable: true,
                 searchPlaceholder: "Search...",
 
                 operationFixed: true,
                 editable: false,
-                rowEditButtonIcon: "pencil",
+                rowEditButtonIcon: "pencil-square-o",
                 removable: false,
-                rowRemoveButtonIcon: "remove",
+                rowRemoveButtonIcon: "trash-o",
                 editDialogSaveButtonText: "Save",
-                editDialogSaveButtonIcon: "floppy-save",
+                editDialogSaveButtonIcon: "floppy-o",
 
                 indexable: false,
                 indexFixed: true,
 
                 sortable: true,
                 sortIcon: "sort",
-                sortAscIcon: "sort-by-attributes",
-                sortDescIcon: "sort-by-attributes-alt",
+                sortAscIcon: "sort-amount-asc",
+                sortDescIcon: "sort-amount-desc",
 
                 pageable: false,
                 countPerPage: 20,
@@ -217,8 +217,8 @@ var NTable = React.createClass(ComponentDefine({
                 <ul className="n-table-heading-buttons pagination pull-right">
                     <li>
                         <a href="javascript:void(0);" onClick={this.onAddClicked}>
-                            <Glyphicon
-                                glyph={this.getComponentOption("addButtonIcon")}/> {this.getComponentOption("addButtonText")}
+                            <Icon
+                                icon={this.getComponentOption("addButtonIcon")}/> {this.getComponentOption("addButtonText")}
                         </a>
                     </li>
                 </ul>
@@ -305,7 +305,7 @@ var NTable = React.createClass(ComponentDefine({
             }
             return (<a href="javascript:void(0);" className={sortClass}
                        onClick={this.onSortClicked.bind(this, column)}>
-                <Glyphicon glyph={icon}/>
+                <Icon icon={icon}/>
             </a>);
         }
     },
@@ -353,12 +353,12 @@ var NTable = React.createClass(ComponentDefine({
         var editButton = column.editable ?
             (<Button bsSize="xsmall" bsStyle="link" onClick={this.onEditClicked.bind(this, data)}
                      className="n-table-op-btn">
-                <Glyphicon glyph={this.getComponentOption("rowEditButtonIcon")}/>
+                <Icon icon={this.getComponentOption("rowEditButtonIcon")} size="lg"/>
             </Button>) : null;
         var removeButton = column.removable ?
             (<Button bsSize="xsmall" bsStyle="link" onClick={this.onRemoveClicked.bind(this, data)}
                      className="n-table-op-btn">
-                <Glyphicon glyph={this.getComponentOption("rowRemoveButtonIcon")}/>
+                <Icon icon={this.getComponentOption("rowRemoveButtonIcon")} size="lg" iconClassName="fa-middle"/>
             </Button>) : null;
         return (<ButtonGroup className="n-table-op-btn-group">
             {editButton}

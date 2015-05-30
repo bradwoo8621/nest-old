@@ -1,7 +1,7 @@
 /**
  * select component, see select2 from jQuery
  */
-var NSelect = React.createClass({
+var NSelect = React.createClass(ComponentDefine({
     propTypes: {
         // model
         model: React.PropTypes.object,
@@ -36,7 +36,7 @@ var NSelect = React.createClass({
      * will update
      */
     componentWillUpdate: function (nextProps) {
-        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
+        this.removePostChangeListener(this.onModelChange);
         if (this.hasParent()) {
             // add post change listener into parent model
             this.getParentModel().removeListener(this.getParentPropertyId(), "post", "change", this.onParentModelChange);
@@ -63,7 +63,7 @@ var NSelect = React.createClass({
         // reset the value when component update
         this.getComponent().val(this.getValueFromModel()).trigger("change");
 
-        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
+        this.addPostChangeListener(this.onModelChange);
         if (this.hasParent()) {
             // remove post change listener from parent model
             this.getParentModel().addListener(this.getParentPropertyId(), "post", "change", this.onParentModelChange);
@@ -77,7 +77,7 @@ var NSelect = React.createClass({
     componentDidMount: function () {
         // Set up Select2
         this.createComponent();
-        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
+        this.addPostChangeListener(this.onModelChange);
         if (this.hasParent()) {
             // add post change listener into parent model
             this.getParentModel().addListener(this.getParentPropertyId(), "post", "change", this.onParentModelChange);
@@ -89,7 +89,7 @@ var NSelect = React.createClass({
      */
     componentWillUnmount: function () {
         // remove post change listener
-        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
+        this.removePostChangeListener(this.onModelChange);
         if (this.hasParent()) {
             // remove post change listener from parent model
             this.getParentModel().removeListener(this.getParentPropertyId(), "post", "change", this.onParentModelChange);
@@ -136,17 +136,6 @@ var NSelect = React.createClass({
      */
     convertDataOptions: function (options) {
         return Array.isArray(options) ? options : options.list();
-    },
-    /**
-     * get option
-     * @param key
-     */
-    getComponentOption: function (key) {
-        var option = this.getLayout().getComponentOption(key);
-        if (option == null) {
-            option = this.props.defaultOptions[key];
-        }
-        return option === undefined ? null : option;
     },
     /**
      * remove tooltip, which is default set by select2 component.
@@ -196,33 +185,12 @@ var NSelect = React.createClass({
         this.resetOptions({data: data});
     },
     /**
-     * get model
-     * @returns {*}
-     */
-    getModel: function () {
-        return this.props.model;
-    },
-    /**
      * get parent model
      * @returns {*}
      */
     getParentModel: function () {
         var parentModel = this.getComponentOption("parentModel");
         return parentModel == null ? this.getModel() : parentModel;
-    },
-    /**
-     * get value from model
-     * @returns {*}
-     */
-    getValueFromModel: function () {
-        return this.getModel().get(this.getId());
-    },
-    /**
-     * set value to model
-     * @param value
-     */
-    setValueToModel: function (value) {
-        this.getModel().set(this.getId(), value);
     },
     /**
      * get parent property value
@@ -232,39 +200,11 @@ var NSelect = React.createClass({
         return this.getParentModel().get(this.getParentPropertyId());
     },
     /**
-     * get layout
-     * @returns {CellLayout}
-     */
-    getLayout: function () {
-        return this.props.layout;
-    },
-    /**
-     * get id of component
-     * @returns {string}
-     */
-    getId: function () {
-        return this.getLayout().getId();
-    },
-    /**
      * get parent property id
      * @returns {string}
      */
     getParentPropertyId: function () {
         return this.getComponentOption("parentPropId");
-    },
-    /**
-     * get component
-     * @returns {*|jQuery|HTMLElement}
-     */
-    getComponent: function () {
-        return $("#" + this.getId());
-    },
-    /**
-     * get component css
-     * @returns {string}
-     */
-    getCSS: function () {
-        return this.getLayout().getAdditionalCSS("comp", "form-control");
     },
     /**
      * has parent or not
@@ -334,7 +274,7 @@ var NSelect = React.createClass({
             component.val("").trigger("change");
         }
     }
-});
+}));
 
 // to fix the select2 disabled property not work in IE8-10
 // provided by https://gist.github.com/cmcnulty/7036509

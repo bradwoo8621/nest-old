@@ -5,7 +5,7 @@ var NModalForm = React.createClass({
     propTypes: {
         title: React.PropTypes.string,
         css: React.PropTypes.string,
-        zIndex: React.PropTypes.number,
+        zIndex: React.PropTypes.number
     },
     getInitialState: function () {
         return {

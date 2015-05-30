@@ -328,12 +328,21 @@ var LayoutDefine = {
                     },
                     cardSecurityNumber: {
                         label: "Security Code",
+                        comp: {
+                            enabled: {
+                                when: function (model, value) {
+                                    return model.getCreditCard() == true;
+                                },
+                                depends: "creditCard"
+                            }
+                        },
                         pos: {col: 2, row: 3}
                     },
                     expiryDate: {
                         label: "Expiry Date",
                         comp: {
-                            type: ComponentConstants.Date
+                            type: ComponentConstants.Date,
+                            format: "YYYY/MM"
                         },
                         pos: {col: 3, row: 3}
                     },
@@ -626,7 +635,7 @@ var ValidatorDefine = {
                 line3: {maxlength: 50},
                 line4: {maxlength: 50},
                 line5: {maxlength: 50},
-                postcode: {maxlength: 6}
+                postcode: {length: 6}
             }
         },
         accounts: {

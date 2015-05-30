@@ -77,7 +77,6 @@ var ComponentConstants = {
     Text: "text",
     Select: "select",
     Check: "check",
-    Radio: "radio",
     Table: "table",
     Date: "date",
     Search: "search",
@@ -998,7 +997,11 @@ var ValidateRules = {
             var itemModel = ModelUtil.createModel(item, validator);
             itemModel.validate();
             var error = itemModel.getError();
-            results.push(item, error);
+            if (Object.keys(error).length != 0) {
+                results.push(item, error);
+            } else {
+                results.remove(item);
+            }
         }
 
         return results.hasError() ? results : true;

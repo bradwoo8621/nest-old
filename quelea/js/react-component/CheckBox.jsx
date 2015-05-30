@@ -1,7 +1,7 @@
 /**
  * checkbox
  */
-var NCheck = React.createClass({
+var NCheck = React.createClass(ComponentDefine({
     propTypes: {
         // model
         model: React.PropTypes.object,
@@ -14,7 +14,7 @@ var NCheck = React.createClass({
      */
     componentWillUpdate: function (nextProps) {
         // remove post change listener to handle model change
-        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
+        this.removePostChangeListener(this.onModelChange);
     },
     /**
      * did update
@@ -25,7 +25,7 @@ var NCheck = React.createClass({
         // set model value to component
         this.getComponent().prop("checked", this.getValueFromModel());
         // add post change listener to handle model change
-        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
+        this.addPostChangeListener(this.onModelChange);
     },
     /**
      * did mount
@@ -34,14 +34,14 @@ var NCheck = React.createClass({
         // set model value to component
         this.getComponent().prop("checked", this.getValueFromModel());
         // add post change listener to handle model change
-        this.getModel().addListener(this.getId(), "post", "change", this.onModelChange);
+        this.addPostChangeListener(this.onModelChange);
     },
     /**
      * will unmount
      */
     componentWillUnmount: function () {
         // remove post change listener to handle model change
-        this.getModel().removeListener(this.getId(), "post", "change", this.onModelChange);
+        this.removePostChangeListener(this.onModelChange);
     },
     /**
      * render check box, using glyphicon instead
@@ -57,7 +57,7 @@ var NCheck = React.createClass({
      * @returns {XML}
      */
     render: function () {
-        return (<div className={this.getCSS()}>
+        return (<div className={this.getComponentCSS("")}>
             <label>
                 {this.renderCheckbox()}
                 <input type="checkbox" id={this.getId()} style={{display: "none"}}
@@ -88,69 +88,10 @@ var NCheck = React.createClass({
         this.forceUpdate();
     },
     /**
-     * get component
-     * @returns {*|jQuery|HTMLElement}
-     */
-    getComponent: function () {
-        return $("#" + this.getId());
-    },
-    /**
-     * get model
-     * @returns {*}
-     */
-    getModel: function () {
-        return this.props.model;
-    },
-    /**
-     * get value from model
-     * @returns {*}
-     */
-    getValueFromModel: function () {
-        return this.getModel().get(this.getId());
-    },
-    /**
-     * set value to model
-     * @param value
-     */
-    setValueToModel: function (value) {
-        this.getModel().set(this.getId(), value);
-    },
-    /**
-     * get layout
-     * @returns {CellLayout}
-     */
-    getLayout: function () {
-        return this.props.layout;
-    },
-    /**
-     * get id of component
-     * @returns {string}
-     */
-    getId: function () {
-        return this.getLayout().getId();
-    },
-    /**
-     * get component css
-     * @returns {string}
-     */
-    getCSS: function () {
-        return this.getCombineCSS("", "comp");
-    },
-    /**
-     * get combine css
-     * @param originalCSS css class names
-     * @param additionalKey key of additional css in layout
-     * @returns {*}
-     */
-    getCombineCSS: function (originalCSS, additionalKey) {
-        var additionalCSS = this.getLayout().getAdditionalCSS(additionalKey);
-        return additionalCSS.length == 0 ? originalCSS : (originalCSS + " " + additionalCSS);
-    },
-    /**
      * is checked or not
      * @returns {boolean}
      */
     isChecked: function () {
         return this.getValueFromModel() === true;
     }
-});
+}));

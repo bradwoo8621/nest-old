@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
     <wb-module deploy-name="quelea-web">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/quelea" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="context-root" value="quelea"/>
+        <dependent-module archiveName="quelea-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/quelea/quelea">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="arcteryx-data-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/arcteryx-data/arcteryx-data">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="arcteryx-common-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/arcteryx-common/arcteryx-common">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="arcteryx-context-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/arcteryx-context/arcteryx-context">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="arcteryx-persistent-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/arcteryx-persistent/arcteryx-persistent">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/quelea-web/build/classes"/>
+        <property name="context-root" value="quelea-web"/>
     </wb-module>
 </project-modules>

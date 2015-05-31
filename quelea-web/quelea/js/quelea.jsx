@@ -184,7 +184,7 @@
             } else {
                 // TODO
                 this.confirmDialog.show("Demo Event Handler",
-                    ["Party Save Button Clicked"]);
+                    [JSON.stringify(this.model.getCurrentModel(), null, "\t")]);
             }
         },
         /**

@@ -13,6 +13,7 @@ import org.restlet.routing.Filter;
  * application
  * 
  * @author brad.wu
+ * @author yi.feng
  */
 public class Application extends JaxRsApplication {
 	private List<Filter> filters = null;

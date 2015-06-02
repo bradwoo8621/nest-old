@@ -12,7 +12,10 @@ import java.lang.annotation.Target;
 import org.springframework.context.annotation.Scope;
 
 /**
+ * flag the JaxRS resource
+ * 
  * @author brad.wu
+ * @author yi.feng
  */
 @Documented
 @Target({ ElementType.TYPE })

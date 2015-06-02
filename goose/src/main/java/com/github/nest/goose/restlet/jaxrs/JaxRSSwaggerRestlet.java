@@ -11,6 +11,7 @@ import org.restlet.Restlet;
  * JaxRS swagger restlet
  * 
  * @author brad.wu
+ * @author yi.feng
  */
 public abstract class JaxRSSwaggerRestlet extends Restlet {
 	private Application jaxRSApplication;

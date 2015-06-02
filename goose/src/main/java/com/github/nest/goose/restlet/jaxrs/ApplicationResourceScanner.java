@@ -20,6 +20,7 @@ import org.springframework.context.ApplicationContextAware;
  * resource scanner
  * 
  * @author brad.wu
+ * @author yi.feng
  */
 public class ApplicationResourceScanner extends Application implements ApplicationContextAware {
 	private Logger logger = LoggerFactory.getLogger(getClass());

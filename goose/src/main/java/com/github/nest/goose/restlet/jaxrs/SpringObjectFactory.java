@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContextAware;
  * application
  * 
  * @author brad.wu
+ * @author yi.feng
  */
 public class SpringObjectFactory implements ObjectFactory, ApplicationContextAware {
 	private ApplicationContext applicationContext;

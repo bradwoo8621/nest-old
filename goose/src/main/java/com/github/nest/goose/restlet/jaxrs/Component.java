@@ -20,6 +20,7 @@ import org.springframework.context.ApplicationContextAware;
  * component
  * 
  * @author brad.wu
+ * @author yi.feng
  */
 public class Component extends org.restlet.Component implements InitializingBean, ApplicationContextAware {
 	public static final String API = "api";

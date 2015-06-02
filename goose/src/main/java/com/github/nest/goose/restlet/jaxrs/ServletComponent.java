@@ -7,6 +7,7 @@ package com.github.nest.goose.restlet.jaxrs;
  * servlet component
  * 
  * @author brad.wu
+ * @author yi.feng
  */
 public class ServletComponent extends Component {
 	/**

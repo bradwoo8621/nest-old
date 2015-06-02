@@ -3,7 +3,12 @@
 	<name>quelea-web</name>
 	<comment></comment>
 	<projects>
+		<project>quelea</project>
+		<project>arcteryx-data</project>
+		<project>arcteryx-common</project>
+		<project>arcteryx-persistent</project>
 		<project>goose</project>
+		<project>arcteryx-context</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

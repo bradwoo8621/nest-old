@@ -11,15 +11,25 @@
 	</welcome-file-list>
 
 	<servlet>
-		<servlet-name>goose</servlet-name>
-		<servlet-class>com.github.nest.goose.SpringServlet</servlet-class>
+		<servlet-name>init</servlet-name>
+		<servlet-class>com.github.nest.goose.SpringInitServlet</servlet-class>
 		<init-param>
-			<param-name>spring.context.location</param-name>
-			<param-value>classpath:/com/github/nest/quelea/web/context.xml</param-value>
+			<param-name>spring.config.file</param-name>
+			<param-value>classpath:/com/github/nest/quelea/web/root.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet>
+		<servlet-name>quelea</servlet-name>
+		<servlet-class>com.github.nest.goose.restlet.jaxrs.SpringServlet</servlet-class>
+		<init-param>
+			<param-name>spring.context.id</param-name>
+			<param-value>quelea</param-value>
 		</init-param>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>goose</servlet-name>
+		<servlet-name>quelea</servlet-name>
 		<url-pattern>/app/*</url-pattern>
 	</servlet-mapping>
 </web-app>

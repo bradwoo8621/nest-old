@@ -39,7 +39,7 @@ public class Context {
 	 * 
 	 * @return
 	 */
-	public static synchronized ApplicationContext createApplicationContextByClassPath(String id,
+	public static synchronized ApplicationContext createContextByClassPath(String id,
 			String... configLocation) {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
 		if (id != null) {
@@ -58,7 +58,7 @@ public class Context {
 	 * 
 	 * @return
 	 */
-	public static synchronized ApplicationContext createApplicationContextByClassPath(ApplicationContext parent,
+	public static synchronized ApplicationContext createContextByClassPath(ApplicationContext parent,
 			String id, String... configLocation) {
 		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(configLocation, parent);
 		if (id != null) {

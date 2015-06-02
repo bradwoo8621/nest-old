@@ -95,43 +95,34 @@
 		</dependency>
 		<dependency>
 			<groupId>org.restlet.jee</groupId>
-			<artifactId>org.restlet.ext.spring</artifactId>
+			<artifactId>org.restlet.ext.servlet</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet.ext.jaxrs</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet.ext.swagger</artifactId>
 			<version>2.3.2</version>
 			<exclusions>
 				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-web</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-webmvc</artifactId>
+					<groupId>org.raml</groupId>
+					<artifactId>raml-parser</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>4.1.6.RELEASE</version>
+			<groupId>org.raml</groupId>
+			<artifactId>raml-parser</artifactId>
+			<version>0.8.11</version>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-			<version>4.1.6.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>4.1.6.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-expression</artifactId>
-			<version>4.1.6.RELEASE</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.2</version>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.github.nest</groupId>

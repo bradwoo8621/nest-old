@@ -35,7 +35,7 @@ public class UT06Test extends EnableLogger {
 		Logger.getLogger("com.atomikos").setLevel(Level.WARN);
 
 		System.setProperty("spring.profiles.active", "test");
-		ApplicationContext context = Context.createApplicationContextByClassPath("ut06",
+		ApplicationContext context = Context.createContextByClassPath("ut06",
 				"/com/github/nest/quelea/ut06/Context.xml");
 		PartyRepository pRep = context.getBean(PartyRepository.class);
 		PartyRoleRepository prRep = context.getBean(PartyRoleRepository.class);

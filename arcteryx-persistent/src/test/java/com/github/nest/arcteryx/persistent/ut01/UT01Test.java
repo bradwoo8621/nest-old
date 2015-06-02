@@ -22,7 +22,7 @@ public class UT01Test extends EnableLogger {
 	@Test
 	public void test() {
 		System.setProperty("spring.profiles.active", "test");
-		ApplicationContext context = Context.createApplicationContextByClassPath("ut01",
+		ApplicationContext context = Context.createContextByClassPath("ut01",
 				"/com/github/nest/arcteryx/persistent/ut01/context.xml");
 
 		UtTable ut = new UtTable();

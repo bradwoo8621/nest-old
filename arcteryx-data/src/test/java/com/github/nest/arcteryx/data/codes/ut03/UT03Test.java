@@ -13,6 +13,6 @@ public class UT03Test extends EnableLogger {
 	 */
 	@Test(expected = BeanCreationException.class)
 	public void test() {
-		Context.createApplicationContextByClassPath("ut03", "/com/github/nest/arcteryx/data/codes/ut03/CodeTableA.xml");
+		Context.createContextByClassPath("ut03", "/com/github/nest/arcteryx/data/codes/ut03/CodeTableA.xml");
 	}
 }

@@ -17,7 +17,7 @@ public class UT03Test extends EnableLogger {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test() {
-		ApplicationContext context = Context.createApplicationContextByClassPath("ut03",
+		ApplicationContext context = Context.createContextByClassPath("ut03",
 				"/com/github/nest/quelea/ut03/Context.xml");
 		IPartyStrategyFactory factory = context.getBean(IPartyStrategyFactory.class);
 

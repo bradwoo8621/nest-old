@@ -14,7 +14,7 @@ public class UT02Test extends EnableLogger {
 	 */
 	@Test
 	public void test() {
-		ApplicationContext context = Context.createApplicationContextByClassPath("ut02",
+		ApplicationContext context = Context.createContextByClassPath("ut02",
 				"/com/github/nest/arcteryx/data/codes/ut02/CodeTableA.xml");
 		ICodeTableRegistry registry = context.getBean("CodeTableRegistry", ICodeTableRegistry.class);
 

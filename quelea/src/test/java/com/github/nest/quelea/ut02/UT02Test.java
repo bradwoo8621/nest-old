@@ -24,7 +24,7 @@ public class UT02Test extends EnableLogger {
 	@Test
 	public void test() {
 		System.setProperty("spring.profiles.active", "test");
-		ApplicationContext context = Context.createApplicationContextByClassPath("ut02",
+		ApplicationContext context = Context.createContextByClassPath("ut02",
 				"/com/github/nest/quelea/ut02/Context.xml");
 		IPartyStrategyFactory factory = context.getBean(IPartyStrategyFactory.class);
 

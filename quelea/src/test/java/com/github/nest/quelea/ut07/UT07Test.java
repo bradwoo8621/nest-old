@@ -24,7 +24,7 @@ public class UT07Test extends EnableLogger {
 	 */
 	@Test
 	public void test() {
-		ApplicationContext context = Context.createApplicationContextByClassPath("ut07",
+		ApplicationContext context = Context.createContextByClassPath("ut07",
 				"/com/github/nest/quelea/ut07/Context.xml");
 		ICodeTableRegistry registry = context.getBean("CodeTableRegistry", ICodeTableRegistry.class);
 

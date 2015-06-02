@@ -38,7 +38,7 @@ public class UT05Test extends EnableLogger {
 		// Logger.getLogger("org.hibernate.type").setLevel(Level.TRACE);
 
 		System.setProperty("spring.profiles.active", "test");
-		ApplicationContext context = Context.createApplicationContextByClassPath("ut05",
+		ApplicationContext context = Context.createContextByClassPath("ut05",
 				"/com/github/nest/quelea/ut05/Context.xml");
 		IPartyStrategyFactory factory = context.getBean(IPartyStrategyFactory.class);
 

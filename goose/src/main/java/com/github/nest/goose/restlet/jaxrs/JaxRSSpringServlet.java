@@ -27,7 +27,7 @@ import org.springframework.context.ApplicationContext;
  * 
  * @author brad.wu
  */
-public class SpringServlet extends HttpServlet {
+public class JaxRSSpringServlet extends HttpServlet {
 	private static final long serialVersionUID = -4833708753876623002L;
 
 	/**

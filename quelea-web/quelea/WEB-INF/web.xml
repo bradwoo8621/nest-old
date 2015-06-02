@@ -22,7 +22,7 @@
 
 	<servlet>
 		<servlet-name>quelea</servlet-name>
-		<servlet-class>com.github.nest.goose.restlet.jaxrs.SpringServlet</servlet-class>
+		<servlet-class>com.github.nest.goose.restlet.jaxrs.JaxRSSpringServlet</servlet-class>
 		<init-param>
 			<param-name>spring.context.id</param-name>
 			<param-value>quelea</param-value>

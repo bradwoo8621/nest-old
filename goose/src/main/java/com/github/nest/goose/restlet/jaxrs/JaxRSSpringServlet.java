@@ -18,8 +18,6 @@ import org.restlet.Server;
 import org.restlet.data.Protocol;
 import org.restlet.engine.adapter.HttpServerHelper;
 import org.restlet.engine.adapter.ServerCall;
-import org.restlet.ext.servlet.internal.ServletCall;
-import org.slf4j.helpers.MessageFormatter;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -71,8 +69,7 @@ public class JaxRSSpringServlet extends HttpServlet {
 
 		springContextId = this.getInitParameter(SPRING_CONTEXT_ID_ATTRIBUTE);
 		if (StringUtils.isBlank(springContextId)) {
-			throw new ServletException(MessageFormatter.format("Value of parameter [{}] cannot be blank.",
-					SPRING_CONTEXT_ID_ATTRIBUTE).getMessage());
+			throw new ServletException("Value of parameter [" + SPRING_CONTEXT_ID_ATTRIBUTE + "] cannot be blank.");
 		}
 	}
 

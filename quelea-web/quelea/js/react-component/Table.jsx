@@ -1087,7 +1087,12 @@ var NTable = React.createClass(ComponentDefine({
         } else if (evt.type == "change") {
             // do nothing
         }
-        this.getModel().validate(this.getId());
+
+        if (this.getModel().getValidator() != null) {
+            this.getModel().validate(this.getId());
+        } else {
+            this.forceUpdate();
+        }
     },
     /**
      * on model validate change

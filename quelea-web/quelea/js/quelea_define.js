@@ -83,7 +83,7 @@ var LayoutDefine = {
             label: "Party Code",
             // comp attribute is optional is no sub properties
             comp: {
-                type: ComponentConstants.Text // optional, default is ComponentConstants.Text
+                type: $pt.ComponentConstants.Text // optional, default is $pt.ComponentConstants.Text
             },
             pos: {
                 col: 1, row: 1, width: 3 // optional is it is 3
@@ -95,13 +95,13 @@ var LayoutDefine = {
         },
         enabled: {
             label: "Enabled",
-            comp: {type: ComponentConstants.Check},
+            comp: {type: $pt.ComponentConstants.Check},
             pos: {col: 4, row: 1}
         },
         addresses: {
             label: "Address",
             comp: {
-                type: ComponentConstants.Table,
+                type: $pt.ComponentConstants.Table,
                 //scrollY: 81,
                 scrollX: true,
                 indexable: true,
@@ -132,7 +132,7 @@ var LayoutDefine = {
                     countryCode: {
                         label: "Country",
                         comp: {
-                            type: ComponentConstants.Select,
+                            type: $pt.ComponentConstants.Select,
                             data: Regions.Country
                         },
                         pos: {col: 1, row: 1}
@@ -140,7 +140,7 @@ var LayoutDefine = {
                     provinceCode: {
                         label: "Province",
                         comp: {
-                            type: ComponentConstants.Select,
+                            type: $pt.ComponentConstants.Select,
                             data: Regions.Province,
                             /* panelModel */ // optional, default is current model
                             parentPropId: "countryCode",
@@ -151,7 +151,7 @@ var LayoutDefine = {
                     cityCode: {
                         label: "City",
                         comp: {
-                            type: ComponentConstants.Select,
+                            type: $pt.ComponentConstants.Select,
                             data: Regions.City,
                             parentPropId: "provinceCode",
                             parentFilter: "pId"
@@ -161,7 +161,7 @@ var LayoutDefine = {
                     districtCode: {
                         label: "District",
                         comp: {
-                            type: ComponentConstants.Select,
+                            type: $pt.ComponentConstants.Select,
                             data: Regions.District,
                             parentPropId: "cityCode",
                             parentFilter: "pId"
@@ -174,13 +174,13 @@ var LayoutDefine = {
                     },
                     enabled: {
                         label: "Enabled",
-                        comp: {type: ComponentConstants.Check},
+                        comp: {type: $pt.ComponentConstants.Check},
                         pos: {col: 2, row: 2}
                     },
                     addressTypeCode: {
                         label: "Address Type",
                         comp: {
-                            type: ComponentConstants.Select,
+                            type: $pt.ComponentConstants.Select,
                             data: Codes.AddressType
                         },
                         pos: {col: 3, row: 2}
@@ -206,7 +206,7 @@ var LayoutDefine = {
                         pos: {col: 1, row: 5, width: 6}
                     }
                 },
-                columns: new TableColumnLayout([{
+                columns: $pt.createTableColumnLayout([{
                     title: "Address Type",
                     width: 150,
                     render: function (data) {
@@ -266,7 +266,7 @@ var LayoutDefine = {
         accounts: {
             label: "Account",
             comp: {
-                type: ComponentConstants.Table,
+                type: $pt.ComponentConstants.Table,
                 scrollX: true,
                 indexable: true,
                 indexFixed: true,
@@ -297,14 +297,14 @@ var LayoutDefine = {
                     bankCode: {
                         label: "Bank",
                         comp: {
-                            type: ComponentConstants.Search
+                            type: $pt.ComponentConstants.Search
                         },
                         pos: {col: 1, row: 1, width: 9}
                     },
                     accountTypeCode: {
                         label: "Account Type",
                         comp: {
-                            type: ComponentConstants.Select,
+                            type: $pt.ComponentConstants.Select,
                             data: Codes.AccountType,
                             minimumResultsForSearch: Infinity
                         },
@@ -313,14 +313,14 @@ var LayoutDefine = {
                     creditCard: {
                         label: "Is Credit Card",
                         comp: {
-                            type: ComponentConstants.Check
+                            type: $pt.ComponentConstants.Check
                         },
                         pos: {col: 3, row: 2}
                     },
                     creditCardTypeCode: {
                         label: "Credit Card Type",
                         comp: {
-                            type: ComponentConstants.Select,
+                            type: $pt.ComponentConstants.Select,
                             data: Codes.CreditCardType,
                             minimumResultsForSearch: Infinity
                         },
@@ -341,7 +341,7 @@ var LayoutDefine = {
                     expiryDate: {
                         label: "Expiry Date",
                         comp: {
-                            type: ComponentConstants.Date,
+                            type: $pt.ComponentConstants.Date,
                             format: "YYYY/MM"
                         },
                         pos: {col: 3, row: 3}
@@ -353,12 +353,12 @@ var LayoutDefine = {
                     valid: {
                         label: "Is Valid",
                         comp: {
-                            type: ComponentConstants.Check
+                            type: $pt.ComponentConstants.Check
                         },
                         pos: {col: 1, row: 4}
                     }
                 },
-                columns: new TableColumnLayout([{
+                columns: $pt.createTableColumnLayout([{
                     title: "Account Number",
                     width: 200,
                     data: "accountNumber"
@@ -408,7 +408,7 @@ var LayoutDefine = {
         idTypeCode: {
             label: "Type of Registration",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Codes.OrganizationIdType,
                 minimumResultsForSearch: Infinity
             },
@@ -421,7 +421,7 @@ var LayoutDefine = {
         legalTypeCode: {
             label: "Legal Type",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Codes.LegalType
             },
             pos: {col: 2, row: 11}
@@ -433,7 +433,7 @@ var LayoutDefine = {
         dateOfRegister: {
             label: "Date of Registration",
             comp: {
-                type: ComponentConstants.Date,
+                type: $pt.ComponentConstants.Date,
                 // optional, default is "YYYY/MM/DD"
                 // all other options references to bootstrap-datetimepicker
                 format: "YYYY-MM-DD"
@@ -444,7 +444,7 @@ var LayoutDefine = {
         },
         dateOfDeregister: {
             label: "Date of Deregistration",
-            comp: {type: ComponentConstants.Date},
+            comp: {type: $pt.ComponentConstants.Date},
             pos: {col: 2, row: 21}
         }
     },
@@ -452,7 +452,7 @@ var LayoutDefine = {
         idTypeCode: {
             label: "Type of Registration",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Codes.IndividualIdType,
                 minimumResultsForSearch: Infinity
             },
@@ -477,7 +477,7 @@ var LayoutDefine = {
         genderCode: {
             label: "Gender",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Codes.Gender,
                 minimumResultsForSearch: Infinity
             },
@@ -485,18 +485,18 @@ var LayoutDefine = {
         },
         dateOfBirth: {
             label: "Date Of Birth",
-            comp: {type: ComponentConstants.Date},
+            comp: {type: $pt.ComponentConstants.Date},
             pos: {col: 2, row: 21}
         },
         dateOfDeath: {
             label: "Date Of Death",
-            comp: {type: ComponentConstants.Date},
+            comp: {type: $pt.ComponentConstants.Date},
             pos: {col: 3, row: 21}
         },
         countryCodeOfBirth: {
             label: "Country Of Birth",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Regions.Country
             },
             pos: {col: 4, row: 21}
@@ -508,7 +508,7 @@ var LayoutDefine = {
         maritalCode: {
             label: "Marital",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Codes.Marital,
                 minimumResultsForSearch: Infinity
             },
@@ -517,7 +517,7 @@ var LayoutDefine = {
         nationalityCode: {
             label: "Nationality",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Regions.Country
             },
             pos: {col: 3, row: 31}
@@ -525,7 +525,7 @@ var LayoutDefine = {
         occupationCode: {
             label: "Occupation",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Codes.Occupation
             },
             pos: {col: 4, row: 31}
@@ -533,7 +533,7 @@ var LayoutDefine = {
         raceCode: {
             label: "Race",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Codes.Race,
                 minimumResultsForSearch: Infinity
             },
@@ -542,7 +542,7 @@ var LayoutDefine = {
         religionCode: {
             label: "Religion",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Codes.Religion
             },
             pos: {col: 2, row: 41}
@@ -553,7 +553,7 @@ var LayoutDefine = {
         partyTypeCode: {
             label: "Party Type",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Codes.PartyType,
                 minimumResultsForSearch: Infinity
             },
@@ -577,7 +577,7 @@ var LayoutDefine = {
         roleTypeCode: {
             label: "Role Type",
             comp: {
-                type: ComponentConstants.Select,
+                type: $pt.ComponentConstants.Select,
                 data: Codes.RoleType
             },
             pos: {col: 1, row: 1, width: 4}

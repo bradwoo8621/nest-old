@@ -47,8 +47,8 @@
          */
         findParty: function () {
             var render = function () {
-                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.PartyQueryModel));
-                var layout = new FormLayout(LayoutDefine.PartyQueryLayout);
+                this.model = $pt.createModel($pt.cloneJSON(ModelDefine.PartyQueryModel));
+                var layout = $pt.createFormLayout(LayoutDefine.PartyQueryLayout);
                 var panel = (<div>
                     <Panel header="Find Party...">
                         <NForm model={this.model} layout={layout}/>
@@ -68,9 +68,9 @@
          */
         findRole: function () {
             var render = function () {
-                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.RoleQueryModel),
-                    new ModelValidator(ValidatorDefine.RoleQueryValidator));
-                var layout = new FormLayout(LayoutDefine.RoleQueryLayout);
+                this.model = $pt.createModel($pt.cloneJSON(ModelDefine.RoleQueryModel),
+                    $pt.createModelValidator(ValidatorDefine.RoleQueryValidator));
+                var layout = $pt.createFormLayout(LayoutDefine.RoleQueryLayout);
                 var panel = (<div>
                     <Panel header="Find Role...">
                         <NForm model={this.model} layout={layout}/>
@@ -103,10 +103,10 @@
          */
         createIndividualParty: function () {
             var render = function () {
-                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.IndividualParty),
-                    new ModelValidator(ValidatorDefine.IndividualPartyValidator));
+                this.model = $pt.createModel($pt.cloneJSON(ModelDefine.IndividualParty),
+                    $pt.createModelValidator(ValidatorDefine.IndividualPartyValidator));
                 this.createParty(this.model,
-                    new FormLayout(LayoutDefine.PartyCommon, LayoutDefine.IndividualParty),
+                    $pt.createFormLayout(LayoutDefine.PartyCommon, LayoutDefine.IndividualParty),
                     "Individual Party");
             };
             this.swtichPage(render);
@@ -116,10 +116,10 @@
          */
         createOrganizationParty: function () {
             var render = function () {
-                this.model = ModelUtil.createModel(ModelUtil.cloneJSON(ModelDefine.OrganizationParty),
-                    new ModelValidator(ValidatorDefine.OrganizationPartyValidator));
+                this.model = $pt.createModel($pt.cloneJSON(ModelDefine.OrganizationParty),
+                    $pt.createModelValidator(ValidatorDefine.OrganizationPartyValidator));
                 this.createParty(this.model,
-                    new FormLayout(LayoutDefine.PartyCommon, LayoutDefine.OrganizationParty),
+                    $pt.createFormLayout(LayoutDefine.PartyCommon, LayoutDefine.OrganizationParty),
                     "Organization Party");
             };
             this.swtichPage(render);

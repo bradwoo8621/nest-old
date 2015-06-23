@@ -10,11 +10,11 @@ var CodesDefine = {
  * Code Tables
  */
 var Codes = {
-    PartyType: new CodeTable([
+    PartyType: $pt.createCodeTable([
         {id: CodesDefine.Party_Individual, text: "Individual"},
         {id: CodesDefine.Party_Organization, text: "Organization"}
     ]),
-    RoleType: new CodeTable([
+    RoleType: $pt.createCodeTable([
         {id: "BNK", text: "Bank"},
         {id: "AGI", text: "Agent Individual"},
         {id: "AGO", text: "Agent Organization"},
@@ -23,8 +23,8 @@ var Codes = {
         {id: "BRH", text: "Branch"},
         {id: "DPT", text: "Department"},
         {id: "EMP", text: "Employee"},
-    ], null, new CodeTableSorter()),
-    LegalType: new CodeTable([
+    ], null, $pt.createDefaultCodeTableSorter()),
+    LegalType: $pt.createCodeTable([
         {id: "1", text: "Sole Proprietor"},
         {id: "2", text: "Private Limited"},
         {id: "3", text: "Partnership"},
@@ -32,11 +32,11 @@ var Codes = {
         {id: "5", text: "Cooperatives"},
         {id: "99", text: "Other"}
     ]),
-    OrganizationIdType: new CodeTable([
+    OrganizationIdType: $pt.createCodeTable([
         {id: "1", text: "ID"},
         {id: "99", text: "Virtual Number"}
     ]),
-    IndividualIdType: new CodeTable([
+    IndividualIdType: $pt.createCodeTable([
         {id: "1", text: "ID Card"},
         {id: "2", text: "Residence Permit"},
         {id: "3", text: "Military ID"},
@@ -44,20 +44,20 @@ var Codes = {
         {id: "5", text: "Drive License"},
         {id: "99", text: "Virtual Number"}
     ]),
-    Gender: new CodeTable([
+    Gender: $pt.createCodeTable([
         {id: "F", text: "Female"},
         {id: "M", text: "Male"}
     ]),
-    Marital: new CodeTable([
+    Marital: $pt.createCodeTable([
         {id: "S", text: "Single"},
         {id: "M", text: "Married"}
     ]),
-    Race: new CodeTable([
+    Race: $pt.createCodeTable([
         {id: "C", text: "Caucasion"},
         {id: "M", text: "Mongoliod"},
         {id: "N", text: "Negriod"},
     ]),
-    Religion: new CodeTable([
+    Religion: $pt.createCodeTable([
         {id: "1", text: "Christianity"},
         {id: "2", text: "Catholicism"},
         {id: "3", text: "Protestantism"},
@@ -76,8 +76,8 @@ var Codes = {
         {id: "64", text: "Taoism"},
         {id: "71", text: "Shinto"},
         {id: "99", text: "Other"}
-    ], null, new CodeTableSorter("99")),
-    Occupation: new CodeTable([
+    ], null, $pt.createDefaultCodeTableSorter("99")),
+    Occupation: $pt.createCodeTable([
         {id: "1", text: "Agricultural Inspector"},
         {id: "2", text: "Bush Pilot"},
         {id: "3", text: "Farm Manager or Owner"},
@@ -161,18 +161,18 @@ var Codes = {
         {id: "99", text: "Policeman"},
         {id: "100", text: "Inspector"},
         {id: "999", text: "Other"}
-    ], null, new CodeTableSorter("999")),
-    AddressType: new CodeTable([
+    ], null, $pt.createDefaultCodeTableSorter("999")),
+    AddressType: $pt.createCodeTable([
         {id: "1", text: "Home"},
         {id: "2", text: "Communicate"},
         {id: "3", text: "Company"},
         {id: "99", text: "Other"}
-    ], null, new CodeTableSorter("99")),
-    AccountType: new CodeTable([
+    ], null, $pt.createDefaultCodeTableSorter("99")),
+    AccountType: $pt.createCodeTable([
         {id: "1", text: "Auto Debit"},
         {id: "2", text: "Credit Card"}
     ]),
-    CreditCardType: new CodeTable([
+    CreditCardType: $pt.createCodeTable([
         {id: "1", text: "American Express"},
         {id: "2", text: "Diners Club"},
         {id: "3", text: "Discover"},
@@ -181,13 +181,13 @@ var Codes = {
         {id: "6", text: "VISA"},
         {id: "7", text: "Unipay"},
         {id: "99", text: "Other"}
-    ], null, new CodeTableSorter("99"))
+    ], null, $pt.createDefaultCodeTableSorter("99"))
 };
 /**
  * regions
  */
 var Regions = {
-    Country: new CodeTable([
+    Country: $pt.createCodeTable([
         /* {id: "AFG", tel: "93", name: "AFGHANISTAN"},
          {id: "ALB", tel: "355", name: "ALBANIA"},
          {id: "DZA", tel: "213", name: "ALGERIA"},
@@ -431,8 +431,8 @@ var Regions = {
          {id: "ZWE", tel: "263", name: "ZIMBABWE"}*/
     ], function (c) {
         return c.id + " - " + c.name;
-    }, new CodeTableSorter()),
-    Province: new CodeTable([
+    }, $pt.createDefaultCodeTableSorter()),
+    Province: $pt.createCodeTable([
         {id: "AH", pId: "CHN", text: "安徽省"},
         {id: "BJ", pId: "CHN", text: "北京市"},
         {id: "CQ", pId: "CHN", text: "重庆市"},
@@ -467,9 +467,9 @@ var Regions = {
         {id: "XZ", pId: "CHN", text: "西藏自治区"},
         {id: "YN", pId: "CHN", text: "云南省"},
         {id: "ZJ", pId: "CHN", text: "浙江省"}
-    ], null, new CodeTableSorter()),
-    City: new CodeTable([{id: "SH", pId: "SH", text: "上海"}]),
-    District: new CodeTable([
+    ], null, $pt.createDefaultCodeTableSorter()),
+    City: $pt.createCodeTable([{id: "SH", pId: "SH", text: "上海"}]),
+    District: $pt.createCodeTable([
         {id: "BS", pId: "SH", text: "宝山区"},
         {id: "CM", pId: "SH", text: "崇明县"},
         {id: "CN", pId: "SH", text: "长宁区"},

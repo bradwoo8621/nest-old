@@ -742,7 +742,8 @@ var Panel = ReactBootstrap.Panel;
             var result = null;
             if (id) {
                 var config = this.getConfig()[id];
-                if (config === undefined) {
+                if (config === undefined || config === null) {
+                    // no rule defined
                     return true;
                 } else {
                     result = Object.keys(config).map(function (rule) {
@@ -754,7 +755,7 @@ var Panel = ReactBootstrap.Panel;
                         } else {
                             ret = _this.getRule(rule).call(_this, model, value, ruleBody);
                         }
-                        return ret !== true ? ret : null;
+                        return (ret !== undefined && ret !== null && ret !== true) ? ret : null;
                     });
                     var finalResult = [];
                     result.forEach(function (item) {

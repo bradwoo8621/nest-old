@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.core.Application;
+import javax.ws.rs.ext.Provider;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -105,6 +106,13 @@ public class ApplicationResourceScanner extends Application implements Applicati
 		if (classes.isEmpty()) {
 			this.getLogger().warn("Application scanner[module={}, version={}] doesn't find any resource.",
 					this.getModule(), this.getVersion());
+		}
+
+		// add providers
+		String[] providerNames = this.getApplicationContext().getBeanNamesForAnnotation(Provider.class);
+		for (String providerName : providerNames) {
+			Class<?> type = this.getApplicationContext().getType(providerName);
+			classes.add(type);
 		}
 		return classes;
 	}

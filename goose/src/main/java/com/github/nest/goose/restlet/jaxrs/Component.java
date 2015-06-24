@@ -156,10 +156,14 @@ public class Component extends org.restlet.Component implements InitializingBean
 	}
 
 	/**
+	 * will be set in
+	 * {@linkplain JaxRSSpringServlet#getComponent(javax.servlet.http.HttpServletRequest)}
+	 * , do not call this method manually.
+	 * 
 	 * @param uriPatternPrefix
 	 *            the uriPatternPrefix to set
 	 */
-	public void setUriPatternPrefix(String uriPatternPrefix) {
+	protected void setUriPatternPrefix(String uriPatternPrefix) {
 		this.uriPatternPrefix = uriPatternPrefix;
 	}
 }

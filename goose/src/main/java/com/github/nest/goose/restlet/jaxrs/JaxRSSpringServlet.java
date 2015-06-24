@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
-import org.restlet.Component;
 import org.restlet.Context;
 import org.restlet.Server;
 import org.restlet.data.Protocol;
 import org.restlet.engine.adapter.HttpServerHelper;
 import org.restlet.engine.adapter.ServerCall;
+import org.restlet.ext.servlet.internal.ServletCall;
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -175,7 +175,7 @@ public class JaxRSSpringServlet extends HttpServlet {
 	 * @return
 	 */
 	protected Component getComponent(HttpServletRequest request) {
-		ServletComponent component = this.getApplicationContext().getBean(ServletComponent.class);
+		Component component = this.getApplicationContext().getBean(Component.class);
 		component.setUriPatternPrefix(this.getContextPath(request) + request.getServletPath());
 		component.initApplications();
 		return component;

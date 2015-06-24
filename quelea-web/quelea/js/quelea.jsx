@@ -191,10 +191,18 @@
          * on party search clicked
          */
         onPartySearchClicked: function () {
-            // TODO
-            this.confirmDialog.show("Demo Event Handler",
-                ["Party Search Button Clicked"], function () {
-                }.bind(this));
+            $.ajax("app/quelea/v1/party/query", {
+                data: JSON.stringify(this.model.getCurrentModel()),
+                contentType: "application/json; charset=UTF-8",
+                method: "POST",
+                dataType: "json"
+            }).done(function (data) {
+            	console.log("done");
+                console.log(data);
+            }).fail(function (data) {
+            	console.log("fail");
+                console.log(data);
+            });
         },
         /**
          * on role search clicked

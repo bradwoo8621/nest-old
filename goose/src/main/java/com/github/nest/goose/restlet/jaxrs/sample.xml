@@ -42,7 +42,7 @@
 		class="com.github.nest.goose.restlet.jaxrs.SpringObjectFactory" />
 
 	<!-- it's a abstract class, implemented it. -->
-	<!-- it no this bean, component will skip swagger -->
+	<!-- if not exists, component will skip swagger -->
 	<!-- <bean class="com.github.nest.goose.restlet.jaxrs.JaxRSSwaggerRestlet" 
 		/> -->
 

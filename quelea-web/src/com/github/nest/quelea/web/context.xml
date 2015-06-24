@@ -42,9 +42,21 @@
 		class="com.github.nest.goose.restlet.jaxrs.SpringObjectFactory" />
 
 	<!-- scan resources -->
+	<!-- restful resources -->
 	<context:component-scan base-package="com.github.nest.quelea.web">
 		<context:include-filter
 			type="annotation"
 			expression="com.github.nest.goose.restlet.jaxrs.JaxRSResource" />
+		<!-- add providers -->
+		<!-- <context:include-filter type="annotation" expression="javax.ws.rs.ext.Provider" 
+			/> -->
 	</context:component-scan>
+	<!-- providers -->
+	<context:component-scan base-package="com.github.nest.goose.restlet.jaxrs">
+		<context:include-filter
+			type="annotation"
+			expression="javax.ws.rs.ext.Provider" />
+	</context:component-scan>
+
+
 </beans>

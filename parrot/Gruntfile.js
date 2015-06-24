@@ -17,7 +17,8 @@ module.exports = function (grunt) {
             cssmin: {
                 options: {
                     shorthandCompacting: false,
-                    roundingPrecision: -1
+                    roundingPrecision: -1,
+                    sourceMap: true
                 },
                 target: {
                     files: {
@@ -36,7 +37,8 @@ module.exports = function (grunt) {
             },
             uglify: {
                 options: {
-                    banner: '/*! <%= pkg.groupId %>.<%= pkg.artifactId %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                    banner: '/*! <%= pkg.groupId %>.<%= pkg.artifactId %> <%= grunt.template.today("yyyy-mm-dd") %> */\n',
+                    sourceMap: true
                 },
                 dist: {
                     files: {

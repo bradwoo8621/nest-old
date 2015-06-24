@@ -8,7 +8,6 @@ import java.io.StringWriter;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
@@ -35,7 +34,7 @@ public class ThrowableMapper implements ExceptionMapper<Throwable> {
 		PrintWriter pw = new PrintWriter(sw);
 		t.printStackTrace(pw);
 		pw.close();
-		return Response.status(Status.INTERNAL_SERVER_ERROR).type(MediaType.TEXT_PLAIN_TYPE).entity(sw.toString())
-				.build();
+		return Response.status(ResponseStatus.SERVER_EXCEPTION_RAISED).type(MediaType.TEXT_PLAIN_TYPE)
+				.entity(sw.toString()).build();
 	}
 }
